@@ -48,7 +48,6 @@ public class TileManager : MonoBehaviour
         {
             Vector3 position = new Vector3(tile.x * tileSize, 0, tile.y * tileSize);
             var res = Instantiate(tilePrefab, position, Quaternion.identity, transform);
-            res.AddComponent<BoxCollider>();
 
             var tileComp = res.AddComponent<Tile>();
             tileComp.Initialize(tile);

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
@@ -21,5 +22,20 @@ public class Tile : MonoBehaviour
     private void OnMouseDown()
     {
         Debug.Log($"Clicked tile at ({x}, {y})");
+
+        StartCoroutine(FlashColor(Color.green, 0.3f)); // 0.3초 동안 초록색
+    }
+
+    private IEnumerator FlashColor(Color color, float duration)
+    {
+        MeshRenderer mr = gameObject.GetComponent<MeshRenderer>();
+
+        Color originalColor = mr.material.color;
+
+        mr.material.color = color;
+
+        yield return new WaitForSeconds(duration);
+
+        mr.material.color = originalColor;
     }
 }
