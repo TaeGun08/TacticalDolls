@@ -23,19 +23,19 @@ public class Tile : MonoBehaviour
     {
         Debug.Log($"Clicked tile at ({x}, {y})");
 
-        StartCoroutine(FlashColor(Color.green, 0.3f)); // 0.3초 동안 초록색
+        // 중앙 관리자로 클릭 알림 보내기
+        SkillRangeTester.Instance.OnTileClicked(this);
     }
 
-    private IEnumerator FlashColor(Color color, float duration)
+    public void Highlight(Color color)
     {
-        MeshRenderer mr = gameObject.GetComponent<MeshRenderer>();
-
-        Color originalColor = mr.material.color;
-
+        MeshRenderer mr = GetComponent<MeshRenderer>();
         mr.material.color = color;
+    }
 
-        yield return new WaitForSeconds(duration);
-
-        mr.material.color = originalColor;
+    public void ResetHighlight()
+    {
+        MeshRenderer mr = GetComponent<MeshRenderer>();
+        mr.material.color = Color.gray;
     }
 }
