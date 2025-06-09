@@ -87,9 +87,20 @@ namespace _3.Script.Ji
                     //     break;
                     // }
                 }
-                else
+                else if (actor == ActorParent.Enemy)
                 {
                     //기본 적 캐릭터 포커스 (Select)
+                    
+                    foreach (var t in turnManager.MonsterUnits)
+                    {
+                        if (t.isCompleteAction == false &&
+                            t.isDead == false)
+                        {
+                            selectedPlayer = t;
+                            //please fix + 카메라 무빙
+                        }
+                    }
+                    
                     //적 캐릭터
                     //자신의 로직에 따라 스킬 사용 Ai 사용
                 
