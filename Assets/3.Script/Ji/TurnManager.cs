@@ -6,7 +6,7 @@ namespace _3.Script.Ji
 {
     public class TurnManager : MonoBehaviour
     {
-        private const int MAX_TURN_COUNT = 12;
+        public int MAX_TURN_COUNT { private get; set; } = 5;
     
         public static TurnManager Instance { get; private set; }
     
@@ -93,6 +93,11 @@ namespace _3.Script.Ji
             GameStateChanged?.Invoke(this, new GameStateEventArgs(State));
         }
     
+        private void RpcTurnStart_S2C(ActorParent actor)
+        {
+            CurrentTurn = actor;
+            ActorChanged?.Invoke(this, CurrentTurn);
+        }
         #endregion
     
         // #region Server To Client | (Client Logic)
@@ -113,11 +118,7 @@ namespace _3.Script.Ji
         // }
         //
         // [Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
-        // private void RpcTurnStart_S2C(PlayerTurn turn)
-        // {
-        //     CurrentTurn = turn;
-        //     TurnChanged?.Invoke(this, CurrentTurn);
-        // }
+
         //
         // #endregion
     
