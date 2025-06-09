@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: c92a295f6bd960941a5813babd742000
+=======
+guid: b6b87999f4f07c64090ec31d6a7c1378
+>>>>>>> Feature/AStartAlgorithm
 DefaultImporter:
   externalObjects: {}
   userData: 
