@@ -9,7 +9,7 @@ public class MapJsonGenerator : MonoBehaviour
     void GenerateMapJson()
     {
         TileDataListWrapper wrapper = new TileDataListWrapper();
-        wrapper.tileList = new List<TileData>();
+        wrapper.stage1 = new List<TileData>();
 
         for (int x = -25; x <= 25; x++)
         {
@@ -23,7 +23,7 @@ public class MapJsonGenerator : MonoBehaviour
                     tileType = TileType.Normal,
                     obstacleDir = ObstacleDir.None
                 };
-                wrapper.tileList.Add(tile);
+                wrapper.stage1.Add(tile);
             }
         }
 
@@ -49,6 +49,11 @@ public class TileData
     public bool isWalkable;
     public TileType tileType;
     public ObstacleDir obstacleDir;
+    
+    void OnMouseDown()
+    {
+        Debug.Log($"Clicked tile at ({x}, {y})");
+    }
 }
 
 public enum TileType
@@ -71,5 +76,5 @@ public enum ObstacleDir
 [System.Serializable]
 public class TileDataListWrapper
 {
-    public List<TileData> tileList;
+    public List<TileData> stage1;
 }

@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.UIElements;
+using UnityEngine.UI;
+using Button = UnityEngine.UIElements.Button;
 
 public class TileManager : MonoBehaviour
 {
@@ -33,7 +36,9 @@ public class TileManager : MonoBehaviour
         {
             Vector3 position = new Vector3(tile.x * tileSize, 0, tile.y * tileSize);
             
-            Instantiate(tilePrefab, position, Quaternion.identity, transform);
+            var res = Instantiate(tilePrefab, position, Quaternion.identity, transform);
+
+            res.AddComponent<BoxCollider>(); 
         }
     }
     
