@@ -49,11 +49,6 @@ public class TileData
     public bool isWalkable;
     public TileType tileType;
     public ObstacleDir obstacleDir;
-    
-    void OnMouseDown()
-    {
-        Debug.Log($"Clicked tile at ({x}, {y})");
-    }
 }
 
 public enum TileType
