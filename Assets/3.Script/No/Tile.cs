@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TileComponent : MonoBehaviour
+public class Tile : MonoBehaviour
 {
     [Header("Tile Info")]
     public int x;

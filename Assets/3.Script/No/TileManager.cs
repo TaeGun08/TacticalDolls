@@ -5,12 +5,23 @@ using UnityEngine.UIElements;
 using UnityEngine.UI;
 using Button = UnityEngine.UIElements.Button;
 
+public enum StageType
+{
+    Stage1,
+    Stage2,
+    Stage3,
+    Stage4,
+}
+
 public class TileManager : MonoBehaviour
 {
     public TextAsset jsonFile;
     public float tileSize = 1.0f;
     public GameObject tilePrefab;
-    
+
+    [Header("Stage Selection")]
+    public StageType selectedStage;
+
     [System.Serializable]
     public class TileData
     {
@@ -20,32 +31,33 @@ public class TileManager : MonoBehaviour
         public int tileType;
         public int obstacleDir;
     }
-    
+
     [System.Serializable]
     public class MapData
     {
-        // stage에 맞는 key값을 변수명으로 지정해야합니다.
-        public List<TileData> stage1;
+        public Dictionary<string, List<TileData>> Stages;
     }
-    
+
     private void LoadMap()
     {
         MapData mapTiles = JsonConvert.DeserializeObject<MapData>(jsonFile.text);
-        
-        foreach (TileData tile in mapTiles.stage1)
+
+        string stageKey = selectedStage.ToString(); 
+
+        foreach (TileData tile in mapTiles.Stages[stageKey])
         {
             Vector3 position = new Vector3(tile.x * tileSize, 0, tile.y * tileSize);
-            
             var res = Instantiate(tilePrefab, position, Quaternion.identity, transform);
-            res.AddComponent<BoxCollider>(); 
-            
-            var tileComp = res.AddComponent<TileComponent>();
+            res.AddComponent<BoxCollider>();
+
+            var tileComp = res.AddComponent<Tile>();
             tileComp.Initialize(tile);
         }
     }
-    
+
     private void Start()
     {
         LoadMap();
     }
 }
+
