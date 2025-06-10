@@ -24,7 +24,7 @@ public class Tile : MonoBehaviour
         Debug.Log($"Clicked tile at ({x}, {y})");
 
         // 중앙 관리자로 클릭 알림 보내기
-        SkillRangeTester.Instance.OnTileClicked(this);
+        // SkillRangeTester.Instance.OnTileClicked(this);
     }
 
     public void Highlight(Color color)

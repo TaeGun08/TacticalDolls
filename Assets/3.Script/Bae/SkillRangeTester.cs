@@ -4,23 +4,42 @@ using UnityEngine;
 
 public class SkillRangeTester : MonoBehaviour
 {
-    public static SkillRangeTester Instance { get; private set; }
+    public static SkillRangeTester Instance;
 
     public enum RangeType { Straight, Plus, Cross, Around }
+    public RangeType currentRangeType = RangeType.Around;
+    public int currentRange = 3;
 
-    public RangeType currentRangeType = RangeType.Straight;
-    public int currentRange = 5;
+    private bool isRangeVisible = false;
+    public CharacterCurrentTileSetter playerUnit; // 현재 캐릭터 (혹은 선택된 캐릭터)
 
     private void Awake()
     {
         Instance = this;
     }
 
-    public void OnTileClicked(Tile clickedTile)
+    private void Update()
     {
-        Debug.Log($"TileManager handling click at ({clickedTile.x}, {clickedTile.y})");
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            ToggleSkillRange();
+        }
+    }
 
-        HighlightSkillRange(clickedTile, currentRangeType, currentRange);
+    private void ToggleSkillRange()
+    {
+        if (playerUnit == null || playerUnit.currentTile == null) return;
+
+        if (isRangeVisible)
+        {
+            ResetAllHighlights();
+            isRangeVisible = false;
+        }
+        else
+        {
+            HighlightSkillRange(playerUnit.currentTile, currentRangeType, currentRange);
+            isRangeVisible = true;
+        }
     }
 
     public void HighlightSkillRange(Tile centerTile, RangeType rangeType, int range)
@@ -37,30 +56,29 @@ public class SkillRangeTester : MonoBehaviour
             switch (rangeType)
             {
                 case RangeType.Straight:
-                    inRange = (dx == 0 && dy <= range) || (dy == 0 && dx <= range);
-                    break;
-
                 case RangeType.Plus:
                     inRange = (dx == 0 && dy <= range) || (dy == 0 && dx <= range);
                     break;
-
                 case RangeType.Cross:
                     inRange = (dx == dy && dx <= range);
                     break;
-
                 case RangeType.Around:
                     inRange = (dx + dy) <= range;
                     break;
             }
 
             if (inRange)
-            {
                 tile.Highlight(Color.cyan);
-            }
             else
-            {
                 tile.ResetHighlight();
-            }
+        }
+    }
+
+    public void ResetAllHighlights()
+    {
+        foreach (Tile tile in FindObjectsOfType<Tile>())
+        {
+            tile.ResetHighlight();
         }
     }
 }
