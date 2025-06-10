@@ -97,8 +97,15 @@ public class GridBehavior : MonoBehaviour
                 
                 MoveRangeSystem.Instance.ResetAllHighlights();
                 Tile tile =  hit.collider.GetComponent<Tile>();
+                
                 if (tile == null) return;
                 if (tile.isWalkable == false) return;
+                
+                if (!MoveRangeSystem.Instance.IsTileInMoveRange(tile))
+                {
+                    Debug.Log("이동 불가능한 범위입니다.");
+                    return;
+                }
                 isMove = true;
                 PathFind(RoundToTilePosition(currentPlayer.position), new Vector3Int(tile.x, 0, tile.y));
             }

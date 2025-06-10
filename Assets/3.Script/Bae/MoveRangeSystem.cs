@@ -12,6 +12,8 @@ public class MoveRangeSystem : MonoBehaviour
     private Tile currentTile;
 
     private bool isRangeVisible = false;
+    
+    private HashSet<Tile> movableTiles = new HashSet<Tile>();
 
     private void Awake()
     {
@@ -67,7 +69,10 @@ public class MoveRangeSystem : MonoBehaviour
                 inRange = (dx + dy) <= range;
 
                 if (inRange)
+                {
                     tile.Highlight(Color.white);
+                    
+                }
                 else
                     tile.ResetHighlight();
             }
@@ -82,5 +87,10 @@ public class MoveRangeSystem : MonoBehaviour
         }
         
         isRangeVisible = false;
+    }
+    
+    public bool IsTileInMoveRange(Tile tile)
+    {
+        return movableTiles.Contains(tile);
     }
 }
