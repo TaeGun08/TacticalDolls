@@ -5,24 +5,19 @@ using UnityEngine;
 
 public class SkillRangeTester : MonoBehaviour
 {
-    public static SkillRangeTester Instance;
-
-    public enum RangeType { Straight, Plus, Cross, Around }
-    public RangeType currentRangeType = RangeType.Around;
-    public int currentRange = 3;
+    public int selectedSkillIndex;
     
-    public Tile[,] tiles;
-    public Tile currentTile;
+    private CharacterData characterData;
+    
+    private Tile[,] tiles;
+    private Tile currentTile;
 
     private bool isRangeVisible = false;
 
-    private void Awake()
-    {
-        Instance = this;
-    }
-
     private void Start()
     {
+        characterData = GetComponent<CharacterData>();
+        
         tiles = TileManager.Instance.tiles;
     }
 
@@ -52,7 +47,10 @@ public class SkillRangeTester : MonoBehaviour
         }
         else
         {
-            HighlightAllTilesInRange(currentTile, currentRangeType, currentRange);
+            HighlightAllTilesInRange(
+                currentTile, 
+                characterData.Skills[selectedSkillIndex].RangeType, 
+                characterData.Skills[selectedSkillIndex].Range);
             isRangeVisible = true;
         }
     }
