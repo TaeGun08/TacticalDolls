@@ -7859,14 +7859,14 @@
                 "x": 22,
                 "y": 0,
                 "isWalkable": true,
-                "tileType": 0,
+                "tileType": 1,
                 "obstacleDir": 0
             },
             {
                 "x": 22,
                 "y": 1,
                 "isWalkable": true,
-                "tileType": 1,
+                "tileType": 0,
                 "obstacleDir": 0
             },
             {

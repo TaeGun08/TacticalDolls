@@ -12,11 +12,6 @@ public class Tile : MonoBehaviour
     public int obstacleDir;
 
     private MeshRenderer mr;
-    
-    private void Start()
-    {
-        mr = GetComponent<MeshRenderer>();
-    }
 
     public void Initialize(TileManager.TileData data)
     {
@@ -25,6 +20,8 @@ public class Tile : MonoBehaviour
         isWalkable = data.isWalkable;
         tileType = data.tileType;
         obstacleDir = data.obstacleDir;
+        
+        mr = GetComponent<MeshRenderer>();
     }
     
     private void OnMouseDown()
