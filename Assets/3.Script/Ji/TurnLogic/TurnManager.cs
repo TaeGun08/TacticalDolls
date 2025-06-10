@@ -72,13 +72,13 @@ public partial class TurnManager : MonoBehaviour
 
     private void SetNextTurn() //턴 전환
     {
-        //처음 실행되면 ActorParent.None 이므로 플레이어부터 시작
+        //처음 실행되면 ActorParent.None 이므로 플레이어부터 시작되는 조건문
         CurrentTurn = (CurrentTurn == ActorParent.Player) ? ActorParent.Enemy : ActorParent.Player;
         Debug.Log($"턴 전환됨: {CurrentTurn}");
         TurnStart(CurrentTurn);
     }
 
-    private bool CheckWinCondition() //승자가 나올 겨우 true, 아니라면 false
+    private bool CheckWinCondition() //승자가 나올 겨우 true, 아니라면 false 반환
     {
         return false; //please fix
         
@@ -111,7 +111,6 @@ public partial class TurnManager : MonoBehaviour
         return false;
     }
 
-
     private void StartGame()
     {
         Debug.Log("게임 시작");
@@ -131,32 +130,5 @@ public partial class TurnManager : MonoBehaviour
         State = GameState.Ended;
         GameStateChanged?.Invoke(this, new GameStateEventArgs(State));
     }
-    
-    // #region Server To Client | (Client Logic)
-    //
-    // [Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
-    // public void RpcSetScoreBoard_S2C()
-    // {
-    //     ScoreManager.Instance.HostBoard = new ScoreManager.ScoreBoard(YachtPlayer.HostPlayer.PlayerRef);
-    //     ScoreManager.Instance.ClientBoard = new ScoreManager.ScoreBoard(YachtPlayer.ClientPlayer.PlayerRef);
-    // }
-    //
-    // [Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
-
-    //
-    // [Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
-
-    //
-    // #endregion
-
-    // #region Client To Server | (Server Logic)
-    //
-    // [Rpc(sources: RpcSources.All, targets: RpcTargets.StateAuthority)]
-    // public void RpcTurnEnd_C2S(PlayerRef playerRef)
-    // {
-    //     turnEndedSource?.TrySetResult(true);
-    // }
-    //
-    // #endregion
 }
 

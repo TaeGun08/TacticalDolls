@@ -7,17 +7,25 @@ using UnityEngine;
 
 public class InGameUIManager : MonoBehaviour
 {
-    private TurnManager turnManager;
-    private SamplePlayer selectedPlayer;
-    private int OnSelectSkill = 0;
+    private TurnManager turnManager;                    //싱글톤 캐싱
+    private ActorParent actorParent = ActorParent.None; //턴 가진 주체 캐싱
     
-    private TaskCompletionSource<bool> skillConfirmTcs;
+    private SamplePlayer selectedCharacter;             //선택한 개체
+    private int currentTurn;                            //현재 턴
+    private int onSelectSkill;                          //스킬을 선택하는 로직 필요
+    private bool isBlockedPlayerControl = false;        //스킬 사용 중 플레이어 입력 막음
     
     private void Start()
     {
         turnManager = TurnManager.Instance;
-        if (turnManager == null) return;
-
+        if (turnManager == null)
+        {
+            Debug.LogError("턴 매니저 인스턴스가 없습니다.");
+            return;
+        }
+        
+        Inintialize();
+        
         turnManager.ActorChanged += OnTurnChangedWrapper;
         turnManager.GameStateChanged += OnGameStateChanged;
     }
@@ -30,6 +38,14 @@ public class InGameUIManager : MonoBehaviour
         turnManager.GameStateChanged -= OnGameStateChanged;
     }
 
+    private void Inintialize()
+    {
+        selectedCharacter = null;
+        currentTurn = 0;
+        onSelectSkill = 0;
+        isBlockedPlayerControl = false;
+    }
+    
     private void OnTurnChangedWrapper(object sender, ActorParent actor)
     {
         _= OnTurnChanged(sender, actor);
@@ -37,125 +53,186 @@ public class InGameUIManager : MonoBehaviour
 
     private void Update()
     {
-        //클릭으로 캐릭터 선택하기 selectedPlayer 변경
+        if(isBlockedPlayerControl) return;
+        
+        switch (actorParent)
+        {
+            case ActorParent.None: //아무 일도 일어나지 않음
+                return;
+            
+            case ActorParent.Player:
+                //클릭으로 캐릭터 선택하기 selectedPlayer 변경
+                ClickObject();
+                
+                break;
+            
+            case ActorParent.Enemy:
+                //UI 비활성화
+                //Pause 버튼과 Pause UI 제외 인게임 조작 완전히 막힘
+                break;
+            
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 
-    private async Task OnTurnChanged(object sender, ActorParent actor) //메서드 반복은 입력이 제한적, 코루티으로 리팩토링?
+    private void OnGUI()
     {
-        int currentTurn = turnManager.TurnCount + 1;
-
-        Debug.Log($"{actor.ToString()}의 {currentTurn}턴이 시작되었습니다.");
-
-        foreach (var VARIABLE in turnManager.PlayerUnits)
-        {
-            
-        }
-
-        while (turnManager.State == GameState.Playing)
-        {
-            Debug.Log("e...");
-
-            if (actor == ActorParent.Player)
-            {
-                // 기본 플레이어 캐릭터 자동 포커스 (무작위 또는 편성시 제일 앞의 캐릭터 (배열 상 가장 앞))
-                // 또한 이미 행동한 캐릭터는 제외한다.
-                foreach (var t in turnManager.PlayerUnits)
-                {
-                    if (t.isCompleteAction == false && //행동 완료한 캐릭터 x, 죽은 캐릭터 x
-                        t.isDead == false)
-                    {
-                        selectedPlayer = t;
-                        //please fix + 카메라 무빙
-                    }
-                }
-                
-                //클릭시 캐릭터 포커스 변경
-                    //if(클릭 시 캐릭터 변경)
-                    //selectedPlayer = target
-                
-                //선택된 캐릭터의 스킬 버튼 표시
-                //선택된 오브젝트의 정보 표시
-                
-                //스킬 확정 입력 시 실행?????
-                //아니. 플레이어가 입력 확정을 할 때까지 Await해야 한다. 따라서
-                StartCoroutine(WaitInputCoroutine());
-                
-                await skillConfirmTcs.Task; //입력 완료할때까지 대기
-                
-                await selectedPlayer.Excute(OnSelectSkill); //스킬 선택 확정 시 Excute 애니메이션, CombatSystem 대기
-                
-                if (turnManager.PlayerUnits.All(unit => unit.isCompleteAction)) //모두 행동 완료시 턴 종료
-                {
-                    turnManager.TurnEndedSource?.TrySetResult(true);
-                    break;
-                }
-                
-                // if (Input.GetKeyDown(KeyCode.Space)) // 테스트용 턴 넘기기
-                // {
-                //     turnManager.TurnEndedSource?.TrySetResult(true);
-                //     break;
-                // }
-            }
-            else if (actor == ActorParent.Enemy)
-            {
-                //기본 적 캐릭터 포커스 (Select)
-                
-                foreach (var t in turnManager.MonsterUnits)
-                {
-                    if (t.isCompleteAction == false &&
-                        t.isDead == false)
-                    {
-                        selectedPlayer = t;
-                        //please fix + 카메라 무빙
-                    }
-                }
-                
-                //적 캐릭터
-                //자신의 로직에 따라 스킬 사용 Ai 사용
-            
-                // if (turnManager.MonsterUnits.All(unit => unit.IsCompleteAction)) //모두 행동 완료
-                // {
-                //     turnManager.TurnEndedSource?.TrySetResult(true);
-                //     break;
-                // }
-                
-                // if (Input.GetKeyDown(KeyCode.Space)) // 테스트용 턴 넘기기
-                // {
-                //     turnManager.TurnEndedSource?.TrySetResult(true);
-                //     break;
-                // }
-            }
-        }
+        
     }
 
-    private IEnumerator WaitInputCoroutine() //이럴 필요 없다
-    {
-        while (true)
-        {
-            //입력을 기다리는 동안 UI 반응이 가능하도록 코루틴에서 설계
-            
-            //please fix - UI 활동
-            
-            //스킬 입력 확정 시
-            if (selectedPlayer != null && OnSelectSkill != 0 && true) // please fix - if ai일 경우를 생각해야 합니다. && 스킬 확정하는 방식 추가하기
-            {
-                skillConfirmTcs.TrySetResult(true); //대기 해제
-                yield break;
-            }
-            
-            yield return null;
-        }
-    }
-
-    public void OnClickedSkillDetailsButton() //스킬 버튼 클릭 시 정보, 범위 표시
+    private void OfffGUI()
     {
         
     }
     
-    public void OnClickedSelectSkills() //스킬 확인(확정) 버튼 클릭 시 스킬 사용
+    private void ClickObject()
+    {
+        if(isBlockedPlayerControl) return;
+        // 클릭 시 Ray발사, GUI 변경
+        
+        // 캐릭터인 경우
+        //FocusCharacter(player)
+        
+        // 스킬인 경우 <-버튼으로 처리
+        
+        // 적인 경우
+        
+        // 맵 오브젝트인 경우
+        
+    }
+
+    private void FocusCharacter(SamplePlayer player)
+    {
+        selectedCharacter = player;
+        //please fix + 카메라 무빙
+    }
+    
+    private async Task OnTurnChanged(object sender, ActorParent actor) //메서드 반복은 입력이 제한적, 코루티으로 리팩토링?
+    {
+        Inintialize(); //초기화
+        
+        currentTurn = turnManager.TurnCount + 1;
+        actorParent = actor;
+        Debug.Log($"{actor.ToString()}의 {currentTurn}턴이 시작되었습니다.");
+
+        foreach (var player in turnManager.PlayerUnits)
+        {
+            player.isCompleteAction = false;
+        }
+        
+        if (actor.Equals(ActorParent.Player))
+        {
+            //플레이어 GUI 활성화
+            OnGUI();
+            
+            // 기본 플레이어 캐릭터 자동 포커스 (무작위 또는 편성시 제일 앞의 캐릭터 (배열 상 가장 앞))
+            // 또한 이미 행동한 캐릭터는 제외한다.
+            foreach (var player in turnManager.PlayerUnits)
+            {
+                if (player.isCompleteAction == false && //행동 완료한 캐릭터 x, 죽은 캐릭터 x
+                    player.isDead == false)
+                {
+                    // if (player.TryGetComponent(Ai)) //Ai 달려있다면
+                    // {
+                    //     자동 스킬 실행
+                    // }
+                    
+                    FocusCharacter(player);
+                    break;
+                }
+            }
+        }
+        else if (actor == ActorParent.Enemy)
+        {
+            //플레이어 GUI 활성화
+            OfffGUI();
+            
+            //기본 적 캐릭터 포커스 (Select)
+            foreach (var player in turnManager.MonsterUnits)
+            {
+                if (player.isCompleteAction == false &&
+                    player.isDead == false)
+                {
+                    FocusCharacter(player);
+                    
+                    //please fix - Ai 이용으로 공격 선택
+                    break;
+                }
+            }
+            
+            //적 캐릭터
+            //자신의 로직에 따라 스킬 사용 Ai 사용
+            if (turnManager.MonsterUnits.All(unit => unit.isCompleteAction)) //모두 행동 완료
+            {
+                turnManager.TurnEndedSource?.TrySetResult(true);
+            }
+        }
+        
+    }
+    
+    #region Buttons
+
+    public void OnClickedSkillDetailButton() //스킬 버튼 클릭 시 정보, 범위 표시
     {
         
     }
+
+    public void OnClickedConfirmSelectSkillButtonWrapper() //스킬 확인(확정) 버튼 클릭 시 스킬 사용 - 버튼 할당
+    {
+        OnClickedConfirmSelectSkillButton();
+    }
+    
+    private async Task OnClickedConfirmSelectSkillButton() //스킬 확인(확정) 버튼 클릭 시 스킬 사용 //플레이어 전용
+    {
+        if (isBlockedPlayerControl) return; 
+        isBlockedPlayerControl = true; //플레이어 입력 차단
+        
+        if (selectedCharacter != null && onSelectSkill != 0) // please fix - if ai일 경우를 생각해야 합니다 (버튼 말고 다른곳에서 하기)
+        {
+            OfffGUI(); //GUI 비활성화
+            
+            await selectedCharacter.Excute(onSelectSkill); //스킬 실행 중 대기
+            
+            FocusCharacter(selectedCharacter); //행동한 캐릭터 자신을 포커스
+            
+            await Task.Delay(1000); //잠깐 대기
+            
+            foreach (var player in turnManager.PlayerUnits)
+            {
+                if (player.isCompleteAction) continue; //행동완료된 캐릭터는 지나침
+                
+                FocusCharacter(player);                //행동할 수 있는 캐릭터 포커스
+                OnGUI();                               //GUI 활성화
+                isBlockedPlayerControl = false;        //플레이어 입력 차단 비활성화
+                return;
+            }
+            
+            //여기까지 왔다면
+            //모두 행동 완료시 턴 종료
+            turnManager.TurnEndedSource?.TrySetResult(true);
+            
+            // if (turnManager.PlayerUnits.All(unit => unit.isCompleteAction)) //모두 행동 완료시 턴 종료
+            // {
+            //     turnManager.TurnEndedSource?.TrySetResult(true);
+            //     return;
+            // }
+            // else
+            // {
+            //     foreach (var player in turnManager.PlayerUnits)
+            //     {
+            //         if (player.isCompleteAction) continue; //행동완료된 캐릭터는 지나침
+            //         FocusCharacter(player); //행동할 수 있는 캐릭터 포커스
+            //         OnGUI();                //GUI 활성화
+            //         return;
+            //     }
+            // }
+            
+            
+        }
+    }
+    
+    #endregion
     
     private void OnGameStateChanged(object sender, GameStateEventArgs e)
     {
