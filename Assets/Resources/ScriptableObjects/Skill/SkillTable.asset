@@ -12,10 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfa79f0d8456cc3498e416fa292ef899, type: 3}
   m_Name: SkillTable
   m_EditorClassIdentifier: 
-  prefabEntries:
-  - prefabKey: 0
-    prefab: {fileID: 0}
-  - prefabKey: 0
-    prefab: {fileID: 0}
-  - prefabKey: 0
-    prefab: {fileID: 0}
+  prefabEntries: []
