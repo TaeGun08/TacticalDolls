@@ -14,9 +14,12 @@ public class GridBehavior : MonoBehaviour
 
         public Node ParentNode { get; set; }
 
-        public Node(Vector3Int position)
+        public Tile Tile { get; set; }
+        
+        public Node(Tile tile)
         {
-            Position = position;
+            Position = new Vector3Int(tile.x, 0, tile.y);
+            Tile = tile;
             G = int.MaxValue;
         }
     }
@@ -29,54 +32,74 @@ public class GridBehavior : MonoBehaviour
 
     [SerializeField] private Transform player;
 
-    private Node[,,] nodeArray;
+    //private Node[,,] nodeArray;
+    private Node[,] nodeArray;
 
-    [SerializeField] private int depth = 5;
+    //[SerializeField] private int depth = 5;
 
+    // private readonly Vector3Int[] directions = new Vector3Int[]
+    // {
+    //     new Vector3Int(1,0,0), new Vector3Int(-1,0,0),
+    //     new Vector3Int(0,1,0), new Vector3Int(0,-1,0),
+    //     new Vector3Int(0,0,1), new Vector3Int(0,0,-1),
+    //
+    //     new Vector3Int(1,1,0), new Vector3Int(1,-1,0), new Vector3Int(-1,1,0), new Vector3Int(-1,-1,0),
+    //     new Vector3Int(1,0,1), new Vector3Int(1,0,-1), new Vector3Int(-1,0,1), new Vector3Int(-1,0,-1),
+    //     new Vector3Int(0,1,1), new Vector3Int(0,1,-1), new Vector3Int(0,-1,1), new Vector3Int(0,-1,-1),
+    //
+    //     new Vector3Int(1,1,1), new Vector3Int(1,1,-1), new Vector3Int(1,-1,1), new Vector3Int(1,-1,-1),
+    //     new Vector3Int(-1,1,1), new Vector3Int(-1,1,-1), new Vector3Int(-1,-1,1), new Vector3Int(-1,-1,-1),
+    // };
+
+    private bool isMove;
+    
     private readonly Vector3Int[] directions = new Vector3Int[]
     {
-        new Vector3Int(1,0,0), new Vector3Int(-1,0,0),
-        new Vector3Int(0,1,0), new Vector3Int(0,-1,0),
-        new Vector3Int(0,0,1), new Vector3Int(0,0,-1),
+        new Vector3Int(1, 0, 0), 
+        new Vector3Int(-1, 0, 0),
+        new Vector3Int(0, 0, 1), 
+        new Vector3Int(0, 0, -1),
 
-        new Vector3Int(1,1,0), new Vector3Int(1,-1,0), new Vector3Int(-1,1,0), new Vector3Int(-1,-1,0),
-        new Vector3Int(1,0,1), new Vector3Int(1,0,-1), new Vector3Int(-1,0,1), new Vector3Int(-1,0,-1),
-        new Vector3Int(0,1,1), new Vector3Int(0,1,-1), new Vector3Int(0,-1,1), new Vector3Int(0,-1,-1),
-
-        new Vector3Int(1,1,1), new Vector3Int(1,1,-1), new Vector3Int(1,-1,1), new Vector3Int(1,-1,-1),
-        new Vector3Int(-1,1,1), new Vector3Int(-1,1,-1), new Vector3Int(-1,-1,1), new Vector3Int(-1,-1,-1),
+        new Vector3Int(1, 0, 1),
+        new Vector3Int(1, 0, -1),
+        new Vector3Int(-1, 0, 1),
+        new Vector3Int(-1, 0, -1),
     };
-    
-    private void Awake()
+
+    private IEnumerator Start()
     {
-        nodeArray = new Node[51, depth, 51];
+        yield return null;
+        nodeArray = new Node[51, 51];
 
         for (int x = 0; x < 51; x++)
         {
-            for (int y = 0; y < depth; y++)
+            for (int z = 0; z < 51; z++)
             {
-                for (int z = 0; z < 51; z++)
-                {
-                    nodeArray[x, y, z] = new Node(new Vector3Int(x, y, z));
-                }
+                nodeArray[x, z] = new Node(tileManager.tiles[x, z]);
             }
         }
     }
 
     private void Update()
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonDown(0) && isMove == false)
         {
-            PathFind(new Vector3Int(0, 0, 0),new Vector3Int(4, 0, 4));
-            // if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out var hit))
-            // {
-            //     Tile tile =  hit.collider.GetComponent<Tile>();
-            //     if (tile == null) return;
-            //     PathFind(new Vector3Int((int)player.transform.position.x, (int)player.transform.position.y, 
-            //             (int)player.transform.position.z),
-            //         new Vector3Int(tile.x, 0, tile.y));
-            // }
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out var hit))
+            {
+                Tile tile =  hit.collider.GetComponent<Tile>();
+                if (tile == null) return;
+                if (tile.isWalkable == false) return;
+                isMove = true;
+                PathFind(RoundToTilePosition(player.position), new Vector3Int(tile.x, 0, tile.y));
+            }
         }
+    }
+    
+    private Vector3Int RoundToTilePosition(Vector3 position)
+    {
+        int x = Mathf.RoundToInt(position.x / tileManager.tileSize);
+        int z = Mathf.RoundToInt(position.z / tileManager.tileSize);
+        return new Vector3Int(x, 0, z);
     }
 
     public void PathFind(Vector3Int start, Vector3Int end)
@@ -88,8 +111,8 @@ public class GridBehavior : MonoBehaviour
             node.ParentNode = null;
         }
 
-        Node startNode = nodeArray[start.x, start.y, start.z];
-        Node endNode = nodeArray[end.x, end.y, end.z];
+        Node startNode = nodeArray[start.x, start.z];
+        Node endNode = nodeArray[end.x, end.z];
 
         startNode.G = 0;
         startNode.H = CalculateDistanceCost(startNode, endNode);
@@ -122,7 +145,7 @@ public class GridBehavior : MonoBehaviour
 
                 int tentativeG = currentNode.G + CalculateDistanceCost(currentNode, neighbor);
 
-                if (tentativeG < neighbor.G)
+                if (tentativeG < neighbor.G && neighbor.Tile.isWalkable)
                 {
                     neighbor.ParentNode = currentNode;
                     neighbor.G = tentativeG;
@@ -160,7 +183,7 @@ public class GridBehavior : MonoBehaviour
         {
             Vector3 targetPos = new Vector3(
                 node.Position.x * tileManager.tileSize,
-                node.Position.y * tileManager.tileSize,
+                0,
                 node.Position.z * tileManager.tileSize
             );
 
@@ -170,6 +193,8 @@ public class GridBehavior : MonoBehaviour
                 yield return null;
             }
         }
+
+        isMove = false;
     }
     
     private List<Node> GetNeighbours(Node node)
@@ -179,14 +204,21 @@ public class GridBehavior : MonoBehaviour
         foreach (var dir in directions)
         {
             int nx = node.Position.x + dir.x;
-            int ny = node.Position.y + dir.y;
             int nz = node.Position.z + dir.z;
-
-            if (nx >= 0 && ny >= 0 && nz >= 0 &&
-                nx < 51 && ny < depth && nz < 51)
+            
+            if (nx < 0 || nz < 0 || nx >= 51 || nz >= 51)
+                continue;
+            
+            if (Mathf.Abs(dir.x) == 1 && Mathf.Abs(dir.z) == 1)
             {
-                neighbors.Add(nodeArray[nx, ny, nz]);
+                Node nodeA = nodeArray[node.Position.x + dir.x, node.Position.z];
+                Node nodeB = nodeArray[node.Position.x, node.Position.z + dir.z];
+
+                if (!nodeA.Tile.isWalkable || !nodeB.Tile.isWalkable)
+                    continue;
             }
+
+            neighbors.Add(nodeArray[nx, nz]);
         }
 
         return neighbors;
@@ -195,10 +227,9 @@ public class GridBehavior : MonoBehaviour
     private int CalculateDistanceCost(Node a, Node b)
     {
         int dx = Mathf.Abs(a.Position.x - b.Position.x);
-        int dy = Mathf.Abs(a.Position.y - b.Position.y);
         int dz = Mathf.Abs(a.Position.z - b.Position.z);
 
-        int max = Mathf.Max(dx, Mathf.Max(dy, dz));
+        int max = Mathf.Max(dx, dz);
         return 10 * max;
     }
 }
