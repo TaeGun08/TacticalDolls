@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 8001896690367711026}
   - component: {fileID: 4730461059666011476}
   - component: {fileID: 4692793713906478149}
+  - component: {fileID: 4442200570086932641}
+  - component: {fileID: -4153370348459965930}
   m_Layer: 5
   m_Name: Shooter
   m_TagString: Untagged
@@ -100,3 +102,29 @@ MonoBehaviour:
     Damge: 0
     Speed: 0
   Skills: []
+--- !u!114 &4442200570086932641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4523403451643908191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b5f0ceb28dbbe246895b76ade27252f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterPrefab3D: {fileID: 4339972236611186631, guid: 89576a289ce3f5e44b653b054d60bd6b,
+    type: 3}
+--- !u!225 &-4153370348459965930
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4523403451643908191}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

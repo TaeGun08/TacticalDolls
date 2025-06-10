@@ -21,19 +21,19 @@ public class SelectCharacterScroll : MonoBehaviour
         
         Debug.Log(PlayerManager.Instance.player.HasCharacter.Count);
         
-        // foreach (var characterDataSample in PlayerManager.Instance.player.HasCharacter)
-        // {
-        //     int characterCode = characterDataSample.characterCode;
-        //
-        //     foreach (var characterUI in characterUIPrefab)
-        //     {
-        //         var character = characterUI.GetComponent<CharacterData>();
-        //
-        //         if (characterCode == character.CharacterID)
-        //         {
-        //             Instantiate(characterUIPrefab[characterCode], HasCharacterContent.transform);
-        //         }
-        //     }
-        // }
+        foreach (var characterDataSample in PlayerManager.Instance.player.HasCharacter)
+        {
+            int characterCode = characterDataSample.characterCode;
+        
+            foreach (var characterUI in characterUIPrefab)
+            {
+                var character = characterUI.GetComponent<CharacterData>();
+        
+                if (characterCode == character.CharacterID)
+                {
+                    Instantiate(characterUIPrefab[characterCode], HasCharacterContent.transform);
+                }
+            }
+        }
     }
 }

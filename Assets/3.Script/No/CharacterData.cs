@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class CharacterData : MonoBehaviour
 {
-    public string CharacterID;        
+    public int CharacterID;        
     public string PrefabName;       
     public StatData Stat;
     public WeaponData Weapon;

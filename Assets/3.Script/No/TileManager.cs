@@ -96,11 +96,15 @@ public class TileManager : MonoBehaviour
         {
             Vector3 position = new Vector3(tile.x * tileSize, 0, tile.y * tileSize);
             GameObject res = Instantiate(tilePrefab, position, Quaternion.identity, transform);
-
             Tile tileComp = res.AddComponent<Tile>();
             tileComp.Initialize(tile);
-
             tiles[tile.x, tile.y] = tileComp;
+            
+            if (tileComp.tileType == 1)
+            {
+                Debug.Log("player spawn able");
+                tileComp.Highlight(Color.green);
+            }
         }
     }
     
@@ -116,6 +120,17 @@ public class TileManager : MonoBehaviour
         int x = Mathf.RoundToInt(position.x);
         int y = Mathf.RoundToInt(position.z);
         return GetTileAt(x, y);
+    }
+    
+    public Tile GetTileAtWorldPosition(Vector3 worldPos)
+    {
+        int x = Mathf.RoundToInt(worldPos.x);
+        int y = Mathf.RoundToInt(worldPos.z);
+
+        if (x < 0 || y < 0 || x >= tiles.GetLength(0) || y >= tiles.GetLength(1))
+            return null;
+
+        return tiles[x, y];
     }
 }
 

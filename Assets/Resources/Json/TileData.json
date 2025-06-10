@@ -7145,7 +7145,7 @@
                 "x": 20,
                 "y": 0,
                 "isWalkable": true,
-                "tileType": 0,
+                "tileType": 1,
                 "obstacleDir": 0
             },
             {
@@ -7502,7 +7502,7 @@
                 "x": 21,
                 "y": 0,
                 "isWalkable": true,
-                "tileType": 0,
+                "tileType": 1,
                 "obstacleDir": 0
             },
             {
@@ -7866,7 +7866,7 @@
                 "x": 22,
                 "y": 1,
                 "isWalkable": true,
-                "tileType": 0,
+                "tileType": 1,
                 "obstacleDir": 0
             },
             {
@@ -8216,7 +8216,7 @@
                 "x": 23,
                 "y": 0,
                 "isWalkable": true,
-                "tileType": 0,
+                "tileType": 1,
                 "obstacleDir": 0
             },
             {
@@ -8573,7 +8573,7 @@
                 "x": 24,
                 "y": 0,
                 "isWalkable": true,
-                "tileType": 0,
+                "tileType": 1,
                 "obstacleDir": 0
             },
             {
@@ -8930,7 +8930,7 @@
                 "x": 25,
                 "y": 0,
                 "isWalkable": true,
-                "tileType": 0,
+                "tileType": 1,
                 "obstacleDir": 0
             },
             {
@@ -9287,7 +9287,7 @@
                 "x": 26,
                 "y": 0,
                 "isWalkable": true,
-                "tileType": 0,
+                "tileType": 1,
                 "obstacleDir": 0
             },
             {
@@ -9644,7 +9644,7 @@
                 "x": 27,
                 "y": 0,
                 "isWalkable": true,
-                "tileType": 0,
+                "tileType": 1,
                 "obstacleDir": 0
             },
             {
@@ -10001,7 +10001,7 @@
                 "x": 28,
                 "y": 0,
                 "isWalkable": true,
-                "tileType": 0,
+                "tileType": 1,
                 "obstacleDir": 0
             },
             {
@@ -10358,7 +10358,7 @@
                 "x": 29,
                 "y": 0,
                 "isWalkable": true,
-                "tileType": 0,
+                "tileType": 1,
                 "obstacleDir": 0
             },
             {
@@ -10715,7 +10715,7 @@
                 "x": 30,
                 "y": 0,
                 "isWalkable": true,
-                "tileType": 0,
+                "tileType": 1,
                 "obstacleDir": 0
             },
             {
