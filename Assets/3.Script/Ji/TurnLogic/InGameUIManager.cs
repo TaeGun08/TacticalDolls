@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
-using System.Linq;
 using System.Threading.Tasks;
-using Firebase.Extensions;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class InGameUIManager : MonoBehaviour
 {
@@ -13,7 +11,8 @@ public class InGameUIManager : MonoBehaviour
     private SamplePlayer selectedCharacter;             //선택한 개체
     private int currentTurn;                            //현재 턴
     private int onSelectSkill;                          //스킬을 선택하는 로직 필요
-    private bool isBlockedPlayerControl = false;        //스킬 사용 중 플레이어 입력 막음
+    private int aiSelectSkill;                          //Ai가 자동으로 선택한 스킬
+    private bool isBlockedPlayerControl;                //스킬 사용 중 플레이어 입력 막음
     
     private void Start()
     {
@@ -45,6 +44,8 @@ public class InGameUIManager : MonoBehaviour
         isBlockedPlayerControl = false;
         
         //캐릭터 행동상태 초기화
+        if (turnManager.PlayerUnits.Length == 0 || turnManager.MonsterUnits.Length == 0) return;
+        
         foreach (var player in turnManager.PlayerUnits)
         {
             player.isCompleteAction = false;
@@ -54,17 +55,11 @@ public class InGameUIManager : MonoBehaviour
         {
             player.isCompleteAction = false;
         }
-        
     }
     
-    private void OnTurnChangedWrapper(object sender, ActorParent actor)
-    {
-        _= OnTurnChanged(sender, actor);
-    }
-
     private void Update()
     {
-        if(isBlockedPlayerControl) return;
+        if(isBlockedPlayerControl) return; //입력 불가 상태일 경구 차단
         
         switch (actorParent)
         {
@@ -85,6 +80,8 @@ public class InGameUIManager : MonoBehaviour
         }
     }
 
+    #region UI Control
+    
     private void OnGUI()
     {
         
@@ -109,11 +106,14 @@ public class InGameUIManager : MonoBehaviour
         
         // 스킬인 경우 <-버튼으로 처리
     }
+    #endregion
 
+    #region SelectCharacter
+    
     private async Task FocusCharacter(SamplePlayer player)
     {
         selectedCharacter = player;
-        //await please fix + 카메라 무빙
+        //await please fix - 카메라 무빙 추가
     }
     
     // 기본 플레이어 자동 포커스 (무작위 또는 편성시 제일 앞의 캐릭터 (배열 상 가장 앞))
@@ -146,6 +146,18 @@ public class InGameUIManager : MonoBehaviour
         }
     }
     
+
+    #endregion
+    
+    #region TurnLogic
+    
+    private bool isAi;
+    
+    private void OnTurnChangedWrapper(object sender, ActorParent actor)
+    {
+        _= OnTurnChanged(sender, actor);
+    }
+    
     private async Task OnTurnChanged(object sender, ActorParent actor) //메서드 반복은 입력이 제한적, 코루티으로 리팩토링?
     {
         Inintialize(); //초기화
@@ -154,36 +166,31 @@ public class InGameUIManager : MonoBehaviour
         actorParent = actor;
         Debug.Log($"{actor.ToString()}의 {currentTurn}턴이 시작되었습니다.");
         
-        if (actor.Equals(ActorParent.Player))
+        if (actor.Equals(ActorParent.Player)) //플레이어 조작
         {
-            //if(Ai) OffGUI(); //please fix - ai활성화 상태라면 GUI없이
-            //else
-            OnGUI(); //플레이어 GUI 활성화
+            await AutoFocusCharacter(actor); //자동으로 행동가능한 캐릭터를 포커스 & 선택
             
-            await AutoFocusCharacter(ActorParent.Player);
-            
-            //if (selectedCharacter.TryGetComponent(Ai)) //Ai 달려있다면
-            // {
-            //     자동 스킬 실행
-            // }
-        }
-        else if (actor == ActorParent.Enemy)
-        {
-            //플레이어 GUI 활성화
-            OfffGUI();
-            
-            //적 캐릭터 랜덤 포커스 (Select)
-            await AutoFocusCharacter(ActorParent.Enemy);
-            
-            //적 캐릭터
-            //자신의 로직에 따라 스킬 사용 Ai 사용
-            if (turnManager.MonsterUnits.All(unit => unit.isCompleteAction)) //모두 행동 완료
+            if (isAi)
             {
-                turnManager.TurnEndedSource?.TrySetResult(true);
+                _= ExcuteSkill(true); //Ai라면 바로 스킬을 실행
+            }
+            else
+            {
+                OnGUI(); //플레이어 GUI 활성화 후 클릭으로 스킬 실행
             }
         }
-        
+        else if (actor == ActorParent.Enemy) //적 조작 //적은 반드시 Ai
+        {
+            OfffGUI(); //플레이어 GUI 비활성화
+            
+            //적 캐릭터 랜덤 포커스 (Select)
+            await AutoFocusCharacter(actor);
+            _= ExcuteSkill(true); //Ai라면 바로 스킬을 실행
+        }
     }
+    
+
+    #endregion
     
     #region Buttons
 
@@ -192,59 +199,73 @@ public class InGameUIManager : MonoBehaviour
         
     }
 
-    public void OnClickedConfirmSelectSkillButtonWrapper() //스킬 확인(확정) 버튼 클릭 시 스킬 사용 - 버튼 할당
+    public void OnClickedConfirmSelectSkillButtonWrapper1() //1스킬 확인(확정) 버튼 클릭 시 스킬 사용 - 버튼 할당
     {
+        onSelectSkill = 1;
         OnClickedConfirmSelectSkillButton();
     }
     
-    private async Task OnClickedConfirmSelectSkillButton() //스킬 확인(확정) 버튼 클릭 시 스킬 사용 //플레이어 전용
+    public void OnClickedConfirmSelectSkillButtonWrapper2() //2스킬 확인(확정) 버튼 클릭 시 스킬 사용 - 버튼 할당
+    {
+        onSelectSkill = 2;
+        OnClickedConfirmSelectSkillButton();
+    }
+    
+    public void OnClickedConfirmSelectSkillButtonWrapper3() //3스킬 확인(확정) 버튼 클릭 시 스킬 사용 - 버튼 할당
+    {
+        onSelectSkill = 3;
+        OnClickedConfirmSelectSkillButton();
+    }
+    
+    private void OnClickedConfirmSelectSkillButton() //실제 스킬이 사용되는 메서드 //플레이어 전용
     {
         if (isBlockedPlayerControl) return; 
         isBlockedPlayerControl = true; //플레이어 입력 차단
-        
-        if (selectedCharacter != null && onSelectSkill != 0) // please fix - if ai일 경우를 생각해야 합니다 (버튼 말고 다른곳에서 하기)
+
+        if (selectedCharacter == null || onSelectSkill == 0)
         {
-            OfffGUI(); //GUI 비활성화
-            
-            await selectedCharacter.Excute(onSelectSkill); //스킬 실행 중 대기
-            
-            FocusCharacter(selectedCharacter); //행동한 캐릭터 자신을 포커스
-            
-            await Task.Delay(1000); //잠깐 대기
-            
-            foreach (var player in turnManager.PlayerUnits) //스킬 사용 후 
-            {
-                if (player.isCompleteAction) continue; //행동완료된 캐릭터는 지나침
-                
-                FocusCharacter(player);                //행동할 수 있는 캐릭터 포커스
-                OnGUI();                               //GUI 활성화
-                isBlockedPlayerControl = false;        //플레이어 입력 차단 비활성화
-                return;
-            }
-            
-            // //여기까지 왔다면
-            // //모두 행동 완료시 턴 종료
-            turnManager.TurnEndedSource?.TrySetResult(true);
-            
-            // if (turnManager.PlayerUnits.All(unit => unit.isCompleteAction)) //모두 행동 완료시 턴 종료
-            // {
-            //     turnManager.TurnEndedSource?.TrySetResult(true);
-            //     return;
-            // }
-            // else
-            // {
-            //     foreach (var player in turnManager.PlayerUnits)
-            //     {
-            //         if (player.isCompleteAction) continue; //행동완료된 캐릭터는 지나침
-            //         FocusCharacter(player); //행동할 수 있는 캐릭터 포커스
-            //         OnGUI();                //GUI 활성화
-            //         return;
-            //     }
-            // }
+            Debug.Log($"onSelectSkill : {onSelectSkill}");
+            Debug.LogError("캐릭터 또는 스킬이 선택되지 않았습니다. ");
+            return;
         }
+        
+        OfffGUI(); //GUI 비활성화
+        _= ExcuteSkill(); //스킬 실행
     }
-    
     #endregion
+    
+    private async Task ExcuteSkill(bool isAiSkill = false)
+    {
+        if(selectedCharacter.isCompleteAction) return;
+        
+        if (isAiSkill)
+        {
+            int aiRandomSkill = Random.Range(1, 4); //please fix - 캐릭터마다 자동으로 스킬을 선택하는 로직을 두기?
+            await selectedCharacter.Excute(aiRandomSkill); //스킬 실행 중 대기 ai전용
+        }
+        else
+        {
+            await selectedCharacter.Excute(onSelectSkill); //스킬 실행 중 대기
+        }
+        
+        //스킬 실행 완료
+        _= FocusCharacter(selectedCharacter); //행동한 캐릭터 자신을 포커스
+        
+        await Task.Delay(1000); //잠깐 대기
+            
+        foreach (var player in turnManager.PlayerUnits) //스킬 사용 후 행동 가능 캐릭터 검사
+        {
+            if (player.isCompleteAction) continue; //행동완료된 캐릭터는 지나침
+            
+            OnGUI();                               //GUI 활성화
+            _= FocusCharacter(player);                //행동할 수 있는 캐릭터 포커스
+            isBlockedPlayerControl = false;        //플레이어 입력 차단 비활성화
+            return;
+        }
+        
+        //여기까지 왔다면 모두 행동을 완료했습니다.
+        turnManager.TurnEndedSource?.TrySetResult(true); //턴 종료
+    }
     
     private void OnGameStateChanged(object sender, GameStateEventArgs e)
     {

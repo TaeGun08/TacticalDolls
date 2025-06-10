@@ -23,6 +23,15 @@ public partial class TurnManager : MonoBehaviour
         // playerUnits = new SamplePlayer[10];
         //적 monsterUnits
         
+        playerUnits = new SamplePlayer[3];
+        monsterUnits = new SamplePlayer[3];
+
+        for (int i = 0; i < 3; i++)
+        {
+            playerUnits[i] = new SamplePlayer();
+            monsterUnits[i] = new SamplePlayer();
+        }
+        
         return Task.FromResult(true);
     }
 }
