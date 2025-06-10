@@ -7,6 +7,7 @@ public class SamplePlayer
 {
     public bool isDead = false;
     public bool isCompleteAction = false;
+    public Animator animator;
     
     public async Task Excute(int selectedSkill)
     {
@@ -32,10 +33,16 @@ public class SamplePlayers : MonoBehaviour
         //스킬 애니메이션
         //애니메이션에 맞춰 스킬 효과 적용 (데미지, 힐,)
         
-        await Task.Delay(3000);
+        // await Task.Delay(3000);
         
+        SamplePlayer samplePlayer = new SamplePlayer();
+        SkillSample_Player sampleSkill = new SkillSample_Player();
+        sampleSkill.MakeSkillSequence(samplePlayer, Vector3.left, sampleAction);
+    }
+
+    private void sampleAction()
+    {
         isCompleteAction = true; //캐릭터 행동 종료
-        // return Task.CompletedTask; //끝난 시점에
     }
 }
 
