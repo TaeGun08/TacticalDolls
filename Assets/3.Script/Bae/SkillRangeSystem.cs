@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillRangeTester : MonoBehaviour
+public class SkillRangeSystem : MonoBehaviour
 {
-    public static SkillRangeTester Instance;
+    public static SkillRangeSystem Instance;
     
     private CharacterData currentCharacterData;
     

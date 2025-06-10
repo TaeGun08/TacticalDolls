@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SkillUI : MonoBehaviour
+public class SkillSelectSystem : MonoBehaviour
 {
     public GameObject panel;
     public Button[] skillButtons = new Button[4];
@@ -57,6 +57,6 @@ public class SkillUI : MonoBehaviour
             return;
 
         // 범위 표시 요청
-        SkillRangeTester.Instance.ShowSkillRange(currentCharacter, index);
+        SkillRangeSystem.Instance.ShowSkillRange(currentCharacter, index);
     }
 }

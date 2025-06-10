@@ -96,7 +96,7 @@ MonoBehaviour:
     HP: 0
     Attack: 0
     Defense: 0
-    Speed: 0
+    MoveRange: 0
   Weapon:
     Name: 
     Damge: 0

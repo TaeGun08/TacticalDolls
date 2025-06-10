@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterClick : MonoBehaviour
+public class CharacterClickSystem : MonoBehaviour
 {
     [SerializeField] private LayerMask characterLayer;
-    [SerializeField] private SkillUI skillUI;
+    [SerializeField] private SkillSelectSystem skillUI;
 
     private void Update()
     {
@@ -18,7 +18,7 @@ public class CharacterClick : MonoBehaviour
                 if (characterData != null)
                 {
                     skillUI.Open(characterData);
-                    SkillRangeTester.Instance.ResetAllHighlights();
+                    SkillRangeSystem.Instance.ResetAllHighlights();
                 }
             }
         }
