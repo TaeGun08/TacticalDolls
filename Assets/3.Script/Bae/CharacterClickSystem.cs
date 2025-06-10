@@ -17,8 +17,9 @@ public class CharacterClickSystem : MonoBehaviour
                 CharacterData characterData = hit.collider.GetComponent<CharacterData>();
                 if (characterData != null)
                 {
-                    skillUI.Open(characterData);
                     SkillRangeSystem.Instance.ResetAllHighlights();
+                    MoveRangeSystem.Instance.ShowMoveRange(characterData);
+                    skillUI.Open(characterData);
                 }
             }
         }

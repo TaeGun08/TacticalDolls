@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Exoa.Maths;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -56,6 +57,7 @@ public class TileManager : MonoBehaviour
         LoadMap();
         
         SkillRangeSystem.Instance.SetAllTiles();
+        MoveRangeSystem.Instance.SetAllTiles();
     }
     
     private void LoadMap()
