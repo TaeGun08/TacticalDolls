@@ -129,6 +129,8 @@ public class PlayerManager: MonoBehaviour
 
                 pos++;
             }
+            
+            Debug.Log("test");
         }
     }
 }
