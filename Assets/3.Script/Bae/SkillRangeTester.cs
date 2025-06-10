@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,26 +10,40 @@ public class SkillRangeTester : MonoBehaviour
     public enum RangeType { Straight, Plus, Cross, Around }
     public RangeType currentRangeType = RangeType.Around;
     public int currentRange = 3;
+    
+    public Tile[,] tiles;
+    public Tile currentTile;
 
     private bool isRangeVisible = false;
-    public CharacterCurrentTileSetter playerUnit; // 현재 캐릭터 (혹은 선택된 캐릭터)
 
     private void Awake()
     {
         Instance = this;
     }
 
+    private void Start()
+    {
+        tiles = TileManager.Instance.tiles;
+    }
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             ToggleSkillRange();
         }
     }
 
+    public Tile GetCurrentTile()
+    {
+        return TileManager.Instance.GetClosestTile(transform.position);
+    }
+    
     private void ToggleSkillRange()
     {
-        if (playerUnit == null || playerUnit.currentTile == null) return;
+        currentTile = GetCurrentTile();
+        
+        if (currentTile == null) return;
 
         if (isRangeVisible)
         {
@@ -37,46 +52,50 @@ public class SkillRangeTester : MonoBehaviour
         }
         else
         {
-            HighlightSkillRange(playerUnit.currentTile, currentRangeType, currentRange);
+            HighlightAllTilesInRange(currentTile, currentRangeType, currentRange);
             isRangeVisible = true;
         }
     }
 
-    public void HighlightSkillRange(Tile centerTile, RangeType rangeType, int range)
+    public void HighlightAllTilesInRange(Tile centerTile, RangeType rangeType, int range)
     {
-        Tile[] allTiles = FindObjectsOfType<Tile>();
-
-        foreach (Tile tile in allTiles)
+        for (int x = 0; x < tiles.GetLength(0); x++)
         {
-            int dx = Mathf.Abs(tile.x - centerTile.x);
-            int dy = Mathf.Abs(tile.y - centerTile.y);
-
-            bool inRange = false;
-
-            switch (rangeType)
+            for (int y = 0; y < tiles.GetLength(1); y++)
             {
-                case RangeType.Straight:
-                case RangeType.Plus:
-                    inRange = (dx == 0 && dy <= range) || (dy == 0 && dx <= range);
-                    break;
-                case RangeType.Cross:
-                    inRange = (dx == dy && dx <= range);
-                    break;
-                case RangeType.Around:
-                    inRange = (dx + dy) <= range;
-                    break;
-            }
+                Tile tile = tiles[x, y];
+                if (tile == null) continue;
 
-            if (inRange)
-                tile.Highlight(Color.cyan);
-            else
-                tile.ResetHighlight();
+                int dx = Mathf.Abs(tile.x - centerTile.x);
+                int dy = Mathf.Abs(tile.y - centerTile.y);
+
+                bool inRange = false;
+
+                switch (rangeType)
+                {
+                    case RangeType.Straight:
+                    case RangeType.Plus:
+                        inRange = (dx == 0 && dy <= range) || (dy == 0 && dx <= range);
+                        break;
+                    case RangeType.Cross:
+                        inRange = (dx == dy && dx <= range);
+                        break;
+                    case RangeType.Around:
+                        inRange = (dx + dy) <= range;
+                        break;
+                }
+
+                if (inRange)
+                    tile.Highlight(Color.cyan);
+                else
+                    tile.ResetHighlight();
+            }
         }
     }
 
     public void ResetAllHighlights()
     {
-        foreach (Tile tile in FindObjectsOfType<Tile>())
+        foreach (Tile tile in tiles)
         {
             tile.ResetHighlight();
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -15,10 +16,16 @@ public enum StageType
 
 public class TileManager : MonoBehaviour
 {
+    public static TileManager Instance;
+    
     public TextAsset jsonFile;
     public float tileSize = 1.0f;
     public GameObject tilePrefab;
 
+    public Tile[,] tiles;
+    private int width;
+    private int height;
+    
     [Header("Stage Selection")]
     public StageType selectedStage;
 
@@ -38,25 +45,77 @@ public class TileManager : MonoBehaviour
         public Dictionary<string, List<TileData>> Stages;
     }
 
-    private void LoadMap()
+    // private void LoadMap()
+    // {
+    //     MapData mapTiles = JsonConvert.DeserializeObject<MapData>(jsonFile.text);
+    //
+    //     string stageKey = selectedStage.ToString(); 
+    //
+    //     foreach (TileData tile in mapTiles.Stages[stageKey])
+    //     {
+    //         Vector3 position = new Vector3(tile.x * tileSize, 0, tile.y * tileSize);
+    //         var res = Instantiate(tilePrefab, position, Quaternion.identity, transform);
+    //
+    //         var tileComp = res.AddComponent<Tile>();
+    //         tileComp.Initialize(tile);
+    //     }
+    // }
+
+    private void Awake()
     {
-        MapData mapTiles = JsonConvert.DeserializeObject<MapData>(jsonFile.text);
-
-        string stageKey = selectedStage.ToString(); 
-
-        foreach (TileData tile in mapTiles.Stages[stageKey])
-        {
-            Vector3 position = new Vector3(tile.x * tileSize, 0, tile.y * tileSize);
-            var res = Instantiate(tilePrefab, position, Quaternion.identity, transform);
-
-            var tileComp = res.AddComponent<Tile>();
-            tileComp.Initialize(tile);
-        }
+        Instance = this;
     }
 
     private void Start()
     {
         LoadMap();
+    }
+    
+    private void LoadMap()
+    {
+        MapData mapTiles = JsonConvert.DeserializeObject<MapData>(jsonFile.text);
+        string stageKey = selectedStage.ToString();
+        List<TileData> stageTiles = mapTiles.Stages[stageKey];
+
+        // 먼저 맵 크기 계산 (최댓값 기준)
+        int maxX = 0;
+        int maxY = 0;
+
+        foreach (var tile in stageTiles)
+        {
+            if (tile.x > maxX) maxX = tile.x;
+            if (tile.y > maxY) maxY = tile.y;
+        }
+
+        width = maxX + 1;
+        height = maxY + 1;
+        tiles = new Tile[width, height];
+
+        // 타일 생성 및 배열에 저장
+        foreach (TileData tile in stageTiles)
+        {
+            Vector3 position = new Vector3(tile.x * tileSize, 0, tile.y * tileSize);
+            GameObject res = Instantiate(tilePrefab, position, Quaternion.identity, transform);
+
+            Tile tileComp = res.AddComponent<Tile>();
+            tileComp.Initialize(tile);
+
+            tiles[tile.x, tile.y] = tileComp;
+        }
+    }
+    
+    public Tile GetTileAt(int x, int y)
+    {
+        if (x >= 0 && x < width && y >= 0 && y < height)
+            return tiles[x, y];
+        return null;
+    }
+    
+    public Tile GetClosestTile(Vector3 position)
+    {
+        int x = Mathf.RoundToInt(position.x);
+        int y = Mathf.RoundToInt(position.z);
+        return GetTileAt(x, y);
     }
 }
 
