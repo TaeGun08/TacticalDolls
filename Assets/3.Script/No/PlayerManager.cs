@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class PlayerManager: MonoBehaviour
 {
+    public static PlayerManager Instance;
+    
     public List<CharacterData> CharacterPrefab;
     
     [System.Serializable]
@@ -26,7 +28,20 @@ public class PlayerManager: MonoBehaviour
     }
 
     public PlayerDataSample player;
-    
+
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject); 
+    }
+
     private void Start()
     {
         player = new PlayerDataSample();
