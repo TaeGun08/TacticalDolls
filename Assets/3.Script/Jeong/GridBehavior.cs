@@ -215,6 +215,6 @@ public class GridBehavior : MonoBehaviour
         int dz = Mathf.Abs(a.Position.z - b.Position.z);
 
         int max = Mathf.Max(dx, Mathf.Max(dy, dz));
-        return 10 * max; // 단순화: 대각선 포함 최소 비용 계산
+        return 10 * max;
     }
 }

@@ -1,66 +1,103 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SkillRangeTester : MonoBehaviour
 {
-    public static SkillRangeTester Instance { get; private set; }
+    public static SkillRangeTester Instance;
 
     public enum RangeType { Straight, Plus, Cross, Around }
+    public RangeType currentRangeType = RangeType.Around;
+    public int currentRange = 3;
+    
+    public Tile[,] tiles;
+    public Tile currentTile;
 
-    public RangeType currentRangeType = RangeType.Straight;
-    public int currentRange = 5;
+    private bool isRangeVisible = false;
 
     private void Awake()
     {
         Instance = this;
     }
 
-    public void OnTileClicked(Tile clickedTile)
+    private void Start()
     {
-        Debug.Log($"TileManager handling click at ({clickedTile.x}, {clickedTile.y})");
-
-        HighlightSkillRange(clickedTile, currentRangeType, currentRange);
+        tiles = TileManager.Instance.tiles;
     }
 
-    public void HighlightSkillRange(Tile centerTile, RangeType rangeType, int range)
+    private void Update()
     {
-        Tile[] allTiles = FindObjectsOfType<Tile>();
-
-        foreach (Tile tile in allTiles)
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            int dx = Mathf.Abs(tile.x - centerTile.x);
-            int dy = Mathf.Abs(tile.y - centerTile.y);
+            ToggleSkillRange();
+        }
+    }
 
-            bool inRange = false;
+    public Tile GetCurrentTile()
+    {
+        return TileManager.Instance.GetClosestTile(transform.position);
+    }
+    
+    private void ToggleSkillRange()
+    {
+        currentTile = GetCurrentTile();
+        
+        if (currentTile == null) return;
 
-            switch (rangeType)
+        if (isRangeVisible)
+        {
+            ResetAllHighlights();
+            isRangeVisible = false;
+        }
+        else
+        {
+            HighlightAllTilesInRange(currentTile, currentRangeType, currentRange);
+            isRangeVisible = true;
+        }
+    }
+
+    public void HighlightAllTilesInRange(Tile centerTile, RangeType rangeType, int range)
+    {
+        for (int x = 0; x < tiles.GetLength(0); x++)
+        {
+            for (int y = 0; y < tiles.GetLength(1); y++)
             {
-                case RangeType.Straight:
-                    inRange = (dx == 0 && dy <= range) || (dy == 0 && dx <= range);
-                    break;
+                Tile tile = tiles[x, y];
+                if (tile == null) continue;
 
-                case RangeType.Plus:
-                    inRange = (dx == 0 && dy <= range) || (dy == 0 && dx <= range);
-                    break;
+                int dx = Mathf.Abs(tile.x - centerTile.x);
+                int dy = Mathf.Abs(tile.y - centerTile.y);
 
-                case RangeType.Cross:
-                    inRange = (dx == dy && dx <= range);
-                    break;
+                bool inRange = false;
 
-                case RangeType.Around:
-                    inRange = (dx + dy) <= range;
-                    break;
+                switch (rangeType)
+                {
+                    case RangeType.Straight:
+                    case RangeType.Plus:
+                        inRange = (dx == 0 && dy <= range) || (dy == 0 && dx <= range);
+                        break;
+                    case RangeType.Cross:
+                        inRange = (dx == dy && dx <= range);
+                        break;
+                    case RangeType.Around:
+                        inRange = (dx + dy) <= range;
+                        break;
+                }
+
+                if (inRange)
+                    tile.Highlight(Color.cyan);
+                else
+                    tile.ResetHighlight();
             }
+        }
+    }
 
-            if (inRange)
-            {
-                tile.Highlight(Color.cyan);
-            }
-            else
-            {
-                tile.ResetHighlight();
-            }
+    public void ResetAllHighlights()
+    {
+        foreach (Tile tile in tiles)
+        {
+            tile.ResetHighlight();
         }
     }
 }
