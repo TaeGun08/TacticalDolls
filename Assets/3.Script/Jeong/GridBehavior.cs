@@ -21,18 +21,15 @@ public class GridBehavior : MonoBehaviour
         }
     }
 
+    [SerializeField] private TileManager tileManager;
+
     [Header("Pathfinding")]
-    [SerializeField] private float cellSize = 1f;
     [SerializeField] private Vector3Int startPos;
     [SerializeField] private Vector3Int endPos;
-    [SerializeField] public int rows = 5;
-    [SerializeField] public int columns = 5;
-    public Color lineColor = Color.white;
 
     [SerializeField] private Transform player;
-    [SerializeField] private GameObject tilePrefab;
-
-    private Node[,,] nodeArray;
+    
+    private Node[,,] nodeArr;
 
     [SerializeField] private int depth = 5;
 
@@ -49,62 +46,25 @@ public class GridBehavior : MonoBehaviour
         new Vector3Int(1,1,1), new Vector3Int(1,1,-1), new Vector3Int(1,-1,1), new Vector3Int(1,-1,-1),
         new Vector3Int(-1,1,1), new Vector3Int(-1,1,-1), new Vector3Int(-1,-1,1), new Vector3Int(-1,-1,-1),
     };
-    
-    private void Awake()
-    {
-        nodeArray = new Node[columns, depth, rows];
-
-        for (int x = 0; x < columns; x++)
-        {
-            for (int y = 0; y < depth; y++)
-            {
-                for (int z = 0; z < rows; z++)
-                {
-                    Vector3 worldPos = new Vector3(x * cellSize + cellSize * 0.5f, y * cellSize + cellSize * 0.5f, z * cellSize + cellSize * 0.5f);
-                    Instantiate(tilePrefab, worldPos, Quaternion.identity);
-                    nodeArray[x, y, z] = new Node(new Vector3Int(x, y, z));
-                }
-            }
-        }
-    }
 
     private void Start()
     {
-        PathFind(startPos, endPos);
+        PathFind(startPos, endPos, new Vector3Int(51, 0, 51));
     }
 
-    #region 임시 타일 그리기
-    private void OnDrawGizmos()
+    public void PathFind(Vector3Int start, Vector3Int end, Vector3Int map)
     {
-        Gizmos.color = lineColor;
-
-        for (int x = 0; x <= columns; x++)
-        {
-            Vector3 start = transform.position + new Vector3(x * cellSize, 0, 0);
-            Vector3 end = start + new Vector3(0, 0, rows * cellSize);
-            Gizmos.DrawLine(start, end);
-        }
-
-        for (int z = 0; z <= rows; z++)
-        {
-            Vector3 start = transform.position + new Vector3(0, 0, z * cellSize);
-            Vector3 end = start + new Vector3(columns * cellSize, 0, 0);
-            Gizmos.DrawLine(start, end);
-        }
-    }
-    #endregion
-
-    public void PathFind(Vector3Int start, Vector3Int end)
-    {
-        foreach (var node in nodeArray)
+        nodeArr = new Node[map.x, map.y, map.z];
+        
+        foreach (var node in nodeArr)
         {
             node.G = int.MaxValue;
             node.H = 0;
             node.ParentNode = null;
         }
-
-        Node startNode = nodeArray[start.x, start.y, start.z];
-        Node endNode = nodeArray[end.x, end.y, end.z];
+        
+        Node startNode = new Node(new Vector3Int(start.x, start.y, start.z));
+        Node endNode = new Node(new Vector3Int(end.x, end.y, end.z));
 
         startNode.G = 0;
         startNode.H = CalculateDistanceCost(startNode, endNode);
@@ -112,9 +72,12 @@ public class GridBehavior : MonoBehaviour
         List<Node> openList = new List<Node> { startNode };
         HashSet<Node> closedList = new HashSet<Node>();
 
-        while (openList.Count > 0)
+        int loopCount = 0;
+        
+        while (openList.Count > 0 && loopCount < 1000)
         {
-            // 최소 F값을 갖는 노드 찾기 - 개선 가능: 우선순위 큐 사용 추천
+            loopCount++;
+            
             Node currentNode = openList[0];
             for (int i = 1; i < openList.Count; i++)
             {
@@ -175,9 +138,9 @@ public class GridBehavior : MonoBehaviour
         foreach (Node node in path)
         {
             Vector3 targetPos = new Vector3(
-                node.Position.x * cellSize + cellSize * 0.5f,
+                node.Position.x * tileManager.tileSize + tileManager.tileSize * 0.5f,
                 node.Position.y,
-                node.Position.z * cellSize + cellSize * 0.5f
+                node.Position.z * tileManager.tileSize + tileManager.tileSize * 0.5f
             );
 
             while (Vector3.Distance(player.position, targetPos) > 0.05f)
@@ -198,10 +161,11 @@ public class GridBehavior : MonoBehaviour
             int ny = node.Position.y + dir.y;
             int nz = node.Position.z + dir.z;
 
-            if (nx >= 0 && ny >= 0 && nz >= 0 &&
-                nx < columns && ny < depth && nz < rows)
+            if (nx >= 0 && nx < 51 &&
+                ny >= 0 && ny < depth &&
+                nz >= 0 && nz < 51)
             {
-                neighbors.Add(nodeArray[nx, ny, nz]);
+                neighbors.Add(nodeArr[nx, ny, nz]);
             }
         }
 
