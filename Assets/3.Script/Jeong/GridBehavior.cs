@@ -49,13 +49,13 @@ public class GridBehavior : MonoBehaviour
     
     private void Awake()
     {
-        nodeArray = new Node[25, depth, 25];
+        nodeArray = new Node[51, depth, 51];
 
-        for (int x = 0; x < 25; x++)
+        for (int x = 0; x < 51; x++)
         {
             for (int y = 0; y < depth; y++)
             {
-                for (int z = 0; z < 25; z++)
+                for (int z = 0; z < 51; z++)
                 {
                     nodeArray[x, y, z] = new Node(new Vector3Int(x, y, z));
                 }
@@ -63,9 +63,17 @@ public class GridBehavior : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void Update()
     {
-        PathFind(startPos, endPos);
+        if (Input.GetMouseButton(1))
+        {
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out var hit))
+            {
+                Tile tile =  hit.collider.GetComponent<Tile>();
+                if (tile == null) return;
+                PathFind(startPos, new Vector3Int(tile.x, 0, tile.y));
+            }
+        }
     }
 
     public void PathFind(Vector3Int start, Vector3Int end)
@@ -148,14 +156,14 @@ public class GridBehavior : MonoBehaviour
         foreach (Node node in path)
         {
             Vector3 targetPos = new Vector3(
-                node.Position.x * tileManager.tileSize + tileManager.tileSize * 0.5f,
+                node.Position.x * tileManager.tileSize,
                 node.Position.y * tileManager.tileSize,
-                node.Position.z * tileManager.tileSize + tileManager.tileSize * 0.5f
+                node.Position.z * tileManager.tileSize
             );
 
             while (Vector3.Distance(player.position, targetPos) > 0.05f)
             {
-                player.position = Vector3.MoveTowards(player.position, targetPos, 3f * Time.deltaTime);
+                player.position = Vector3.MoveTowards(player.position, targetPos, 10f * Time.deltaTime);
                 yield return null;
             }
         }
