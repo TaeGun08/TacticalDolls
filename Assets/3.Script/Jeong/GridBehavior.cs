@@ -212,6 +212,7 @@ public class GridBehavior : MonoBehaviour
         }
 
         isMove = false;
+        MoveRangeSystem.Instance.ResetMovableTiles();
     }
     
     private List<Node> GetNeighbours(Node node)

@@ -71,7 +71,7 @@ public class MoveRangeSystem : MonoBehaviour
                 if (inRange)
                 {
                     tile.Highlight(Color.white);
-                    
+                    movableTiles.Add(tile);
                 }
                 else
                     tile.ResetHighlight();
@@ -92,5 +92,10 @@ public class MoveRangeSystem : MonoBehaviour
     public bool IsTileInMoveRange(Tile tile)
     {
         return movableTiles.Contains(tile);
+    }
+
+    public void ResetMovableTiles()
+    {
+        movableTiles.Clear();
     }
 }
