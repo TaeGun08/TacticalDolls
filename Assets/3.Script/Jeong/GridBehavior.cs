@@ -21,16 +21,13 @@ public class GridBehavior : MonoBehaviour
         }
     }
 
+    [SerializeField] private TileManager tileManager;
+
     [Header("Pathfinding")]
-    [SerializeField] private float cellSize = 1f;
     [SerializeField] private Vector3Int startPos;
     [SerializeField] private Vector3Int endPos;
-    [SerializeField] public int rows = 5;
-    [SerializeField] public int columns = 5;
-    public Color lineColor = Color.white;
 
     [SerializeField] private Transform player;
-    [SerializeField] private GameObject tilePrefab;
 
     private Node[,,] nodeArray;
 
@@ -52,47 +49,35 @@ public class GridBehavior : MonoBehaviour
     
     private void Awake()
     {
-        nodeArray = new Node[columns, depth, rows];
+        nodeArray = new Node[51, depth, 51];
 
-        for (int x = 0; x < columns; x++)
+        for (int x = 0; x < 51; x++)
         {
             for (int y = 0; y < depth; y++)
             {
-                for (int z = 0; z < rows; z++)
+                for (int z = 0; z < 51; z++)
                 {
-                    Vector3 worldPos = new Vector3(x * cellSize + cellSize * 0.5f, y * cellSize + cellSize * 0.5f, z * cellSize + cellSize * 0.5f);
-                    Instantiate(tilePrefab, worldPos, Quaternion.identity);
                     nodeArray[x, y, z] = new Node(new Vector3Int(x, y, z));
                 }
             }
         }
     }
 
-    private void Start()
+    private void Update()
     {
-        PathFind(startPos, endPos);
-    }
-
-    #region 임시 타일 그리기
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = lineColor;
-
-        for (int x = 0; x <= columns; x++)
+        if (Input.GetMouseButton(0))
         {
-            Vector3 start = transform.position + new Vector3(x * cellSize, 0, 0);
-            Vector3 end = start + new Vector3(0, 0, rows * cellSize);
-            Gizmos.DrawLine(start, end);
-        }
-
-        for (int z = 0; z <= rows; z++)
-        {
-            Vector3 start = transform.position + new Vector3(0, 0, z * cellSize);
-            Vector3 end = start + new Vector3(columns * cellSize, 0, 0);
-            Gizmos.DrawLine(start, end);
+            PathFind(new Vector3Int(0, 0, 0),new Vector3Int(4, 0, 4));
+            // if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out var hit))
+            // {
+            //     Tile tile =  hit.collider.GetComponent<Tile>();
+            //     if (tile == null) return;
+            //     PathFind(new Vector3Int((int)player.transform.position.x, (int)player.transform.position.y, 
+            //             (int)player.transform.position.z),
+            //         new Vector3Int(tile.x, 0, tile.y));
+            // }
         }
     }
-    #endregion
 
     public void PathFind(Vector3Int start, Vector3Int end)
     {
@@ -114,7 +99,6 @@ public class GridBehavior : MonoBehaviour
 
         while (openList.Count > 0)
         {
-            // 최소 F값을 갖는 노드 찾기 - 개선 가능: 우선순위 큐 사용 추천
             Node currentNode = openList[0];
             for (int i = 1; i < openList.Count; i++)
             {
@@ -175,14 +159,14 @@ public class GridBehavior : MonoBehaviour
         foreach (Node node in path)
         {
             Vector3 targetPos = new Vector3(
-                node.Position.x * cellSize + cellSize * 0.5f,
-                node.Position.y,
-                node.Position.z * cellSize + cellSize * 0.5f
+                node.Position.x * tileManager.tileSize,
+                node.Position.y * tileManager.tileSize,
+                node.Position.z * tileManager.tileSize
             );
 
             while (Vector3.Distance(player.position, targetPos) > 0.05f)
             {
-                player.position = Vector3.MoveTowards(player.position, targetPos, 3f * Time.deltaTime);
+                player.position = Vector3.MoveTowards(player.position, targetPos, 10f * Time.deltaTime);
                 yield return null;
             }
         }
@@ -199,7 +183,7 @@ public class GridBehavior : MonoBehaviour
             int nz = node.Position.z + dir.z;
 
             if (nx >= 0 && ny >= 0 && nz >= 0 &&
-                nx < columns && ny < depth && nz < rows)
+                nx < 51 && ny < depth && nz < 51)
             {
                 neighbors.Add(nodeArray[nx, ny, nz]);
             }

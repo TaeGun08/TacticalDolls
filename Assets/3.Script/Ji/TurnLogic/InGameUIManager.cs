@@ -24,8 +24,6 @@ public class InGameUIManager : MonoBehaviour
             return;
         }
         
-        Inintialize();
-        
         turnManager.ActorChanged += OnTurnChangedWrapper;
         turnManager.GameStateChanged += OnGameStateChanged;
     }
@@ -40,10 +38,23 @@ public class InGameUIManager : MonoBehaviour
 
     private void Inintialize()
     {
+        //this 초기화
         selectedCharacter = null;
         currentTurn = 0;
         onSelectSkill = 0;
         isBlockedPlayerControl = false;
+        
+        //캐릭터 행동상태 초기화
+        foreach (var player in turnManager.PlayerUnits)
+        {
+            player.isCompleteAction = false;
+        }
+        
+        foreach (var player in turnManager.MonsterUnits)
+        {
+            player.isCompleteAction = false;
+        }
+        
     }
     
     private void OnTurnChangedWrapper(object sender, ActorParent actor)
@@ -63,11 +74,9 @@ public class InGameUIManager : MonoBehaviour
             case ActorParent.Player:
                 //클릭으로 캐릭터 선택하기 selectedPlayer 변경
                 ClickObject();
-                
                 break;
             
             case ActorParent.Enemy:
-                //UI 비활성화
                 //Pause 버튼과 Pause UI 제외 인게임 조작 완전히 막힘
                 break;
             
@@ -94,18 +103,47 @@ public class InGameUIManager : MonoBehaviour
         // 캐릭터인 경우
         //FocusCharacter(player)
         
-        // 스킬인 경우 <-버튼으로 처리
-        
         // 적인 경우
         
         // 맵 오브젝트인 경우
         
+        // 스킬인 경우 <-버튼으로 처리
     }
 
-    private void FocusCharacter(SamplePlayer player)
+    private async Task FocusCharacter(SamplePlayer player)
     {
         selectedCharacter = player;
-        //please fix + 카메라 무빙
+        //await please fix + 카메라 무빙
+    }
+    
+    // 기본 플레이어 자동 포커스 (무작위 또는 편성시 제일 앞의 캐릭터 (배열 상 가장 앞))
+    private async Task AutoFocusCharacter(ActorParent actor)
+    {
+        SamplePlayer[] character;
+
+        switch (actor)
+        {
+            case ActorParent.None:
+                return;
+            case ActorParent.Player:
+                character = turnManager.PlayerUnits;
+                break;
+            case ActorParent.Enemy:
+            default:
+                character = turnManager.MonsterUnits;
+                break;
+        }
+        
+        //자동 선택
+        foreach (var c in character)
+        {
+            if (c.isCompleteAction == false && //행동 완료한 캐릭터 제외, 사망 캐릭터 제외
+                c.isDead == false)
+            {
+                await FocusCharacter(c); //카메라 무브 대기
+                break;
+            }
+        }
     }
     
     private async Task OnTurnChanged(object sender, ActorParent actor) //메서드 반복은 입력이 제한적, 코루티으로 리팩토링?
@@ -115,51 +153,27 @@ public class InGameUIManager : MonoBehaviour
         currentTurn = turnManager.TurnCount + 1;
         actorParent = actor;
         Debug.Log($"{actor.ToString()}의 {currentTurn}턴이 시작되었습니다.");
-
-        foreach (var player in turnManager.PlayerUnits)
-        {
-            player.isCompleteAction = false;
-        }
         
         if (actor.Equals(ActorParent.Player))
         {
-            //플레이어 GUI 활성화
-            OnGUI();
+            //if(Ai) OffGUI(); //please fix - ai활성화 상태라면 GUI없이
+            //else
+            OnGUI(); //플레이어 GUI 활성화
             
-            // 기본 플레이어 캐릭터 자동 포커스 (무작위 또는 편성시 제일 앞의 캐릭터 (배열 상 가장 앞))
-            // 또한 이미 행동한 캐릭터는 제외한다.
-            foreach (var player in turnManager.PlayerUnits)
-            {
-                if (player.isCompleteAction == false && //행동 완료한 캐릭터 x, 죽은 캐릭터 x
-                    player.isDead == false)
-                {
-                    // if (player.TryGetComponent(Ai)) //Ai 달려있다면
-                    // {
-                    //     자동 스킬 실행
-                    // }
-                    
-                    FocusCharacter(player);
-                    break;
-                }
-            }
+            await AutoFocusCharacter(ActorParent.Player);
+            
+            //if (selectedCharacter.TryGetComponent(Ai)) //Ai 달려있다면
+            // {
+            //     자동 스킬 실행
+            // }
         }
         else if (actor == ActorParent.Enemy)
         {
             //플레이어 GUI 활성화
             OfffGUI();
             
-            //기본 적 캐릭터 포커스 (Select)
-            foreach (var player in turnManager.MonsterUnits)
-            {
-                if (player.isCompleteAction == false &&
-                    player.isDead == false)
-                {
-                    FocusCharacter(player);
-                    
-                    //please fix - Ai 이용으로 공격 선택
-                    break;
-                }
-            }
+            //적 캐릭터 랜덤 포커스 (Select)
+            await AutoFocusCharacter(ActorParent.Enemy);
             
             //적 캐릭터
             //자신의 로직에 따라 스킬 사용 Ai 사용
@@ -198,7 +212,7 @@ public class InGameUIManager : MonoBehaviour
             
             await Task.Delay(1000); //잠깐 대기
             
-            foreach (var player in turnManager.PlayerUnits)
+            foreach (var player in turnManager.PlayerUnits) //스킬 사용 후 
             {
                 if (player.isCompleteAction) continue; //행동완료된 캐릭터는 지나침
                 
@@ -208,8 +222,8 @@ public class InGameUIManager : MonoBehaviour
                 return;
             }
             
-            //여기까지 왔다면
-            //모두 행동 완료시 턴 종료
+            // //여기까지 왔다면
+            // //모두 행동 완료시 턴 종료
             turnManager.TurnEndedSource?.TrySetResult(true);
             
             // if (turnManager.PlayerUnits.All(unit => unit.isCompleteAction)) //모두 행동 완료시 턴 종료
@@ -227,8 +241,6 @@ public class InGameUIManager : MonoBehaviour
             //         return;
             //     }
             // }
-            
-            
         }
     }
     
