@@ -5,7 +5,7 @@ using UnityEngine;
 public class CharacterClickSystem : MonoBehaviour
 {
     [SerializeField] private LayerMask characterLayer;
-    [SerializeField] private SkillSelectSystem skillUI;
+    [SerializeField] private SkillSelectSystem skillSelectSystem;
 
     private void Update()
     {
@@ -17,8 +17,9 @@ public class CharacterClickSystem : MonoBehaviour
                 CharacterData characterData = hit.collider.GetComponent<CharacterData>();
                 if (characterData != null)
                 {
-                    skillUI.Open(characterData);
                     SkillRangeSystem.Instance.ResetAllHighlights();
+                    MoveRangeSystem.Instance.ShowMoveRange(characterData);
+                    skillSelectSystem.Open(characterData);
                 }
             }
         }

@@ -56,6 +56,7 @@ public class TileManager : MonoBehaviour
         LoadMap();
         
         SkillRangeSystem.Instance.SetAllTiles();
+        MoveRangeSystem.Instance.SetAllTiles();
     }
     
     private void LoadMap()
