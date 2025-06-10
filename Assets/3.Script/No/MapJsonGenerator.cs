@@ -11,9 +11,9 @@ public class MapJsonGenerator : MonoBehaviour
         TileDataListWrapper wrapper = new TileDataListWrapper();
         wrapper.stage1 = new List<TileData>();
 
-        for (int x = -25; x <= 25; x++)
+        for (int x = 0; x <= 50; x++)
         {
-            for (int y = -25; y <= 25; y++)
+            for (int y = 0; y <= 50; y++)
             {
                 TileData tile = new TileData
                 {
