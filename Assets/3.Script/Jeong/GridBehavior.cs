@@ -65,14 +65,17 @@ public class GridBehavior : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButton(0))
         {
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out var hit))
-            {
-                Tile tile =  hit.collider.GetComponent<Tile>();
-                if (tile == null) return;
-                PathFind(startPos, new Vector3Int(tile.x, 0, tile.y));
-            }
+            PathFind(new Vector3Int(0, 0, 0),new Vector3Int(4, 0, 4));
+            // if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out var hit))
+            // {
+            //     Tile tile =  hit.collider.GetComponent<Tile>();
+            //     if (tile == null) return;
+            //     PathFind(new Vector3Int((int)player.transform.position.x, (int)player.transform.position.y, 
+            //             (int)player.transform.position.z),
+            //         new Vector3Int(tile.x, 0, tile.y));
+            // }
         }
     }
 
