@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -9,6 +10,13 @@ public class Tile : MonoBehaviour
     public bool isWalkable;
     public int tileType;
     public int obstacleDir;
+
+    private MeshRenderer mr;
+    
+    private void Start()
+    {
+        mr = GetComponent<MeshRenderer>();
+    }
 
     public void Initialize(TileManager.TileData data)
     {
@@ -29,13 +37,11 @@ public class Tile : MonoBehaviour
 
     public void Highlight(Color color)
     {
-        MeshRenderer mr = GetComponent<MeshRenderer>();
         mr.material.color = color;
     }
 
     public void ResetHighlight()
     {
-        MeshRenderer mr = GetComponent<MeshRenderer>();
         mr.material.color = Color.gray;
     }
 }

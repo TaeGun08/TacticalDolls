@@ -13,8 +13,7 @@ GameObject:
   - component: {fileID: 3104183439741821703}
   - component: {fileID: 5533618723931842645}
   - component: {fileID: -8641185917274103583}
-  - component: {fileID: -7896394532474187300}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Supporter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,18 +133,3 @@ MonoBehaviour:
     Speed: 0
   Skills:
   - {fileID: 11400000, guid: c9017b8ae934cfa42b771e78def1448a, type: 2}
---- !u!114 &-7896394532474187300
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4754987287716921293}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe3526213d788dd4eb8ceb2907c228b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentRangeType: 3
-  currentRange: 3
-  currentTile: {fileID: 0}

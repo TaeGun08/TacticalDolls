@@ -5,38 +5,38 @@ using UnityEngine;
 
 public class SkillRangeTester : MonoBehaviour
 {
-    public int selectedSkillIndex;
+    public static SkillRangeTester Instance;
     
-    private CharacterData characterData;
+    private CharacterData currentCharacterData;
     
     private Tile[,] tiles;
     private Tile currentTile;
 
+    private int selectedSkillIndex;
     private bool isRangeVisible = false;
 
-    private void Start()
+    private void Awake()
     {
-        characterData = GetComponent<CharacterData>();
-        
+        Instance = this;
+    }
+
+    // TileManager Start에서 LoadMap 이후에 실행 시켜줘야 함
+    public void SetAllTiles()
+    {
         tiles = TileManager.Instance.tiles;
     }
 
-    private void Update()
+    private Tile GetCurrentTile(CharacterData characterData)
     {
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            ToggleSkillRange();
-        }
-    }
-
-    public Tile GetCurrentTile()
-    {
-        return TileManager.Instance.GetClosestTile(transform.position);
+        currentCharacterData = characterData;
+        
+        return TileManager.Instance.GetClosestTile(currentCharacterData.gameObject.transform.position);
     }
     
-    private void ToggleSkillRange()
+    public void ShowSkillRange(CharacterData characterData, int index)
     {
-        currentTile = GetCurrentTile();
+        currentTile = GetCurrentTile(characterData);
+        selectedSkillIndex = index;
         
         if (currentTile == null) return;
 
@@ -49,13 +49,13 @@ public class SkillRangeTester : MonoBehaviour
         {
             HighlightAllTilesInRange(
                 currentTile, 
-                characterData.Skills[selectedSkillIndex].RangeType, 
-                characterData.Skills[selectedSkillIndex].Range);
+                currentCharacterData.Skills[selectedSkillIndex].RangeType, 
+                currentCharacterData.Skills[selectedSkillIndex].Range);
             isRangeVisible = true;
         }
     }
 
-    public void HighlightAllTilesInRange(Tile centerTile, RangeType rangeType, int range)
+    private void HighlightAllTilesInRange(Tile centerTile, RangeType rangeType, int range)
     {
         for (int x = 0; x < tiles.GetLength(0); x++)
         {
@@ -97,5 +97,7 @@ public class SkillRangeTester : MonoBehaviour
         {
             tile.ResetHighlight();
         }
+        
+        isRangeVisible = false;
     }
 }
