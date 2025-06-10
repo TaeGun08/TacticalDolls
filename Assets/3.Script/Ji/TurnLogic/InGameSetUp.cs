@@ -6,8 +6,8 @@ public partial class TurnManager : MonoBehaviour
 {
     private int maxTurnCount = 10;
     
-    [ReadOnly] public SamplePlayer[] playerUnits;
-    [ReadOnly] public SamplePlayer[] monsterUnits;
+    [ReadOnly] private SamplePlayer[] playerUnits;
+    [ReadOnly] private SamplePlayer[] monsterUnits;
     
     public SamplePlayer[] PlayerUnits => playerUnits;
     public SamplePlayer[] MonsterUnits => monsterUnits;

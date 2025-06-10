@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,12 +34,22 @@ public class InGameUIManager : MonoBehaviour
     {
         _= OnTurnChanged(sender, actor);
     }
-    
+
+    private void Update()
+    {
+        //클릭으로 캐릭터 선택하기 selectedPlayer 변경
+    }
+
     private async Task OnTurnChanged(object sender, ActorParent actor) //메서드 반복은 입력이 제한적, 코루티으로 리팩토링?
     {
         int currentTurn = turnManager.TurnCount + 1;
 
         Debug.Log($"{actor.ToString()}의 {currentTurn}턴이 시작되었습니다.");
+
+        foreach (var VARIABLE in turnManager.PlayerUnits)
+        {
+            
+        }
 
         while (turnManager.State == GameState.Playing)
         {
@@ -50,7 +61,7 @@ public class InGameUIManager : MonoBehaviour
                 // 또한 이미 행동한 캐릭터는 제외한다.
                 foreach (var t in turnManager.PlayerUnits)
                 {
-                    if (t.isCompleteAction == false &&
+                    if (t.isCompleteAction == false && //행동 완료한 캐릭터 x, 죽은 캐릭터 x
                         t.isDead == false)
                     {
                         selectedPlayer = t;
@@ -117,7 +128,7 @@ public class InGameUIManager : MonoBehaviour
         }
     }
 
-    private IEnumerator WaitInputCoroutine()
+    private IEnumerator WaitInputCoroutine() //이럴 필요 없다
     {
         while (true)
         {
@@ -134,6 +145,16 @@ public class InGameUIManager : MonoBehaviour
             
             yield return null;
         }
+    }
+
+    public void OnClickedSkillDetailsButton() //스킬 버튼 클릭 시 정보, 범위 표시
+    {
+        
+    }
+    
+    public void OnClickedSelectSkills() //스킬 확인(확정) 버튼 클릭 시 스킬 사용
+    {
+        
     }
     
     private void OnGameStateChanged(object sender, GameStateEventArgs e)
