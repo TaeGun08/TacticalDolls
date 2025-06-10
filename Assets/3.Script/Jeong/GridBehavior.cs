@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class GridBehavior : MonoBehaviour
 {
@@ -29,8 +30,9 @@ public class GridBehavior : MonoBehaviour
     [Header("Pathfinding")]
     [SerializeField] private Vector3Int startPos;
     [SerializeField] private Vector3Int endPos;
-
-    [SerializeField] private Transform player;
+    
+    [SerializeField] private Transform currentPlayer;
+    [SerializeField] private LayerMask characterLayer;
 
     //private Node[,,] nodeArray;
     private Node[,] nodeArray;
@@ -84,13 +86,24 @@ public class GridBehavior : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && isMove == false)
         {
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hitCharacter, 100f, characterLayer))
+            {
+                CharacterData characterData = hitCharacter.collider.GetComponent<CharacterData>();
+                if (characterData != null)
+                {
+                    currentPlayer = characterData.transform;
+                }
+            }
+            
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out var hit))
             {
+                if (currentPlayer == null) return;
+                
                 Tile tile =  hit.collider.GetComponent<Tile>();
                 if (tile == null) return;
                 if (tile.isWalkable == false) return;
                 isMove = true;
-                PathFind(RoundToTilePosition(player.position), new Vector3Int(tile.x, 0, tile.y));
+                PathFind(RoundToTilePosition(currentPlayer.position), new Vector3Int(tile.x, 0, tile.y));
             }
         }
     }
@@ -187,9 +200,9 @@ public class GridBehavior : MonoBehaviour
                 node.Position.z * tileManager.tileSize
             );
 
-            while (Vector3.Distance(player.position, targetPos) > 0.05f)
+            while (Vector3.Distance(currentPlayer.position, targetPos) > 0.05f)
             {
-                player.position = Vector3.MoveTowards(player.position, targetPos, 10f * Time.deltaTime);
+                currentPlayer.position = Vector3.MoveTowards(currentPlayer.position, targetPos, 10f * Time.deltaTime);
                 yield return null;
             }
         }
