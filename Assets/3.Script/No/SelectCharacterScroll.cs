@@ -1,19 +1,27 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime;
-using UnityEngine.UIElements;
 using UnityEngine.UI;
 using UnityEngine;
-using Image = UnityEngine.UIElements.Image;
-
-using UnityEngine;
-using UnityEngine.UI;
 
 public class SelectCharacterScroll : MonoBehaviour
 {
     public Transform HasCharacterContent; 
     public GameObject[] characterUIPrefab;
+    
+    public Button Apply;
+    public Button CancelApply;
+
+    private GameObject disposeCharacter;
+    
+    private readonly List<GameObject> spawnedCharacters = new List<GameObject>();
+    private bool isInitFocus = false;
+
+    private void Awake()
+    {
+        Apply.onClick.AddListener(ApplyCharacter);
+        CancelApply.onClick.AddListener(CancelApplyCharacter);
+    }
 
     private IEnumerator Start()
     {
@@ -31,9 +39,37 @@ public class SelectCharacterScroll : MonoBehaviour
         
                 if (characterCode == character.CharacterID)
                 {
-                    Instantiate(characterUIPrefab[characterCode], HasCharacterContent.transform);
+                    var characterSprite = Instantiate(characterUIPrefab[characterCode], HasCharacterContent.transform);
+                    
+                    Button btn = characterSprite.AddComponent<Button>();
+                    btn.onClick.AddListener(() => OnCharacterSelected(characterSprite));
+                    
+                    spawnedCharacters.Add(characterSprite);
+                    
+                    if (isInitFocus) continue;
+                    disposeCharacter = characterSprite;
+                    characterSprite.GetComponent<Outline>().enabled = true;
+                    isInitFocus = true;
                 }
             }
         }
+    }
+    
+    private void OnCharacterSelected(GameObject character)
+    {
+        foreach (var characterPrefab in spawnedCharacters)
+        {
+            characterPrefab.GetComponent<Outline>().enabled = false;
+        }
+        
+        character.GetComponent<Outline>().enabled = true;
+    }
+
+    private void ApplyCharacter()
+    {
+    }
+    
+    private void CancelApplyCharacter()
+    {
     }
 }

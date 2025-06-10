@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7539079894860485151}
   - component: {fileID: -6968983817259881828}
   - component: {fileID: -6054153073456231944}
+  - component: {fileID: -8808516436154472114}
   m_Layer: 5
   m_Name: Supporter
   m_TagString: Untagged
@@ -96,7 +97,7 @@ MonoBehaviour:
     HP: 0
     Attack: 0
     Defense: 0
-    Speed: 0
+    MoveRange: 0
   Weapon:
     Name: 
     Damge: 0
@@ -128,3 +129,18 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &-8808516436154472114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4409047874068816009}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0.13679248, g: 0.9318198, b: 1, a: 0.5}
+  m_EffectDistance: {x: 5, y: 5}
+  m_UseGraphicAlpha: 1
