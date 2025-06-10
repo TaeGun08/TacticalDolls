@@ -28,8 +28,8 @@ public class GridBehavior : MonoBehaviour
     [SerializeField] private Vector3Int endPos;
 
     [SerializeField] private Transform player;
-    
-    private Node[,,] nodeArr;
+
+    private Node[,,] nodeArray;
 
     [SerializeField] private int depth = 5;
 
@@ -46,25 +46,39 @@ public class GridBehavior : MonoBehaviour
         new Vector3Int(1,1,1), new Vector3Int(1,1,-1), new Vector3Int(1,-1,1), new Vector3Int(1,-1,-1),
         new Vector3Int(-1,1,1), new Vector3Int(-1,1,-1), new Vector3Int(-1,-1,1), new Vector3Int(-1,-1,-1),
     };
+    
+    private void Awake()
+    {
+        nodeArray = new Node[25, depth, 25];
+
+        for (int x = 0; x < 25; x++)
+        {
+            for (int y = 0; y < depth; y++)
+            {
+                for (int z = 0; z < 25; z++)
+                {
+                    nodeArray[x, y, z] = new Node(new Vector3Int(x, y, z));
+                }
+            }
+        }
+    }
 
     private void Start()
     {
-        PathFind(startPos, endPos, new Vector3Int(51, 0, 51));
+        PathFind(startPos, endPos);
     }
 
-    public void PathFind(Vector3Int start, Vector3Int end, Vector3Int map)
+    public void PathFind(Vector3Int start, Vector3Int end)
     {
-        nodeArr = new Node[map.x, map.y, map.z];
-        
-        foreach (var node in nodeArr)
+        foreach (var node in nodeArray)
         {
             node.G = int.MaxValue;
             node.H = 0;
             node.ParentNode = null;
         }
-        
-        Node startNode = new Node(new Vector3Int(start.x, start.y, start.z));
-        Node endNode = new Node(new Vector3Int(end.x, end.y, end.z));
+
+        Node startNode = nodeArray[start.x, start.y, start.z];
+        Node endNode = nodeArray[end.x, end.y, end.z];
 
         startNode.G = 0;
         startNode.H = CalculateDistanceCost(startNode, endNode);
@@ -72,12 +86,8 @@ public class GridBehavior : MonoBehaviour
         List<Node> openList = new List<Node> { startNode };
         HashSet<Node> closedList = new HashSet<Node>();
 
-        int loopCount = 0;
-        
-        while (openList.Count > 0 && loopCount < 1000)
+        while (openList.Count > 0)
         {
-            loopCount++;
-            
             Node currentNode = openList[0];
             for (int i = 1; i < openList.Count; i++)
             {
@@ -139,7 +149,7 @@ public class GridBehavior : MonoBehaviour
         {
             Vector3 targetPos = new Vector3(
                 node.Position.x * tileManager.tileSize + tileManager.tileSize * 0.5f,
-                node.Position.y,
+                node.Position.y * tileManager.tileSize,
                 node.Position.z * tileManager.tileSize + tileManager.tileSize * 0.5f
             );
 
@@ -161,11 +171,10 @@ public class GridBehavior : MonoBehaviour
             int ny = node.Position.y + dir.y;
             int nz = node.Position.z + dir.z;
 
-            if (nx >= 0 && nx < 51 &&
-                ny >= 0 && ny < depth &&
-                nz >= 0 && nz < 51)
+            if (nx >= 0 && ny >= 0 && nz >= 0 &&
+                nx < 51 && ny < depth && nz < 51)
             {
-                neighbors.Add(nodeArr[nx, ny, nz]);
+                neighbors.Add(nodeArray[nx, ny, nz]);
             }
         }
 
