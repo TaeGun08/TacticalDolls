@@ -21,7 +21,8 @@ public class TileManager : MonoBehaviour
     public TextAsset jsonFile;
     public float tileSize = 1.0f;
     public GameObject tilePrefab;
-
+    public List<EnemyData> EnmeyPrefab;
+    
     public Tile[,] tiles;
     private int width;
     private int height;
@@ -86,10 +87,24 @@ public class TileManager : MonoBehaviour
             tileComp.Initialize(tile);
             tiles[tile.x, tile.y] = tileComp;
             
+            // 플레이어 스폰 위치 체크
             if (tileComp.tileType == 1)
             {
                 Debug.Log("player spawn able");
                 tileComp.Highlight(Color.green);
+            }
+
+            if (tile.tileType > 100)
+            {
+                foreach (var enemy in EnmeyPrefab)
+                {
+                    EnemyData enemyData = enemy.GetComponent<EnemyData>();
+
+                    if (tile.tileType == enemyData.EnemyID)
+                    {
+                        Instantiate(enemy,tileComp.transform.position + Vector3.up, Quaternion.identity);
+                    }
+                }
             }
         }
     }

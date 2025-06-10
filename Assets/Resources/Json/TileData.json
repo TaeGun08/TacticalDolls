@@ -11065,7 +11065,7 @@
                 "x": 30,
                 "y": 50,
                 "isWalkable": true,
-                "tileType": 0,
+                "tileType": 101,
                 "obstacleDir": 0
             },
             {
@@ -11086,7 +11086,7 @@
                 "x": 31,
                 "y": 2,
                 "isWalkable": true,
-                "tileType": 0,
+                "tileType": 101,
                 "obstacleDir": 0
             },
             {
@@ -11114,7 +11114,7 @@
                 "x": 31,
                 "y": 6,
                 "isWalkable": true,
-                "tileType": 0,
+                "tileType": 101,
                 "obstacleDir": 0
             },
             {

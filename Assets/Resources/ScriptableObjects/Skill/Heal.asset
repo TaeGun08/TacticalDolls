@@ -16,4 +16,4 @@ MonoBehaviour:
   Name: Heal
   Type: 1
   RangeType: 3
-  Range: 1
+  Range: 4

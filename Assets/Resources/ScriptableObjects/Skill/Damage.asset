@@ -16,4 +16,4 @@ MonoBehaviour:
   Name: 'Damage '
   Type: 0
   RangeType: 2
-  Range: 1
+  Range: 3

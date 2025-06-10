@@ -10,7 +10,7 @@ public class PlayerManager: MonoBehaviour
     
     public List<CharacterData> CharacterPrefab;
     public PlayerDataSample player;
-    
+
     private void Awake()
     {
         if (Instance != null)
@@ -119,15 +119,15 @@ public class PlayerManager: MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            int pos = 0; 
-            
-            foreach (var characterDataSample in player.HasCharacter)
-            {
-                Instantiate(CharacterPrefab[characterDataSample.characterCode].gameObject, new Vector3(pos, 1, 0),
-                    Quaternion.identity);
-
-                pos++;
-            }
+            // int pos = 0; 
+            //
+            // foreach (var characterDataSample in player.HasCharacter)
+            // {
+            //     Instantiate(CharacterPrefab[characterDataSample.characterCode].gameObject, new Vector3(pos, 1, 0),
+            //         Quaternion.identity);
+            //
+            //     pos++;
+            // }
         }
     }
 }
