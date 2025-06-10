@@ -20,7 +20,6 @@ public class SkillRangeTester : MonoBehaviour
         Instance = this;
     }
 
-    // TileManager Start에서 LoadMap 이후에 실행 시켜줘야 함
     public void SetAllTiles()
     {
         tiles = TileManager.Instance.tiles;

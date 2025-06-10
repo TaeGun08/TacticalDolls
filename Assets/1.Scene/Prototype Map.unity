@@ -2190,7 +2190,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00002184203}
+  m_AnchoredPosition: {x: 0, y: 0.000010279927}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1583637457
@@ -3136,7 +3136,6 @@ MonoBehaviour:
   - {fileID: -1050778822023757517, guid: 89576a289ce3f5e44b653b054d60bd6b, type: 3}
   - {fileID: -8641185917274103583, guid: f90a3e9727824ef4385fe232b522bd1e, type: 3}
   - {fileID: -5835233133872801774, guid: 93a391f996e01174aa4d52f36b67b172, type: 3}
-  playerSpawnPoints: []
 --- !u!4 &2137488148
 Transform:
   m_ObjectHideFlags: 0

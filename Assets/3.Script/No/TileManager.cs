@@ -45,22 +45,6 @@ public class TileManager : MonoBehaviour
         public Dictionary<string, List<TileData>> Stages;
     }
 
-    // private void LoadMap()
-    // {
-    //     MapData mapTiles = JsonConvert.DeserializeObject<MapData>(jsonFile.text);
-    //
-    //     string stageKey = selectedStage.ToString(); 
-    //
-    //     foreach (TileData tile in mapTiles.Stages[stageKey])
-    //     {
-    //         Vector3 position = new Vector3(tile.x * tileSize, 0, tile.y * tileSize);
-    //         var res = Instantiate(tilePrefab, position, Quaternion.identity, transform);
-    //
-    //         var tileComp = res.AddComponent<Tile>();
-    //         tileComp.Initialize(tile);
-    //     }
-    // }
-
     private void Awake()
     {
         Instance = this;
@@ -69,6 +53,8 @@ public class TileManager : MonoBehaviour
     private void Start()
     {
         LoadMap();
+        
+        SkillRangeTester.Instance.SetAllTiles();
     }
     
     private void LoadMap()
