@@ -63,6 +63,7 @@ public class SelectCharacterScroll : MonoBehaviour
         }
         
         character.GetComponent<Outline>().enabled = true;
+        disposeCharacter = character;
     }
 
     private void ApplyCharacter()
