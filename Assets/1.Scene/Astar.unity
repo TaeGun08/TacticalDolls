@@ -250,7 +250,7 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -261,7 +261,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 143596813}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -351,6 +351,55 @@ Transform:
   - {fileID: 1322547639}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &512449017
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 512449019}
+  - component: {fileID: 512449018}
+  m_Layer: 0
+  m_Name: TileManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &512449018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512449017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b19b565328654b4fae2517c026498d4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jsonFile: {fileID: 4900000, guid: 27b003b953e9a704293f17e0855c4679, type: 3}
+  tileSize: 1
+  tilePrefab: {fileID: 635771682647208799, guid: b5783c2df4f4b0148b83b0adc01c0cc7,
+    type: 3}
+  selectedStage: 0
+--- !u!4 &512449019
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512449017}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1213943423
 GameObject:
   m_ObjectHideFlags: 0
@@ -382,12 +431,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cellSize: 3
   startPos: {x: 0, y: 0, z: 0}
-  endPos: {x: 4, y: 0, z: 4}
+  endPos: {x: 3, y: 0, z: 3}
   rows: 5
   columns: 5
   lineColor: {r: 0, g: 1, b: 0.16973758, a: 1}
   player: {fileID: 155046482}
   tilePrefab: {fileID: 143596813}
+  depth: 5
 --- !u!4 &1213943425
 Transform:
   m_ObjectHideFlags: 0
@@ -637,3 +687,4 @@ SceneRoots:
   - {fileID: 155046482}
   - {fileID: 1213943425}
   - {fileID: 143596817}
+  - {fileID: 512449019}
