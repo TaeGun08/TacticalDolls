@@ -26,7 +26,7 @@ public class StatData
     public int HP;
     public int Attack;
     public int Defense;
-    public int Speed;
+    public int MoveRange;
 }
 
 
