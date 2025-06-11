@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 
@@ -18,8 +19,8 @@ public interface IUnitSkill
     public SkillType SkillType { get; }     //스킬 타입 Damage, Heal, Buff
     public RangeType RangeType { get; }     //범위 타입 Straight, Plus, Cross, Around
     
-    public string SkillName { get; }
-    public string SkillInfoText { get; }
+    public string SkillName { get; }        //스킬 이름
+    public string SkillInfoText { get; }    //스킬 설명 ( $보간으로 텍스트에 수치를 넣습니다. )
 }
 
 public abstract class PlayerSkillParent : MonoBehaviour, IUnitSkill //플레이어 전용 스킬 부모
@@ -44,14 +45,14 @@ public abstract class PlayerSkillParent : MonoBehaviour, IUnitSkill //플레이�
     }
     public UnitSkillDetails unitSkillDetails;
     
-    protected GameObject[] SkillEffectPrefabs;
-    protected SamplePlayer SamplePlayer;
-    protected Sequence SkillSequence;     //시퀀스 캐싱
-    protected Vector3 TargetPos;          //목표 지점 (타일)
-    protected GameObject[] SkillVFX;      //스킬 비주얼 효과
-
-    public abstract void MakeSkillSequence(SamplePlayer samplePlayer, Vector3 target, Action action = null); //시퀀스 제작
-    public abstract void SkillEffect();  // 적용시킬 스킬 효과
+    protected GameObject[] SkillEffectPrefabs; //스킬 VFX
+    protected SamplePlayer SamplePlayer;       //스킬 주인 캐싱
+    protected Sequence SkillSequence;          //시퀀스 캐싱
+    protected Vector3 TargetPos;               //목표 지점 (타일)
+    protected GameObject[] SkillVFX;           //스킬 비주얼 효과
+    
+    public abstract Task MakeSkillSequence(SamplePlayer samplePlayer, SamplePlayer reciver); //시퀀스 제작
+    public abstract Task SkillEffect();  // 적용시킬 스킬 효과
 }
 
 public class SkillSample_Player : PlayerSkillParent
@@ -61,32 +62,45 @@ public class SkillSample_Player : PlayerSkillParent
     public override RangeType RangeType => RangeType.Straight;
 
     public override string SkillName => "샘플스킬 1";
-    public override string SkillInfoText => "포탄을 발사해 4X4 범위로 피해를 가합니다.";
+    public override string SkillInfoText => $"포탄을 발사해 4X4 범위로 {10} 피해를 가합니다.";
     
-    public override void MakeSkillSequence(SamplePlayer samplePlayer, Vector3 targetpos, Action action = null) //스킬 실행
+    
+    public override async Task MakeSkillSequence(SamplePlayer sender, SamplePlayer reciver) //스킬 실행
     {
-        TargetPos = targetpos;
+        TargetPos = reciver.gameObject.transform.position; //타겟 위치 please fix - 타겟된 타일들의 정보를 받는게 좋음
         
         SkillSequence = DOTween.Sequence();
         
         SkillSequence.AppendCallback(()=>
         {
-            samplePlayer.animator.SetTrigger("animationTrigger");
+            // + 카메라 연출이랑 동시에
+            sender.animator.SetTrigger("animationTrigger");
         });
-        SkillSequence.AppendInterval(unitSkillDetails.skillDelay); //일정 시간 딜레이
-        SkillSequence.AppendCallback(() =>
-        {
-            //스킬 이벤트 발생
-            SkillEffect();
-        });
+
+        SkillSequence.Pause(); //대기
+        
+        await StateEventSender.WaitForAnimationEvent(sender.gameObject, "AttackImpact");
+        SkillEffect(); //스킬 이벤트 발생 (실제로 적용되는 전투 효과 (데미지, 힐, 보호막))
+        
+        SkillSequence.Play(); //시작
+        
+        // SkillSequence.AppendInterval(unitSkillDetails.skillDelay); //일정 시간 딜레이
+        
+        // SkillSequence.AppendCallback(() =>
+        // {
+        //     //스킬 이벤트 발생 (실제로 적용되는 전투 효과 (데미지, 힐, 보호막))
+        //     SkillEffect();
+        // });
+        
         SkillSequence.OnComplete(() =>
         {
-            action?.Invoke();
+            sender.SkillTcs.SetResult(true); //시퀀스 종료
         });
     }
 
-    public override void SkillEffect() //스킬 이벤트
+    public override async Task SkillEffect() //스킬 이벤트 //카메라 무브
     {
-        //please fix - CombatSystem.~
+        //공격 맞는 시점 - 총알 -> Ray, 투사체 -> DoMove 끝날때 (목표지점에 투사체 도착)
+        //please fix - CombatSystem.~ 
     }
 }

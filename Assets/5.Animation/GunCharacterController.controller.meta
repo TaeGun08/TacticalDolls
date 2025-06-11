@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/5.Animation/GunCharacterController.controller.meta
 guid: 18fb7c076fa7a8441ad9c5018e0a51ff
+========
+guid: 55f2347bf72fa37439ac00583818be5c
+>>>>>>>> Develop:Assets/0. ExternalAssets/UI/Dark - Complete Horror UI/Animations/Button/Tab Button.controller.meta
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 9100000
