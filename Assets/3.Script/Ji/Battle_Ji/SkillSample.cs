@@ -44,13 +44,13 @@ public abstract class PlayerSkillParent : MonoBehaviour, IUnitSkill //플레이�
     }
     public UnitSkillDetails unitSkillDetails;
     
-    protected GameObject[] SkillEffectPrefabs;
-    protected SamplePlayer SamplePlayer;
-    protected Sequence SkillSequence;     //시퀀스 캐싱
-    protected Vector3 TargetPos;          //목표 지점 (타일)
-    protected GameObject[] SkillVFX;      //스킬 비주얼 효과
+    protected GameObject[] SkillEffectPrefabs; //스킬 VFX
+    protected SamplePlayer SamplePlayer;       //스킬 주인 캐싱
+    protected Sequence SkillSequence;          //시퀀스 캐싱
+    protected Vector3 TargetPos;               //목표 지점 (타일)
+    protected GameObject[] SkillVFX;           //스킬 비주얼 효과
 
-    public abstract void MakeSkillSequence(SamplePlayer samplePlayer, Vector3 target, Action action = null); //시퀀스 제작
+    public abstract void MakeSkillSequence(SamplePlayer samplePlayer, SamplePlayer reciver, Action action = null); //시퀀스 제작
     public abstract void SkillEffect();  // 적용시킬 스킬 효과
 }
 
@@ -63,15 +63,15 @@ public class SkillSample_Player : PlayerSkillParent
     public override string SkillName => "샘플스킬 1";
     public override string SkillInfoText => "포탄을 발사해 4X4 범위로 피해를 가합니다.";
     
-    public override void MakeSkillSequence(SamplePlayer samplePlayer, Vector3 targetpos, Action action = null) //스킬 실행
+    public override void MakeSkillSequence(SamplePlayer sender, SamplePlayer reciver, Action action = null) //스킬 실행
     {
-        TargetPos = targetpos;
+        TargetPos = reciver.gameObject.transform.position; //타겟 위치 please fix - 타겟된 타일들의 정보를 받는게 좋음
         
         SkillSequence = DOTween.Sequence();
-        
         SkillSequence.AppendCallback(()=>
         {
-            samplePlayer.animator.SetTrigger("animationTrigger");
+            //카메라 연출이랑 동시에
+            sender.animator.SetTrigger("animationTrigger");
         });
         SkillSequence.AppendInterval(unitSkillDetails.skillDelay); //일정 시간 딜레이
         SkillSequence.AppendCallback(() =>

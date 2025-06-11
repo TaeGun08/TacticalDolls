@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class SamplePlayer
+public class SamplePlayer : MonoBehaviour
 {
     public bool isDead = false;
     public bool isCompleteAction = false;
@@ -32,7 +32,7 @@ public class SamplePlayers : MonoBehaviour
     {
         SamplePlayer samplePlayer = new SamplePlayer(); //쓰레기값
         SkillSample_Player sampleSkill = new SkillSample_Player(); //쓰레기값
-        sampleSkill.MakeSkillSequence(samplePlayer, Vector3.left, sampleAction);
+        sampleSkill.MakeSkillSequence(samplePlayer, samplePlayer, sampleAction);
         skillTcs = new TaskCompletionSource<bool>();
         await skillTcs.Task;
     }
