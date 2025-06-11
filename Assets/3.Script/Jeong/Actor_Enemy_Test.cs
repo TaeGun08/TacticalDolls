@@ -13,7 +13,6 @@ public class Actor_Enemy_Test : Actor_Test
     
     public override void MyTurn()
     {
-        Debug.Log(gameObject.name);
         gridBehavior.Actor = this;
         gridBehavior.EnemyMove();
     }

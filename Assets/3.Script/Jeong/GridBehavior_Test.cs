@@ -2,13 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class GridBehavior_Test : MonoBehaviour
 {
     public static GridBehavior_Test Instance;
-    
+
     public class Node
     {
         public Vector3Int Position { get; set; }
@@ -19,7 +21,7 @@ public class GridBehavior_Test : MonoBehaviour
         public Node ParentNode { get; set; }
 
         public Tile Tile { get; set; }
-        
+
         public Node(Tile tile)
         {
             Position = new Vector3Int(tile.x, 0, tile.y);
@@ -30,7 +32,7 @@ public class GridBehavior_Test : MonoBehaviour
 
     [SerializeField] private TileManager tileManager;
     [SerializeField] private Turn_Test turn;
-    
+
     private Vector3Int startPos;
     private Vector3Int endPos;
 
@@ -39,6 +41,8 @@ public class GridBehavior_Test : MonoBehaviour
 
     //private Node[,,] nodeArray;
     private Node[,] nodeArray;
+    
+    public TaskCompletionSource<bool> moveTcs;
 
     //[SerializeField] private int depth = 5;
 
@@ -60,9 +64,9 @@ public class GridBehavior_Test : MonoBehaviour
 
     private readonly Vector3Int[] directions = new Vector3Int[]
     {
-        new Vector3Int(1, 0, 0), 
+        new Vector3Int(1, 0, 0),
         new Vector3Int(-1, 0, 0),
-        new Vector3Int(0, 0, 1), 
+        new Vector3Int(0, 0, 1),
         new Vector3Int(0, 0, -1),
 
         new Vector3Int(1, 0, 1),
@@ -95,7 +99,7 @@ public class GridBehavior_Test : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && IsMove == false)
         {
             Debug.Log("클릭 중");
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hitCharacter, 
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hitCharacter,
                     100f, characterLayer))
             {
                 Actor = hitCharacter.transform.GetComponent<Actor_Test>();
@@ -103,12 +107,12 @@ public class GridBehavior_Test : MonoBehaviour
             else if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out var hit))
             {
                 if (Actor == null) return;
-                
-                Tile tile =  hit.collider.GetComponent<Tile>();
-                
+
+                Tile tile = hit.collider.GetComponent<Tile>();
+
                 if (tile == null) return;
                 if (tile.isWalkable == false) return;
-                
+
                 if (!MoveRangeSystem.Instance.IsTileInMoveRange(tile))
                 {
                     Debug.Log("이동 불가능한 범위입니다.");
@@ -116,7 +120,7 @@ public class GridBehavior_Test : MonoBehaviour
                     MoveRangeSystem.Instance.ResetMovableTiles();
                     return;
                 }
-                
+
                 IsMove = true;
                 MoveRangeSystem.Instance.ResetAllHighlights();
                 PathFind(RoundToTilePosition(Actor.transform.position), new Vector3Int(tile.x, 0, tile.y));
@@ -126,14 +130,41 @@ public class GridBehavior_Test : MonoBehaviour
 
     public void AllyAutoMove()
     {
-        
+        if (IsMove) return;
     }
-    
+
     public void EnemyMove()
     {
+        if (IsMove) return;
         
+        bool firstAlly = false;
+        Vector3Int targetPos = Vector3Int.zero;
+        Vector3 prevPos = Vector3.zero;
+        
+        foreach (var ally in turn.Ally)
+        {
+            Debug.Log(ally.gameObject.name);
+            if (firstAlly == false)
+            {
+                targetPos = new Vector3Int((int)ally.transform.position.x, 0, (int)ally.transform.position.y);
+                prevPos = ally.transform.position;
+                firstAlly = true;
+                continue;
+            }
+            
+            float distance = Vector3.Distance(Actor.transform.position, ally.transform.position);
+            float prevDistance = Vector3.Distance(Actor.transform.position, prevPos);
+            
+            if (distance >= prevDistance) continue;
+            targetPos = new Vector3Int((int)ally.transform.position.x, 0, (int)ally.transform.position.y);
+            prevPos = ally.transform.position;
+        }
+        
+        Debug.Log("고고씽");
+        PathFind(RoundToTilePosition(Actor.transform.position), targetPos);
+        IsMove = true;
     }
-    
+
     public Vector3Int RoundToTilePosition(Vector3 position)
     {
         int x = Mathf.RoundToInt(position.x / tileManager.tileSize);
@@ -207,13 +238,44 @@ public class GridBehavior_Test : MonoBehaviour
             path.Add(current);
             current = current.ParentNode;
         }
-        
-        if(current == startNode)
+
+        if (current == startNode)
             path.Add(startNode);
 
         path.Reverse();
 
         StartCoroutine(MovePlayerAlongPath(path));
+    }
+
+    private async Task movePlayerAlongPathTask(List<Node> path)
+    {
+        moveTcs = new TaskCompletionSource<bool>();
+
+        Tween t = null;
+        
+        // while ()
+        // {
+        //     foreach (Node node in path)
+        //     {
+        //         Vector3 targetPos = new Vector3(
+        //             node.Position.x * tileManager.tileSize,
+        //             1.5f,
+        //             node.Position.z * tileManager.tileSize
+        //         );
+        //
+        //         Actor.transform.DOMove(new Vector3()).OnComplete(() =>
+        //         {
+        //             moveTcs.TrySetResult(true);
+        //         });
+        //     }
+        // }
+        //
+        await moveTcs.Task;
+
+        turn.TurnActor.Remove(Actor);
+        Actor = null;
+        IsMove = false;
+        MoveRangeSystem.Instance.ResetMovableTiles();
     }
     
     private IEnumerator MovePlayerAlongPath(List<Node> path)
@@ -228,7 +290,8 @@ public class GridBehavior_Test : MonoBehaviour
 
             while (Vector3.Distance(Actor.transform.position, targetPos) > 0.05f)
             {
-                Actor.transform.position = Vector3.MoveTowards(Actor.transform.position, targetPos, 10f * Time.deltaTime);
+                Actor.transform.position =
+                    Vector3.MoveTowards(Actor.transform.position, targetPos, 10f * Time.deltaTime);
                 yield return null;
             }
         }
@@ -238,7 +301,7 @@ public class GridBehavior_Test : MonoBehaviour
         IsMove = false;
         MoveRangeSystem.Instance.ResetMovableTiles();
     }
-    
+
     private List<Node> GetNeighbours(Node node)
     {
         List<Node> neighbors = new List<Node>();
@@ -247,10 +310,10 @@ public class GridBehavior_Test : MonoBehaviour
         {
             int nx = node.Position.x + dir.x;
             int nz = node.Position.z + dir.z;
-            
+
             if (nx < 0 || nz < 0 || nx >= 51 || nz >= 51)
                 continue;
-            
+
             if (Mathf.Abs(dir.x) == 1 && Mathf.Abs(dir.z) == 1)
             {
                 Node nodeA = nodeArray[node.Position.x + dir.x, node.Position.z];
