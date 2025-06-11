@@ -23,6 +23,8 @@ public class TileManager : MonoBehaviour
     public float tileSize = 1.0f;
     public GameObject tilePrefab;
     public List<EnemyData> EnmeyPrefab;
+
+    public GameObject combatScript;
     
     public Tile[,] tiles;
     private int width;
@@ -59,6 +61,8 @@ public class TileManager : MonoBehaviour
         
         SkillRangeSystem.Instance.SetAllTiles();
         MoveRangeSystem.Instance.SetAllTiles();
+        
+        combatScript.SetActive(false);
     }
     
     private void LoadMap()
