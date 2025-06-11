@@ -46,9 +46,9 @@ public abstract class PlayerSkillParent : MonoBehaviour, IUnitSkill //플레이�
     
     protected GameObject[] SkillEffectPrefabs;
     protected SamplePlayer SamplePlayer;
-    protected Sequence SkillSequence;  //시퀀스 캐싱
-    protected Vector3 TargetPos;        //목표 지점 (타일)
-    protected GameObject SkillVFX;      //스킬 비주얼 효과
+    protected Sequence SkillSequence;     //시퀀스 캐싱
+    protected Vector3 TargetPos;          //목표 지점 (타일)
+    protected GameObject[] SkillVFX;      //스킬 비주얼 효과
 
     public abstract void MakeSkillSequence(SamplePlayer samplePlayer, Vector3 target, Action action = null); //시퀀스 제작
     public abstract void SkillEffect();  // 적용시킬 스킬 효과
@@ -63,28 +63,30 @@ public class SkillSample_Player : PlayerSkillParent
     public override string SkillName => "샘플스킬 1";
     public override string SkillInfoText => "포탄을 발사해 4X4 범위로 피해를 가합니다.";
     
-    public override void MakeSkillSequence(SamplePlayer samplePlayer, Vector3 target, Action action = null) //스킬 실행
+    public override void MakeSkillSequence(SamplePlayer samplePlayer, Vector3 targetpos, Action action = null) //스킬 실행
     {
+        TargetPos = targetpos;
+        
         SkillSequence = DOTween.Sequence();
         
         SkillSequence.AppendCallback(()=>
         {
             samplePlayer.animator.SetTrigger("animationTrigger");
         });
-        SkillSequence.AppendInterval(unitSkillDetails.skillDelay);
-        
+        SkillSequence.AppendInterval(unitSkillDetails.skillDelay); //일정 시간 딜레이
         SkillSequence.AppendCallback(() =>
         {
             //스킬 이벤트 발생
             SkillEffect();
         });
-        
-        action?.Invoke();
-        // TargetPos = target;
+        SkillSequence.OnComplete(() =>
+        {
+            action?.Invoke();
+        });
     }
 
     public override void SkillEffect() //스킬 이벤트
     {
-        //CombatSystem.~
+        //please fix - CombatSystem.~
     }
 }
