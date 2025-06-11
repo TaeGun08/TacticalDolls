@@ -33,6 +33,8 @@ public class GridBehavior : MonoBehaviour
     [SerializeField] private Transform currentPlayer;
     [SerializeField] private LayerMask characterLayer;
 
+    private Animator playerAnimater;
+
     //private Node[,,] nodeArray;
     private Node[,] nodeArray;
 
@@ -53,6 +55,8 @@ public class GridBehavior : MonoBehaviour
     // };
 
     private bool isMove;
+
+    private float turnCalmVelocity;
     
     private readonly Vector3Int[] directions = new Vector3Int[]
     {
@@ -108,6 +112,14 @@ public class GridBehavior : MonoBehaviour
                 
                 isMove = true;
                 MoveRangeSystem.Instance.ResetAllHighlights();
+
+                playerAnimater = currentPlayer.GetComponent<Animator>();
+
+                if (playerAnimater != null)
+                {
+                    playerAnimater.SetBool("isRunning", true);
+                }
+                
                 PathFind(RoundToTilePosition(currentPlayer.position), new Vector3Int(tile.x, 0, tile.y));
             }
         }
@@ -201,19 +213,35 @@ public class GridBehavior : MonoBehaviour
         {
             Vector3 targetPos = new Vector3(
                 node.Position.x * tileManager.tileSize,
-                1.5f,
+                0.5f,
                 node.Position.z * tileManager.tileSize
             );
 
             while (Vector3.Distance(currentPlayer.position, targetPos) > 0.05f)
             {
                 currentPlayer.position = Vector3.MoveTowards(currentPlayer.position, targetPos, 10f * Time.deltaTime);
+                
+                var temp = new Vector2(targetPos.x - currentPlayer.position.x, targetPos.z - currentPlayer.position.z);
+                UpdateRotation(currentPlayer, temp, 0.1f);
                 yield return null;
             }
         }
-
+        
+        if (playerAnimater != null)
+        {
+            playerAnimater.SetBool("isRunning", false);
+        }
+        
         isMove = false;
         MoveRangeSystem.Instance.ResetMovableTiles();
+    }
+    
+    private void UpdateRotation(Transform player, Vector2 inputAxis, float smoothTime)
+    {
+        float targetAngle = Mathf.Atan2(inputAxis.x, inputAxis.y) * Mathf.Rad2Deg;
+        float angle =
+            Mathf.SmoothDampAngle(player.eulerAngles.y, targetAngle, ref turnCalmVelocity, smoothTime);
+        player.rotation = Quaternion.Euler(0f, angle, 0f);
     }
     
     private List<Node> GetNeighbours(Node node)

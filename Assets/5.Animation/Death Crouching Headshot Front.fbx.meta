@@ -1,64 +1,9 @@
 fileFormatVersion: 2
-guid: 85e6fdc5dc4d5a847ba6d438d03f68bd
+guid: 6132f59cb808f354b8d64cc3a7da45fd
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: MAT_BODY
-    second: {fileID: 2100000, guid: 8a42abb20a779a047b66ee03821f6162, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: MAT_EYE_L
-    second: {fileID: 2100000, guid: 1e8710309fec72d4ba6c4153f820ae89, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: MAT_EYE_R
-    second: {fileID: 2100000, guid: 1e8710309fec72d4ba6c4153f820ae89, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: MAT_HAT
-    second: {fileID: 2100000, guid: 03071d6c2903167498fc95aa52b191a6, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: MAT_HEAD
-    second: {fileID: 2100000, guid: a5dc4e4c792e20347bf009ad23bfab54, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: MAT_LASHES
-    second: {fileID: 2100000, guid: 14eca1960ca98e642b9f068a8d1f45fa, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: MAT_LINGERIE
-    second: {fileID: 2100000, guid: 2c0b4309ce6fcfe4d9a62d7da2c2bfe5, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: MAT_MILITARY_ASSAULT
-    second: {fileID: 2100000, guid: cd35f06b4df565445905062a4fb6a65b, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: MAT_MILITARY_HEAVY
-    second: {fileID: 2100000, guid: fd93df1b4bc29a24ca9ad6d55fb664ae, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: MAT_MILITARY_MEDIC
-    second: {fileID: 2100000, guid: 5ecfcbbba9a556547af680d0c148fa97, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: MAT_MILITARY_SNIPER
-    second: {fileID: 2100000, guid: 2ff9094e64d643e47ac16ca493ff6adb, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -69,7 +14,7 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
-    removeConstantScaleCurves: 1
+    removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -96,10 +41,10 @@ ModelImporter:
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
     importPhysicalCameras: 1
-    importVisibility: 0
+    importVisibility: 1
     importBlendShapes: 1
-    importCameras: 0
-    importLights: 0
+    importCameras: 1
+    importLights: 1
     nodeNameCollisionStrategy: 1
     fileIdsGeneration: 2
     swapUVChannels: 0
@@ -127,10 +72,10 @@ ModelImporter:
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
-    tangentImportMode: 2
+    tangentImportMode: 3
     normalCalculationMode: 4
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
-    blendShapeNormalImportMode: 2
+    blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips: []
   importAnimation: 1
@@ -156,7 +101,7 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
-  importBlendShapeDeformPercent: 0
+  importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0
   additionalBone: 0
   userData: 
