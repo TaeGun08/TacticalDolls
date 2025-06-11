@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -10,6 +11,8 @@ public class Character2DDragSystem : MonoBehaviour, IBeginDragHandler, IDragHand
 
     public GameObject characterPrefab3D;
 
+    public Action<GameObject> OnCharacterSpawned;
+    
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -41,8 +44,21 @@ public class Character2DDragSystem : MonoBehaviour, IBeginDragHandler, IDragHand
             Tile tile = hit.collider.GetComponent<Tile>();
 
             if (tile.tileType != 1) return;
+            if(tile.isUsingTile) return;
             
-            Instantiate(characterPrefab3D, hit.collider.transform.position + Vector3.up, Quaternion.identity);
+            // 이미 배치된 캐릭터인지 체크
+            if (PlayerManager.Instance.usingCharacter.Contains(characterPrefab3D.GetComponent<CharacterData>().CharacterID)) return;
+            
+            var spawned = Instantiate(characterPrefab3D, hit.collider.transform.position + Vector3.up, Quaternion.identity);
+            tile.isUsingTile = true;
+            
+            // 배치된 캐릭터 저장
+            PlayerManager.Instance.usingCharacter.Add(characterPrefab3D.GetComponent<CharacterData>().CharacterID);
+            
+            // 이벤트 구독
+            Debug.Log("Spawned character, invoking OnCharacterSpawned");
+            OnCharacterSpawned?.Invoke(spawned); 
+            
             Debug.Log("캐릭터 배치 완료");
         }
     }

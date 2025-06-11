@@ -18,15 +18,23 @@ public enum StageType
 public class TileManager : MonoBehaviour
 {
     public static TileManager Instance;
+    public GameObject combatScript;
     
+    [Header("Tile Settings")]
     public TextAsset jsonFile;
     public float tileSize = 1.0f;
     public GameObject tilePrefab;
     public List<EnemyData> EnmeyPrefab;
-    
     public Tile[,] tiles;
     private int width;
     private int height;
+    
+    [Header("Select Tile Settings")]
+    public List<Tile> CharacterSpawnUseTiles;
+    public Tile selectedTile;
+    private Tile previousSelectedTile;
+    public Material defaultMaterial;
+    public Material outlineMaterial;
     
     [Header("Stage Selection")]
     public StageType selectedStage;
@@ -59,6 +67,8 @@ public class TileManager : MonoBehaviour
         
         SkillRangeSystem.Instance.SetAllTiles();
         MoveRangeSystem.Instance.SetAllTiles();
+        
+        combatScript.SetActive(false);
     }
     
     private void LoadMap()
@@ -95,6 +105,7 @@ public class TileManager : MonoBehaviour
             {
                 Debug.Log("player spawn able");
                 tileComp.Highlight(Color.green);
+                CharacterSpawnUseTiles.Add(tileComp);
             }
 
             if (tile.tileType > 100)
@@ -135,6 +146,19 @@ public class TileManager : MonoBehaviour
             return null;
 
         return tiles[x, y];
+    }
+    
+    public void SetSelectedTile(Tile tile)
+    {
+        defaultMaterial = tile.GetComponent<Renderer>().material;
+        
+        if (previousSelectedTile != null)
+            previousSelectedTile.SetOutline(false);
+
+        selectedTile = tile;
+        selectedTile.SetOutline(true);
+
+        previousSelectedTile = selectedTile;
     }
 }
 

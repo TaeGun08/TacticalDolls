@@ -1,7 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class PlayerManager: MonoBehaviour
@@ -10,7 +9,11 @@ public class PlayerManager: MonoBehaviour
     
     public List<CharacterData> CharacterPrefab;
     public PlayerDataSample player;
-
+    public List<int> usingCharacter;
+    
+    public GameObject SelectedCharacterPanel;
+    public Button StartBtn;
+    
     private void Awake()
     {
         if (Instance != null)
@@ -28,6 +31,7 @@ public class PlayerManager: MonoBehaviour
         player = new PlayerDataSample();
         
         TestPlayerHasCharacter();
+        StartBtn.onClick.AddListener(StartGame);
     }
 
     public void TestPlayerHasCharacter()
@@ -115,19 +119,18 @@ public class PlayerManager: MonoBehaviour
         player.HasCharacter.Add(sampleCharacter3); 
     }
 
-    public void Update()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (usingCharacter.Count > 0)
         {
-            // int pos = 0; 
-            //
-            // foreach (var characterDataSample in player.HasCharacter)
-            // {
-            //     Instantiate(CharacterPrefab[characterDataSample.characterCode].gameObject, new Vector3(pos, 1, 0),
-            //         Quaternion.identity);
-            //
-            //     pos++;
-            // }
+            StartBtn.gameObject.SetActive(true);
         }
+    }
+
+    public void StartGame()
+    {
+        TileManager.Instance.combatScript.SetActive(true);
+        MoveRangeSystem.Instance.ResetAllHighlights();
+        SelectedCharacterPanel.SetActive(false);
     }
 }
