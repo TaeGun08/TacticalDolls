@@ -4,17 +4,23 @@ using UnityEngine;
 
 public class Actor_Ally_Test : Actor_Test
 {
-    public override void MyTurn(Actor_Test[] actor)
+    protected override void Start()
     {
-        gridBehavior.Actor = transform;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out var hit))
+        base.Start();
+        turn.Ally.Add(this);
+    }
+    
+    public override void MyTurn()
+    {
+        Debug.Log(gameObject.name);
+        if (turn.IsAuto)
         {
-            Tile tile = hit.collider.GetComponent<Tile>();
-            if (tile == null) return;
-            if (tile.isWalkable == false) return;
-            gridBehavior.IsMove = true;
-            gridBehavior.PathFind(gridBehavior.RoundToTilePosition(gridBehavior.Actor.position), 
-                new Vector3Int(tile.x, 0, tile.y));
+            gridBehavior.Actor = this;
+            gridBehavior.AllyAutoMove();
+        }
+        else
+        {
+            gridBehavior.AllyInputMove();
         }
     }
 }

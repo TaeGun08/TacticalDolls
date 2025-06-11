@@ -1,12 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Actor_Enemy_Test : Actor_Test
 {
-    public override void MyTurn(Actor_Test[] actor)
+    protected override void Start()
     {
-        gridBehavior.Actor = transform;
-        
+        base.Start();
+        turn.Enemy.Add(this);
+    }
+    
+    public override void MyTurn()
+    {
+        Debug.Log(gameObject.name);
+        gridBehavior.Actor = this;
+        gridBehavior.EnemyMove();
     }
 }
