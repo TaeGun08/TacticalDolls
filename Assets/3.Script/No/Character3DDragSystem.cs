@@ -1,14 +1,16 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Character3DDragSystem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class Character3DDragSystem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
     private Camera mainCamera;
     private Vector3 offset;
     private bool isDragging;
     
     private Vector3 initPosOffset;
-
+    
+    public Action OnCharacterClicked;
     
     private void Awake()
     {
@@ -17,6 +19,8 @@ public class Character3DDragSystem : MonoBehaviour, IBeginDragHandler, IDragHand
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        Debug.Log("OnBeginDrag");
+        
         initPosOffset = gameObject.transform.position;
         
         isDragging = true;
@@ -53,6 +57,8 @@ public class Character3DDragSystem : MonoBehaviour, IBeginDragHandler, IDragHand
             Tile targetTile = TileManager.Instance.GetTileAtWorldPosition(hit.point);
             if (targetTile.tileType == 1) 
             {
+                if(targetTile.isUsingTile) return;
+                
                 transform.position = new Vector3(targetTile.transform.position.x, 1f, targetTile.transform.position.z);
                 Debug.Log("Valid tile. Character moved.");
             }
@@ -63,5 +69,10 @@ public class Character3DDragSystem : MonoBehaviour, IBeginDragHandler, IDragHand
                 transform.position = initPosOffset;
             }
         }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        OnCharacterClicked?.Invoke();
     }
 }

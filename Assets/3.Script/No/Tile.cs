@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Tile : MonoBehaviour
 {
@@ -14,6 +15,13 @@ public class Tile : MonoBehaviour
 
     private MeshRenderer mr;
 
+    private Renderer tileRenderer;
+    
+    private void Awake()
+    {
+        tileRenderer = GetComponent<Renderer>();
+    }
+    
     public void Initialize(TileManager.TileData data)
     {
         x = data.x;
@@ -29,9 +37,25 @@ public class Tile : MonoBehaviour
     private void OnMouseDown()
     {
         Debug.Log($"Clicked tile at ({x}, {y})");
+        Debug.Log($"Clicked tile at ({tileType})");
+
+        
+        if (tileType == 1)
+        {
+            TileManager.Instance.SetSelectedTile(this);
+            //TileManager.Instance.selectedTile = this;
+        }
 
         // 중앙 관리자로 클릭 알림 보내기
         // SkillRangeTester.Instance.OnTileClicked(this);
+    }
+    
+    public void SetOutline(bool enable)
+    {
+        if (tileRenderer != null)
+        {
+            tileRenderer.material = enable ? TileManager.Instance.outlineMaterial : TileManager.Instance.defaultMaterial;
+        }
     }
 
     public void Highlight(Color color)
