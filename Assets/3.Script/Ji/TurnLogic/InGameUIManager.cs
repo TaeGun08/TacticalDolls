@@ -34,28 +34,6 @@ public class InGameUIManager : MonoBehaviour
         turnManager.ActorChanged -= OnTurnChangedWrapper;
         turnManager.GameStateChanged -= OnGameStateChanged;
     }
-
-    private void Inintialize()
-    {
-        //this 초기화
-        selectedCharacter = null;
-        currentTurn = 0;
-        onSelectSkill = 0;
-        isBlockedPlayerControl = false;
-        
-        //캐릭터 행동상태 초기화
-        if (turnManager.PlayerUnits.Length == 0 || turnManager.MonsterUnits.Length == 0) return;
-        
-        foreach (var player in turnManager.PlayerUnits)
-        {
-            player.isCompleteAction = false;
-        }
-        
-        foreach (var player in turnManager.MonsterUnits)
-        {
-            player.isCompleteAction = false;
-        }
-    }
     
     private void Update()
     {
@@ -153,6 +131,28 @@ public class InGameUIManager : MonoBehaviour
     
     private bool isAi;
     
+    private void Inintialize()
+    {
+        //this 초기화
+        selectedCharacter = null;
+        currentTurn = 0;
+        onSelectSkill = 0;
+        isBlockedPlayerControl = false;
+        
+        //캐릭터 행동상태 초기화
+        if (turnManager.PlayerUnits.Length == 0 || turnManager.MonsterUnits.Length == 0) return;
+        
+        foreach (var player in turnManager.PlayerUnits)
+        {
+            player.isCompleteAction = false;
+        }
+        
+        foreach (var player in turnManager.MonsterUnits)
+        {
+            player.isCompleteAction = false;
+        }
+    }
+    
     private void OnTurnChangedWrapper(object sender, ActorParent actor)
     {
         _= OnTurnChanged(sender, actor);
@@ -189,7 +189,6 @@ public class InGameUIManager : MonoBehaviour
         }
     }
     
-
     #endregion
     
     #region Buttons
@@ -226,6 +225,7 @@ public class InGameUIManager : MonoBehaviour
         {
             Debug.Log($"onSelectSkill : {onSelectSkill}");
             Debug.LogError("캐릭터 또는 스킬이 선택되지 않았습니다. ");
+            turnManager.TurnEndedSource?.TrySetResult(true); //턴 종료
             return;
         }
         

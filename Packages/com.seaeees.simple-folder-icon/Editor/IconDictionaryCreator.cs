@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
@@ -26,7 +27,25 @@ namespace SimpleFolderIcon.Editor
         {
             foreach (string str in assets)
             {
-                if (ReplaceSeparatorChar(Path.GetDirectoryName(str)) == "Packages/" + AssetsPath)
+                if (string.IsNullOrEmpty(str))
+                    continue;
+
+                string directory = null;
+
+                try
+                {
+                    directory = Path.GetDirectoryName(str);
+                }
+                catch (ArgumentException e)
+                {
+                    Debug.LogWarning($"[SimpleFolderIcon] Invalid path: '{str}' - {e.Message}");
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(directory))
+                    continue;
+
+                if (ReplaceSeparatorChar(directory) == "Packages/" + AssetsPath)
                 {
                     return true;
                 }

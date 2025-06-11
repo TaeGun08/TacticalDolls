@@ -40,21 +40,4 @@ public class StateEventSender : StateMachineBehaviour
             isPassedEnd = true;
         }
     }
-    
-    public static Task WaitForAnimationEvent(GameObject target, string param)
-    {
-        var tcs = new TaskCompletionSource<bool>();
-
-        void OnStart(string p, GameObject go)
-        {
-            if (go == target && p == param)
-            {
-                OnAnimationStartEvent -= OnStart;
-                tcs.TrySetResult(true);
-            }
-        }
-
-        OnAnimationStartEvent += OnStart;
-        return tcs.Task;
-    }
 }
