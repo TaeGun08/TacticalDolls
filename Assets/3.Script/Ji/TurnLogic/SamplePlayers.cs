@@ -26,22 +26,20 @@ public class SamplePlayers : MonoBehaviour
     [Header("Bool")]
     [ReadOnly] public bool isDead = false;
     [ReadOnly] public bool isCompleteAction = false;
-    // private SkillData[] skills;
+    private TaskCompletionSource<bool> skillTcs;
     
     public async Task Excute(int selectedSkill)
     {
-        //스킬 애니메이션
-        //애니메이션에 맞춰 스킬 효과 적용 (데미지, 힐,)
-        
-        // await Task.Delay(3000);
-        
-        SamplePlayer samplePlayer = new SamplePlayer();
-        SkillSample_Player sampleSkill = new SkillSample_Player();
+        SamplePlayer samplePlayer = new SamplePlayer(); //쓰레기값
+        SkillSample_Player sampleSkill = new SkillSample_Player(); //쓰레기값
         sampleSkill.MakeSkillSequence(samplePlayer, Vector3.left, sampleAction);
+        skillTcs = new TaskCompletionSource<bool>();
+        await skillTcs.Task;
     }
 
     private void sampleAction()
     {
+        skillTcs.TrySetResult(true);
         isCompleteAction = true; //캐릭터 행동 종료
     }
 }
