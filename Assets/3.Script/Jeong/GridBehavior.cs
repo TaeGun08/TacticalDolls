@@ -85,17 +85,14 @@ public class GridBehavior : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && isMove == false)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hitCharacter, 100f, characterLayer))
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hitCharacter, 100f, characterLayer))
             {
                 currentPlayer = hitCharacter.transform;
             }
-            
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out var hit))
+            else if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out var hit))
             {
                 if (currentPlayer == null) return;
                 
-                MoveRangeSystem.Instance.ResetAllHighlights();
                 Tile tile =  hit.collider.GetComponent<Tile>();
                 
                 if (tile == null) return;
@@ -104,9 +101,13 @@ public class GridBehavior : MonoBehaviour
                 if (!MoveRangeSystem.Instance.IsTileInMoveRange(tile))
                 {
                     Debug.Log("이동 불가능한 범위입니다.");
+                    MoveRangeSystem.Instance.ResetAllHighlights();
+                    MoveRangeSystem.Instance.ResetMovableTiles();
                     return;
                 }
+                
                 isMove = true;
+                MoveRangeSystem.Instance.ResetAllHighlights();
                 PathFind(RoundToTilePosition(currentPlayer.position), new Vector3Int(tile.x, 0, tile.y));
             }
         }

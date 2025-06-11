@@ -11,8 +11,7 @@ public class CharacterClickSystem : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, 100f, characterLayer))
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 100f, characterLayer))
             {
                 CharacterData characterData = hit.collider.GetComponent<CharacterData>();
                 if (characterData != null)

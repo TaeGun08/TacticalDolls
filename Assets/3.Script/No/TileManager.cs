@@ -39,6 +39,7 @@ public class TileManager : MonoBehaviour
         public bool isWalkable;
         public int tileType;
         public int obstacleDir;
+        public bool isUsingTile;
     }
 
     [System.Serializable]
