@@ -115,7 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b5f0ceb28dbbe246895b76ade27252f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterPrefab3D: {fileID: 4754987287716921293, guid: f90a3e9727824ef4385fe232b522bd1e,
+  characterPrefab3D: {fileID: 763871247456310229, guid: f90a3e9727824ef4385fe232b522bd1e,
     type: 3}
 --- !u!225 &-6054153073456231944
 CanvasGroup:
