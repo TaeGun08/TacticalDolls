@@ -9,21 +9,56 @@ public class MapJsonGenerator : MonoBehaviour
     void GenerateMapJson()
     {
         TileDataListWrapper wrapper = new TileDataListWrapper();
-        wrapper.stage1 = new List<TileData>();
+        wrapper.Stage1 = new List<TileData>();
 
         for (int x = 0; x <= 50; x++)
         {
             for (int y = 0; y <= 50; y++)
             {
-                TileData tile = new TileData
+                if (x <= 30 && x >= 20 && y == 5)
                 {
-                    x = x,
-                    y = y,
-                    isWalkable = true,
-                    tileType = TileType.Normal,
-                    obstacleDir = ObstacleDir.None
-                };
-                wrapper.stage1.Add(tile);
+                    // player spawn 
+                    TileData tile = new TileData
+                    {
+                        x = x,
+                        y = y,
+                        isWalkable = true,
+                        tileType = 1,
+                        obstacleDir = ObstacleDir.None,
+                        isUsingTile = false
+                    };
+                    
+                    wrapper.Stage1.Add(tile);
+
+                } else if (x <= 30 && x >= 20 && y == 30)
+                {
+                    // enemy spawn 
+                    TileData tile = new TileData
+                    {
+                        x = x,
+                        y = y,
+                        isWalkable = true,
+                        tileType = 101,
+                        obstacleDir = ObstacleDir.None,
+                        isUsingTile = true
+                    };
+                    
+                    wrapper.Stage1.Add(tile);
+                }
+                else
+                {
+                    TileData tile = new TileData
+                    {
+                        x = x,
+                        y = y,
+                        isWalkable = true,
+                        tileType = 0,
+                        obstacleDir = ObstacleDir.None,
+                        isUsingTile = false
+                    };
+                    
+                    wrapper.Stage1.Add(tile);
+                }
             }
         }
 
@@ -47,16 +82,9 @@ public class TileData
     public int x;
     public int y;
     public bool isWalkable;
-    public TileType tileType;
+    public int tileType;
     public ObstacleDir obstacleDir;
-}
-
-public enum TileType
-{
-    Normal = 0,
-    Obstacle = 1,
-    StartPoint = 2,
-    GoalPoint = 3
+    public bool isUsingTile;
 }
 
 public enum ObstacleDir
@@ -71,5 +99,5 @@ public enum ObstacleDir
 [System.Serializable]
 public class TileDataListWrapper
 {
-    public List<TileData> stage1;
+    public List<TileData> Stage1;
 }

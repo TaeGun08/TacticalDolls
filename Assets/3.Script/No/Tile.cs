@@ -10,6 +10,7 @@ public class Tile : MonoBehaviour
     public bool isWalkable;
     public int tileType;
     public int obstacleDir;
+    public bool isUsingTile;
 
     private MeshRenderer mr;
 
@@ -20,7 +21,8 @@ public class Tile : MonoBehaviour
         isWalkable = data.isWalkable;
         tileType = data.tileType;
         obstacleDir = data.obstacleDir;
-        
+        isUsingTile = data.isUsingTile;
+
         mr = GetComponent<MeshRenderer>();
     }
     
