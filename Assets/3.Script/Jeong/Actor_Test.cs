@@ -13,5 +13,7 @@ public abstract class Actor_Test : MonoBehaviour
         turn = Turn_Test.Instance;
     }
 
-    public abstract void MyTurn();
+    public abstract void OnMoveStart();
+
+    protected abstract void OnMoveEnd();
 }

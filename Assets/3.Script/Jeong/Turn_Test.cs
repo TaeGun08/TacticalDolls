@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -19,7 +20,7 @@ public class Turn_Test : MonoBehaviour
     private int aiSelectSkill;
     private bool isBlockedPlayerControl;
 
-    public TaskCompletionSource<bool> moveTcs;
+    public TaskCompletionSource<bool> MoveTcs;
     
     public List<Actor_Test> Ally;
     public List<Actor_Test> Enemy;
@@ -34,17 +35,16 @@ public class Turn_Test : MonoBehaviour
     {
         Instance = this;
         
-        // startButton.onClick.AddListener(() =>
-        // {
-        //     turnManager.gameObject.SetActive(true);
-        // });
+        startButton.onClick.AddListener(() =>
+        {
+            turnManager.gameObject.SetActive(true);
+        });
     }
 
     private void Start()
     {
         gridBehavior = GridBehavior_Test.Instance;
-        turnManager = TurnManager.Instance;
-
+        
         turnManager.ActorChanged += OnTurnChangedWrapper;
         turnManager.GameStateChanged += OnGameStateChanged;
     }
@@ -69,17 +69,16 @@ public class Turn_Test : MonoBehaviour
         currentTurn = turnManager.TurnCount + 1;
         actorParent = actor;
         Debug.Log($"{actor.ToString()}의 {currentTurn}턴이 시작되었습니다.");
-        moveTcs = new TaskCompletionSource<bool>();
+        MoveTcs = new  TaskCompletionSource<bool>();
+        TurnActor = new List<Actor_Test>();
         
         if (actor.Equals(ActorParent.Player))
         {
-            AllyTest();
-            await moveTcs.Task;
+            await AllyTest();
         }
         else if (actor == ActorParent.Enemy)
         {
-            EnemyTest();
-            await moveTcs.Task;
+            await EnemyTest();
         }
         
         turnManager.TurnEndedSource.TrySetResult(true);
@@ -87,20 +86,31 @@ public class Turn_Test : MonoBehaviour
 
     private async Task AllyTest()
     {
-        await Task.Delay(1000);
-        moveTcs.TrySetResult(true);
+        if (IsAuto)
+        {
+            
+        }
+        else
+        {
+            while (TurnActor.Count < Ally.Count)
+            {
+                await Task.Delay(10);
+            }
+            
+            MoveTcs.TrySetResult(true);
+            await Task.Delay(1000);
+        }
+        
+        await MoveTcs.Task;
     }
 
     private async Task EnemyTest()
     {
-        // foreach (var enemy in Enemy)
-        // {
-        //     if (gridBehavior.Actor) continue;
-        //     enemy.MyTurn();
-        // }
-        
-        await Task.Delay(1000);
-        moveTcs.TrySetResult(true);
+        foreach (var enemy in Enemy)
+        {
+            enemy.OnMoveStart();
+            await MoveTcs.Task;
+        }
     }
 
     #endregion
