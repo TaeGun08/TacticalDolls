@@ -10,16 +10,13 @@ public class Actor_Ally_Test : Actor_Test
         turn.Ally.Add(this);
     }
     
-    public override void MyTurn()
+    public override void OnMoveStart()
     {
-        if (turn.IsAuto)
-        {
-            gridBehavior.Actor = this;
-            gridBehavior.AllyAutoMove();
-        }
-        else
-        {
-            gridBehavior.AllyInputMove();
-        }
+        OnMoveEnd();
+    }
+
+    protected override void OnMoveEnd()
+    {
+        turn.MoveTcs.TrySetResult(true);
     }
 }

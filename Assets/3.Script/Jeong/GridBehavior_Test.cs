@@ -36,13 +36,11 @@ public class GridBehavior_Test : MonoBehaviour
     private Vector3Int startPos;
     private Vector3Int endPos;
 
-    public Actor_Test Actor { get; set; }
+    public Actor_Test Actor;
     [SerializeField] private LayerMask characterLayer;
 
     //private Node[,,] nodeArray;
     private Node[,] nodeArray;
-    
-    public TaskCompletionSource<bool> moveTcs;
 
     //[SerializeField] private int depth = 5;
 
@@ -94,15 +92,29 @@ public class GridBehavior_Test : MonoBehaviour
         }
     }
 
-    public void AllyInputMove()
+    private void Update()
+    {
+        AllyInputMove();
+    }
+
+    private void AllyInputMove()
     {
         if (Input.GetMouseButtonDown(0) && IsMove == false)
         {
-            Debug.Log("클릭 중");
+            Debug.Log("클릭");
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hitCharacter,
                     100f, characterLayer))
             {
                 Actor = hitCharacter.transform.GetComponent<Actor_Test>();
+
+                foreach (var actor in turn.TurnActor)
+                {
+                    if (actor.Equals(Actor))
+                    {
+                        Actor = null;
+                        return;
+                    }
+                }
             }
             else if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out var hit))
             {
@@ -123,45 +135,40 @@ public class GridBehavior_Test : MonoBehaviour
 
                 IsMove = true;
                 MoveRangeSystem.Instance.ResetAllHighlights();
+                turn.TurnActor.Add(Actor);
                 PathFind(RoundToTilePosition(Actor.transform.position), new Vector3Int(tile.x, 0, tile.y));
             }
         }
     }
 
-    public void AllyAutoMove()
-    {
-        if (IsMove) return;
-    }
-
-    public void EnemyMove()
+    public void AutoMove()
     {
         if (IsMove) return;
         
-        bool firstAlly = false;
-        Vector3Int targetPos = Vector3Int.zero;
-        Vector3 prevPos = Vector3.zero;
+        // bool firstAlly = false;
+        // Vector3Int targetPos = Vector3Int.zero;
+        // Vector3 prevPos = Vector3.zero;
+        //
+        // foreach (var ally in turn.Ally)
+        // {
+        //     Debug.Log(ally.gameObject.name);
+        //     if (firstAlly == false)
+        //     {
+        //         targetPos = new Vector3Int((int)ally.transform.position.x, 0, (int)ally.transform.position.y);
+        //         prevPos = ally.transform.position;
+        //         firstAlly = true;
+        //         continue;
+        //     }
+        //     
+        //     float distance = Vector3.Distance(Actor.transform.position, ally.transform.position);
+        //     float prevDistance = Vector3.Distance(Actor.transform.position, prevPos);
+        //     
+        //     if (distance >= prevDistance) continue;
+        //     targetPos = new Vector3Int((int)ally.transform.position.x, 0, (int)ally.transform.position.y);
+        //     prevPos = ally.transform.position;
+        // }
         
-        foreach (var ally in turn.Ally)
-        {
-            Debug.Log(ally.gameObject.name);
-            if (firstAlly == false)
-            {
-                targetPos = new Vector3Int((int)ally.transform.position.x, 0, (int)ally.transform.position.y);
-                prevPos = ally.transform.position;
-                firstAlly = true;
-                continue;
-            }
-            
-            float distance = Vector3.Distance(Actor.transform.position, ally.transform.position);
-            float prevDistance = Vector3.Distance(Actor.transform.position, prevPos);
-            
-            if (distance >= prevDistance) continue;
-            targetPos = new Vector3Int((int)ally.transform.position.x, 0, (int)ally.transform.position.y);
-            prevPos = ally.transform.position;
-        }
-        
-        Debug.Log("고고씽");
-        PathFind(RoundToTilePosition(Actor.transform.position), targetPos);
+        PathFind(RoundToTilePosition(Actor.transform.position), RoundToTilePosition(turn.Ally[0].transform.position));
         IsMove = true;
     }
 
@@ -244,39 +251,38 @@ public class GridBehavior_Test : MonoBehaviour
 
         path.Reverse();
 
+        //movePlayerAlongPathTask(path);
         StartCoroutine(MovePlayerAlongPath(path));
     }
 
-    private async Task movePlayerAlongPathTask(List<Node> path)
-    {
-        moveTcs = new TaskCompletionSource<bool>();
-
-        Tween t = null;
-        
-        // while ()
-        // {
-        //     foreach (Node node in path)
-        //     {
-        //         Vector3 targetPos = new Vector3(
-        //             node.Position.x * tileManager.tileSize,
-        //             1.5f,
-        //             node.Position.z * tileManager.tileSize
-        //         );
-        //
-        //         Actor.transform.DOMove(new Vector3()).OnComplete(() =>
-        //         {
-        //             moveTcs.TrySetResult(true);
-        //         });
-        //     }
-        // }
-        //
-        await moveTcs.Task;
-
-        turn.TurnActor.Remove(Actor);
-        Actor = null;
-        IsMove = false;
-        MoveRangeSystem.Instance.ResetMovableTiles();
-    }
+    // private async Task movePlayerAlongPathTask(List<Node> path)
+    // {
+    //     moveTcs = new TaskCompletionSource<bool>();
+    //     
+    //     foreach (Node node in path)
+    //     {
+    //         Vector3 targetPos = new Vector3(
+    //             node.Position.x * tileManager.tileSize,
+    //             1.5f,
+    //             node.Position.z * tileManager.tileSize
+    //         );
+    //         
+    //         Actor.transform.DOMove(targetPos, 0.3f)
+    //             .SetEase(Ease.Linear)
+    //             .OnComplete(() =>
+    //         {
+    //             moveTcs.TrySetResult(true);
+    //         });
+    //         
+    //         await moveTcs.Task;
+    //     }
+    //     
+    //
+    //     turn.TurnActor.Remove(Actor);
+    //     Actor = null;
+    //     IsMove = false;
+    //     MoveRangeSystem.Instance.ResetMovableTiles();
+    // }
     
     private IEnumerator MovePlayerAlongPath(List<Node> path)
     {
@@ -287,7 +293,7 @@ public class GridBehavior_Test : MonoBehaviour
                 1.5f,
                 node.Position.z * tileManager.tileSize
             );
-
+    
             while (Vector3.Distance(Actor.transform.position, targetPos) > 0.05f)
             {
                 Actor.transform.position =
@@ -295,9 +301,8 @@ public class GridBehavior_Test : MonoBehaviour
                 yield return null;
             }
         }
-
-        turn.TurnActor.Remove(Actor);
-        Actor = null;
+        
+        turn.MoveTcs.TrySetResult(true);
         IsMove = false;
         MoveRangeSystem.Instance.ResetMovableTiles();
     }
