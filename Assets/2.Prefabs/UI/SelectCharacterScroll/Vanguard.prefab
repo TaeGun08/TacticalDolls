@@ -94,6 +94,7 @@ MonoBehaviour:
   CharacterID: 2
   PrefabName: Vanguard
   Stat:
+    Level: 0
     HP: 0
     Attack: 0
     Defense: 0
@@ -115,7 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b5f0ceb28dbbe246895b76ade27252f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterPrefab3D: {fileID: 6227964824445870087, guid: 93a391f996e01174aa4d52f36b67b172,
+  characterPrefab3D: {fileID: 1054886437853045308, guid: c7dd1f2c01374b84eb08c1368e05413a,
     type: 3}
 --- !u!225 &8586753269948602528
 CanvasGroup:
