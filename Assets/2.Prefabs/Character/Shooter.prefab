@@ -3793,8 +3793,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e47f5849f7b5ecf4fadec2a0bccf912e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftHandTarget: {fileID: 9049778457742281728}
-  rightHandTarget: {fileID: 4295461731406665424}
+  rifle: {fileID: 0}
+  pistol: {fileID: 0}
 --- !u!136 &6618116706347151219
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3810,7 +3810,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -3827,7 +3827,7 @@ Rigidbody:
   m_GameObject: {fileID: 6303883111972311899}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0
+  m_Drag: 100
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}

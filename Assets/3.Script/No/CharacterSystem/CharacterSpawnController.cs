@@ -47,7 +47,7 @@ public class CharacterSpawnController : MonoBehaviour
 
                     _2DDragSystem.OnCharacterSpawned += (spawnedCharacter3D) =>
                     {
-                        EventTest(spawnedCharacter3D);
+                        CancelApplyEvent(spawnedCharacter3D);
                     };
                     
                     Button btn = SpawnCharacter.AddComponent<Button>();
@@ -97,7 +97,7 @@ public class CharacterSpawnController : MonoBehaviour
         GameObject characterSpawn = Instantiate(_2DDragSystem.characterPrefab3D);
         characterSpawn.transform.position = TileManager.Instance.selectedTile.transform.position + Vector3.up * 0.5f;
         
-        EventTest(characterSpawn);
+        CancelApplyEvent(characterSpawn);
         
         TileManager.Instance.selectedTile.isUsingTile = true;
         
@@ -153,7 +153,7 @@ public class CharacterSpawnController : MonoBehaviour
         RevertChracter = null;
     }
 
-    private void EventTest(GameObject character)
+    private void CancelApplyEvent(GameObject character)
     {
         var drag3D = character.GetComponent<Character3DDragSystem>();
         

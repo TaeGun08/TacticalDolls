@@ -59,7 +59,7 @@ public class Character3DDragSystem : MonoBehaviour, IBeginDragHandler, IDragHand
             {
                 if(targetTile.isUsingTile) return;
                 
-                transform.position = new Vector3(targetTile.transform.position.x, 1f, targetTile.transform.position.z);
+                transform.position = targetTile.transform.position + Vector3.up * 0.5f;
                 Debug.Log("Valid tile. Character moved.");
             }
             else
