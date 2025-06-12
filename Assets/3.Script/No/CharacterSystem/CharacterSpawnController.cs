@@ -95,7 +95,7 @@ public class CharacterSpawnController : MonoBehaviour
         var _2DDragSystem = disposeCharacter.GetComponent<Character2DDragSystem>();
         
         GameObject characterSpawn = Instantiate(_2DDragSystem.characterPrefab3D);
-        characterSpawn.transform.position = TileManager.Instance.selectedTile.transform.position + Vector3.up;
+        characterSpawn.transform.position = TileManager.Instance.selectedTile.transform.position + Vector3.up * 0.5f;
         
         EventTest(characterSpawn);
         
@@ -106,6 +106,10 @@ public class CharacterSpawnController : MonoBehaviour
         
         // 배치된 타일과 캐릭터 저장
         characterTileMap[characterSpawn] = TileManager.Instance.selectedTile;
+        
+        // 타일에 적용된 오브젝트 저장
+        Tile applyTileObj = TileManager.Instance.GetClosestTile(characterSpawn.transform.position);
+        applyTileObj.SetOccupant(characterSpawn.GetComponent<CharacterData>());
     }
     
     private GameObject RevertChracter;
@@ -135,6 +139,9 @@ public class CharacterSpawnController : MonoBehaviour
         {
             tile.isUsingTile = false;
             characterTileMap.Remove(RevertChracter);
+            
+            // 타일에 적용된 오브젝트 삭제
+            tile.ClearOccupant();
         }
 
         // 캐릭터 제거
@@ -142,8 +149,7 @@ public class CharacterSpawnController : MonoBehaviour
 
         // 버튼 UI 리셋
         CancelApply.gameObject.SetActive(false);
-        //Apply.gameObject.SetActive(true);
-
+        
         RevertChracter = null;
     }
 

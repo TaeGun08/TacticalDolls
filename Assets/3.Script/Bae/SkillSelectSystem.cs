@@ -38,7 +38,7 @@ public class SkillSelectSystem : MonoBehaviour
                 skillButtons[i].interactable = false;
             }
         }
-
+        
         panel.SetActive(true);
     }
 

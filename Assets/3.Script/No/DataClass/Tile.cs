@@ -14,7 +14,6 @@ public class Tile : MonoBehaviour
     public bool isUsingTile;
 
     private MeshRenderer mr;
-
     private Renderer tileRenderer;
     
     private void Awake()
@@ -50,6 +49,8 @@ public class Tile : MonoBehaviour
         // SkillRangeTester.Instance.OnTileClicked(this);
     }
     
+    private IDamageAble occupant;
+    
     public void SetOutline(bool enable)
     {
         if (tileRenderer != null)
@@ -66,5 +67,22 @@ public class Tile : MonoBehaviour
     public void ResetHighlight()
     {
         mr.material.color = Color.gray;
+    }
+    
+    
+    // combat settings
+    public void SetOccupant(IDamageAble obj)
+    {
+        occupant = obj;
+    }
+
+    public IDamageAble GetOccupant()
+    {
+        return occupant;
+    }
+
+    public void ClearOccupant()
+    {
+        occupant = null;
     }
 }

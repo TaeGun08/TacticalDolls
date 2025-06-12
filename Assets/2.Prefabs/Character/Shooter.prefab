@@ -3729,9 +3729,9 @@ GameObject:
   - component: {fileID: 1015954909369209928}
   - component: {fileID: 6658329879998160359}
   - component: {fileID: 6618116706347151219}
-  - component: {fileID: 7384177618396278950}
-  - component: {fileID: 2816836125169686510}
   - component: {fileID: 4546412291728748001}
+  - component: {fileID: 2816836125169686510}
+  - component: {fileID: 7632375900871144250}
   m_Layer: 6
   m_Name: Shooter
   m_TagString: Untagged
@@ -3773,7 +3773,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 18fb7c076fa7a8441ad9c5018e0a51ff, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -3818,43 +3818,6 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.88, z: 0}
---- !u!114 &7384177618396278950
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6303883111972311899}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9962c534960090e4fbfd1d105be98100, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CharacterID: 0
-  PrefabName: Shooter
-  Stat:
-    HP: 0
-    Attack: 0
-    Defense: 0
-    MoveRange: 5
-  Weapon:
-    Name: 
-    Damge: 0
-    Speed: 0
-  Skills:
-  - {fileID: 11400000, guid: dba2ff2e5545180408e88dda97d3439c, type: 2}
---- !u!114 &2816836125169686510
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6303883111972311899}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac3548e6f5779a34badc74a4e72c881c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &4546412291728748001
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3882,6 +3845,44 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!114 &2816836125169686510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6303883111972311899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac3548e6f5779a34badc74a4e72c881c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7632375900871144250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6303883111972311899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9962c534960090e4fbfd1d105be98100, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CharacterID: 0
+  PrefabName: Shooter
+  Stat:
+    Level: 1
+    HP: 101
+    Attack: 21
+    Defense: 6
+    MoveRange: 3
+  Weapon:
+    Name: 
+    Damge: 0
+    Speed: 0
+  Skills:
+  - {fileID: 11400000, guid: dba2ff2e5545180408e88dda97d3439c, type: 2}
 --- !u!1 &6402302345025105639
 GameObject:
   m_ObjectHideFlags: 0
