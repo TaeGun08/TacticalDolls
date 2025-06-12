@@ -112,11 +112,11 @@ public class TileManager : MonoBehaviour
             {
                 foreach (var enemy in EnmeyPrefab)
                 {
-                    EnemyData enemyData = enemy.GetComponent<EnemyData>();
-
+                    EnemyData enemyData = enemy.GameObject.GetComponent<EnemyData>();
+                    
                     if (tile.tileType == enemyData.EnemyID)
                     {
-                        Instantiate(enemy,tileComp.transform.position + Vector3.up, Quaternion.identity);
+                        Instantiate(enemyData.GameObject,tileComp.transform.position + Vector3.up, Quaternion.identity);
                     }
                 }
             }

@@ -29,7 +29,7 @@ public class SkillRangeSystem : MonoBehaviour
     {
         currentCharacterData = characterData;
         
-        return TileManager.Instance.GetClosestTile(currentCharacterData.gameObject.transform.position);
+        return TileManager.Instance.GetClosestTile(currentCharacterData.GameObject.transform.position);
     }
     
     public void ShowSkillRange(CharacterData characterData, int index)

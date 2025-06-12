@@ -4831,9 +4831,9 @@ GameObject:
   - component: {fileID: 4790117152104452923}
   - component: {fileID: 6027023764648247504}
   - component: {fileID: 9049935481894352925}
-  - component: {fileID: 3963448983138241833}
-  - component: {fileID: 1630460228455831785}
   - component: {fileID: 4705662613526359538}
+  - component: {fileID: 1630460228455831785}
+  - component: {fileID: -4992809080540692550}
   m_Layer: 6
   m_Name: Vanguard
   m_TagString: Untagged
@@ -4920,43 +4920,6 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.88, z: 0}
---- !u!114 &3963448983138241833
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6227964824445870087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9962c534960090e4fbfd1d105be98100, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CharacterID: 2
-  PrefabName: Vanguard
-  Stat:
-    HP: 0
-    Attack: 0
-    Defense: 0
-    MoveRange: 5
-  Weapon:
-    Name: 
-    Damge: 0
-    Speed: 0
-  Skills:
-  - {fileID: 11400000, guid: 187e8dbb48b6ca24aa2813801e71be81, type: 2}
---- !u!114 &1630460228455831785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6227964824445870087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac3548e6f5779a34badc74a4e72c881c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &4705662613526359538
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4984,6 +4947,44 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!114 &1630460228455831785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6227964824445870087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac3548e6f5779a34badc74a4e72c881c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-4992809080540692550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6227964824445870087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9962c534960090e4fbfd1d105be98100, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CharacterID: 2
+  PrefabName: Vanguard
+  Stat:
+    Level: 3
+    HP: 103
+    Attack: 23
+    Defense: 8
+    MoveRange: 3
+  Weapon:
+    Name: 
+    Damge: 0
+    Speed: 0
+  Skills:
+  - {fileID: 11400000, guid: 187e8dbb48b6ca24aa2813801e71be81, type: 2}
 --- !u!1 &6271492910037430229
 GameObject:
   m_ObjectHideFlags: 0

@@ -1658,7 +1658,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1216077625}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.999997
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2665,7 +2665,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00003259119}
+  m_AnchoredPosition: {x: 0, y: 0.000012921547}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1583637457
@@ -2907,6 +2907,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1643356043}
   m_CullTransparentMesh: 1
+--- !u!1 &1718064821
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1718064822}
+  - component: {fileID: 1718064823}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1718064822
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718064821}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1718064823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718064821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 936c6d2a73dddc4438a9e5f6120a7bb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CharacterSOData: {fileID: 11400000, guid: 343d15066456cd345a4086756a10ad9a, type: 2}
+  PrefabsTable: {fileID: 11400000, guid: 343d15066456cd345a4086756a10ad9a, type: 2}
 --- !u!1 &1757626283
 GameObject:
   m_ObjectHideFlags: 0
@@ -3900,9 +3946,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharacterPrefab:
-  - {fileID: -1050778822023757517, guid: 89576a289ce3f5e44b653b054d60bd6b, type: 3}
-  - {fileID: -8641185917274103583, guid: f90a3e9727824ef4385fe232b522bd1e, type: 3}
-  - {fileID: -5835233133872801774, guid: 93a391f996e01174aa4d52f36b67b172, type: 3}
+  - {fileID: 7632375900871144250, guid: 89576a289ce3f5e44b653b054d60bd6b, type: 3}
+  - {fileID: -985184253695825529, guid: f90a3e9727824ef4385fe232b522bd1e, type: 3}
+  - {fileID: -4992809080540692550, guid: 93a391f996e01174aa4d52f36b67b172, type: 3}
   usingCharacter: 
   SelectedCharacterPanel: {fileID: 85905583}
   StartBtn: {fileID: 14823469}
@@ -4552,6 +4598,7 @@ SceneRoots:
   - {fileID: 1259046001}
   - {fileID: 8354416668599502667}
   - {fileID: 2039194119}
+  - {fileID: 1718064822}
   - {fileID: 1490750613}
   - {fileID: 2137488148}
   - {fileID: 261119185}

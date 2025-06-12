@@ -7,7 +7,7 @@ public class PlayerManager: MonoBehaviour
 {
     public static PlayerManager Instance;
     
-    public List<CharacterData> CharacterPrefab;
+    //public List<CharacterData> CharacterPrefab;
     public PlayerDataSample player;
     public List<int> usingCharacter;
     
@@ -30,7 +30,9 @@ public class PlayerManager: MonoBehaviour
     {
         player = new PlayerDataSample();
         
+        // test data 생성
         TestPlayerHasCharacter();
+        
         StartBtn.onClick.AddListener(StartGame);
     }
 
@@ -65,7 +67,7 @@ public class PlayerManager: MonoBehaviour
         CharacterDataSample sampleCharacter2 = new CharacterDataSample
         {
             characterCode = 1,
-            level = 1,
+            level = 2,
                 
             weapon = new WeaponDataSample
             {
@@ -91,7 +93,7 @@ public class PlayerManager: MonoBehaviour
         CharacterDataSample sampleCharacter3 = new CharacterDataSample
         {
             characterCode = 2,
-            level = 1,
+            level = 3,
                 
             weapon = new WeaponDataSample
             {
@@ -114,10 +116,24 @@ public class PlayerManager: MonoBehaviour
             }
         };
         
-        player.HasCharacter.Add(sampleCharacter); 
-        player.HasCharacter.Add(sampleCharacter2); 
-        player.HasCharacter.Add(sampleCharacter3); 
+
+        player.HasCharacter.Add(CreateCharacterDataFromSample(sampleCharacter));
+        player.HasCharacter.Add(CreateCharacterDataFromSample(sampleCharacter2));
+        player.HasCharacter.Add(CreateCharacterDataFromSample(sampleCharacter3));
     }
+    
+    public CharacterDataSample CreateCharacterDataFromSample(CharacterDataSample sample)
+    {
+        CharacterData baseData = GameManager.Instance.PrefabsTable.GetPrefabByIndex(sample.characterCode).GetComponent<CharacterData>();
+        
+        //CharacterData baseData = CharacterPrefab[sample.characterCode];
+        
+        // 스탯 초기화
+        baseData.Stat = baseData.CalculateStatFromLevel(sample.level);
+
+        return sample;
+    }
+
 
     private void Update()
     {

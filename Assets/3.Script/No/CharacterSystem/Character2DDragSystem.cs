@@ -45,15 +45,21 @@ public class Character2DDragSystem : MonoBehaviour, IBeginDragHandler, IDragHand
 
             if (tile.tileType != 1) return;
             if(tile.isUsingTile) return;
+
+            CharacterData characterData = characterPrefab3D.GetComponent<CharacterData>();
             
             // 이미 배치된 캐릭터인지 체크
-            if (PlayerManager.Instance.usingCharacter.Contains(characterPrefab3D.GetComponent<CharacterData>().CharacterID)) return;
+            if (PlayerManager.Instance.usingCharacter.Contains(characterData.CharacterID)) return;
             
-            var spawned = Instantiate(characterPrefab3D, hit.collider.transform.position + Vector3.up, Quaternion.identity);
+            var spawned = Instantiate(characterPrefab3D, hit.collider.transform.position + Vector3.up * 0.5f, Quaternion.identity);
             tile.isUsingTile = true;
             
             // 배치된 캐릭터 저장
-            PlayerManager.Instance.usingCharacter.Add(characterPrefab3D.GetComponent<CharacterData>().CharacterID);
+            PlayerManager.Instance.usingCharacter.Add(characterData.CharacterID);
+            
+            // 타일에 적용된 오브젝트 저장
+            Tile applyTileObj = TileManager.Instance.GetClosestTile(spawned.transform.position);
+            applyTileObj.SetOccupant(characterData);
             
             // 이벤트 구독
             Debug.Log("Spawned character, invoking OnCharacterSpawned");
