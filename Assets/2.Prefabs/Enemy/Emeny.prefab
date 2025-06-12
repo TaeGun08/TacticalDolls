@@ -123,7 +123,7 @@ MonoBehaviour:
   EnemyID: 101
   PrefabName: Enemy1
   Stat:
-    HP: 0
+    HP: 100
     Attack: 0
     Defense: 0
     MoveRange: 0

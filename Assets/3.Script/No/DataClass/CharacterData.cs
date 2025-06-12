@@ -13,6 +13,8 @@ public class CharacterData : MonoBehaviour, IDamageAble
     
     public Collider MainCollider { get; }
     public GameObject GameObject => gameObject;
+    public int Team => 0; 
+    
     public void TakeDamage(CombatEvent combatEvent)
     {
         Debug.Log($"{PrefabName} Character Take damage :: {CharacterID}");

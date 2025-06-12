@@ -11,10 +11,13 @@ public class EnemyData : MonoBehaviour, IDamageAble
     
     public Collider MainCollider { get; }
     public GameObject GameObject => gameObject;
+    public int Team => 1; 
     
     public void TakeDamage(CombatEvent combatEvent)
     {
         Debug.Log($"{PrefabName} Enemy Take damage :: {EnemyID}");
+        
+        Stat.HP -= combatEvent.Damage;
     }
 
     public void TakeHeal(HealEvent combatEvent)

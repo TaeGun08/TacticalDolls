@@ -116,7 +116,10 @@ public class TileManager : MonoBehaviour
                     
                     if (tile.tileType == enemyData.EnemyID)
                     {
-                        Instantiate(enemyData.GameObject,tileComp.transform.position + Vector3.up, Quaternion.identity);
+                        var spawnEnemey = Instantiate(enemyData.GameObject,tileComp.transform.position + Vector3.up, Quaternion.identity);
+                        Tile applyTileObj = GetClosestTile(spawnEnemey.transform.position);
+                        applyTileObj.SetOccupant(spawnEnemey.GetComponent<IDamageAble>());
+                        // Instantiate(enemyData.GameObject,tileComp.transform.position + Vector3.up, Quaternion.identity);
                     }
                 }
             }

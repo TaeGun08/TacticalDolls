@@ -15,6 +15,10 @@ public class SkillRangeSystem : MonoBehaviour
     private int selectedSkillIndex;
     private bool isRangeVisible = false;
 
+    private List<Tile> usableTiles = new List<Tile>();
+    
+    public List<IDamageAble> damageAbles = new List<IDamageAble>();
+    
     private void Awake()
     {
         Instance = this;
@@ -83,11 +87,16 @@ public class SkillRangeSystem : MonoBehaviour
                 }
 
                 if (inRange)
+                {
                     tile.Highlight(Color.cyan);
+                    usableTiles.Add(tile);
+                }
                 else
                     tile.ResetHighlight();
             }
         }
+        
+        SetDamageAbles();
     }
 
     public void ResetAllHighlights()
@@ -98,5 +107,28 @@ public class SkillRangeSystem : MonoBehaviour
         }
         
         isRangeVisible = false;
+    }
+
+    public void SetDamageAbles()
+    {
+        for (int i = 0; i < usableTiles.Count; i++)
+        {
+            if (usableTiles[i].GetOccupant() != null)
+            {
+                damageAbles.Add(usableTiles[i].GetOccupant());
+            }
+        }
+        
+        Debug.Log($"damageAbles: {damageAbles.Count}");
+    }
+
+    public void ClearUsableTiles()
+    {
+        usableTiles.Clear();
+    }
+    
+    public void ClearDamageAbles()
+    {
+        damageAbles.Clear();
     }
 }

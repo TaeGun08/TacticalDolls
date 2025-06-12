@@ -110,6 +110,11 @@ public class GridBehavior : MonoBehaviour
                     return;
                 }
                 
+                // 이동 전 플레이어 타일 데이터 초기화
+                var  currentPlayerTilePos = TileManager.Instance.GetClosestTile(currentPlayer.position);
+                currentPlayerTilePos.isUsingTile = false;
+                currentPlayerTilePos.ClearOccupant();
+                
                 isMove = true;
                 MoveRangeSystem.Instance.ResetAllHighlights();
 
@@ -234,6 +239,11 @@ public class GridBehavior : MonoBehaviour
         
         isMove = false;
         MoveRangeSystem.Instance.ResetMovableTiles();
+        
+        // 이동 후 플레이어 타일 데이터 셋팅
+        var  currentPlayerTilePos = TileManager.Instance.GetClosestTile(currentPlayer.position);
+        currentPlayerTilePos.isUsingTile = true;
+        currentPlayerTilePos.SetOccupant(currentPlayer.GetComponent<IDamageAble>());
     }
     
     private void UpdateRotation(Transform player, Vector2 inputAxis, float smoothTime)

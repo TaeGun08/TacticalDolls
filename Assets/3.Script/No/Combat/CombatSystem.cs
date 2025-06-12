@@ -10,26 +10,73 @@ public class CombatSystem : MonoBehaviour
         Instance = this;
     }
 
-    public void ExecuteSkill(CharacterData character, int skillIndex)
+    public void ExecuteSkill(IDamageAble attacker, int skillIndex)
     {
-        SkillSO skill = character.Skills[skillIndex];
-        Tile centerTile = TileManager.Instance.GetClosestTile(character.GameObject.transform.position);
-
-        if (centerTile == null) return;
-
-        List<IDamageAble> targets = GetTargetsInRange(centerTile, skill.RangeType, skill.Range);
-        
-        foreach (IDamageAble target in targets)
+        CharacterData character = attacker as CharacterData;
+        if (character != null)
         {
-            // 이벤트 객체 생성
-            CombatEvent combatEvent = new CombatEvent
+            // 캐릭터 스킬 처리
+        }
+        else
+        {
+            EnemyData enemy = attacker as EnemyData;
+            if (enemy != null)
             {
-                Attacker = character,
-                Target = target,
-            };
+                // 적 스킬 처리
+                return;
+            }
+            else
+            {
+                Debug.LogWarning("캐스팅 실패: attacker는 CharacterData도 EnemyData도 아님");
+            }
+        }
+        
+        List<IDamageAble> targetList = SkillRangeSystem.Instance.damageAbles;
+        
+        if (character != null)
+        {
+            // 플레이어 공격 처리
+            SkillSO skill = character.Skills[skillIndex];
+        
+            foreach (IDamageAble target in targetList)
+            {
+                if (target.Team == attacker.Team)
+                {
+                    Debug.Log("같은 팀으로 피격을 넘어갑니다.");
+                    continue;
+                }
+                
+                switch (skill.Type)
+                {
+                    case SkillType.Damage:
+                        var combatEvent = new CombatEvent
+                        {
+                            Sender = attacker,
+                            Target = target,
+                            Damage = character.Stat.Attack,
+                        };
+                        
+                        target.TakeDamage(combatEvent);
+                        break;
 
-            // 데미지 적용
-            target.TakeDamage(combatEvent);
+                    case SkillType.Heal:
+                        var healEvent = new HealEvent
+                        {
+                            Sender = attacker,
+                            Target = target,
+                            Heal = character.Stat.Attack,
+                            Position = target.GameObject.transform.position,
+                        };
+                        target.TakeHeal(healEvent);
+                        break;
+
+                    // 다른 타입도 추가 가능
+                }
+            }
+        }
+        else
+        {
+            // enemy 공격 처리
         }
     }
     
@@ -40,48 +87,48 @@ public class CombatSystem : MonoBehaviour
     //     return baseDamage; 
     // }
 
-    private List<IDamageAble> GetTargetsInRange(Tile centerTile, RangeType rangeType, int range)
-    {
-        List<IDamageAble> targets = new List<IDamageAble>();
-        Tile[,] tiles = TileManager.Instance.tiles;
-
-        for (int x = 0; x < tiles.GetLength(0); x++)
-        {
-            for (int y = 0; y < tiles.GetLength(1); y++)
-            {
-                Tile tile = tiles[x, y];
-                if (tile == null) continue;
-
-                int dx = Mathf.Abs(tile.x - centerTile.x);
-                int dy = Mathf.Abs(tile.y - centerTile.y);
-
-                bool inRange = false;
-
-                switch (rangeType)
-                {
-                    case RangeType.Straight:
-                    case RangeType.Plus:
-                        inRange = (dx == 0 && dy <= range) || (dy == 0 && dx <= range);
-                        break;
-                    case RangeType.Cross:
-                        inRange = (dx == dy && dx <= range);
-                        break;
-                    case RangeType.Around:
-                        inRange = (dx + dy) <= range;
-                        break;
-                }
-
-                if (!inRange) continue;
-
-                // 타일 위에 IDamageAble 대상이 있는지 확인
-                IDamageAble target = tile.GetOccupant() as IDamageAble;
-                if (target != null)
-                {
-                    targets.Add(target);
-                }
-            }
-        }
-
-        return targets;
-    }
+    // private List<IDamageAble> GetTargetsInRange(Tile centerTile, RangeType rangeType, int range)
+    // {
+    //     List<IDamageAble> targets = new List<IDamageAble>();
+    //     Tile[,] tiles = TileManager.Instance.tiles;
+    //
+    //     for (int x = 0; x < tiles.GetLength(0); x++)
+    //     {
+    //         for (int y = 0; y < tiles.GetLength(1); y++)
+    //         {
+    //             Tile tile = tiles[x, y];
+    //             if (tile == null) continue;
+    //
+    //             int dx = Mathf.Abs(tile.x - centerTile.x);
+    //             int dy = Mathf.Abs(tile.y - centerTile.y);
+    //
+    //             bool inRange = false;
+    //
+    //             switch (rangeType)
+    //             {
+    //                 case RangeType.Straight:
+    //                 case RangeType.Plus:
+    //                     inRange = (dx == 0 && dy <= range) || (dy == 0 && dx <= range);
+    //                     break;
+    //                 case RangeType.Cross:
+    //                     inRange = (dx == dy && dx <= range);
+    //                     break;
+    //                 case RangeType.Around:
+    //                     inRange = (dx + dy) <= range;
+    //                     break;
+    //             }
+    //
+    //             if (!inRange) continue;
+    //
+    //             // 타일 위에 IDamageAble 대상이 있는지 확인
+    //             IDamageAble target = tile.GetOccupant() as IDamageAble;
+    //             if (target != null)
+    //             {
+    //                 targets.Add(target);
+    //             }
+    //         }
+    //     }
+    //
+    //     return targets;
+    // }
 }

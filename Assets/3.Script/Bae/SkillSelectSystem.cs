@@ -57,6 +57,19 @@ public class SkillSelectSystem : MonoBehaviour
             return;
 
         // 범위 표시 요청
+        SkillRangeSystem.Instance.ClearUsableTiles();
+        SkillRangeSystem.Instance.ClearDamageAbles();
         SkillRangeSystem.Instance.ShowSkillRange(currentCharacter, index);
+        
+        // 범위에 있는 obj 체크 
+        TestCombat(index);
+    }
+
+    public void TestCombat(int skillIndex)
+    {
+        Debug.Log($"skillIndex:: {skillIndex}");
+        
+        // 타겟 리스트 전달
+        CombatSystem.Instance.ExecuteSkill(currentCharacter, skillIndex);
     }
 }

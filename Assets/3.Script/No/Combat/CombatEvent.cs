@@ -7,11 +7,12 @@ public abstract class InGameEvent
     public enum EventType
     {
         Unknown,
-        Combat,
+        Attack,
+        Buff,
         Heal,
     }
     
-    public IDamageAble Attacker { get; set; }
+    public IDamageAble Sender { get; set; }
     public IDamageAble Target { get; set; }
     public abstract EventType Type { get; }
 }
@@ -19,7 +20,14 @@ public abstract class InGameEvent
 public class CombatEvent : InGameEvent
 {
     public int Damage;
-    public override EventType Type => EventType.Combat;
+    public override EventType Type => EventType.Attack;
+}
+
+public class BuffEvent : InGameEvent
+{
+    public int Buff { get; set; }
+    public Vector3 Position { get; set; }
+    public override EventType Type => EventType.Buff;
 }
 
 public class HealEvent : InGameEvent

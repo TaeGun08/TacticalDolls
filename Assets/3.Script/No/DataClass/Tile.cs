@@ -68,7 +68,16 @@ public class Tile : MonoBehaviour
     {
         mr.material.color = Color.gray;
     }
-    
+
+    // public GameObject ReturnTopOfTileOrNull()
+    // {
+    //     if (Physics.Raycast(transform.position, Vector3.up, out RaycastHit hit, 100f))
+    //     {
+    //         return hit.transform.gameObject;
+    //     }
+    //     
+    //     return null;
+    // }
     
     // combat settings
     public void SetOccupant(IDamageAble obj)
