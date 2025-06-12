@@ -5,9 +5,9 @@ using Firebase.Extensions;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public partial class TurnManager : MonoBehaviour
+public class TurnManager_Test : MonoBehaviour
 {
-    public static TurnManager Instance { get; private set; }
+    public static TurnManager_Test Instance { get; private set; }
 
     public event EventHandler<ActorParent> ActorChanged;
     public event EventHandler<GameStateEventArgs> GameStateChanged;
@@ -17,7 +17,7 @@ public partial class TurnManager : MonoBehaviour
     public int TurnCount { get; private set; } = 0;
 
     public TaskCompletionSource<bool> TurnEndedSource;
-    
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -25,7 +25,9 @@ public partial class TurnManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
@@ -35,27 +37,27 @@ public partial class TurnManager : MonoBehaviour
         {
             if (task.IsFaulted || task.IsCanceled) return;
             //--초기화 완료 시점--
-            _= RunGameFlow();
+            _ = RunGameFlow();
         });
     }
-    
+
     private async Task RunGameFlow()
     {
         await Task.Delay(1000);
-    
+
         StartGame();
-        
+
         while (State == GameState.Playing)
         {
             SetNextTurn();
             TurnEndedSource = new TaskCompletionSource<bool>();
             await TurnEndedSource.Task;
-        
+
             if (CheckWinCondition())
             {
                 break;
             }
-            
+
             SetNextTurn();
             TurnEndedSource = new TaskCompletionSource<bool>();
             await TurnEndedSource.Task;
@@ -80,34 +82,6 @@ public partial class TurnManager : MonoBehaviour
     private bool CheckWinCondition() //승자가 나올 겨우 true, 아니라면 false 반환
     {
         return false; //please fix
-        
-        ActorParent winner;
-        
-        // 추가할 것 - 양쪽에 //&& 맵 승리조건이 있고, 그게 달성되었으면 && mapWinLogic?.Invoke ?
-        
-        if (playerUnits.All(unit => unit.isDead)) //playerAllDead
-        {
-            winner = ActorParent.Enemy;
-            EndGame(winner);
-            return true;
-        }
-        
-        if (monsterUnits.All(unit => unit.isDead)) //enemyAllDead
-        {
-            winner = ActorParent.Player;
-            EndGame(winner);
-            return true;
-        }
-        
-        if (TurnCount >= maxTurnCount) // 턴이 최대 턴 수를 지나 패배 처리
-        {
-            winner = ActorParent.Enemy;
-            EndGame(winner);
-            return true;
-        }
-        
-        winner = ActorParent.None;
-        return false;
     }
 
     private void StartGame()
@@ -116,18 +90,48 @@ public partial class TurnManager : MonoBehaviour
         State = GameState.Playing;
         GameStateChanged?.Invoke(this, new GameStateEventArgs(State));
     }
-    
+
     private void TurnStart(ActorParent actor)
     {
         CurrentTurn = actor;
         ActorChanged?.Invoke(this, CurrentTurn);
     }
-    
+
     private void EndGame(ActorParent winner)
     {
         Debug.Log($"게임 종료. 승자: {winner}");
         State = GameState.Ended;
         GameStateChanged?.Invoke(this, new GameStateEventArgs(State));
     }
-}
+    
+    private int maxTurnCount = 10;
+    
+    [ReadOnly] private SamplePlayer[] playerUnits;
+    [ReadOnly] private SamplePlayer[] monsterUnits;
+    
+    public SamplePlayer[] PlayerUnits => playerUnits;
+    public SamplePlayer[] MonsterUnits => monsterUnits;
+    
+    // [Header("PrefabsTable")]
+    // [SerializeField] private PrefabsTable playerPrefabsTable;
+    // [SerializeField] private PrefabsTable monsterPrefabsTable;
+    // [SerializeField] private PrefabsTable playerSkillPrefabsTable;
+    
+    private Task<bool> InGameInitialize() //게임 시작 초기화
+    {
+        // maxTurnCount = 50; //맵의 최대 턴 수 정보로
+        // playerUnits = new SamplePlayer[10];
+        //적 monsterUnits
+        
+        playerUnits = new SamplePlayer[3];
+        monsterUnits = new SamplePlayer[3];
 
+        for (int i = 0; i < 3; i++)
+        {
+            playerUnits[i] = new SamplePlayer();
+            monsterUnits[i] = new SamplePlayer();
+        }
+        
+        return Task.FromResult(true);
+    }
+}

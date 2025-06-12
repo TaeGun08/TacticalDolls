@@ -12,7 +12,6 @@ public class Actor_Ally_Test : Actor_Test
     
     public override void MyTurn()
     {
-        Debug.Log(gameObject.name);
         if (turn.IsAuto)
         {
             gridBehavior.Actor = this;

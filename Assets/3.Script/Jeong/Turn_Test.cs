@@ -10,14 +10,14 @@ public class Turn_Test : MonoBehaviour
 
     private GridBehavior_Test gridBehavior;
 
-    public TurnManager turnManager; //싱글톤 캐싱
-    private ActorParent actorParent = ActorParent.None; //턴 가진 주체 캐싱
+    public TurnManager turnManager;
+    private ActorParent actorParent = ActorParent.None;
 
-    private SamplePlayer selectedCharacter; //선택한 개체
-    private int currentTurn; //현재 턴
-    private int onSelectSkill; //스킬을 선택하는 로직 필요
-    private int aiSelectSkill; //Ai가 자동으로 선택한 스킬
-    private bool isBlockedPlayerControl; //스킬 사용 중 플레이어 입력 막음
+    private SamplePlayer selectedCharacter;
+    private int currentTurn;
+    private int onSelectSkill;
+    private int aiSelectSkill;
+    private bool isBlockedPlayerControl;
 
     public TaskCompletionSource<bool> moveTcs;
     
@@ -34,15 +34,16 @@ public class Turn_Test : MonoBehaviour
     {
         Instance = this;
         
-        startButton.onClick.AddListener(() =>
-        {
-            turnManager.gameObject.SetActive(true);
-        });
+        // startButton.onClick.AddListener(() =>
+        // {
+        //     turnManager.gameObject.SetActive(true);
+        // });
     }
 
     private void Start()
     {
         gridBehavior = GridBehavior_Test.Instance;
+        turnManager = TurnManager.Instance;
 
         turnManager.ActorChanged += OnTurnChangedWrapper;
         turnManager.GameStateChanged += OnGameStateChanged;
@@ -63,37 +64,42 @@ public class Turn_Test : MonoBehaviour
         _ = OnTurnChanged(sender, actor);
     }
 
-    private async Task OnTurnChanged(object sender, ActorParent actor) //메서드 반복은 입력이 제한적, 코루티으로 리팩토링?
+    private async Task OnTurnChanged(object sender, ActorParent actor)
     {
         currentTurn = turnManager.TurnCount + 1;
         actorParent = actor;
         Debug.Log($"{actor.ToString()}의 {currentTurn}턴이 시작되었습니다.");
         moveTcs = new TaskCompletionSource<bool>();
-
-        if (actor.Equals(ActorParent.Player)) //플레이어 조작
+        
+        if (actor.Equals(ActorParent.Player))
         {
             AllyTest();
             await moveTcs.Task;
         }
-        else if (actor == ActorParent.Enemy) //적 조작 //적은 반드시 Ai
+        else if (actor == ActorParent.Enemy)
         {
             EnemyTest();
             await moveTcs.Task;
         }
-
-        turnManager.TurnEndedSource.TrySetResult(true); //턴 넘김  
+        
+        turnManager.TurnEndedSource.TrySetResult(true);
     }
 
-
-    private void AllyTest()
+    private async Task AllyTest()
     {
-        
+        await Task.Delay(1000);
         moveTcs.TrySetResult(true);
     }
 
-    private void EnemyTest()
+    private async Task EnemyTest()
     {
+        // foreach (var enemy in Enemy)
+        // {
+        //     if (gridBehavior.Actor) continue;
+        //     enemy.MyTurn();
+        // }
         
+        await Task.Delay(1000);
         moveTcs.TrySetResult(true);
     }
 
