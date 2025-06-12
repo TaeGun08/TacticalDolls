@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class AnimationTest : MonoBehaviour
 {
+    [SerializeField] private GameObject rifle;
+    [SerializeField] private GameObject pistol;
+    
     private Animator animator;
+    private bool isSwitchingWeapon = false;
 
     private void Start()
     {
@@ -14,6 +18,11 @@ public class AnimationTest : MonoBehaviour
     private void Update()
     {
         CheckInput();
+
+        if (isSwitchingWeapon)
+        {
+            CheckAnimationEnd();
+        }
     }
 
     private void CheckInput()
@@ -30,13 +39,49 @@ public class AnimationTest : MonoBehaviour
             }
         }
         else if (Input.GetKeyDown(KeyCode.W))
-            PlayAnimationByTrigger("Shoot");
+            PlayAnimationByTrigger("Skill_1");
         else if (Input.GetKeyDown(KeyCode.E))
-            PlayAnimationByTrigger("Hit");
+        {
+            rifle.SetActive(false);
+            PlayAnimationByTrigger("Skill_2");
+            isSwitchingWeapon = true;
+        }
         else if (Input.GetKeyDown(KeyCode.R))
+        {
+            PlayAnimationByTrigger("Skill_3");
+            isSwitchingWeapon = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.T))
+            PlayAnimationByTrigger("Attacked");
+        else if (Input.GetKeyDown(KeyCode.Y))
             PlayAnimationByTrigger("Die");
     }
 
+    private void CheckAnimationEnd()
+    {
+        AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
+        
+        if (info.IsName("Skill_2") && info.normalizedTime > 0.99f)
+        {
+            rifle.SetActive(true);
+
+            isSwitchingWeapon = false;
+        }
+        
+        if (info.IsName("Skill_3") && info.normalizedTime > 0.1f)
+        {
+            rifle.SetActive(false);
+            pistol.SetActive(true);
+        }
+        if (info.IsName("Skill_3") && info.normalizedTime > 0.8f)
+        {
+            rifle.SetActive(true);
+            pistol.SetActive(false);
+
+            isSwitchingWeapon = false;
+        }
+    }
+    
     private void PlayAnimationByTrigger(string trigger)
     {
         if (animator != null)
@@ -44,26 +89,4 @@ public class AnimationTest : MonoBehaviour
             animator.SetTrigger(trigger);
         }
     }
-    
-    public Transform leftHandTarget;
-    public Transform rightHandTarget;
-
-    // private void OnAnimatorIK(int layerIndex)
-    // {
-    //     if (rightHandTarget != null)
-    //     {
-    //         animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
-    //         animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1);
-    //         animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandTarget.position);
-    //         animator.SetIKRotation(AvatarIKGoal.RightHand, rightHandTarget.rotation);
-    //     }
-    //
-    //     if (leftHandTarget != null)
-    //     {
-    //         animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
-    //         animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1);
-    //         animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandTarget.position);
-    //         animator.SetIKRotation(AvatarIKGoal.LeftHand, leftHandTarget.rotation);
-    //     }
-    // }
 }
