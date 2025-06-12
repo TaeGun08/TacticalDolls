@@ -16,7 +16,7 @@ public class SamplePlayer : MonoBehaviour
         //스킬 애니메이션
         //애니메이션에 맞춰 스킬 효과 적용 (데미지, 힐,)
         SamplePlayer samplePlayer = new SamplePlayer(); //쓰레기값
-        SkillSample_Player sampleSkill = new SkillSample_Player(); //쓰레기값
+        SkillSample sampleSkill = new SkillSample(); //쓰레기값
         sampleSkill.MakeSkillSequence(samplePlayer, samplePlayer);
         SkillTcs = new TaskCompletionSource<bool>();
         await SkillTcs.Task;
