@@ -10,7 +10,7 @@ public class SkillSelectSystem : MonoBehaviour
     public Button[] skillButtons = new Button[4];
     public TMP_Text[] skillNameTexts = new TMP_Text[4];
 
-    private CharacterData currentCharacter;
+    private IDamageAble currentTarget;
     
     private void Start()
     {
@@ -20,56 +20,54 @@ public class SkillSelectSystem : MonoBehaviour
             skillButtons[i].onClick.AddListener(() => OnSkillButtonClicked(index));
         }
     }
-    
-    public void Open(CharacterData characterData)
+
+    public void Open(IDamageAble targetData)
     {
-        currentCharacter = characterData;
-        
-        for (int i = 0; i < skillNameTexts.Length; i++)
-        {
-            if (i < characterData.Skills.Count && characterData.Skills[i] != null)
-            {
-                skillNameTexts[i].text = characterData.Skills[i].Name;
-                skillButtons[i].interactable = true;
-            }
-            else
-            {
-                skillNameTexts[i].text = "Empty";
-                skillButtons[i].interactable = false;
-            }
-        }
-        
         panel.SetActive(true);
+        currentTarget = targetData;
+
+        OpenSkills(currentTarget);
     }
 
+    private void OpenSkills(IDamageAble unit)
+    {
+        for (int i = 0; i < skillNameTexts.Length; i++)
+        {
+            if (i < unit.Stat.Skills.Count && unit.Stat.Skills[i] != null)
+            {
+                skillNameTexts[i].text = unit.Stat.Skills[i].Name;
+                skillButtons[i].interactable = true;
+
+                int capturedIndex = i;
+                skillButtons[i].onClick.RemoveAllListeners();
+                skillButtons[i].onClick.AddListener(() => OnSkillButtonClicked(capturedIndex));
+            }
+        }
+    }
+    
     public void Close()
     {
         panel.SetActive(false);
+        currentTarget = null;
     }
-    
+
     private void OnSkillButtonClicked(int index)
     {
-        if (currentCharacter == null || index >= currentCharacter.Skills.Count)
-            return;
+        if (index >= currentTarget.Stat.Skills.Count) return;
 
-        SkillSO skill = currentCharacter.Skills[index];
-        if (skill == null)
-            return;
+        SkillSO skill = currentTarget.Stat.Skills[index];
+        if (skill == null) return;
 
-        // 범위 표시 요청
         SkillRangeSystem.Instance.ClearUsableTiles();
         SkillRangeSystem.Instance.ClearDamageAbles();
-        SkillRangeSystem.Instance.ShowSkillRange(currentCharacter, index);
-        
-        // 범위에 있는 obj 체크 
+        SkillRangeSystem.Instance.ShowSkillRange(currentTarget, index);
+
         TestCombat(index);
     }
 
     public void TestCombat(int skillIndex)
     {
-        Debug.Log($"skillIndex:: {skillIndex}");
-        
-        // 타겟 리스트 전달
-        CombatSystem.Instance.ExecuteSkill(currentCharacter, skillIndex);
+        Debug.Log($"skillIndex: {skillIndex}");
+        CombatSystem.Instance.ExecuteSkill(currentTarget, skillIndex);
     }
 }

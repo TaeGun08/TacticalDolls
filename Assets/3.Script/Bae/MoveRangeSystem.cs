@@ -6,7 +6,7 @@ public class MoveRangeSystem : MonoBehaviour
 {
     public static MoveRangeSystem Instance;
     
-    private CharacterData currentCharacterData;
+    private IDamageAble currentTargetData;
     
     private Tile[,] tiles;
     private Tile currentTile;
@@ -25,19 +25,24 @@ public class MoveRangeSystem : MonoBehaviour
         tiles = TileManager.Instance.tiles;
     }
     
-    private Tile GetCurrentTile(CharacterData characterData)
+    private Tile GetCurrentTile(IDamageAble targetData)
     {
-        currentCharacterData = characterData;
+        currentTargetData = targetData;
         
-        return TileManager.Instance.GetClosestTile(currentCharacterData.GameObject.transform.position);
+        return TileManager.Instance.GetClosestTile(currentTargetData.GameObject.transform.position);
     }
     
-    public void ShowMoveRange(CharacterData characterData)
+    public void ShowMoveRange(IDamageAble targetData)
     {
-        currentTile = GetCurrentTile(characterData);
-        
-        if (currentTile == null) return;
+        currentTile = GetCurrentTile(targetData);
 
+        if (currentTile == null) return;
+        
+        HandleMove(targetData);
+    }
+    
+    private void HandleMove(IDamageAble unit)
+    {
         if (isRangeVisible)
         {
             ResetAllHighlights();
@@ -45,13 +50,11 @@ public class MoveRangeSystem : MonoBehaviour
         }
         else
         {
-            HighlightAllTilesInRange(
-                currentTile,
-                currentCharacterData.Stat.MoveRange);
+            HighlightAllTilesInRange(currentTile, unit.Stat.MoveRange);
             isRangeVisible = true;
         }
     }
-
+    
     private void HighlightAllTilesInRange(Tile centerTile, int range)
     {
         for (int x = 0; x < tiles.GetLength(0); x++)

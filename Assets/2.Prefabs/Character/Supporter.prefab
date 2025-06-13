@@ -796,7 +796,7 @@ GameObject:
   - component: {fileID: 8705938668380462047}
   - component: {fileID: 2117041887504147084}
   - component: {fileID: 4234192337372336795}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Supporter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -896,18 +896,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterID: 1
   PrefabName: Supporter
-  Stat:
-    Level: 0
-    HP: 0
-    Attack: 0
-    Defense: 0
-    MoveRange: 5
+  stat:
+    rid: 8346046720868352002
   Weapon:
     Name: 
     Damge: 0
     Speed: 0
-  Skills:
-  - {fileID: 11400000, guid: c9017b8ae934cfa42b771e78def1448a, type: 2}
+  references:
+    version: 2
+    RefIds:
+    - rid: 8346046720868352002
+      type: {class: StatData, ns: , asm: Assembly-CSharp}
+      data:
+        level: 2
+        hp: 0
+        attack: 0
+        defense: 0
+        moveRange: 0
+        skills:
+        - {fileID: 11400000, guid: c9017b8ae934cfa42b771e78def1448a, type: 2}
 --- !u!114 &2117041887504147084
 MonoBehaviour:
   m_ObjectHideFlags: 0

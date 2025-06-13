@@ -7,8 +7,8 @@ public class SkillRangeSystem : MonoBehaviour
 {
     public static SkillRangeSystem Instance;
     
-    private CharacterData currentCharacterData;
-    
+    private IDamageAble target;
+
     private Tile[,] tiles;
     private Tile currentTile;
 
@@ -29,19 +29,27 @@ public class SkillRangeSystem : MonoBehaviour
         tiles = TileManager.Instance.tiles;
     }
 
-    private Tile GetCurrentTile(CharacterData characterData)
+    private Tile GetCurrentTile(IDamageAble unit)
     {
-        currentCharacterData = characterData;
-        
-        return TileManager.Instance.GetClosestTile(currentCharacterData.GameObject.transform.position);
+        target = unit;
+
+        if (target == null)
+            return null;
+
+        return TileManager.Instance.GetClosestTile(target.GameObject.transform.position);
     }
     
-    public void ShowSkillRange(CharacterData characterData, int index)
+    public void ShowSkillRange(IDamageAble unit, int index)
     {
-        currentTile = GetCurrentTile(characterData);
+        currentTile = GetCurrentTile(unit);
         selectedSkillIndex = index;
-        
+
         if (currentTile == null) return;
+
+        SkillSO skill = null;
+        skill = unit.Stat.Skills[index];
+
+        if (skill == null) return;
 
         if (isRangeVisible)
         {
@@ -50,13 +58,11 @@ public class SkillRangeSystem : MonoBehaviour
         }
         else
         {
-            HighlightAllTilesInRange(
-                currentTile, 
-                currentCharacterData.Skills[selectedSkillIndex].RangeType, 
-                currentCharacterData.Skills[selectedSkillIndex].Range);
+            HighlightAllTilesInRange(currentTile, skill.RangeType, skill.Range);
             isRangeVisible = true;
         }
     }
+
 
     private void HighlightAllTilesInRange(Tile centerTile, RangeType rangeType, int range)
     {

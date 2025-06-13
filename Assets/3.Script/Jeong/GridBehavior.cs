@@ -31,7 +31,7 @@ public class GridBehavior : MonoBehaviour
     private Vector3Int endPos;
     
     [SerializeField] private Transform currentPlayer;
-    [SerializeField] private LayerMask characterLayer;
+    [SerializeField] private LayerMask unitLayer;
 
     private Animator playerAnimater;
 
@@ -89,7 +89,7 @@ public class GridBehavior : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && isMove == false)
         {
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hitCharacter, 100f, characterLayer))
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hitCharacter, 100f, unitLayer))
             {
                 currentPlayer = hitCharacter.transform;
             }
