@@ -94,6 +94,7 @@ MonoBehaviour:
   CharacterID: 1
   PrefabName: Suporter
   Stat:
+    Level: 0
     HP: 0
     Attack: 0
     Defense: 0
@@ -115,7 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b5f0ceb28dbbe246895b76ade27252f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterPrefab3D: {fileID: 6011638765199841960, guid: 1e4771b0c226f6943b492307a2dd20cf,
+  characterPrefab3D: {fileID: 1054886437853045308, guid: a7b939bd49658ad4b8d483dfd14cf59b,
     type: 3}
 --- !u!225 &-6054153073456231944
 CanvasGroup:

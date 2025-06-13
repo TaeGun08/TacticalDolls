@@ -6,6 +6,8 @@ public abstract class Actor_Test : MonoBehaviour
 {
     protected GridBehavior_Test gridBehavior;
     protected Turn_Test turn;
+    public int MoveRange;
+    public int AttackRange;
 
     protected virtual void Start()
     {

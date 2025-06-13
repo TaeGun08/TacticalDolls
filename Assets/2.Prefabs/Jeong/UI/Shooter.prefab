@@ -94,6 +94,7 @@ MonoBehaviour:
   CharacterID: 0
   PrefabName: Shooter
   Stat:
+    Level: 0
     HP: 0
     Attack: 0
     Defense: 0
@@ -115,7 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b5f0ceb28dbbe246895b76ade27252f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterPrefab3D: {fileID: 5233763272570667877, guid: 5dd0fff1340e38d47beefcd69e770eed,
+  characterPrefab3D: {fileID: 1054886437853045308, guid: 86734caebf421da498dcb78fa65934f7,
     type: 3}
 --- !u!225 &-4153370348459965930
 CanvasGroup:

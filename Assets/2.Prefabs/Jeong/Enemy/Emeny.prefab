@@ -140,3 +140,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9af6ccd07d1b3da48bacc91fabc6b424, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MoveRange: 3
+  AttackRange: 4
