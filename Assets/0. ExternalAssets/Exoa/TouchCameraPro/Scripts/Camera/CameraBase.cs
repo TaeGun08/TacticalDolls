@@ -1008,7 +1008,7 @@ namespace Exoa.Cameras
             finalDistance = CalculateClampedDistance(targetDistanceOrSize);
             finalPosition = CalculatePosition(finalOffset, finalRotation, finalDistance);
 
-            ApplyToCamera();
+            // ApplyToCamera();
         }
 
         /// <summary>

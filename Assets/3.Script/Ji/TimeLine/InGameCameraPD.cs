@@ -7,14 +7,13 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using Random = UnityEngine.Random;
+using UnityEngine.Sequences.Timeline;
 
 public class InGameCameraPD : MonoBehaviour
 {
-    [LabelText("Cameras")]
     [SerializeField] private CinemachineVirtualCamera topViewCamera;
     [SerializeField] private CinemachineVirtualCamera characterMiddleZoomCamera;
     
-    [LabelText("TimeLine")]
     [SerializeField] private PlayableDirector director;
     [SerializeField] private TimelineAsset timelineAsset;
     
@@ -31,36 +30,43 @@ public class InGameCameraPD : MonoBehaviour
     
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            PlaySkill(animator,animationClip[0], effect, timelineAsset);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            PlaySkill(animator,animationClip[1], effect, timelineAsset);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            PlaySkill(animator,animationClip[2], effect, timelineAsset);
-        }
-        // if (director.state == PlayState.Playing && isPlaying == false)
+        testCameraFocus();
+        // if (Input.GetKeyDown(KeyCode.Alpha1))
         // {
-        //     isPlaying = true;
-        //     if (director.time >= director.duration)
-        //     {
-        //         Debug.Log("Timeline time reached end.");
-        //         // 여기에 종료 후 작업 실행
-        //         
-        //         isPlaying = false;
-        //     }
+        //     PlaySkill(animator,animationClip[0], effect, timelineAsset);
         // }
-        // else if (isPlaying)
+        //
+        // if (Input.GetKeyDown(KeyCode.Alpha2))
         // {
-        //     Debug.Log("Timeline stopped (early or finished)");
-        //     isPlaying = false;
+        //     PlaySkill(animator,animationClip[1], effect, timelineAsset);
         // }
+        //
+        // if (Input.GetKeyDown(KeyCode.Alpha3))
+        // {
+        //     PlaySkill(animator,animationClip[2], effect, timelineAsset);
+        // }
+    }
+
+    public void testCameraFocus()
+    {
+        if (Input.GetMouseButtonDown(0)) // 마우스 클릭 (모바일은 터치로 변경 가능)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, 100f))
+            {
+                TestPlayerTimeLine timeline = hit.collider.GetComponent<TestPlayerTimeLine>();
+                if (timeline != null)
+                {
+                    Debug.Log("TestPlayerTimeLine 대상 감지됨: " + hit.collider.name);
+
+                    // 카메라를 해당 대상에 따라가게 설정
+                    topViewCamera.LookAt = hit.transform;
+
+                    // Priority 높여서 전환되게 설정
+                    topViewCamera.Priority = 20;
+                }
+            }
+        }
     }
     
     public void PlaySkillTimeline(Animator caster, TimelineAsset timelineAsset)
@@ -90,8 +96,6 @@ public class InGameCameraPD : MonoBehaviour
         public TimelineAsset timeline;
         public GameObject projectilePrefab;
         public float damage;
-        
-        
     }
     
     public void PlaySkill(Animator caster, AnimationClip animClip, GameObject effect, TimelineAsset skillTimeLine)
