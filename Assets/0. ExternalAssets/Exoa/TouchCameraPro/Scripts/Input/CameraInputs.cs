@@ -45,6 +45,7 @@ namespace Exoa.Cameras
 
         public bool ResetCamera()
         {
+            Debug.Log("ResetCamera");
             return enableShortcutKeys && BaseTouchInput.GetKeyWentDown(resetCamera) && !IsOverUI;
         }
 
