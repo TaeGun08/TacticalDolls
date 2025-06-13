@@ -134,6 +134,18 @@ namespace Exoa.Cameras
             if (!preventGroundRaycast)
             {
                 RelocateCameraInstant(cam.transform.position); // 카메라 현재로 초기화 //하랑
+                
+                // Vector3 currentOffset = cam.transform.position;
+                Quaternion currentRot = cam.transform.rotation;
+                
+                Vector2 currentRotation = new Vector2(
+                    NormalizeAngle(currentRot.eulerAngles.x),
+                    currentRot.eulerAngles.y
+                );
+
+                MoveCameraToInstant(finalPosition, finalDistance, currentRotation);
+                /////////////////////////
+
                 Vector3 vecFingersCenterToCamera = (finalPosition - worldPointFingersCenter);
                 float vecFingersCenterToCameraDistance = vecFingersCenterToCamera.magnitude * zoomRatio;
                 vecFingersCenterToCamera = vecFingersCenterToCamera.normalized * vecFingersCenterToCameraDistance;
