@@ -133,28 +133,75 @@ namespace Exoa.Cameras
             }
             if (!preventGroundRaycast)
             {
+                // RelocateCameraInstant(cam.transform.position); // 카메라 현재로 초기화 //하랑
+                //
+                // // Vector3 currentOffset = cam.transform.position;
+                // Quaternion currentRot = cam.transform.rotation;
+                //
+                // Vector2 currentRotation = new Vector2(
+                //     NormalizeAngle(currentRot.eulerAngles.x),
+                //     currentRot.eulerAngles.y
+                // );
+                //
+                // MoveCameraToInstant(finalPosition, finalDistance, currentRotation);
+                /////////////////////////
+
                 Vector3 vecFingersCenterToCamera = (finalPosition - worldPointFingersCenter);
                 float vecFingersCenterToCameraDistance = vecFingersCenterToCamera.magnitude * zoomRatio;
                 vecFingersCenterToCamera = vecFingersCenterToCamera.normalized * vecFingersCenterToCameraDistance;
-
+            
                 Vector3 targetPosition = worldPointFingersCenter + vecFingersCenterToCamera;
                 Vector3 offsetFromFingerCenter = worldPointFingersCenter - worldPointFingersDelta;
-
+            
                 finalRotation = twistRot * finalRotation;
                 finalRotation = ClampRotation(finalRotation);
                 finalPosition = twistRot * (targetPosition - worldPointFingersCenter) + offsetFromFingerCenter;
-
+            
                 currentPitch = NormalizeAngle(finalRotation.eulerAngles.x);
                 currentYaw = (finalRotation.eulerAngles.y);
-
+            
                 Vector3 newWorldPointCameraCenter = CalculateOffset(finalPosition, finalRotation);
-
+            
                 Vector3 newWorldPointCameraCenterClamped = ClampInCameraBoundaries(newWorldPointCameraCenter, out IsInBoundaries);
-
+            
                 finalOffset = newWorldPointCameraCenterClamped;
                 finalDistance = CalculateClampedDistance(finalPosition, newWorldPointCameraCenter, minMaxDistance);
-
+            
             }
+
+            #region MyRegion
+            // if (!preventGroundRaycast)
+            // {
+            //     // 기존 카메라 상태로부터 시작하지 않고,
+            //     // 이전 frame에서 계산된 finalRotation, finalPosition을 누적적으로 갱신함
+            //     RelocateCameraInstant(cam.transform.position);
+            //         
+            //     Vector3 vecFingersCenterToCamera = (finalPosition - worldPointFingersCenter);
+            //     float vecFingersCenterToCameraDistance = vecFingersCenterToCamera.magnitude * zoomRatio;
+            //     vecFingersCenterToCamera = vecFingersCenterToCamera.normalized * vecFingersCenterToCameraDistance;
+            //
+            //     Vector3 targetPosition = worldPointFingersCenter + vecFingersCenterToCamera;
+            //     Vector3 offsetFromFingerCenter = worldPointFingersCenter - worldPointFingersDelta;
+            //
+            //     // twistRot은 사용자가 두 손가락 회전한 정도
+            //     finalRotation = twistRot * finalRotation;
+            //     finalRotation = ClampRotation(finalRotation);
+            //
+            //     finalPosition = twistRot * (targetPosition - worldPointFingersCenter) + offsetFromFingerCenter;
+            //
+            //     currentPitch = NormalizeAngle(finalRotation.eulerAngles.x);
+            //     currentYaw = finalRotation.eulerAngles.y;
+            //
+            //     Vector3 newWorldPointCameraCenter = CalculateOffset(finalPosition, finalRotation);
+            //     Vector3 newWorldPointCameraCenterClamped = ClampInCameraBoundaries(newWorldPointCameraCenter, out IsInBoundaries);
+            //
+            //     finalOffset = newWorldPointCameraCenterClamped;
+            //     finalDistance = CalculateClampedDistance(finalPosition, newWorldPointCameraCenter, minMaxDistance);
+            // }
+            
+            #endregion
+
+            
             if (!preventGroundRaycast)
             {
                 finalPosition = CalculatePosition(finalOffset, finalRotation, finalDistance);
