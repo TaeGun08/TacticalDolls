@@ -1,11 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class GridBehavior_Test : MonoBehaviour
 {
@@ -59,6 +55,8 @@ public class GridBehavior_Test : MonoBehaviour
     // };
 
     public bool IsMove { get; set; }
+    public bool IsAutoMove { get; set; }
+    public List<Actor_Test> Actors;
 
     private readonly Vector3Int[] directions = new Vector3Int[]
     {
@@ -95,11 +93,13 @@ public class GridBehavior_Test : MonoBehaviour
     private void Update()
     {
         AllyInputMove();
+        AutoMove();
     }
 
     private void AllyInputMove()
     {
-        if (Input.GetMouseButtonDown(0) && IsMove == false)
+        if (Input.GetMouseButtonDown(0)
+            && IsMove == false)
         {
             Debug.Log("클릭");
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hitCharacter,
@@ -141,34 +141,33 @@ public class GridBehavior_Test : MonoBehaviour
         }
     }
 
-    public void AutoMove()
+    private void AutoMove()
     {
-        if (IsMove) return;
-        
-        // bool firstAlly = false;
-        // Vector3Int targetPos = Vector3Int.zero;
-        // Vector3 prevPos = Vector3.zero;
-        //
-        // foreach (var ally in turn.Ally)
-        // {
-        //     Debug.Log(ally.gameObject.name);
-        //     if (firstAlly == false)
-        //     {
-        //         targetPos = new Vector3Int((int)ally.transform.position.x, 0, (int)ally.transform.position.y);
-        //         prevPos = ally.transform.position;
-        //         firstAlly = true;
-        //         continue;
-        //     }
-        //     
-        //     float distance = Vector3.Distance(Actor.transform.position, ally.transform.position);
-        //     float prevDistance = Vector3.Distance(Actor.transform.position, prevPos);
-        //     
-        //     if (distance >= prevDistance) continue;
-        //     targetPos = new Vector3Int((int)ally.transform.position.x, 0, (int)ally.transform.position.y);
-        //     prevPos = ally.transform.position;
-        // }
-        
-        PathFind(RoundToTilePosition(Actor.transform.position), RoundToTilePosition(turn.Ally[0].transform.position));
+        if (IsMove || IsAutoMove == false) return;
+        bool firstActor = false;
+        Vector3Int targetPos = Vector3Int.zero;
+        Vector3 prevPos = Vector3.zero;
+
+        foreach (var targetActor in Actors)
+        {
+            if (firstActor == false)
+            {
+                targetPos = new Vector3Int((int)targetActor.transform.position.x, 0,
+                    (int)targetActor.transform.position.z);
+                prevPos = targetActor.transform.position;
+                firstActor = true;
+                continue;
+            }
+
+            float distance = Vector3.Distance(Actor.transform.position, targetActor.transform.position);
+            float prevDistance = Vector3.Distance(Actor.transform.position, prevPos);
+
+            if (distance >= prevDistance) continue;
+            targetPos = new Vector3Int((int)targetActor.transform.position.x, 0, (int)targetActor.transform.position.z);
+            prevPos = targetActor.transform.position;
+        }
+
+        PathFind(RoundToTilePosition(Actor.transform.position), RoundToTilePosition(targetPos));
         IsMove = true;
     }
 
@@ -283,29 +282,113 @@ public class GridBehavior_Test : MonoBehaviour
     //     IsMove = false;
     //     MoveRangeSystem.Instance.ResetMovableTiles();
     // }
-    
+
     private IEnumerator MovePlayerAlongPath(List<Node> path)
     {
+        int range = 0;
+        bool attackIn = false;
+        
+        foreach (var actor in Actors)
+        {
+            if (AttackChecker(actor))
+            {
+                attackIn = true;
+                break;
+            }
+        }
+
         foreach (Node node in path)
         {
+            if (IsAutoMove && (range > Actor.MoveRange || attackIn))
+            {
+                break;
+            }
+            Debug.Log("움직입니다");
             Vector3 targetPos = new Vector3(
                 node.Position.x * tileManager.tileSize,
                 1.5f,
                 node.Position.z * tileManager.tileSize
             );
-    
+
             while (Vector3.Distance(Actor.transform.position, targetPos) > 0.05f)
             {
                 Actor.transform.position =
                     Vector3.MoveTowards(Actor.transform.position, targetPos, 10f * Time.deltaTime);
                 yield return null;
             }
+
+            range++;
         }
-        
+
+        yield return null;
         turn.MoveTcs.TrySetResult(true);
         IsMove = false;
         MoveRangeSystem.Instance.ResetMovableTiles();
     }
+
+    private List<Vector2Int> GetReachableTiles(Vector2Int origin, int range)
+    {
+        List<Vector2Int> reachable = new List<Vector2Int>();
+        for (int dx = -range; dx <= range; dx++)
+        {
+            for (int dy = -range; dy <= range; dy++)
+            {
+                int dist = Mathf.Abs(dx) + Mathf.Abs(dy);
+                if (dist <= range)
+                {
+                    int x = origin.x + dx;
+                    int y = origin.y + dy;
+                    if (x >= 0 && y >= 0)
+                        reachable.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        return reachable;
+    }
+
+    private List<Vector2Int> GetAttackableTilesFromReachable(Vector2Int origin, int moveRange, int attackRange)
+    {
+        var reachable = GetReachableTiles(origin, moveRange);
+        HashSet<Vector2Int> attackable = new HashSet<Vector2Int>();
+
+        foreach (var moveTile in reachable)
+        {
+            for (int dx = -attackRange; dx <= attackRange; dx++)
+            {
+                for (int dy = -attackRange; dy <= attackRange; dy++)
+                {
+                    if (Mathf.Abs(dx) + Mathf.Abs(dy) <= attackRange)
+                    {
+                        int x = moveTile.x + dx;
+                        int y = moveTile.y + dy;
+                        if (x >= 0 && y >= 0)
+                            attackable.Add(new Vector2Int(x, y));
+                    }
+                }
+            }
+        }
+
+        return attackable.ToList();
+    }
+
+    private bool AttackChecker(Actor_Test actor)
+    {
+        Vector2Int origin = new Vector2Int((int)Actor.transform.position.x, (int)Actor.transform.position.z);
+        foreach (var attack in GetAttackableTilesFromReachable(origin, Actor.MoveRange, Actor.AttackRange))
+        {
+            if (attack.Equals(new Vector2Int((int)actor.transform.position.x,
+                    (int)actor.transform.position.z))) return true;
+        }
+    
+        return false;
+    }
+    
+    // private bool AttackChecker(Actor_Test target)
+    // {
+    //     float attackRange = Actor.AttackRange;
+    //     return Vector3.Distance(Actor.transform.position, target.transform.position) <= attackRange;
+    // }
 
     private List<Node> GetNeighbours(Node node)
     {

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfa79f0d8456cc3498e416fa292ef899, type: 3}
+  m_Name: ChracterTable_Test
+  m_EditorClassIdentifier: 
+  prefabEntries:
+  - prefabKey: 0
+    prefab: {fileID: 1054886437853045308, guid: 86734caebf421da498dcb78fa65934f7,
+      type: 3}
+  - prefabKey: 1
+    prefab: {fileID: 1054886437853045308, guid: a7b939bd49658ad4b8d483dfd14cf59b,
+      type: 3}
+  - prefabKey: 2
+    prefab: {fileID: 1054886437853045308, guid: 9cb8b85914ff02741877d596db561fcc,
+      type: 3}

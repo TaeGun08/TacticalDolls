@@ -955,6 +955,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 226868774}
   m_CullTransparentMesh: 1
+--- !u!1 &388867783
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 388867785}
+  - component: {fileID: 388867784}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &388867784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 388867783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 936c6d2a73dddc4438a9e5f6120a7bb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PrefabsTable: {fileID: 11400000, guid: e728d627f5039624fa321c0e1aa98879, type: 2}
+--- !u!4 &388867785
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 388867783}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &431901304
 GameObject:
   m_ObjectHideFlags: 0
@@ -1038,7 +1083,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1847063597}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99999535
+  m_Size: 0.99998426
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2136,9 +2181,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileManager: {fileID: 569519179}
   turn: {fileID: 1693132227}
+  Actor: {fileID: 0}
   characterLayer:
     serializedVersion: 2
     m_Bits: 64
+  Actors: []
 --- !u!1 &986494261
 GameObject:
   m_ObjectHideFlags: 0
@@ -2340,7 +2387,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.0000459546}
+  m_AnchoredPosition: {x: 0, y: 0.004853309}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1173781563
@@ -3943,10 +3990,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d712f579aa0e4d71adf300803d5768de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterPrefab:
-  - {fileID: 4202682003610467051, guid: 5dd0fff1340e38d47beefcd69e770eed, type: 3}
-  - {fileID: 470829806249375078, guid: 1e4771b0c226f6943b492307a2dd20cf, type: 3}
-  - {fileID: 5816478253210409380, guid: 392fa4c156832c24b80bb13fde8180c1, type: 3}
   usingCharacter: 
   SelectedCharacterPanel: {fileID: 1972356124}
   StartBtn: {fileID: 200677021}
@@ -4134,6 +4177,7 @@ SceneRoots:
   - {fileID: 854237648}
   - {fileID: 1442460291}
   - {fileID: 2089284489}
+  - {fileID: 388867785}
   - {fileID: 1253627484}
   - {fileID: 569519180}
   - {fileID: 1826570348}

@@ -13,6 +13,7 @@ public class Turn_Test : MonoBehaviour
 
     public TurnManager turnManager;
     private ActorParent actorParent = ActorParent.None;
+    public ActorParent ActorParent { get; }
 
     private SamplePlayer selectedCharacter;
     private int currentTurn;
@@ -21,7 +22,7 @@ public class Turn_Test : MonoBehaviour
     private bool isBlockedPlayerControl;
 
     public TaskCompletionSource<bool> MoveTcs;
-    
+
     public List<Actor_Test> Ally;
     public List<Actor_Test> Enemy;
 
@@ -29,22 +30,19 @@ public class Turn_Test : MonoBehaviour
 
     public bool IsAuto;
 
-    public Button startButton; 
+    public Button startButton;
 
     private void Awake()
     {
         Instance = this;
-        
-        startButton.onClick.AddListener(() =>
-        {
-            turnManager.gameObject.SetActive(true);
-        });
+
+        startButton.onClick.AddListener(() => { turnManager.gameObject.SetActive(true); });
     }
 
     private void Start()
     {
         gridBehavior = GridBehavior_Test.Instance;
-        
+
         turnManager.ActorChanged += OnTurnChangedWrapper;
         turnManager.GameStateChanged += OnGameStateChanged;
     }
@@ -69,9 +67,8 @@ public class Turn_Test : MonoBehaviour
         currentTurn = turnManager.TurnCount + 1;
         actorParent = actor;
         Debug.Log($"{actor.ToString()}의 {currentTurn}턴이 시작되었습니다.");
-        MoveTcs = new  TaskCompletionSource<bool>();
         TurnActor = new List<Actor_Test>();
-        
+
         if (actor.Equals(ActorParent.Player))
         {
             await AllyTest();
@@ -80,7 +77,7 @@ public class Turn_Test : MonoBehaviour
         {
             await EnemyTest();
         }
-        
+
         turnManager.TurnEndedSource.TrySetResult(true);
     }
 
@@ -88,29 +85,64 @@ public class Turn_Test : MonoBehaviour
     {
         if (IsAuto)
         {
+            gridBehavior.IsAutoMove = true;
+
+            gridBehavior.Actors = Enemy;
+
+            foreach (var ally in Ally)
+            {
+                if (AllyChecker(ally) || IsAuto == false) continue;
+
+                MoveTcs = new TaskCompletionSource<bool>();
+                gridBehavior.Actor = ally;
+                TurnActor.Add(ally);
+                await MoveTcs.Task;
+            }
+
+            Debug.Log("Ally turn 종료");
             
+            gridBehavior.IsAutoMove = false;
         }
         else
         {
-            while (TurnActor.Count < Ally.Count)
+            MoveTcs = new TaskCompletionSource<bool>();
+
+            while (TurnActor.Count < Ally.Count || IsAuto)
             {
                 await Task.Delay(10);
             }
-            
+
             MoveTcs.TrySetResult(true);
             await Task.Delay(1000);
+
+            await MoveTcs.Task;
         }
-        
-        await MoveTcs.Task;
     }
 
     private async Task EnemyTest()
     {
+        gridBehavior.IsAutoMove = true;
+
+        gridBehavior.Actors = Ally;
+
         foreach (var enemy in Enemy)
         {
-            enemy.OnMoveStart();
+            MoveTcs = new TaskCompletionSource<bool>();
+            gridBehavior.Actor = enemy;
             await MoveTcs.Task;
         }
+
+        gridBehavior.IsAutoMove = false;
+    }
+
+    private bool AllyChecker(Actor_Test actor)
+    {
+        foreach (var turnActor in TurnActor)
+        {
+            if (turnActor.Equals(actor)) return true;
+        }
+
+        return false;
     }
 
     #endregion
