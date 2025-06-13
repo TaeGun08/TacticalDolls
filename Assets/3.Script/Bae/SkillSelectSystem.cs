@@ -10,7 +10,7 @@ public class SkillSelectSystem : MonoBehaviour
     public Button[] skillButtons = new Button[4];
     public TMP_Text[] skillNameTexts = new TMP_Text[4];
 
-    private CharacterData currentCharacter;
+    private IDamageAble currentTarget;
     
     private void Start()
     {
@@ -20,56 +20,98 @@ public class SkillSelectSystem : MonoBehaviour
             skillButtons[i].onClick.AddListener(() => OnSkillButtonClicked(index));
         }
     }
-    
-    public void Open(CharacterData characterData)
+
+    public void Open(IDamageAble targetData)
     {
-        currentCharacter = characterData;
-        
+        panel.SetActive(true);
+        currentTarget = targetData;
+
+        if (targetData is CharacterData character)
+        {
+            OpenCharacterSkills(character);
+        }
+        else if (targetData is EnemyData enemy)
+        {
+            OpenEnemySkills(enemy);
+        }
+    }
+
+    private void OpenCharacterSkills(CharacterData characterData)
+    {
         for (int i = 0; i < skillNameTexts.Length; i++)
         {
             if (i < characterData.Skills.Count && characterData.Skills[i] != null)
             {
                 skillNameTexts[i].text = characterData.Skills[i].Name;
                 skillButtons[i].interactable = true;
-            }
-            else
-            {
-                skillNameTexts[i].text = "Empty";
-                skillButtons[i].interactable = false;
+
+                int capturedIndex = i;
+                skillButtons[i].onClick.RemoveAllListeners();
+                skillButtons[i].onClick.AddListener(() => OnSkillButtonClicked(capturedIndex));
             }
         }
-        
-        panel.SetActive(true);
+    }
+
+    private void OpenEnemySkills(EnemyData enemyData)
+    {
+        for (int i = 0; i < skillNameTexts.Length; i++)
+        {
+            if (i < enemyData.Skills.Count && enemyData.Skills[i] != null)
+            {
+                skillNameTexts[i].text = enemyData.Skills[i].Name;
+                skillButtons[i].interactable = true;
+
+                int capturedIndex = i;
+                skillButtons[i].onClick.RemoveAllListeners();
+                skillButtons[i].onClick.AddListener(() => OnSkillButtonClicked(capturedIndex));
+            }
+        }
     }
 
     public void Close()
     {
         panel.SetActive(false);
+        currentTarget = null;
     }
-    
+
     private void OnSkillButtonClicked(int index)
     {
-        if (currentCharacter == null || index >= currentCharacter.Skills.Count)
-            return;
+        if (currentTarget is CharacterData character)
+        {
+            if (index >= character.Skills.Count) return;
 
-        SkillSO skill = currentCharacter.Skills[index];
-        if (skill == null)
-            return;
+            SkillSO skill = character.Skills[index];
+            if (skill == null) return;
 
-        // 범위 표시 요청
-        SkillRangeSystem.Instance.ClearUsableTiles();
-        SkillRangeSystem.Instance.ClearDamageAbles();
-        SkillRangeSystem.Instance.ShowSkillRange(currentCharacter, index);
-        
-        // 범위에 있는 obj 체크 
-        TestCombat(index);
+            SkillRangeSystem.Instance.ClearUsableTiles();
+            SkillRangeSystem.Instance.ClearDamageAbles();
+            SkillRangeSystem.Instance.ShowSkillRange(character, index);
+
+            TestCombat(index);
+        }
+        else if (currentTarget is EnemyData enemy)
+        {
+            if (index >= enemy.Skills.Count) return;
+
+            SkillSO skill = enemy.Skills[index];
+            if (skill == null) return;
+
+            SkillRangeSystem.Instance.ClearUsableTiles();
+            SkillRangeSystem.Instance.ClearDamageAbles();
+            SkillRangeSystem.Instance.ShowSkillRange(enemy, index);
+
+            TestCombat(index);
+        }
+        else
+        {
+            Debug.LogWarning("스킬을 사용할 수 있는 대상이 아닙니다.");
+        }
     }
+
 
     public void TestCombat(int skillIndex)
     {
-        Debug.Log($"skillIndex:: {skillIndex}");
-        
-        // 타겟 리스트 전달
-        CombatSystem.Instance.ExecuteSkill(currentCharacter, skillIndex);
+        Debug.Log($"skillIndex: {skillIndex}");
+        CombatSystem.Instance.ExecuteSkill(currentTarget, skillIndex);
     }
 }

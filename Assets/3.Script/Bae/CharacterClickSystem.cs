@@ -13,14 +13,15 @@ public class CharacterClickSystem : MonoBehaviour
         {
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 100f, characterLayer))
             {
-                CharacterData characterData = hit.collider.GetComponent<CharacterData>();
-                if (characterData != null)
+                IDamageAble target= hit.collider.GetComponent<IDamageAble>();
+                
+                if (target != null)
                 {
                     MoveRangeSystem.Instance.ResetAllHighlights();
                     SkillRangeSystem.Instance.ResetAllHighlights();
-                    
-                    MoveRangeSystem.Instance.ShowMoveRange(characterData);
-                    skillUI.Open(characterData);
+                
+                    MoveRangeSystem.Instance.ShowMoveRange(target);
+                    skillUI.Open(target);
                 }
             }
         }

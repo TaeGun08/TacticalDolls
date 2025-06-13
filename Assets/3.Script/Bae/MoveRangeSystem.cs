@@ -6,7 +6,7 @@ public class MoveRangeSystem : MonoBehaviour
 {
     public static MoveRangeSystem Instance;
     
-    private CharacterData currentCharacterData;
+    private IDamageAble currentTargetData;
     
     private Tile[,] tiles;
     private Tile currentTile;
@@ -25,19 +25,31 @@ public class MoveRangeSystem : MonoBehaviour
         tiles = TileManager.Instance.tiles;
     }
     
-    private Tile GetCurrentTile(CharacterData characterData)
+    private Tile GetCurrentTile(IDamageAble targetData)
     {
-        currentCharacterData = characterData;
+        currentTargetData = targetData;
         
-        return TileManager.Instance.GetClosestTile(currentCharacterData.GameObject.transform.position);
+        return TileManager.Instance.GetClosestTile(currentTargetData.GameObject.transform.position);
     }
     
-    public void ShowMoveRange(CharacterData characterData)
+    public void ShowMoveRange(IDamageAble targetData)
     {
-        currentTile = GetCurrentTile(characterData);
-        
-        if (currentTile == null) return;
+        currentTile = GetCurrentTile(targetData);
 
+        if (currentTile == null) return;
+        
+        if (targetData is CharacterData character)
+        {
+            HandleCharacterMove(character);
+        }
+        else if (targetData is EnemyData enemy)
+        {
+            HandleEnemyMove(enemy);
+        }
+    }
+    
+    private void HandleCharacterMove(CharacterData character)
+    {
         if (isRangeVisible)
         {
             ResetAllHighlights();
@@ -45,9 +57,21 @@ public class MoveRangeSystem : MonoBehaviour
         }
         else
         {
-            HighlightAllTilesInRange(
-                currentTile,
-                currentCharacterData.Stat.MoveRange);
+            HighlightAllTilesInRange(currentTile, character.Stat.MoveRange);
+            isRangeVisible = true;
+        }
+    }
+
+    private void HandleEnemyMove(EnemyData enemy)
+    {
+        if (isRangeVisible)
+        {
+            ResetAllHighlights();
+            isRangeVisible = false;
+        }
+        else
+        {
+            HighlightAllTilesInRange(currentTile, enemy.Stat.MoveRange);
             isRangeVisible = true;
         }
     }

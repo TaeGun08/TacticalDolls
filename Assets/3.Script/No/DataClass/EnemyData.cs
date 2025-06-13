@@ -8,6 +8,7 @@ public class EnemyData : MonoBehaviour, IDamageAble
     public int EnemyID;        
     public string PrefabName;       
     public EnemyStatData Stat;
+    public List<SkillSO> Skills;
     
     public Collider MainCollider { get; }
     public GameObject GameObject => gameObject;
@@ -23,6 +24,11 @@ public class EnemyData : MonoBehaviour, IDamageAble
     public void TakeHeal(HealEvent combatEvent)
     {
         Debug.Log($"{PrefabName} Enemy Take Heal :: {EnemyID}");
+    }
+    
+    public void TakeBuff(BuffEvent combatEvent)
+    {
+        Debug.Log($"{PrefabName} Enemy Take Buff :: {EnemyID}");
     }
 }
 

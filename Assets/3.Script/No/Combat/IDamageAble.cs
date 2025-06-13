@@ -10,4 +10,5 @@ public interface IDamageAble
     
     public void TakeDamage(CombatEvent combatEvent);
     public void TakeHeal(HealEvent combatEvent);
+    public void TakeBuff(BuffEvent combatEvent);
 }

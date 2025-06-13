@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6189700860610501555}
   - component: {fileID: 5998460467496013330}
   - component: {fileID: 5253676370753747957}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Emeny
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,4 +126,6 @@ MonoBehaviour:
     HP: 100
     Attack: 0
     Defense: 0
-    MoveRange: 0
+    MoveRange: 5
+  Skills:
+  - {fileID: 11400000, guid: dba2ff2e5545180408e88dda97d3439c, type: 2}

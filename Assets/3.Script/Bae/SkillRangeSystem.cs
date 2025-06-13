@@ -8,7 +8,8 @@ public class SkillRangeSystem : MonoBehaviour
     public static SkillRangeSystem Instance;
     
     private CharacterData currentCharacterData;
-    
+    private EnemyData currentEnemyData;
+
     private Tile[,] tiles;
     private Tile currentTile;
 
@@ -29,19 +30,48 @@ public class SkillRangeSystem : MonoBehaviour
         tiles = TileManager.Instance.tiles;
     }
 
-    private Tile GetCurrentTile(CharacterData characterData)
+    private Tile GetCurrentTile(IDamageAble unit)
     {
-        currentCharacterData = characterData;
-        
-        return TileManager.Instance.GetClosestTile(currentCharacterData.GameObject.transform.position);
+        GameObject targetObject = null;
+
+        if (unit is CharacterData character)
+        {
+            currentCharacterData = character;
+            targetObject = character.GameObject;
+        }
+        else if (unit is EnemyData enemy)
+        {
+            currentEnemyData = enemy;
+            targetObject = enemy.GameObject;
+        }
+
+        if (targetObject == null)
+            return null;
+
+        return TileManager.Instance.GetClosestTile(targetObject.transform.position);
     }
     
-    public void ShowSkillRange(CharacterData characterData, int index)
+    public void ShowSkillRange(IDamageAble unit, int index)
     {
-        currentTile = GetCurrentTile(characterData);
+        currentTile = GetCurrentTile(unit);
         selectedSkillIndex = index;
-        
+
         if (currentTile == null) return;
+
+        SkillSO skill = null;
+
+        if (unit is CharacterData character)
+        {
+            currentCharacterData = character;
+            skill = character.Skills[index];
+        }
+        else if (unit is EnemyData enemy)
+        {
+            currentEnemyData = enemy;
+            skill = enemy.Skills[index];
+        }
+
+        if (skill == null) return;
 
         if (isRangeVisible)
         {
@@ -50,13 +80,11 @@ public class SkillRangeSystem : MonoBehaviour
         }
         else
         {
-            HighlightAllTilesInRange(
-                currentTile, 
-                currentCharacterData.Skills[selectedSkillIndex].RangeType, 
-                currentCharacterData.Skills[selectedSkillIndex].Range);
+            HighlightAllTilesInRange(currentTile, skill.RangeType, skill.Range);
             isRangeVisible = true;
         }
     }
+
 
     private void HighlightAllTilesInRange(Tile centerTile, RangeType rangeType, int range)
     {

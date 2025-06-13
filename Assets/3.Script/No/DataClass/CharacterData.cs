@@ -18,11 +18,17 @@ public class CharacterData : MonoBehaviour, IDamageAble
     public void TakeDamage(CombatEvent combatEvent)
     {
         Debug.Log($"{PrefabName} Character Take damage :: {CharacterID}");
+        Stat.HP -= combatEvent.Damage;
     }
 
     public void TakeHeal(HealEvent combatEvent)
     {
         Debug.Log($"{PrefabName} Character Take Heal :: {CharacterID}");
+    }
+    
+    public void TakeBuff(BuffEvent combatEvent)
+    {
+        Debug.Log($"{PrefabName} Character Take Buff :: {CharacterID}");
     }
     
     // 임시 스텟 계산
@@ -40,11 +46,6 @@ public class CharacterData : MonoBehaviour, IDamageAble
     
     // 무기 설정
     public void SetWeaponData(int level){}
-
-    // public void test()
-    // {
-    //     CombatSystem.Instance.ExecuteSkill(this, selectedSkillIndex);
-    // }
 }
 
 [System.Serializable]

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,123 +13,127 @@ public class CombatSystem : MonoBehaviour
 
     public void ExecuteSkill(IDamageAble attacker, int skillIndex)
     {
-        CharacterData character = attacker as CharacterData;
-        if (character != null)
+        switch (attacker)
         {
-            // 캐릭터 스킬 처리
-        }
-        else
-        {
-            EnemyData enemy = attacker as EnemyData;
-            if (enemy != null)
-            {
-                // 적 스킬 처리
-                return;
-            }
-            else
-            {
-                Debug.LogWarning("캐스팅 실패: attacker는 CharacterData도 EnemyData도 아님");
-            }
-        }
-        
-        List<IDamageAble> targetList = SkillRangeSystem.Instance.damageAbles;
-        
-        if (character != null)
-        {
-            // 플레이어 공격 처리
-            SkillSO skill = character.Skills[skillIndex];
-        
-            foreach (IDamageAble target in targetList)
-            {
-                if (target.Team == attacker.Team)
-                {
-                    Debug.Log("같은 팀으로 피격을 넘어갑니다.");
-                    continue;
-                }
-                
-                switch (skill.Type)
-                {
-                    case SkillType.Damage:
-                        var combatEvent = new CombatEvent
-                        {
-                            Sender = attacker,
-                            Target = target,
-                            Damage = character.Stat.Attack,
-                        };
-                        
-                        target.TakeDamage(combatEvent);
-                        break;
-
-                    case SkillType.Heal:
-                        var healEvent = new HealEvent
-                        {
-                            Sender = attacker,
-                            Target = target,
-                            Heal = character.Stat.Attack,
-                            Position = target.GameObject.transform.position,
-                        };
-                        target.TakeHeal(healEvent);
-                        break;
-
-                    // 다른 타입도 추가 가능
-                }
-            }
-        }
-        else
-        {
-            // enemy 공격 처리
+            case CharacterData character:
+                ExecuteCharacterSkill(character, skillIndex);
+                break;
+            case EnemyData enemy:
+                ExecuteEnemySkill(enemy, skillIndex);
+                break;
+            default:
+                Debug.LogWarning("캐스팅 실패");
+                break;
         }
     }
-    
-    // 임시 계산
-    // private int CalculateDamage(CharacterData caster, IDamageAble target, SkillSO skill)
-    // {
-    //     int baseDamage = caster.Stat.Attack + caster.Weapon.Damge;
-    //     return baseDamage; 
-    // }
 
-    // private List<IDamageAble> GetTargetsInRange(Tile centerTile, RangeType rangeType, int range)
-    // {
-    //     List<IDamageAble> targets = new List<IDamageAble>();
-    //     Tile[,] tiles = TileManager.Instance.tiles;
-    //
-    //     for (int x = 0; x < tiles.GetLength(0); x++)
-    //     {
-    //         for (int y = 0; y < tiles.GetLength(1); y++)
-    //         {
-    //             Tile tile = tiles[x, y];
-    //             if (tile == null) continue;
-    //
-    //             int dx = Mathf.Abs(tile.x - centerTile.x);
-    //             int dy = Mathf.Abs(tile.y - centerTile.y);
-    //
-    //             bool inRange = false;
-    //
-    //             switch (rangeType)
-    //             {
-    //                 case RangeType.Straight:
-    //                 case RangeType.Plus:
-    //                     inRange = (dx == 0 && dy <= range) || (dy == 0 && dx <= range);
-    //                     break;
-    //                 case RangeType.Cross:
-    //                     inRange = (dx == dy && dx <= range);
-    //                     break;
-    //                 case RangeType.Around:
-    //                     inRange = (dx + dy) <= range;
-    //                     break;
-    //             }
-    //
-    //             if (!inRange) continue;
-    //
-    //             // 타일 위에 IDamageAble 대상이 있는지 확인
-    //             IDamageAble target = tile.GetOccupant() as IDamageAble;
-    //             if (target != null)
-    //             {
-    //                 targets.Add(target);
-    //             }
-    //         }
-    //     }
-    //
-    //     return targets;
-    // }
+    private void ExecuteCharacterSkill(CharacterData character, int skillIndex)
+    {
+        SkillSO skill = character.Skills[skillIndex];
+        List<IDamageAble> targetList = SkillRangeSystem.Instance.damageAbles;
+
+        foreach (IDamageAble target in targetList)
+        {
+            switch (skill.Type)
+            {
+                case SkillType.Damage:
+                    if (IsSameTeam(character, target))
+                    {
+                        Debug.Log("같은 팀으로 피격을 넘어갑니다.");
+                        return;
+                    }
+                    
+                    ApplyDamage(character, target, character.Stat.Attack);
+                    break;
+
+                case SkillType.Heal:
+                    ApplyHeal(character, target, character.Stat.Attack);
+                    break;
+                
+                case SkillType.Buff:
+                    ApplyBuff(character, target, character.Stat.Attack);
+
+                    break;
+                
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+    }
+
+    private void ExecuteEnemySkill(EnemyData enemy, int skillIndex)
+    {
+        SkillSO skill = enemy.Skills[skillIndex];
+        List<IDamageAble> targetList = SkillRangeSystem.Instance.damageAbles;
+
+        foreach (IDamageAble target in targetList)
+        {
+            switch (skill.Type)
+            {
+                case SkillType.Damage:
+                    if (IsSameTeam(enemy, target))
+                    {
+                        Debug.Log("같은 팀으로 Enemy로 피격을 넘어갑니다.");
+                        return;
+                    }
+                    
+                    ApplyDamage(enemy, target, enemy.Stat.Attack);
+                    break;
+
+                case SkillType.Heal:
+                    ApplyHeal(enemy, target, enemy.Stat.Attack);
+                    break;
+                
+                case SkillType.Buff:
+                    ApplyBuff(enemy, target, enemy.Stat.Attack);
+                    break;
+                
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+    }
+
+    private bool IsSameTeam(IDamageAble a, IDamageAble b)
+    {
+        return a.Team == b.Team;
+    }
+
+    private void ApplyDamage(IDamageAble attacker, IDamageAble target, int amount)
+    {
+        var combatEvent = new CombatEvent
+        {
+            Sender = attacker,
+            Target = target,
+            Damage = amount
+        };
+        
+        target.TakeDamage(combatEvent);
+    }
+
+    private void ApplyHeal(IDamageAble healer, IDamageAble target, int amount)
+    {
+        var healEvent = new HealEvent
+        {
+            Sender = healer,
+            Target = target,
+            Heal = amount,
+            Position = target.GameObject.transform.position
+        };
+        
+        target.TakeHeal(healEvent);
+    }
+    
+    private void ApplyBuff(IDamageAble healer, IDamageAble target, int amount)
+    {
+        var buffEvent = new BuffEvent
+        {
+            Sender = healer,
+            Target = target,
+            Buff = amount,
+            Position = target.GameObject.transform.position
+        };
+        
+        target.TakeBuff(buffEvent);
+    }
 }
