@@ -3,3 +3,5 @@ Assets/Firebase/Plugins/x86_64/*.dll filter=lfs diff=lfs merge=lfs -text
 Assets/Firebase/Plugins/x86_64/*.so filter=lfs diff=lfs merge=lfs -text
 Assets/Firebase/Plugins/x86_64/*.bundle filter=lfs diff=lfs merge=lfs -text
 assets/5.Animation/*.fbx filter=lfs diff=lfs merge=lfs -text
+assets/5.Animation/RifleCharacter/*.fbx filter=lfs diff=lfs merge=lfs -text
+assets/0.[[:space:]]ExternalAssets/Pistol[[:space:]]92/Textures/*.png filter=lfs diff=lfs merge=lfs -text
