@@ -1,11 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class GridBehavior_Test : MonoBehaviour
 {
@@ -303,11 +299,11 @@ public class GridBehavior_Test : MonoBehaviour
 
         foreach (Node node in path)
         {
-            if (IsAutoMove && (range > Actor.MoveRange) || attackIn)
+            if (IsAutoMove && (range > Actor.MoveRange || attackIn))
             {
                 break;
             }
-
+            Debug.Log("움직입니다");
             Vector3 targetPos = new Vector3(
                 node.Position.x * tileManager.tileSize,
                 1.5f,
@@ -384,9 +380,15 @@ public class GridBehavior_Test : MonoBehaviour
             if (attack.Equals(new Vector2Int((int)actor.transform.position.x,
                     (int)actor.transform.position.z))) return true;
         }
-
+    
         return false;
     }
+    
+    // private bool AttackChecker(Actor_Test target)
+    // {
+    //     float attackRange = Actor.AttackRange;
+    //     return Vector3.Distance(Actor.transform.position, target.transform.position) <= attackRange;
+    // }
 
     private List<Node> GetNeighbours(Node node)
     {
