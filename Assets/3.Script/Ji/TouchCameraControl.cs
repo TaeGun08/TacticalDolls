@@ -10,7 +10,7 @@ public class TouchCameraControl : MonoBehaviour
     public float originalPitch = 45f; // 초기 시점의 pitch 각도
     public float returnDelay = 2f;
     public float returnDuration = 1f;
-
+    
     private Coroutine resetCoroutine;
     private Tween pitchTween;
 
@@ -34,11 +34,21 @@ public class TouchCameraControl : MonoBehaviour
                 resetCoroutine = StartCoroutine(ResetPitchAfterDelay());
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            targetCamera.Init();
+        }
     }
 
     private IEnumerator ResetPitchAfterDelay()
     {
-        targetCamera.ResetCamera();
+        // targetCamera.ResetCamera();
+
+        Quaternion rotation45Pitch = Quaternion.Euler(45f, 0f, 0f);
+        targetCamera.Init();
+        targetCamera.StopFollow();
+        targetCamera.FocusCamera(targetCamera.transform.position, targetCamera.initDistance, rotation45Pitch);
         yield return new WaitForSeconds(returnDelay);
     }
 }

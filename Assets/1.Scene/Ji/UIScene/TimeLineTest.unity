@@ -187,6 +187,8 @@ PlayableDirector:
     value: {fileID: 0}
   - key: {fileID: 0}
     value: {fileID: 0}
+  - key: {fileID: -5261955404670131900, guid: dd64d5534bdbed84eb8a6acbdf670119, type: 2}
+    value: {fileID: 0}
   m_ExposedReferences:
     m_References:
     - 656a9bcd2a98bc64890a6340d2702ace: {fileID: 1542042826}
@@ -2935,8 +2937,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableShortcutKeys: 1
-  resetCamera: 32
-  switchPerspective: 257
+  resetCamera: 273
+  switchPerspective: 0
 --- !u!4 &4797536564005461363
 Transform:
   m_ObjectHideFlags: 0
@@ -3003,7 +3005,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1367270649281649906}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 43a336952599a254fbddf50282a4a87c, type: 3}
   m_Name: 

@@ -20,7 +20,7 @@ namespace Exoa.Cameras
         /// <summary>
         /// Init some camera parameters
         /// </summary>
-        override protected void Init()
+        override public void Init()
         {
             Log("Init position:" + transform.position);
 

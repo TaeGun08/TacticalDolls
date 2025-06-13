@@ -11,10 +11,11 @@ namespace Exoa.Cameras
         /// <summary>
         /// Init some camera parameters
         /// </summary>
-        override protected void Init()
+        override public void Init()
         {
             base.Init();
 
+            Debug.Log("Init CameraPerspective");
             // Calculating the initial parameters based on camera's transform
             initialRotation = transform.rotation.eulerAngles;
             GetInitialRotation();

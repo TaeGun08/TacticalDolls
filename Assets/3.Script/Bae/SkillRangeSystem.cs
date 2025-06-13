@@ -51,8 +51,16 @@ public class SkillRangeSystem : MonoBehaviour
 
         if (skill == null) return;
 
-        ResetAllHighlights();
-        HighlightAllTilesInRange(currentTile, skill.RangeType, skill.Range);
+        if (isRangeVisible)
+        {
+            ResetAllHighlights();
+            isRangeVisible = false;
+        }
+        else
+        {
+            HighlightAllTilesInRange(currentTile, skill.RangeType, skill.Range);
+            isRangeVisible = true;
+        }
     }
 
 
@@ -103,6 +111,8 @@ public class SkillRangeSystem : MonoBehaviour
         {
             tile.ResetHighlight();
         }
+        
+        isRangeVisible = false;
     }
 
     public void SetDamageAbles()
