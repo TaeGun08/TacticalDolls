@@ -797,7 +797,7 @@ GameObject:
   - component: {fileID: 2117041887504147084}
   - component: {fileID: 4234192337372336795}
   - component: {fileID: 978316322529048146}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Vanguard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -897,18 +897,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterID: 2
   PrefabName: Vanguard
-  Stat:
-    Level: 3
-    HP: 103
-    Attack: 23
-    Defense: 8
-    MoveRange: 3
+  stat:
+    rid: 1991657863579172871
   Weapon:
     Name: 
     Damge: 0
     Speed: 0
-  Skills:
-  - {fileID: 11400000, guid: 187e8dbb48b6ca24aa2813801e71be81, type: 2}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1991657863579172871
+      type: {class: StatData, ns: , asm: Assembly-CSharp}
+      data:
+        level: 0
+        hp: 100
+        attack: 20
+        defense: 5
+        moveRange: 3
+        skills:
+        - {fileID: 11400000, guid: dba2ff2e5545180408e88dda97d3439c, type: 2}
 --- !u!114 &2117041887504147084
 MonoBehaviour:
   m_ObjectHideFlags: 0

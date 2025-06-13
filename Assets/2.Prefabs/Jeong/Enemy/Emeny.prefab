@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5998460467496013330}
   - component: {fileID: 5253676370753747957}
   - component: {fileID: 7352372177640684690}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Emeny
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,11 +123,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyID: 101
   PrefabName: Enemy1
-  Stat:
-    HP: 0
-    Attack: 0
-    Defense: 0
-    MoveRange: 0
+  stat:
+    rid: 1991657863579172870
+  references:
+    version: 2
+    RefIds:
+    - rid: 1991657863579172870
+      type: {class: EnemyStatData, ns: , asm: Assembly-CSharp}
+      data:
+        level: 1
+        hp: 100
+        attack: 5
+        defense: 5
+        moveRange: 5
+        skills:
+        - {fileID: 11400000, guid: dba2ff2e5545180408e88dda97d3439c, type: 2}
 --- !u!114 &7352372177640684690
 MonoBehaviour:
   m_ObjectHideFlags: 0
