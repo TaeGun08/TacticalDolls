@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4231791077877921153}
   - component: {fileID: 6171852125360726229}
   - component: {fileID: 735051944440560035}
-  - component: {fileID: 3784537943139497080}
   - component: {fileID: -6534194406593813175}
   - component: {fileID: 8586753269948602528}
   - component: {fileID: 3770169189969299345}
@@ -79,31 +78,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3784537943139497080
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2028351747548310683}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9962c534960090e4fbfd1d105be98100, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CharacterID: 2
-  PrefabName: Vanguard
-  Stat:
-    Level: 0
-    HP: 0
-    Attack: 0
-    Defense: 0
-    MoveRange: 0
-  Weapon:
-    Name: 
-    Damge: 0
-    Speed: 0
-  Skills: []
 --- !u!114 &-6534194406593813175
 MonoBehaviour:
   m_ObjectHideFlags: 0

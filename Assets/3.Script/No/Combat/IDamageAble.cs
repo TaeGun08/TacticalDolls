@@ -4,11 +4,12 @@ using UnityEngine;
 
 public interface IDamageAble
 {
-    public Collider MainCollider { get; }
-    public GameObject GameObject { get; }
-    public int Team => 0;
-    
-    public void TakeDamage(CombatEvent combatEvent);
-    public void TakeHeal(HealEvent combatEvent);
-    public void TakeBuff(BuffEvent combatEvent);
+    IStat Stat { get; }
+    Collider MainCollider { get; }
+    GameObject GameObject { get; }
+    int Team { get; }
+
+    void TakeDamage(CombatEvent combatEvent);
+    void TakeHeal(HealEvent combatEvent);
+    void TakeBuff(BuffEvent combatEvent);
 }

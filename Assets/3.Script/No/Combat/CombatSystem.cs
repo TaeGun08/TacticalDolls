@@ -13,23 +13,7 @@ public class CombatSystem : MonoBehaviour
 
     public void ExecuteSkill(IDamageAble attacker, int skillIndex)
     {
-        switch (attacker)
-        {
-            case CharacterData character:
-                ExecuteCharacterSkill(character, skillIndex);
-                break;
-            case EnemyData enemy:
-                ExecuteEnemySkill(enemy, skillIndex);
-                break;
-            default:
-                Debug.LogWarning("캐스팅 실패");
-                break;
-        }
-    }
-
-    private void ExecuteCharacterSkill(CharacterData character, int skillIndex)
-    {
-        SkillSO skill = character.Skills[skillIndex];
+        SkillSO skill = attacker.Stat.Skills[skillIndex];
         List<IDamageAble> targetList = SkillRangeSystem.Instance.damageAbles;
 
         foreach (IDamageAble target in targetList)
@@ -37,21 +21,21 @@ public class CombatSystem : MonoBehaviour
             switch (skill.Type)
             {
                 case SkillType.Damage:
-                    if (IsSameTeam(character, target))
+                    if (IsSameTeam(attacker, target))
                     {
                         Debug.Log("같은 팀으로 피격을 넘어갑니다.");
-                        return;
+                        break;
                     }
                     
-                    ApplyDamage(character, target, character.Stat.Attack);
+                    ApplyDamage(attacker, target, attacker.Stat.Attack);
                     break;
 
                 case SkillType.Heal:
-                    ApplyHeal(character, target, character.Stat.Attack);
+                    ApplyHeal(attacker, target, attacker.Stat.Attack);
                     break;
                 
                 case SkillType.Buff:
-                    ApplyBuff(character, target, character.Stat.Attack);
+                    ApplyBuff(attacker, target, attacker.Stat.Attack);
 
                     break;
                 
@@ -60,40 +44,7 @@ public class CombatSystem : MonoBehaviour
             }
         }
     }
-
-    private void ExecuteEnemySkill(EnemyData enemy, int skillIndex)
-    {
-        SkillSO skill = enemy.Skills[skillIndex];
-        List<IDamageAble> targetList = SkillRangeSystem.Instance.damageAbles;
-
-        foreach (IDamageAble target in targetList)
-        {
-            switch (skill.Type)
-            {
-                case SkillType.Damage:
-                    if (IsSameTeam(enemy, target))
-                    {
-                        Debug.Log("같은 팀으로 Enemy로 피격을 넘어갑니다.");
-                        return;
-                    }
-                    
-                    ApplyDamage(enemy, target, enemy.Stat.Attack);
-                    break;
-
-                case SkillType.Heal:
-                    ApplyHeal(enemy, target, enemy.Stat.Attack);
-                    break;
-                
-                case SkillType.Buff:
-                    ApplyBuff(enemy, target, enemy.Stat.Attack);
-                    break;
-                
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-    }
-
+    
     private bool IsSameTeam(IDamageAble a, IDamageAble b)
     {
         return a.Team == b.Team;

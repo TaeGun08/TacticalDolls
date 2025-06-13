@@ -7,8 +7,7 @@ public class SkillRangeSystem : MonoBehaviour
 {
     public static SkillRangeSystem Instance;
     
-    private CharacterData currentCharacterData;
-    private EnemyData currentEnemyData;
+    private IDamageAble target;
 
     private Tile[,] tiles;
     private Tile currentTile;
@@ -32,23 +31,12 @@ public class SkillRangeSystem : MonoBehaviour
 
     private Tile GetCurrentTile(IDamageAble unit)
     {
-        GameObject targetObject = null;
+        target = unit;
 
-        if (unit is CharacterData character)
-        {
-            currentCharacterData = character;
-            targetObject = character.GameObject;
-        }
-        else if (unit is EnemyData enemy)
-        {
-            currentEnemyData = enemy;
-            targetObject = enemy.GameObject;
-        }
-
-        if (targetObject == null)
+        if (target == null)
             return null;
 
-        return TileManager.Instance.GetClosestTile(targetObject.transform.position);
+        return TileManager.Instance.GetClosestTile(target.GameObject.transform.position);
     }
     
     public void ShowSkillRange(IDamageAble unit, int index)
@@ -59,17 +47,7 @@ public class SkillRangeSystem : MonoBehaviour
         if (currentTile == null) return;
 
         SkillSO skill = null;
-
-        if (unit is CharacterData character)
-        {
-            currentCharacterData = character;
-            skill = character.Skills[index];
-        }
-        else if (unit is EnemyData enemy)
-        {
-            currentEnemyData = enemy;
-            skill = enemy.Skills[index];
-        }
+        skill = unit.Stat.Skills[index];
 
         if (skill == null) return;
 

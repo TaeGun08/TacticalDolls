@@ -38,44 +38,23 @@ public class MoveRangeSystem : MonoBehaviour
 
         if (currentTile == null) return;
         
-        if (targetData is CharacterData character)
+        HandleMove(targetData);
+    }
+    
+    private void HandleMove(IDamageAble unit)
+    {
+        if (isRangeVisible)
         {
-            HandleCharacterMove(character);
+            ResetAllHighlights();
+            isRangeVisible = false;
         }
-        else if (targetData is EnemyData enemy)
+        else
         {
-            HandleEnemyMove(enemy);
+            HighlightAllTilesInRange(currentTile, unit.Stat.MoveRange);
+            isRangeVisible = true;
         }
     }
     
-    private void HandleCharacterMove(CharacterData character)
-    {
-        if (isRangeVisible)
-        {
-            ResetAllHighlights();
-            isRangeVisible = false;
-        }
-        else
-        {
-            HighlightAllTilesInRange(currentTile, character.Stat.MoveRange);
-            isRangeVisible = true;
-        }
-    }
-
-    private void HandleEnemyMove(EnemyData enemy)
-    {
-        if (isRangeVisible)
-        {
-            ResetAllHighlights();
-            isRangeVisible = false;
-        }
-        else
-        {
-            HighlightAllTilesInRange(currentTile, enemy.Stat.MoveRange);
-            isRangeVisible = true;
-        }
-    }
-
     private void HighlightAllTilesInRange(Tile centerTile, int range)
     {
         for (int x = 0; x < tiles.GetLength(0); x++)

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6797914585256609027}
   - component: {fileID: 6812312075058337421}
   - component: {fileID: 5953677568592372665}
-  - component: {fileID: 7539079894860485151}
   - component: {fileID: -6968983817259881828}
   - component: {fileID: -6054153073456231944}
   - component: {fileID: -8808516436154472114}
@@ -79,31 +78,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7539079894860485151
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4409047874068816009}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9962c534960090e4fbfd1d105be98100, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CharacterID: 1
-  PrefabName: Suporter
-  Stat:
-    Level: 0
-    HP: 0
-    Attack: 0
-    Defense: 0
-    MoveRange: 0
-  Weapon:
-    Name: 
-    Damge: 0
-    Speed: 0
-  Skills: []
 --- !u!114 &-6968983817259881828
 MonoBehaviour:
   m_ObjectHideFlags: 0

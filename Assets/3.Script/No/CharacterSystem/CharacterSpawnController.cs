@@ -38,7 +38,7 @@ public class CharacterSpawnController : MonoBehaviour
         
             foreach (var characterUI in characterUIPrefab)
             {
-                var character = characterUI.GetComponent<CharacterData>();
+                var character = characterUI.GetComponent<Character2DDragSystem>().characterPrefab3D.GetComponent<CharacterData>();
         
                 if (characterCode == character.CharacterID)
                 {
@@ -87,29 +87,28 @@ public class CharacterSpawnController : MonoBehaviour
 
     private void ApplyCharacter()
     {
-        // 타일에 이미 배치된 오브젝트가 있는지 확인
-        if(TileManager.Instance.selectedTile.isUsingTile) return;
-        // 이미 배치된 캐릭터인지 체크
-        if (PlayerManager.Instance.usingCharacter.Contains(disposeCharacter.GetComponent<CharacterData>().CharacterID)) return;
-        
         var _2DDragSystem = disposeCharacter.GetComponent<Character2DDragSystem>();
-        
+        var prefabData = _2DDragSystem.characterPrefab3D.GetComponent<CharacterData>();
+    
+        // 이미 배치된 캐릭터인지 체크
+        if (PlayerManager.Instance.usingCharacter.Contains(prefabData.CharacterID)) return;
+    
+        // 타일에 이미 배치된 오브젝트가 있는지 확인
+        if (TileManager.Instance.selectedTile.isUsingTile) return;
+
         GameObject characterSpawn = Instantiate(_2DDragSystem.characterPrefab3D);
         characterSpawn.transform.position = TileManager.Instance.selectedTile.transform.position + Vector3.up * 0.5f;
-        
+
         CancelApplyEvent(characterSpawn);
-        
+    
         TileManager.Instance.selectedTile.isUsingTile = true;
-        
-        // 배치된 캐릭터 저장
-        PlayerManager.Instance.usingCharacter.Add(characterSpawn.GetComponent<CharacterData>().CharacterID);
-        
-        // 배치된 타일과 캐릭터 저장
+
+        PlayerManager.Instance.usingCharacter.Add(prefabData.CharacterID);
+    
         characterTileMap[characterSpawn] = TileManager.Instance.selectedTile;
-        
-        // 타일에 적용된 오브젝트 저장
+    
         Tile applyTileObj = TileManager.Instance.GetClosestTile(characterSpawn.transform.position);
-        applyTileObj.SetOccupant(characterSpawn.GetComponent<CharacterData>());
+        applyTileObj.SetOccupant(prefabData);
     }
     
     private GameObject RevertChracter;

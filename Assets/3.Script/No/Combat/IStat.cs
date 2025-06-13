@@ -9,4 +9,5 @@ public interface IStat
     int Attack { get; set; }
     int Defense { get; set; }
     int MoveRange { get; set; }
+    List<SkillSO> Skills { get; set; }
 }

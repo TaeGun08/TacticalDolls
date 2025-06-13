@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     //public ScriptableObject CharacterSOData;
-    public PrefabsTable PrefabsTable;
+    public PrefabsTable CharacterTable;
 
     private void Awake()
     {
