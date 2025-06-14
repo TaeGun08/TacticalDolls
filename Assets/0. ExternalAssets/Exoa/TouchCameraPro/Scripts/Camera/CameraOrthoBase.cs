@@ -34,7 +34,7 @@ namespace Exoa.Cameras
         /// <summary>
         /// Init some camera parameters
         /// </summary>
-        override public void Init()
+        public override void Init()
         {
             base.Init();
             finalSize = initSize;

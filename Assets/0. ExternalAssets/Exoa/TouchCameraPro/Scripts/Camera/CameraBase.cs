@@ -221,7 +221,7 @@ namespace Exoa.Cameras
         /// <summary>
         /// Init some camera parameters
         /// </summary>
-        virtual protected void Init()
+        virtual public void Init()
         {
             CreateConverter();
         }
