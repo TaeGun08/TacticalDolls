@@ -128,7 +128,7 @@ public class GridBehavior_Test : MonoBehaviour
         List<Node> path = PathFindingManager.Instance.PathFind(Actor.transform.position, finalTargetPos);
         reservedTiles.Add(new Vector2Int(finalTargetPos.x, finalTargetPos.z));
         IsMove = true;
-        if (path.Count <= 0) return; 
+        if (path == null) return; 
         StartCoroutine(MovePlayerAlongPath(path, finalTargetPos));
     }
 
