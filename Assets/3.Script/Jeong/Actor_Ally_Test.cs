@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Actor_Ally_Test : Actor_Test
 {
+    [SerializeField] private CharacterData characterData;
+    
     protected override void Start()
     {
         base.Start();

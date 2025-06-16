@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Actor_Enemy_Test : Actor_Test
 {
+    [SerializeField] private EnemyData enemyData;
+    
     protected override void Start()
     {
         base.Start();
