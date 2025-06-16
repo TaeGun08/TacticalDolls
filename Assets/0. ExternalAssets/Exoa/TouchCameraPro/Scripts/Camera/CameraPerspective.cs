@@ -29,8 +29,6 @@ namespace Exoa.Cameras
             finalDistance = CalculateClampedDistance(initDistance, minMaxDistance);
             finalRotation = GetRotationFromPitchYaw();
             finalPosition = CalculatePosition(finalOffset, finalRotation, finalDistance);
-
-
         }
 
 

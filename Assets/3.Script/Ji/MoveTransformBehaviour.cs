@@ -1,18 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
-public class MoveTransformBehaviour : MonoBehaviour
+[System.Serializable]
+public class MoveTransformBehaviour : PlayableBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Transform startTransform;
+    public Transform endTransform;
 
-    // Update is called once per frame
-    void Update()
+    public override void ProcessFrame(Playable playable, FrameData info, object playerData)
     {
-        
+        var transform = playerData as Transform;
+        if (transform == null || startTransform == null || endTransform == null)
+            return;
+
+        double time = playable.GetTime();
+        double duration = playable.GetDuration();
+        float t = (float)(time / duration);
+
+        transform.position = Vector3.Lerp(startTransform.position, endTransform.position, t);
     }
 }
