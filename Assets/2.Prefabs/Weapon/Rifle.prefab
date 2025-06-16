@@ -164,3 +164,5 @@ MonoBehaviour:
   WeaponName: Rifle
   Level: 1
   BaseDamage: 5
+  Skills:
+  - {fileID: 11400000, guid: 73ddb1daffae0a7419eddf8cbdb0ab5a, type: 2}

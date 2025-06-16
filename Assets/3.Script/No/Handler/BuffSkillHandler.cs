@@ -16,6 +16,7 @@ public class BuffSkillHandler : SkillEffectHandlerBase
             Buff = attacker.Stat.Attack,
             Position = target.GameObject.transform.position
         };
+        
         target.TakeBuff(buffEvent);
     }
 }

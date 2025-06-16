@@ -859,22 +859,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterID: 2
   PrefabName: Vanguard
-  stat:
-    rid: 8346046783562711043
-  Weapon: {fileID: 3330984961467865235, guid: 54be0897d98795b49afb61f3731d7645, type: 3}
-  references:
-    version: 2
-    RefIds:
-    - rid: 8346046783562711043
-      type: {class: StatData, ns: , asm: Assembly-CSharp}
-      data:
-        level: 1
-        hp: 101
-        attack: 21
-        defense: 6
-        moveRange: 3
-        skills:
-        - {fileID: 11400000, guid: 355f49512152d4845a1ea900a86f48f3, type: 2}
+  baseStatSO: {fileID: 11400000, guid: 96bc17ed5b8608c4abde132b2bd7edc2, type: 2}
+  runtimeStat:
+    level: 0
+    hp: 0
+    attack: 0
+    defense: 0
+    moveRange: 0
+    skills: []
+    weapon: {fileID: 0}
 --- !u!114 &4758839894552402197
 MonoBehaviour:
   m_ObjectHideFlags: 0

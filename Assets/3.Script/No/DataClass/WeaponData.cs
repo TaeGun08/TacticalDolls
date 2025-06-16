@@ -7,32 +7,76 @@ public class WeaponData : MonoBehaviour
     public string WeaponName;
     public int Level;
     public int BaseDamage;
-    List<SkillSO> Skills { get; set; }
-
-    public int GetDamage() => BaseDamage + Level;
     
-    // public void OnHitEffect(CombatEvent combatEvent, CharacterData owner)
-    // {
-    //     foreach (SkillSO skill in Skills)
-    //     {
-    //         switch (skill.Type)
-    //         {
-    //             case SkillType.Damage:
-    //                 Debug.Log($"{WeaponName} Reflect activated! Reflecting {skill.Damage} damage.");
-    //                 break;
-    //
-    //             case SkillType.Heal:
-    //                 Debug.Log($"{WeaponName} Bleed activated! Target takes {skill.Damage} bleed damage.");
-    //                 break;
-    //             
-    //             case SkillType.Buff:
-    //                 Debug.Log($"{WeaponName} Bleed activated! Target takes {skill.Damage} bleed damage.");
-    //                 break;
-    //
-    //             default:
-    //                 Debug.Log($"{WeaponName} activates skill: {skill.Damage}");
-    //                 break;
-    //         }
-    //     }
-    // }
+    public List<SkillEffectHandlerBase> Skills;
+
+    //public int GetDamage() => BaseDamage + Level;
+    
+    public void TriggerSkills(IDamageAble attacker, IDamageAble target)
+    {
+        foreach (SkillEffectHandlerBase skill in Skills)
+        {
+            switch (skill.Type)
+            {
+                case SkillType.Damage:
+                   
+                    OnDamageEffect(attacker, target, skill);
+                    break;
+
+                case SkillType.Heal:
+                    OnHealEffect(attacker, target, skill);
+                    break;
+        
+                case SkillType.Buff:
+                    OnBuffEffect(attacker, target, skill);
+                    break;
+
+                default:
+                    Debug.Log($"{WeaponName} activates skill: {skill.Damage}");
+                    break;
+            }
+        }
+    }
+    
+    public void OnDamageEffect(IDamageAble attacker, IDamageAble target,  SkillEffectHandlerBase skill)
+    {
+        if (skill.IsSameTeam(attacker, target))
+        {
+            Debug.Log("같은 편 공격력 증가");
+            target.Stat.Attack += 10;
+
+            return;
+        }
+        
+        Debug.Log("적 추가 hp 감소");
+        target.Stat.HP -= 10;
+    }
+    
+    public void OnHealEffect(IDamageAble attacker, IDamageAble target,  SkillEffectHandlerBase skill)
+    {
+        if (skill.IsSameTeam(attacker, target))
+        {
+            Debug.Log("같은 편 HP 증가");
+            attacker.Stat.HP += 100;
+
+            return;
+        }
+        
+        Debug.Log("적 추가 hp 감소");
+        target.Stat.HP -= 10;
+    }
+    
+    public void OnBuffEffect(IDamageAble attacker, IDamageAble target, SkillEffectHandlerBase skill)
+    {
+        if (skill.IsSameTeam(attacker, target))
+        {
+            Debug.Log("같은 편 이동범위 증가");
+            attacker.Stat.MoveRange += 5;
+
+            return;
+        }
+        
+        Debug.Log("적 이동범위 감소");
+        target.Stat.MoveRange -= 1;
+    }
 }

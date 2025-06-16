@@ -10,4 +10,5 @@ public interface IStat
     int Defense { get; set; }
     int MoveRange { get; set; }
     List<SkillEffectHandlerBase> Skills { get; set; }
+    WeaponData Weapon { get; set; }
 }

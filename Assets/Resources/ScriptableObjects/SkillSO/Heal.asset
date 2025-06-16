@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SkillID: 2
   Name: Heal
-  Type: 0
+  Type: 1
   RangeType: 3
   Range: 4
   Damage: 5

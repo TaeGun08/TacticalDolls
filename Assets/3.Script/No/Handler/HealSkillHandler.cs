@@ -9,8 +9,6 @@ public class HealSkillHandler : SkillEffectHandlerBase
     {
         if (!IsSameTeam(attacker, target)) return;
 
-        Debug.Log("apply heal");
-            
         var healEvent = new HealEvent
         {
             Sender = attacker,
@@ -18,6 +16,7 @@ public class HealSkillHandler : SkillEffectHandlerBase
             Heal = attacker.Stat.Attack,
             Position = target.GameObject.transform.position
         };
+        
         target.TakeHeal(healEvent);
     }
 }

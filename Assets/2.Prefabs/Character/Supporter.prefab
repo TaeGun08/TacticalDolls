@@ -4064,22 +4064,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterID: 1
   PrefabName: Supporter
-  stat:
-    rid: 8346046783562711045
-  Weapon: {fileID: -5119681726747987232, guid: 463e5a7dbcf268d4986b84a9cddb6554, type: 3}
-  references:
-    version: 2
-    RefIds:
-    - rid: 8346046783562711045
-      type: {class: StatData, ns: , asm: Assembly-CSharp}
-      data:
-        level: 1
-        hp: 101
-        attack: 21
-        defense: 6
-        moveRange: 3
-        skills:
-        - {fileID: 11400000, guid: 73ddb1daffae0a7419eddf8cbdb0ab5a, type: 2}
+  baseStatSO: {fileID: 11400000, guid: 1da04776241776a4abba08b51d3777fa, type: 2}
+  runtimeStat:
+    level: 0
+    hp: 0
+    attack: 0
+    defense: 0
+    moveRange: 0
+    skills: []
+    weapon: {fileID: 0}
 --- !u!114 &63716359993798297
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -36,7 +36,8 @@ public class Tile : MonoBehaviour
     private void OnMouseDown()
     {
         Debug.Log($"Clicked tile at ({x}, {y})");
-        Debug.Log($"Clicked tile at ({tileType})");
+        // Debug.Log($"Clicked tile at ({tileType})");
+        Debug.Log($"Clicked tile at ({isUsingTile})");
 
         
         if (tileType == 1)
