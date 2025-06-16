@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Exoa.Maths;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 using UnityEngine.UI;
 using Button = UnityEngine.UIElements.Button;
@@ -23,7 +24,17 @@ public class TileManager : MonoBehaviour
     [Header("Tile Settings")]
     public TextAsset jsonFile;
     public float tileSize = 1.0f;
+    public GameObject tileTransform;
+    public GameObject structureTransform;
+    public GameObject wallTransform;
     public GameObject tilePrefab;
+    public GameObject structurePrefab201Left;
+    public GameObject structurePrefab201Up;
+    public GameObject structurePrefab201Right;
+    public GameObject structurePrefab201Down;
+    public GameObject structurePrefab202;
+    public GameObject structurePrefab203;
+    public GameObject structurePrefab204;
     public List<EnemyData> EnmeyPrefab;
     public Tile[,] tiles;
     private int width;
@@ -81,6 +92,21 @@ public class TileManager : MonoBehaviour
         int maxX = 0;
         int maxY = 0;
 
+        int wallMinX = 0;
+        int wallMaxX = 0;
+        int wallMinY = 0;
+        int wallMaxY = 0;
+        
+        switch (stageKey)
+        {
+            case "Stage1":
+                wallMinX = 15;
+                wallMaxX = 35;
+                wallMinY = 10;
+                wallMaxY = 40;
+                break;
+        }
+
         foreach (var tile in stageTiles)
         {
             if (tile.x > maxX) maxX = tile.x;
@@ -95,7 +121,7 @@ public class TileManager : MonoBehaviour
         foreach (TileData tile in stageTiles)
         {
             Vector3 position = new Vector3(tile.x * tileSize, 0, tile.y * tileSize);
-            GameObject res = Instantiate(tilePrefab, position, Quaternion.identity, transform);
+            GameObject res = Instantiate(tilePrefab, position, Quaternion.identity, tileTransform.transform);
             Tile tileComp = res.AddComponent<Tile>();
             tileComp.Initialize(tile);
             tiles[tile.x, tile.y] = tileComp;
@@ -122,6 +148,80 @@ public class TileManager : MonoBehaviour
                         // Instantiate(enemyData.GameObject,tileComp.transform.position + Vector3.up, Quaternion.identity);
                     }
                 }
+            }
+
+            if (tile.tileType == 201)
+            {
+                var structurePosition = new Vector3(tile.x, 0.5f, tile.y);
+
+                if (tile.x == wallMinX && tile.y % 5 == 0 && tile.y >= wallMinY && tile.y < wallMaxY)
+                {
+                    GameObject structure201 = new GameObject("Structure201");
+                    structure201.transform.SetParent(wallTransform.transform);
+                    structure201.transform.position = structurePosition;
+                    
+                    Instantiate(structurePrefab201Left, structure201.transform);
+                }
+                
+                if (tile.y == wallMaxY && tile.x % 5 == 0 && tile.x >= wallMinX && tile.x < wallMaxX)
+                {
+                    GameObject structure201 = new GameObject("Structure201");
+                    structure201.transform.SetParent(wallTransform.transform);
+                    structure201.transform.position = structurePosition;
+                    
+                    Instantiate(structurePrefab201Up, structure201.transform);
+                }
+                
+                if (tile.x == wallMaxX && tile.y % 5 == 0 && tile.y >= wallMinY && tile.y < wallMaxY)
+                {
+                    GameObject structure201 = new GameObject("Structure201");
+                    structure201.transform.SetParent(wallTransform.transform);
+                    structure201.transform.position = structurePosition;
+                    
+                    Instantiate(structurePrefab201Right, structure201.transform);
+                }
+                
+                if (tile.y == wallMinY && tile.x % 5 == 0 && tile.x >= wallMinX && tile.x < wallMaxX)
+                {
+                    GameObject structure201 = new GameObject("Structure201");
+                    structure201.transform.SetParent(wallTransform.transform);
+                    structure201.transform.position = structurePosition;
+                    
+                    Instantiate(structurePrefab201Down, structure201.transform);
+                }
+            }
+            
+            if (tile.tileType == 202)
+            {
+                var structurePosition = new Vector3(tile.x, 0.5f, tile.y);
+                
+                GameObject structure202 = new GameObject("Structure202");
+                structure202.transform.SetParent(structureTransform.transform);
+                structure202.transform.position = structurePosition;
+                
+                Instantiate(structurePrefab202, structure202.transform);
+            }
+            
+            if (tile.tileType == 203)
+            {
+                var structurePosition = new Vector3(tile.x, 0.5f, tile.y);
+                
+                GameObject structure203 = new GameObject("Structure203");
+                structure203.transform.SetParent(structureTransform.transform);
+                structure203.transform.position = structurePosition;
+                
+                Instantiate(structurePrefab203, structure203.transform);
+            }
+            
+            if (tile.tileType == 204)
+            {
+                var structurePosition = new Vector3(tile.x, 0.5f, tile.y);
+                
+                GameObject structure204 = new GameObject("Structure204");
+                structure204.transform.SetParent(structureTransform.transform);
+                structure204.transform.position = structurePosition;
+                
+                Instantiate(structurePrefab204, structure204.transform);
             }
         }
     }
