@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -32,35 +33,22 @@ public class DynamicTransformTweenChanger : MonoBehaviour
 
     private void Update()
     {
-        // if (Input.GetKeyDown(KeyCode.Space))
-        // {
-        //     ChangeTransformTweenLocation(testDirector, testplayer, shotTransform);
-        //     // CopyClipsFromTo(NewSourceTimelineAsset, Target);
-        // }
-        
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            RaycastHit hit;
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit))
-            {
-                // hit.point를 Transform으로 바꾸기 위해 임시 오브젝트 생성
-                GameObject tempTarget = new GameObject("TempHitTarget");
-                tempTarget.transform.position = hit.point;
-
-                // Transform으로 전달
-                ChangeTransformTweenLocation(testDirector, null, tempTarget.transform);
-            }
-            
+            ChangeTransformTweenLocation(testDirector, null, shotTransform);
+                
             CopyClipsFromTo(NewSourceTimelineAsset, Target);
+                
             ChangeBezierTweenLocation(testDirector, testplayer, shotTransform);
+            
+            testDirector.Play();
         }
     }
 
     //클립의 로케이션 변경
     public void ChangeTransformTweenLocation(PlayableDirector director, Transform newStartLocation = null, Transform newEndLocation = null)
     {
-        cashTweenClip = FindClipByType<TransformTweenClip>(director);
+        cashTweenClip = FindClipByType<TransformTweenTrack>(director);
         
         if (cashTweenClip is TransformTweenClip tweenClip) //형변환
         {
@@ -73,7 +61,6 @@ public class DynamicTransformTweenChanger : MonoBehaviour
         
         // 변경사항 적용
         director.RebuildGraph();
-        director.Play();
     }
     
     public void ChangeBezierTweenLocation(PlayableDirector director, Transform newStartLocation = null, Transform newEndLocation = null)
@@ -90,7 +77,6 @@ public class DynamicTransformTweenChanger : MonoBehaviour
         
         // 변경사항 적용
         director.RebuildGraph();
-        director.Play();
     }
     
     private PlayableAsset FindClipByType<T>(PlayableDirector director) //탄환 도착 지점 동적할당
@@ -131,7 +117,7 @@ public class DynamicTransformTweenChanger : MonoBehaviour
                     {
                         if (oldClip.asset.GetType() == newClip.asset.GetType())
                         {
-                            Debug.Log("oldClipChange");
+                            // Debug.Log("oldClipChange");
                             oldClip.start = newClip.start;
                             oldClip.duration = newClip.duration;
                             oldClip.displayName = newClip.displayName;
@@ -141,6 +127,8 @@ public class DynamicTransformTweenChanger : MonoBehaviour
                 }
             }
         }
+        
+        testDirector.RebuildGraph();
         
         // foreach (var track in target.GetOutputTracks())
         // {
@@ -173,10 +161,23 @@ public class DynamicTransformTweenChanger : MonoBehaviour
         // }
         
         // return Task.CompletedTask;
-        // testDirector.RebuildGraph();
         //
         // Debug.Log("endLocation SetReferenceValue 적용 완료");
         //
         // testDirector.Play();
+    }
+    
+    public float ReturnAStarDuration(List<Vector2Int> path)
+    {
+        float totalDistance = 0f;
+        for (int i = 1; i < path.Count; i++)
+        {
+            totalDistance += Vector2Int.Distance(path[i - 1], path[i]);
+        }
+        
+        float speed = 2.0f; // 고정된 이동 속도 (예: 2m/s)
+        float duration = totalDistance / speed;
+        
+        return duration;
     }
 }

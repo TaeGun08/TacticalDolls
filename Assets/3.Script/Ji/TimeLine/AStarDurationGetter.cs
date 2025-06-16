@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class AStarDurationGetter : MonoBehaviour
 {
-    
     public float ReturnAStarDuration(List<Vector2Int> path)
     {
         float totalDistance = 0f;
