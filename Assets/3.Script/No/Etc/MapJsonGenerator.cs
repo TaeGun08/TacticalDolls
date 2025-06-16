@@ -237,12 +237,18 @@ public class MapJsonGenerator : MonoBehaviour
                 {
                     x = x,
                     y = y,
-                    isWalkable = true,
+                    isWalkable = false,
                     tileType = 0,
                     obstacleDir = ObstacleDir.None,
                     isUsingTile = false
                 };
 
+                // 벽 내부 이동 가능 처리
+                if (x > 15 && x < 35 && y > 10 && y < 40)
+                {
+                    tile.isWalkable = true;
+                }
+                
                 // 벽 스폰 위치 (201)
                 if ((x == 15 || x == 35) && y >= 10 && y <= 40)
                 {
@@ -250,40 +256,46 @@ public class MapJsonGenerator : MonoBehaviour
                     tile.tileType = 201;
                     tile.isUsingTile = true;
                 }
-                else if (x > 15 && x < 35 && (y == 10 || y == 40))
+                
+                if (x > 15 && x < 35 && (y == 10 || y == 40))
                 {
                     tile.isWalkable = false;
                     tile.tileType = 201;
                     tile.isUsingTile = true;
                 }
+                
                 // 플레이어 스폰 위치
-                else if (playerSpawnPoints.Contains(new Vector2Int(x, y)))
+                if (playerSpawnPoints.Contains(new Vector2Int(x, y)))
                 {
                     tile.tileType = 1;
                     tile.isUsingTile = false;
                 }
+                
                 // 적 스폰 위치
-                else if (enemySpawnPoints.Contains(new Vector2Int(x, y)))
+                if (enemySpawnPoints.Contains(new Vector2Int(x, y)))
                 {
                     tile.tileType = 101;
                     tile.isUsingTile = true;
                 }
+                
                 // 구조물 위치 (202)
-                else if (obstaclePoints202.Contains(new Vector2Int(x, y)))
+                if (obstaclePoints202.Contains(new Vector2Int(x, y)))
                 {
                     tile.isWalkable = false;
                     tile.tileType = 202;
                     tile.isUsingTile = true;
                 }
+                
                 // 구조물 위치 (203)
-                else if (obstaclePoints203.Contains(new Vector2Int(x, y)))
+                if (obstaclePoints203.Contains(new Vector2Int(x, y)))
                 {
                     tile.isWalkable = false;
                     tile.tileType = 203;
                     tile.isUsingTile = true;
                 }
+                
                 // 구조물 위치 (204)
-                else if (obstaclePoints204.Contains(new Vector2Int(x, y)))
+                if (obstaclePoints204.Contains(new Vector2Int(x, y)))
                 {
                     tile.isWalkable = false;
                     tile.tileType = 204;

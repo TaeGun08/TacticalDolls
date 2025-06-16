@@ -71,7 +71,7 @@ public class MoveRangeSystem : MonoBehaviour
 
                 inRange = (dx + dy) <= range;
 
-                if (inRange)
+                if (inRange && tile.isWalkable)
                 {
                     tile.Highlight(Color.white);
                     movableTiles.Add(tile);

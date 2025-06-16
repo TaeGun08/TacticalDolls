@@ -92,7 +92,7 @@ public class SkillRangeSystem : MonoBehaviour
                         break;
                 }
 
-                if (inRange)
+                if (inRange && tile.isWalkable)
                 {
                     tile.Highlight(Color.cyan);
                     usableTiles.Add(tile);
