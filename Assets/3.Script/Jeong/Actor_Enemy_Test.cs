@@ -5,21 +5,9 @@ using UnityEngine;
 
 public class Actor_Enemy_Test : Actor_Test
 {
-    [SerializeField] private EnemyData enemyData;
-    
     protected override void Start()
     {
         base.Start();
         turn.Enemy.Add(this);
-    }
-    
-    public override void OnMoveStart()
-    {
-
-    }
-
-    protected override void OnMoveEnd()
-    {
-        turn.MoveTcs.TrySetResult(true);
     }
 }

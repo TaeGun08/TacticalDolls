@@ -7,20 +7,62 @@ public abstract class Actor_Test : MonoBehaviour
 {
     protected GridBehavior_Test gridBehavior;
     protected Turn_Test turn;
-    public int MoveRange;
-    public int AttackRange;
+    
+    [SerializeField] protected int moveRange;
+    [SerializeField] protected int attackRange;
 
     protected virtual void Start()
     {
         gridBehavior = GridBehavior_Test.Instance;
         turn = Turn_Test.Instance;
     }
-
-    public abstract void OnMoveStart();
-
-    protected abstract void OnMoveEnd();
     
-    protected List<Vector2Int> GetReachableTiles(Vector2Int origin, int range)
+    public List<Vector2Int> GetReachableTiles()
+    {
+        List<Vector2Int> reachable = new List<Vector2Int>();
+        Vector3Int origin = PathFindingManager.Instance.RoundToTilePosition(transform.position);
+        
+        for (int dx = -moveRange; dx <= moveRange; dx++)
+        {
+            for (int dy = -moveRange; dy <= moveRange; dy++)
+            {
+                int dist = Mathf.Abs(dx) + Mathf.Abs(dy);
+                if (dist <= moveRange)
+                {
+                    int x = origin.x + dx;
+                    int y = origin.z + dy;
+                    if (x >= 0 && y >= 0)
+                        reachable.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+        
+        return reachable;
+    }
+
+    public List<Vector2Int> GetAttackableTilesFromReachable()
+    {
+        Vector3Int origin = PathFindingManager.Instance.RoundToTilePosition(transform.position);
+        HashSet<Vector2Int> attackable = new HashSet<Vector2Int>();
+
+        for (int dx = -attackRange; dx <= attackRange; dx++)
+        {
+            for (int dy = -attackRange; dy <= attackRange; dy++)
+            {
+                if (Mathf.Abs(dx) + Mathf.Abs(dy) <= attackRange)
+                {
+                    int x = origin.x + dx;
+                    int y = origin.z + dy;
+                    if (x >= 0 && y >= 0)
+                        attackable.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        return attackable.ToList();
+    }
+    
+    public List<Vector2Int> GetReachableTiles(Vector2Int origin, int range)
     {
         List<Vector2Int> reachable = new List<Vector2Int>();
         for (int dx = -range; dx <= range; dx++)
@@ -41,7 +83,7 @@ public abstract class Actor_Test : MonoBehaviour
         return reachable;
     }
 
-    protected List<Vector2Int> GetAttackableTilesFromReachable(Vector2Int origin, int moveRange, int attackRange)
+    public List<Vector2Int> GetAttackableTilesFromReachable(Vector2Int origin, int moveRange, int attackRange)
     {
         var reachable = GetReachableTiles(origin, moveRange);
         HashSet<Vector2Int> attackable = new HashSet<Vector2Int>();
