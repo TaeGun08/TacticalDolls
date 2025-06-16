@@ -58,6 +58,22 @@ public class Character3DDragSystem : MonoBehaviour, IBeginDragHandler, IDragHand
                 if(targetTile.isUsingTile) return;
                 
                 transform.position = targetTile.transform.position + Vector3.up * 0.5f;
+                
+                // 이동 전 점유한 타일
+                var characterData = GetComponent<CharacterData>();
+                var charID = characterData.CharacterID;
+                
+                // 타일 초기화
+                if (PlayerManager.Instance.CharacterSpawnController.characterTileMap.TryGetValue(charID, out Tile oldTile))
+                {
+                    oldTile.isUsingTile = false;
+                    oldTile.ClearOccupant();
+                }
+                
+                // 타일 재설정
+                targetTile.isUsingTile = true;
+                PlayerManager.Instance.CharacterSpawnController.characterTileMap[characterData.CharacterID] = targetTile;
+                
                 Debug.Log("Valid tile. Character moved.");
             }
             else

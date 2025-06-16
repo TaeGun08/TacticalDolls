@@ -64,10 +64,12 @@ public class Character2DDragSystem : MonoBehaviour, IBeginDragHandler, IDragHand
 
             // 배치된 캐릭터 저장
             PlayerManager.Instance.usingCharacter.Add(spawnedData.CharacterID);
-
+            
             // 타일에 적용된 오브젝트 저장
             Tile applyTileObj = TileManager.Instance.GetClosestTile(spawned.transform.position);
             applyTileObj.SetOccupant(spawnedData);
+            
+            PlayerManager.Instance.CharacterSpawnController.characterTileMap[spawnedData.CharacterID] = applyTileObj;
             
             // 이벤트 구독
             OnCharacterSpawned?.Invoke(spawned);

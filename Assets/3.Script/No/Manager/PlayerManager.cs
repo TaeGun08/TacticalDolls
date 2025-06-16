@@ -14,6 +14,8 @@ public class PlayerManager : MonoBehaviour
     public GameObject SelectedCharacterPanel;
     public Button StartBtn;
 
+    public CharacterSpawnController CharacterSpawnController;
+    
     private void Awake()
     {
         if (Instance != null)
@@ -92,24 +94,6 @@ public class PlayerManager : MonoBehaviour
         
         return sample;
     }
-    
-    // 임시 데이터 생성
-    // public CharacterDataSample InitializeCharacterSampleData(CharacterDataSample sample)
-    // {
-    //     CharacterData prefabData = GameManager.Instance.CharacterTable
-    //         .GetPrefabByIndex(sample.characterCode)
-    //         .GetComponent<CharacterData>();
-    //
-    //     StatData stat = prefabData.CalculateStatFromLevel(sample.level);
-    //     //stat.Skills = new List<SkillSO>();
-    //     
-    //     foreach (var skill in stat.Skills)
-    //     {
-    //         stat.Skills.Add(skill);
-    //     }
-    //     
-    //     return sample;
-    // }
 
     private void Update()
     {
