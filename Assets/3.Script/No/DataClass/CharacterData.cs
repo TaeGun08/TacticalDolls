@@ -37,25 +37,14 @@ public class CharacterData : MonoBehaviour, IDamageAble
     {
         return new StatData
         {
-            Level = level,
+            Level = level ,
             HP = 100 + level,
-            Attack = 20 + level,
+            Attack = 20 + level + Weapon.GetDamage(),
             Defense = 5 + level,
             MoveRange = 3,
             Skills = new List<SkillSO>(stat.Skills)
         };
     }
-    
-    // 무기 설정
-    public void SetWeaponData(int level){}
-}
-
-[System.Serializable]
-public class WeaponData
-{
-    public string Name;
-    public int Damge;
-    public int Speed;
 }
 
 [System.Serializable]

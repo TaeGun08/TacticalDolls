@@ -73,6 +73,7 @@ GameObject:
   - component: {fileID: 8916653383438827897}
   - component: {fileID: 696271934081039003}
   - component: {fileID: 1785149380792477263}
+  - component: {fileID: -5119681726747987232}
   m_Layer: 0
   m_Name: Rifle
   m_TagString: Untagged
@@ -88,15 +89,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3546364535766828168}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.48927855, y: 0.74449694, z: 0.30350223, w: 0.33796054}
-  m_LocalPosition: {x: 0.062, y: -0.011, z: 0.012}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8039581507376566762}
   - {fileID: 740374961385153081}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -6.961, y: 126.278, z: 70.154}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &696271934081039003
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -147,3 +148,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &-5119681726747987232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3546364535766828168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 077375dbc750fa344b408e988b149393, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ID: 1
+  WeaponName: Rifle
+  Level: 1
+  BaseDamage: 5

@@ -513,6 +513,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 509008028129950958}
+  - component: {fileID: -8985103076616876387}
   m_Layer: 0
   m_Name: Pistol
   m_TagString: Untagged
@@ -528,9 +529,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7257292289926141734}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.1267816, y: -0.33792892, z: 0.9265801, w: 0.10573504}
-  m_LocalPosition: {x: -0.09940383, y: 0.044999834, z: 0.020401098}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5864734607648905539}
@@ -540,4 +541,20 @@ Transform:
   - {fileID: 7062186187401228353}
   - {fileID: 9114218193494530325}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 40.772, y: 12.467, z: 171.629}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-8985103076616876387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7257292289926141734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 077375dbc750fa344b408e988b149393, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ID: 0
+  WeaponName: Pistol
+  Level: 1
+  BaseDamage: 10
