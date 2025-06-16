@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5998460467496013330}
   - component: {fileID: 5253676370753747957}
   - component: {fileID: 7352372177640684690}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Emeny
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,3 +152,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveRange: 3
   AttackRange: 4
+  enemyData: {fileID: 5253676370753747957}

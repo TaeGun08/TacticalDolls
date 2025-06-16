@@ -971,6 +971,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MoveRange: 3
   AttackRange: 4
+  characterData: {fileID: 8705938668380462047}
 --- !u!1 &1087375589216768300
 GameObject:
   m_ObjectHideFlags: 0

@@ -129,7 +129,7 @@ public class GridBehavior_Test : MonoBehaviour
             Debug.Log("움직입니다");
             Vector3 targetPos = new Vector3(
                 node.Position.x * tileManager.tileSize,
-                1.5f,
+                1.0f,
                 node.Position.z * tileManager.tileSize
             );
 
