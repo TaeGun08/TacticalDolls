@@ -874,7 +874,7 @@ MonoBehaviour:
         defense: 6
         moveRange: 3
         skills:
-        - {fileID: 11400000, guid: 187e8dbb48b6ca24aa2813801e71be81, type: 2}
+        - {fileID: 11400000, guid: 355f49512152d4845a1ea900a86f48f3, type: 2}
 --- !u!114 &4758839894552402197
 MonoBehaviour:
   m_ObjectHideFlags: 0

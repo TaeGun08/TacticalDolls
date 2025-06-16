@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea9b4b02568b4647967424baa2757ed8, type: 3}
+  m_Script: {fileID: 11500000, guid: fbf9faa662ed9d543be98b8d2d919229, type: 3}
   m_Name: Heal
   m_EditorClassIdentifier: 
   SkillID: 2
   Name: Heal
-  Type: 1
+  Type: 0
   RangeType: 3
   Range: 4
   Damage: 5

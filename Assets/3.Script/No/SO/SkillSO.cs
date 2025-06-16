@@ -8,4 +8,7 @@ public class SkillSO : ScriptableObject
     public SkillType Type;
     public RangeType RangeType;
     public int Range;
+    public int Damage;
+    
+    public SkillEffectHandlerBase EffectHandler; 
 }

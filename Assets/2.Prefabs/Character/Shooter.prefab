@@ -1052,21 +1052,21 @@ MonoBehaviour:
   CharacterID: 0
   PrefabName: Shooter
   stat:
-    rid: 8346046783562711044
+    rid: 8346046784588742656
   Weapon: {fileID: -8985103076616876387, guid: 9098ebe93f92a804b808393bab6d1c39, type: 3}
   references:
     version: 2
     RefIds:
-    - rid: 8346046783562711044
+    - rid: 8346046784588742656
       type: {class: StatData, ns: , asm: Assembly-CSharp}
       data:
         level: 1
         hp: 101
-        attack: 21
+        attack: 32
         defense: 6
         moveRange: 3
         skills:
-        - {fileID: 11400000, guid: dba2ff2e5545180408e88dda97d3439c, type: 2}
+        - {fileID: 11400000, guid: bcf42b402ce89dd4e9ce8653ccdcab75, type: 2}
 --- !u!114 &9157683120066158592
 MonoBehaviour:
   m_ObjectHideFlags: 0

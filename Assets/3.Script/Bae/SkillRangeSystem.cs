@@ -46,7 +46,7 @@ public class SkillRangeSystem : MonoBehaviour
 
         if (currentTile == null) return;
 
-        SkillSO skill = null;
+        SkillEffectHandlerBase skill = null;
         skill = unit.Stat.Skills[index];
 
         if (skill == null) return;
