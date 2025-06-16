@@ -1312,6 +1312,18 @@ PlayableDirector:
     value: {fileID: 818079519}
   - key: {fileID: -502232686528543081, guid: f215478e5ff87784192b189b20c16f8f, type: 2}
     value: {fileID: 818079518}
+  - key: {fileID: 4389163372828678167, guid: f215478e5ff87784192b189b20c16f8f, type: 2}
+    value: {fileID: 818079519}
+  - key: {fileID: -3940194468853276745, guid: f215478e5ff87784192b189b20c16f8f, type: 2}
+    value: {fileID: 818079518}
+  - key: {fileID: -7553476532742513793, guid: f215478e5ff87784192b189b20c16f8f, type: 2}
+    value: {fileID: 818079519}
+  - key: {fileID: -78240582960939635, guid: f215478e5ff87784192b189b20c16f8f, type: 2}
+    value: {fileID: 818079518}
+  - key: {fileID: -7740979296594894005, guid: f215478e5ff87784192b189b20c16f8f, type: 2}
+    value: {fileID: 703426789}
+  - key: {fileID: 954142014066429028, guid: f215478e5ff87784192b189b20c16f8f, type: 2}
+    value: {fileID: 703426789}
   m_ExposedReferences:
     m_References:
     - c06700f8124f3794cb248939219133d1: {fileID: 1917725558}
@@ -1329,10 +1341,14 @@ PlayableDirector:
     - a79336e496b6c2f4e81651cd7a2b5ec5: {fileID: 2136794087}
     - 79ee2a24f68a3354a897ae0700a92be0: {fileID: 196270483}
     - 0b21df528ced79d43864da993a4b1833: {fileID: 196270483}
+    - 7708a2123e7e9214e910ebc7cb591672: {fileID: 2136794087}
     - 07d08dece70b8f145be7cb01b50d9527: {fileID: 196270483}
     - 565a9440f2baf3f44b761273aa068dcc: {fileID: 255032807}
     - 901dce98d27ecbc4bbab71715aee338b: {fileID: 703426793}
+    - 3bd5c978f84d92d43af9a5092f2f22dc: {fileID: 2136794087}
+    - c01d05f78101f8c469f377c2771141b6: {fileID: 2136794087}
     - 52ceee085c787f8449b56027c9e56ae8: {fileID: 703426793}
+    - b92442688a635594bba48ccdf17a7a85: {fileID: 2136794087}
     - 9448372ea57c17b4883f47cb997fcfa3: {fileID: 703426793}
 --- !u!1 &728550572
 GameObject:
@@ -3323,6 +3339,7 @@ MonoBehaviour:
   Target: {fileID: 11400000, guid: f215478e5ff87784192b189b20c16f8f, type: 2}
   NewSourceTimelineAsset: {fileID: 11400000, guid: 9ab0aa9d3ea04654dbf65c41baec44db,
     type: 2}
+  camera: {fileID: 0}
 --- !u!4 &2006646490
 Transform:
   m_ObjectHideFlags: 0
