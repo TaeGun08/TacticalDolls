@@ -55,7 +55,7 @@ public class SkillSelectSystem : MonoBehaviour
     {
         if (index >= currentTarget.Stat.Skills.Count) return;
 
-        SkillSO skill = currentTarget.Stat.Skills[index];
+        SkillEffectHandlerBase skill = currentTarget.Stat.Skills[index];
         if (skill == null) return;
 
         SkillRangeSystem.Instance.ClearUsableTiles();

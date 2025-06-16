@@ -36,13 +36,12 @@ public class Tile : MonoBehaviour
     private void OnMouseDown()
     {
         Debug.Log($"Clicked tile at ({x}, {y})");
-        Debug.Log($"Clicked tile at ({tileType})");
+        Debug.Log($"Clicked tile at ({isUsingTile})");
 
         
         if (tileType == 1)
         {
             TileManager.Instance.SetSelectedTile(this);
-            //TileManager.Instance.selectedTile = this;
         }
 
         // 중앙 관리자로 클릭 알림 보내기
@@ -68,16 +67,6 @@ public class Tile : MonoBehaviour
     {
         mr.material.color = Color.gray;
     }
-
-    // public GameObject ReturnTopOfTileOrNull()
-    // {
-    //     if (Physics.Raycast(transform.position, Vector3.up, out RaycastHit hit, 100f))
-    //     {
-    //         return hit.transform.gameObject;
-    //     }
-    //     
-    //     return null;
-    // }
     
     // combat settings
     public void SetOccupant(IDamageAble obj)
@@ -93,5 +82,6 @@ public class Tile : MonoBehaviour
     public void ClearOccupant()
     {
         occupant = null;
+        isUsingTile = false;
     }
 }

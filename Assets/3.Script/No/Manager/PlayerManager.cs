@@ -9,10 +9,13 @@ public class PlayerManager : MonoBehaviour
 
     public PlayerDataSample player;
     public List<int> usingCharacter;
+    public List<CharacterData> usingCharacterData;
 
     public GameObject SelectedCharacterPanel;
     public Button StartBtn;
 
+    public CharacterSpawnController CharacterSpawnController;
+    
     private void Awake()
     {
         if (Instance != null)
@@ -37,13 +40,13 @@ public class PlayerManager : MonoBehaviour
 
     public void TestPlayerHasCharacter()
     {
+        // 초기 플레이어가 사용가능한 캐릭터 데이터 조회
         var sampleCharacters = new List<CharacterDataSample>
         {
             new CharacterDataSample
             {
                 characterCode = 0,
                 level = 1,
-                //weapon = new WeaponDataSample { weaponCode = 0, level = 1 },
                 skills = new SkillDataSample[]
                 {
                     new SkillDataSample { skillCode = 1, level = 1 },
@@ -72,6 +75,7 @@ public class PlayerManager : MonoBehaviour
             }
         };
 
+        // 사용가능한 캐릭터 데이터 캐싱
         foreach (var sample in sampleCharacters)
         {
             var initializedSample = InitializeCharacterSampleData(sample);
@@ -81,49 +85,15 @@ public class PlayerManager : MonoBehaviour
     
     public CharacterDataSample InitializeCharacterSampleData(CharacterDataSample sample)
     {
-        CharacterData prefabData = GameManager.Instance.CharacterTable
-            .GetPrefabByIndex(sample.characterCode)
-            .GetComponent<CharacterData>();
+        GameObject prefab = GameManager.Instance.CharacterTable.GetPrefabByIndex(sample.characterCode);
 
-        // 레벨 기준으로 스탯 생성
-        StatData stat = prefabData.CalculateStatFromLevel(prefabData.Stat.Level);
-
-        // 스킬 설정
-        // stat.Skills = new List<SkillSO>();
-        // foreach (var skillData in sample.skills)
-        // {
-        //     SkillSO skill = GameManager.Instance.SkillTable.GetSkillByCode(skillData.skillCode);
-        //     if (skill != null)
-        //     {
-        //         stat.Skills.Add(skill);
-        //     }
-        // }
-
-        // **중요: stat을 실제로 prefabData에 반영**
-        typeof(CharacterData)
-            .GetField("stat", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            ?.SetValue(prefabData, stat);
-
+        CharacterData character = prefab.GetComponent<CharacterData>();
+        character.CalculateStatFromLevel(sample.level);
+        
+        usingCharacterData.Add(character);
+        
         return sample;
     }
-    
-    // 임시 데이터 생성
-    // public CharacterDataSample InitializeCharacterSampleData(CharacterDataSample sample)
-    // {
-    //     CharacterData prefabData = GameManager.Instance.CharacterTable
-    //         .GetPrefabByIndex(sample.characterCode)
-    //         .GetComponent<CharacterData>();
-    //
-    //     StatData stat = prefabData.CalculateStatFromLevel(sample.level);
-    //     //stat.Skills = new List<SkillSO>();
-    //     
-    //     foreach (var skill in stat.Skills)
-    //     {
-    //         stat.Skills.Add(skill);
-    //     }
-    //     
-    //     return sample;
-    // }
 
     private void Update()
     {
@@ -135,5 +105,28 @@ public class PlayerManager : MonoBehaviour
         TileManager.Instance.combatScript.SetActive(true);
         MoveRangeSystem.Instance.ResetAllHighlights();
         SelectedCharacterPanel.SetActive(false);
+    }
+    
+    public void ResetCachedCharacterData()
+    {
+        for (int i = 0; i < usingCharacterData.Count; i++)
+        {
+            CharacterData cachedData = usingCharacterData[i];
+            int charID = cachedData.CharacterID;
+
+            // 원본 프리팹 가져오기
+            GameObject prefab = GameManager.Instance.CharacterTable.GetPrefabByIndex(charID);
+            CharacterData prefabData = prefab.GetComponent<CharacterData>();
+
+            if (prefabData == null)
+            {
+                Debug.LogWarning($"Prefab for CharacterID {charID} not found or has no CharacterData.");
+                continue;
+            }
+
+            cachedData.ResetStatFrom();
+        }
+    
+        Debug.Log("캐싱된 캐릭터 데이터 모두 초기화 완료.");
     }
 }
