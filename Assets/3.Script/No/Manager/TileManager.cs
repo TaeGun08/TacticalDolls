@@ -92,20 +92,10 @@ public class TileManager : MonoBehaviour
         int maxX = 0;
         int maxY = 0;
 
-        int wallMinX = 0;
-        int wallMaxX = 0;
-        int wallMinY = 0;
-        int wallMaxY = 0;
-        
-        switch (stageKey)
-        {
-            case "Stage1":
-                wallMinX = 15;
-                wallMaxX = 35;
-                wallMinY = 10;
-                wallMaxY = 40;
-                break;
-        }
+        int wallMinX = 15;
+        int wallMaxX = 35;
+        int wallMinY = 10;
+        int wallMaxY = 40;
 
         foreach (var tile in stageTiles)
         {
