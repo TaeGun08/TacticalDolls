@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class PistolCharacterAnimationTest : MonoBehaviour
 {
-    [SerializeField] private GameObject rifle;
-    [SerializeField] private GameObject pistol;
-    
     private Animator animator;
 
     private void Start()
