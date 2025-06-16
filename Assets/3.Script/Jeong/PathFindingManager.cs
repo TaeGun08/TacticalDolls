@@ -27,8 +27,10 @@ public class PathFindingManager : MonoBehaviour
     public static PathFindingManager Instance { get; private set; }
     
     private TileManager tileManager;
+    private Turn_Test turn;
     
     private Node[,] nodeArray;
+    public Node[,]  NodeArray => nodeArray;
     
     private readonly Vector3Int[] directions = new Vector3Int[]
     {
@@ -51,6 +53,7 @@ public class PathFindingManager : MonoBehaviour
     private IEnumerator Start()
     {
         tileManager = TileManager.Instance;
+        turn = Turn_Test.Instance;
         yield return null;
         nodeArray = new Node[51, 51];
 
@@ -76,6 +79,7 @@ public class PathFindingManager : MonoBehaviour
         Vector3Int endPos = RoundToTilePosition(end);
         
         Node startNode = nodeArray[startPos.x, startPos.z];
+        startNode.Tile.isUsingTile = false;
         Node endNode = nodeArray[endPos.x, endPos.z];
 
         startNode.G = 0;
@@ -108,7 +112,9 @@ public class PathFindingManager : MonoBehaviour
 
                 int tentativeG = currentNode.G + CalculateDistanceCost(currentNode, neighbor);
 
-                if (tentativeG < neighbor.G && neighbor.Tile.isWalkable)
+                if (tentativeG < neighbor.G 
+                    && neighbor.Tile.isWalkable
+                    && neighbor.Tile.isUsingTile == false)
                 {
                     neighbor.ParentNode = currentNode;
                     neighbor.G = tentativeG;
@@ -123,7 +129,7 @@ public class PathFindingManager : MonoBehaviour
         return null;
     }
     
-    private Vector3Int RoundToTilePosition(Vector3 position)
+    public Vector3Int RoundToTilePosition(Vector3 position)
     {
         int x = Mathf.RoundToInt(position.x / tileManager.tileSize);
         int z = Mathf.RoundToInt(position.z / tileManager.tileSize);
@@ -161,21 +167,57 @@ public class PathFindingManager : MonoBehaviour
             if (nx < 0 || nz < 0 || nx >= 51 || nz >= 51)
                 continue;
 
-            if (Mathf.Abs(dir.x) == 1 && Mathf.Abs(dir.z) == 1)
+            Node neighbor = nodeArray[nx, nz];
+            if (neighbor == null || !neighbor.Tile.isWalkable)
+                continue;
+
+            bool isDiagonal = Mathf.Abs(dir.x) == 1 && Mathf.Abs(dir.z) == 1;
+
+            if (isDiagonal)
             {
                 Node nodeA = nodeArray[node.Position.x + dir.x, node.Position.z];
                 Node nodeB = nodeArray[node.Position.x, node.Position.z + dir.z];
 
-                if (!nodeA.Tile.isWalkable || !nodeB.Tile.isWalkable)
+                if (nodeA == null || nodeB == null || !nodeA.Tile.isWalkable || !nodeB.Tile.isWalkable)
                     continue;
             }
 
-            neighbors.Add(nodeArray[nx, nz]);
+            if (IsTargetAtPosition(neighbor.Position))
+                continue;
+
+            neighbors.Add(neighbor);
         }
 
         return neighbors;
     }
 
+    private bool IsTargetAtPosition(Vector3Int pos)
+    {
+        if (TurnManager.Instance == null || turn == null)
+            return false;
+
+        switch (TurnManager.Instance.CurrentTurn)
+        {
+            case ActorParent.Player:
+                foreach (Actor_Test enemy in turn.Enemy)
+                {
+                    if (RoundToTilePosition(enemy.transform.position) == pos)
+                        return true;
+                }
+                break;
+
+            case ActorParent.Enemy:
+                foreach (Actor_Test ally in turn.Ally)
+                {
+                    if (RoundToTilePosition(ally.transform.position) == pos)
+                        return true;
+                }
+                break;
+        }
+
+        return false;
+    }
+    
     private int CalculateDistanceCost(Node a, Node b)
     {
         int dx = Mathf.Abs(a.Position.x - b.Position.x);

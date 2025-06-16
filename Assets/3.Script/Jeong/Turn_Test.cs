@@ -13,7 +13,6 @@ public class Turn_Test : MonoBehaviour
 
     public TurnManager turnManager;
     private ActorParent actorParent = ActorParent.None;
-    public ActorParent ActorParent { get; }
 
     private SamplePlayer selectedCharacter;
     private int currentTurn;
@@ -73,7 +72,7 @@ public class Turn_Test : MonoBehaviour
         {
             await AllyTest();
         }
-        else if (actor == ActorParent.Enemy)
+        else if (actor.Equals(ActorParent.Enemy))
         {
             await EnemyTest();
         }
@@ -92,10 +91,9 @@ public class Turn_Test : MonoBehaviour
             foreach (var ally in Ally)
             {
                 if (AllyChecker(ally) || IsAuto == false) continue;
-
+                
                 MoveTcs = new TaskCompletionSource<bool>();
                 gridBehavior.Actor = ally;
-                TurnActor.Add(ally);
                 await MoveTcs.Task;
             }
 
