@@ -49,24 +49,24 @@ public class InGameCameraPD : MonoBehaviour
 
     public void testCameraFocus()
     {
-        if (Input.GetMouseButtonDown(0)) // 마우스 클릭 (모바일은 터치로 변경 가능)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, 100f))
-            {
-                TestPlayerTimeLine timeline = hit.collider.GetComponent<TestPlayerTimeLine>();
-                if (timeline != null)
-                {
-                    Debug.Log("TestPlayerTimeLine 대상 감지됨: " + hit.collider.name);
-
-                    // 카메라를 해당 대상에 따라가게 설정
-                    topViewCamera.LookAt = hit.transform;
-
-                    // Priority 높여서 전환되게 설정
-                    topViewCamera.Priority = 20;
-                }
-            }
-        }
+        // if (Input.GetMouseButtonDown(0)) // 마우스 클릭 (모바일은 터치로 변경 가능)
+        // {
+        //     Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //     if (Physics.Raycast(ray, out RaycastHit hit, 100f))
+        //     {
+        //         // TestPlayerTimeLine timeline = hit.collider.GetComponent<TestPlayerTimeLine>();
+        //         // if (timeline != null)
+        //         // {
+        //         //     Debug.Log("TestPlayerTimeLine 대상 감지됨: " + hit.collider.name);
+        //         //
+        //         //     // 카메라를 해당 대상에 따라가게 설정
+        //         //     topViewCamera.LookAt = hit.transform;
+        //         //
+        //         //     // Priority 높여서 전환되게 설정
+        //         //     topViewCamera.Priority = 20;
+        //         // }
+        //     }
+        // }
     }
     
     public void PlaySkillTimeline(Animator caster, TimelineAsset timelineAsset)

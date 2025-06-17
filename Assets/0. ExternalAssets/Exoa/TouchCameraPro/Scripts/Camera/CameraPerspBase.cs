@@ -1,20 +1,18 @@
-﻿using Exoa.Common;
+﻿using System.Collections.Generic;
+using Exoa.Cameras;
+using Exoa.Common;
 using Exoa.Designer;
-using Exoa.Events;
 using Exoa.Touch;
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Exoa.Cameras
+namespace _0._ExternalAssets.Exoa.TouchCameraPro.Scripts.Camera
 {
     public class CameraPerspBase : CameraBase, ITouchPerspCamera
     {
         [Header("DISTANCE/ZOOM")]
         public Vector2 minMaxDistance = new Vector2(3, 30);
         public float initDistance = 10f;
-        [Range(0f, 1f)]
-        public float zoomSmoothness = 0f;
+        [Range(0f, 1f)] public float zoomSmoothness;
 
         [Header("FOV")]
         public float fov = 55.0f;
@@ -119,6 +117,7 @@ namespace Exoa.Cameras
                 zoomRatio = 1;
                 worldPointFingersCenter = ClampInCameraBoundaries(HeightScreenDepth.Convert(screenCenter), out IsInBoundaries);
             }
+            
             if (IsInputMatching(InputMapFingerPinch.ZoomAndRotate) || IsInputMatching(InputMapFingerPinch.RotateOnly))
             {
                 twistRot = Quaternion.AngleAxis(allowYawRotation ? CameraInputs.twistDegrees : 0, GetRotateAroundVector());
@@ -126,26 +125,15 @@ namespace Exoa.Cameras
 
                 anyInteraction = true;
             }
+            
             if (!isFocusingOrFollowing && IsInputMatching(InputMapFingerDrag.Translate))
             {
                 worldPointFingersDelta = Vector3.ClampMagnitude(HeightScreenDepth.ConvertDelta(CameraInputs.lastScreenPointAnyFingerCountCenter, CameraInputs.screenPointAnyFingerCountCenter, gameObject), maxTranslationSpeed);
                 anyInteraction = true;
             }
+            
             if (!preventGroundRaycast)
             {
-                // RelocateCameraInstant(cam.transform.position); // 카메라 현재로 초기화 //하랑
-                //
-                // // Vector3 currentOffset = cam.transform.position;
-                // Quaternion currentRot = cam.transform.rotation;
-                //
-                // Vector2 currentRotation = new Vector2(
-                //     NormalizeAngle(currentRot.eulerAngles.x),
-                //     currentRot.eulerAngles.y
-                // );
-                //
-                // MoveCameraToInstant(finalPosition, finalDistance, currentRotation);
-                /////////////////////////
-
                 Vector3 vecFingersCenterToCamera = (finalPosition - worldPointFingersCenter);
                 float vecFingersCenterToCameraDistance = vecFingersCenterToCamera.magnitude * zoomRatio;
                 vecFingersCenterToCamera = vecFingersCenterToCamera.normalized * vecFingersCenterToCameraDistance;
@@ -166,7 +154,6 @@ namespace Exoa.Cameras
             
                 finalOffset = newWorldPointCameraCenterClamped;
                 finalDistance = CalculateClampedDistance(finalPosition, newWorldPointCameraCenter, minMaxDistance);
-            
             }
 
             #region MyRegion
@@ -245,10 +232,11 @@ namespace Exoa.Cameras
         {
             return Mathf.Clamp(distance, minMaxDistance.x, minMaxDistance.y);
         }
+
         /// <summary>
         /// Converts a distance to a camera position
         /// </summary>
-        /// <param name="distance"></param>
+        /// <param name="v"></param>
         public void SetPositionByDistance(float v)
         {
             finalDistance = Mathf.Clamp(v, minMaxDistance.x, minMaxDistance.y);
@@ -277,6 +265,7 @@ namespace Exoa.Cameras
         /// <summary>
         /// Setup the camera move animation
         /// </summary>
+        /// <param name="changeOffsetPostion"></param>
         /// <param name="targetOffsetPosition"></param>
         /// <param name="changeDistance"></param>
         /// <param name="targetDistanceOrSize"></param>
