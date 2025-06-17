@@ -897,27 +897,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterID: 0
   PrefabName: Shooter
-  stat:
-    rid: 6798339036936929346
-  Weapon:
-    Name: 
-    Damge: 0
-    Speed: 0
-  references:
-    version: 2
-    RefIds:
-    - rid: 6798339036936929346
-      type: {class: StatData, ns: , asm: Assembly-CSharp}
-      data:
-        level: 0
-        hp: 100
-        attack: 20
-        defense: 5
-        moveRange: 5
-        skills:
-        - {fileID: 11400000, guid: dba2ff2e5545180408e88dda97d3439c, type: 2}
-        - {fileID: 11400000, guid: 187e8dbb48b6ca24aa2813801e71be81, type: 2}
-        - {fileID: 11400000, guid: c9017b8ae934cfa42b771e78def1448a, type: 2}
+  baseStatSO: {fileID: 11400000, guid: c24d3475c95a7cf4d94d5a0866131bde, type: 2}
+  runtimeStat:
+    level: 1
+    hp: 101
+    attack: 101
+    defense: 101
+    moveRange: 6
+    skills:
+    - {fileID: 11400000, guid: bcf42b402ce89dd4e9ce8653ccdcab75, type: 2}
+    weapon: {fileID: -8985103076616876387, guid: 9098ebe93f92a804b808393bab6d1c39,
+      type: 3}
 --- !u!114 &2117041887504147084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -969,7 +959,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 723ec5d78ab34fa488600415a2a97e01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveRange: 5
+  moveRange: 3
   attackRange: 5
 --- !u!1 &1087375589216768300
 GameObject:

@@ -93,17 +93,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterID: 0
   PrefabName: Shooter
-  Stat:
-    Level: 0
-    HP: 0
-    Attack: 0
-    Defense: 0
-    MoveRange: 0
-  Weapon:
-    Name: 
-    Damge: 0
-    Speed: 0
-  Skills: []
+  baseStatSO: {fileID: 11400000, guid: c24d3475c95a7cf4d94d5a0866131bde, type: 2}
+  runtimeStat:
+    level: 0
+    hp: 0
+    attack: 0
+    defense: 0
+    moveRange: 0
+    skills: []
+    weapon: {fileID: 0}
 --- !u!114 &4442200570086932641
 MonoBehaviour:
   m_ObjectHideFlags: 0

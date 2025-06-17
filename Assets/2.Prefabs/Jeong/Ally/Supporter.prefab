@@ -897,25 +897,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterID: 1
   PrefabName: Supporter
-  stat:
-    rid: 6798339036936929347
-  Weapon:
-    Name: 
-    Damge: 0
-    Speed: 0
-  references:
-    version: 2
-    RefIds:
-    - rid: 6798339036936929347
-      type: {class: StatData, ns: , asm: Assembly-CSharp}
-      data:
-        level: 0
-        hp: 100
-        attack: 20
-        defense: 5
-        moveRange: 5
-        skills:
-        - {fileID: 11400000, guid: dba2ff2e5545180408e88dda97d3439c, type: 2}
+  baseStatSO: {fileID: 11400000, guid: 1da04776241776a4abba08b51d3777fa, type: 2}
+  runtimeStat:
+    level: 2
+    hp: 102
+    attack: 102
+    defense: 102
+    moveRange: 7
+    skills:
+    - {fileID: 11400000, guid: 73ddb1daffae0a7419eddf8cbdb0ab5a, type: 2}
+    weapon: {fileID: -5119681726747987232, guid: 463e5a7dbcf268d4986b84a9cddb6554,
+      type: 3}
 --- !u!114 &2117041887504147084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -967,7 +959,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 723ec5d78ab34fa488600415a2a97e01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveRange: 5
+  moveRange: 3
   attackRange: 5
 --- !u!1 &1087375589216768300
 GameObject:

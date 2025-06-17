@@ -123,21 +123,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyID: 101
   PrefabName: Enemy1
-  stat:
-    rid: 1991657863579172870
-  references:
-    version: 2
-    RefIds:
-    - rid: 1991657863579172870
-      type: {class: EnemyStatData, ns: , asm: Assembly-CSharp}
-      data:
-        level: 1
-        hp: 100
-        attack: 5
-        defense: 5
-        moveRange: 5
-        skills:
-        - {fileID: 11400000, guid: dba2ff2e5545180408e88dda97d3439c, type: 2}
+  baseStatSO: {fileID: 11400000, guid: 49ab79f5437eb0741a6b012b36dd5e17, type: 2}
+  runtimeStat:
+    level: 0
+    hp: 0
+    attack: 0
+    defense: 0
+    moveRange: 0
+    skills: []
+    weapon: {fileID: 0}
 --- !u!114 &7352372177640684690
 MonoBehaviour:
   m_ObjectHideFlags: 0
