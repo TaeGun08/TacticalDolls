@@ -59,16 +59,16 @@ public class SkillSelectSystem : MonoBehaviour
         SkillEffectHandlerBase skill = currentTarget.Stat.Skills[index];
         if (skill == null) return;
 
-        SkillRangeSystem.Instance.ClearUsableTiles();
-        SkillRangeSystem.Instance.ClearDamageAbles();
-        SkillRangeSystem.Instance.ShowSkillRange(currentTarget, index);
+        // SkillRangeSystem.Instance.ClearUsableTiles();
+        // SkillRangeSystem.Instance.ClearDamageAbles();
+        //SkillRangeSystem.Instance.ShowSkillRange(currentTarget, ,index);
 
-        TestCombat(index);
+        //TestCombat(index);
     }
 
-    public void TestCombat(int skillIndex)
-    {
-        Debug.Log($"skillIndex: {skillIndex}");
-        CombatSystem.Instance.ExecuteSkill(currentTarget, skillIndex);
-    }
+    // public void TestCombat(int skillIndex)
+    // {
+    //     Debug.Log($"skillIndex: {skillIndex}");
+    //     CombatSystem.Instance.ExecuteSkill(currentTarget, skillIndex);
+    // }
 }

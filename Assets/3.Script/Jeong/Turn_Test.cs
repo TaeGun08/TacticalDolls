@@ -89,7 +89,6 @@ public class Turn_Test : MonoBehaviour
             foreach (var ally in Ally)
             {
                 if (AllyChecker(ally) || IsAuto == false) continue;
-                
                 MoveTcs = new TaskCompletionSource<bool>();
                 SkillTcs = new TaskCompletionSource<bool>();
                 gridBehavior.Actor = ally;

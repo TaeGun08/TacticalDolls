@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class GridBehavior : MonoBehaviour
@@ -32,6 +31,9 @@ public class GridBehavior : MonoBehaviour
     };
 
     private HashSet<Vector2Int> reservedTiles = new HashSet<Vector2Int>();
+    
+    private Tile moveChoiceTile;
+    private Tile skillChoiceTile;
 
     private void Awake()
     {
@@ -72,10 +74,10 @@ public class GridBehavior : MonoBehaviour
             {
                 if (Actor == null) return;
 
-                Tile tile = hit.collider.GetComponent<Tile>();
-                if (tile == null || !tile.isWalkable) return;
+                moveChoiceTile = hit.collider.GetComponent<Tile>();
+                if (moveChoiceTile == null || !moveChoiceTile.isWalkable) return;
 
-                if (!MoveRangeSystem.Instance.IsTileInMoveRange(tile))
+                if (!MoveRangeSystem.Instance.IsTileInMoveRange(moveChoiceTile))
                 {
                     Debug.Log("이동 불가능한 범위입니다.");
                     MoveRangeSystem.Instance.ResetAllHighlights();
@@ -88,7 +90,7 @@ public class GridBehavior : MonoBehaviour
                 turn.TurnActor.Add(Actor);
 
                 List<Node> path =
-                    PathFindingManager.Instance.PathFind(Actor.transform.position, new Vector3Int(tile.x, 0, tile.y));
+                    PathFindingManager.Instance.PathFind(Actor.transform.position, new Vector3Int(moveChoiceTile.x, 0, moveChoiceTile.y));
                 StartCoroutine(MovePlayerAlongPath(path, Vector3.zero));
             }
         }
@@ -98,8 +100,9 @@ public class GridBehavior : MonoBehaviour
     {
         if (IsMove || !IsAutoMove || Actor == null) return;
 
+        SkillRangeSystem.Instance.ResetAllHighlights();
         reservedTiles.Clear();
-        foreach (var actor in turn.Ally.Concat(turn.Enemy))
+        foreach (Actor_Test actor in turn.Ally.Concat(turn.Enemy))
         {
             if (actor != Actor)
             {
@@ -120,7 +123,6 @@ public class GridBehavior : MonoBehaviour
             return;
         }
 
-        // 자기 위치와 같으면 이동 생략
         if (new Vector2Int(finalTargetPos.x, finalTargetPos.z) ==
             new Vector2Int(Mathf.RoundToInt(Actor.transform.position.x), Mathf.RoundToInt(Actor.transform.position.z)))
         {
@@ -134,18 +136,19 @@ public class GridBehavior : MonoBehaviour
         if (path == null)
         {
             if (IsAutoMove)
-            { 
+            {
                 Actor.Excute(0);
                 Actor = null;
             }
+
             return;
         }
+
         StartCoroutine(MovePlayerAlongPath(path, finalTargetPos));
     }
 
     private IEnumerator MovePlayerAlongPath(List<Node> path, Vector3 target)
     {
-        // 현재 타일 비우기
         Tile currentTile = TileManager.Instance.GetClosestTile(Actor.transform.position);
         if (currentTile != null)
         {
@@ -187,14 +190,21 @@ public class GridBehavior : MonoBehaviour
         if (newTile != null)
         {
             newTile.isUsingTile = true;
-            newTile.SetOccupant(Actor.GetComponent<IDamageAble>());
+            newTile.SetOccupant(Actor.DamageAble);
         }
 
-        if (IsAutoMove)
-        { 
+        if (IsAutoMove && AttackRangeChecker(Actor.GetAttackableTilesFromReachable(),
+                PathFindingManager.Instance.RoundToTilePosition(target)))
+        {
             Actor.Excute(0);
         }
-        
+        else
+        {
+            Turn_Test.Instance.SkillTcs.TrySetResult(true);
+        }
+
+        yield return new WaitForSeconds(2f);
+
         Actor = null;
         turn.MoveTcs.TrySetResult(true);
         IsMove = false;

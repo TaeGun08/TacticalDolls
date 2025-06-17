@@ -959,17 +959,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 723ec5d78ab34fa488600415a2a97e01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actorPosition: 2
   moveRange: 6
   attackRange: 5
-  baseStatSO: {fileID: 11400000, guid: 96bc17ed5b8608c4abde132b2bd7edc2, type: 2}
-  runtimeStat:
-    level: 0
-    hp: 0
-    attack: 0
-    defense: 0
-    moveRange: 0
-    skills: []
-    weapon: {fileID: 0}
 --- !u!1 &1087375589216768300
 GameObject:
   m_ObjectHideFlags: 0

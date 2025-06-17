@@ -39,28 +39,20 @@ public class SkillRangeSystem : MonoBehaviour
         return TileManager.Instance.GetClosestTile(target.GameObject.transform.position);
     }
     
-    public void ShowSkillRange(IDamageAble unit, int index)
+    public void ShowSkillRange(IDamageAble attackAble, IDamageAble targetAble, int index)
     {
-        currentTile = GetCurrentTile(unit);
+        currentTile = GetCurrentTile(targetAble);
         selectedSkillIndex = index;
 
         if (currentTile == null) return;
 
         SkillEffectHandlerBase skill = null;
-        skill = unit.Stat.Skills[index];
+        skill = attackAble.Stat.Skills[index];
 
         if (skill == null) return;
 
-        if (isRangeVisible)
-        {
-            ResetAllHighlights();
-            isRangeVisible = false;
-        }
-        else
-        {
-            HighlightAllTilesInRange(currentTile, skill.RangeType, skill.Range);
-            isRangeVisible = true;
-        }
+        ResetAllHighlights();
+        HighlightAllTilesInRange(currentTile, skill.RangeType, skill.Range);
     }
 
 
@@ -111,8 +103,6 @@ public class SkillRangeSystem : MonoBehaviour
         {
             tile.ResetHighlight();
         }
-        
-        isRangeVisible = false;
     }
 
     public void SetDamageAbles()

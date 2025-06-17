@@ -5,11 +5,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
+public enum ActorPosition
+{
+    Shooter,
+    Supporter,
+    Vanguard,
+    Enemy,
+}
+
 public abstract class Actor_Test : MonoBehaviour
 {
     protected GridBehavior gridBehavior;
     protected Turn_Test turn;
     protected CombatSystem combatSystem;
+    public abstract IDamageAble DamageAble { get; }
+    
+    [SerializeField] private ActorPosition actorPosition;
+    public ActorPosition ActorPosition => actorPosition;
     
     [SerializeField] protected int moveRange;
     [SerializeField] protected int attackRange;

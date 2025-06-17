@@ -21,21 +21,23 @@ public class CombatSystem : MonoBehaviour
         };
     }
     
-    public void ExecuteSkill(IDamageAble attacker, int skillIndex)
-    {
-        SkillEffectHandlerBase skill = attacker.Stat.Skills[skillIndex];
+    public void ExecuteSkill(IDamageAble attackAble, IDamageAble targetAble, int skillIndex)
+    { 
+        SkillEffectHandlerBase skill = attackAble.Stat.Skills[skillIndex];
+        SkillRangeSystem.Instance.ClearDamageAbles();
+        SkillRangeSystem.Instance.ClearUsableTiles();
+        SkillRangeSystem.Instance.ShowSkillRange(attackAble, targetAble, skillIndex);
         var targets = SkillRangeSystem.Instance.damageAbles;
         if (!_skillHandlers.TryGetValue(skill.Type, out var handler))
         {
             return;
         }
-
+        
         foreach (var target in targets)
         {
-            handler.Apply(attacker, target, skill);
+            handler.Apply(attackAble, target, skill);
         }
-
-        Debug.Log(skill);
+        
         Turn_Test.Instance.SkillTcs.TrySetResult(true);
     }
 
