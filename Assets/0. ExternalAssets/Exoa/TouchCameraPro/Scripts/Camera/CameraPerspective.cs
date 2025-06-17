@@ -2,6 +2,7 @@
 using Exoa.Events;
 using Exoa.Touch;
 using System.Collections.Generic;
+using _0._ExternalAssets.Exoa.TouchCameraPro.Scripts.Camera;
 using UnityEngine;
 
 namespace Exoa.Cameras

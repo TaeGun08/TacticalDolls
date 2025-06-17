@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Exoa.Cameras;
+using Exoa.Events;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Serialization;
 using UnityEngine.Timeline;
 
 
@@ -23,25 +26,49 @@ public class DynamicTransformTweenChanger : MonoBehaviour
     public PlayableDirector testDirector;
     public TimelineAsset Target;
     public TimelineAsset NewSourceTimelineAsset;
-    public Camera camera;
+    public CameraPerspective touchCamera;
     
     private void Awake()
     {
         Instance = this;
-        camera = Camera.main;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        // if (Input.GetKeyDown(KeyCode.Space))
+        // {
+        //
+        // }
+        
+        if (Input.GetMouseButtonDown(0)) // 마우스 왼쪽 클릭 또는 모바일 터치
         {
-            ChangeTransformTweenLocation(testDirector, null, shotTransform);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                // Debug.Log("Hit Point: " + hit.point);
+
+                // 충돌 지점의 좌표로 Transform 생성 (예시)
+                GameObject marker = new GameObject("HitPointTransform");
+                marker.transform.position = hit.point;
+                marker.transform.rotation = Quaternion.identity;
+
+                // 필요 시 marker.transform으로 다른 연산 가능
                 
-            CopyClipsFromTo(NewSourceTimelineAsset, Target);
+                ChangeTransformTweenLocation(testDirector, null, marker.transform);
                 
-            ChangeBezierTweenLocation(testDirector, testplayer, shotTransform);
+                CopyClipsFromTo(NewSourceTimelineAsset, Target);
+                
+                ChangeBezierTweenLocation(testDirector, testplayer, shotTransform);
             
-            testDirector.Play();
+                testDirector.Play();
+                // Debug.Log(testplayer.position);
+                // CameraEvents.OnRequestObjectFocus?.Invoke(testplayer.gameObject, false);
+                
+                Quaternion targetRotation = Quaternion.Euler(45f, 180f, 0f);
+                touchCamera.MoveCameraTo(targetRotation);
+            }
         }
     }
 

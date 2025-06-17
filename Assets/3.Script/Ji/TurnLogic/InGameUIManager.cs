@@ -9,7 +9,7 @@ public class InGameUIManager : MonoBehaviour
     private TurnManager turnManager;                    //싱글톤 캐싱
     private ActorParent actorParent = ActorParent.None; //턴 가진 주체 캐싱
     
-    private SamplePlayer selectedCharacter;             //선택한 개체
+    public SamplePlayer selectedCharacter;              //선택한 개체
     private int currentTurn;                            //현재 턴
     private int onSelectSkill;                          //스킬을 선택하는 로직 필요
     private int aiSelectSkill;                          //Ai가 자동으로 선택한 스킬
@@ -91,7 +91,7 @@ public class InGameUIManager : MonoBehaviour
     
     private async Task FocusCharacter(SamplePlayer player)
     {
-        selectedCharacter = player;
+        // selectedCharacter = player;
         //await please fix - 카메라 무빙 추가
     }
     
@@ -135,7 +135,7 @@ public class InGameUIManager : MonoBehaviour
     private void Inintialize()
     {
         //this 초기화
-        selectedCharacter = null;
+        // selectedCharacter = null;
         currentTurn = 0;
         onSelectSkill = 0;
         isBlockedPlayerControl = false;
@@ -246,7 +246,7 @@ public class InGameUIManager : MonoBehaviour
         }
         else
         {
-            await selectedCharacter.Excute(onSelectSkill); //스킬 실행 중 대기
+            await selectedCharacter.Excute(onSelectSkill-1); //스킬 실행 중 대기
         }
         
         //스킬 실행 완료
