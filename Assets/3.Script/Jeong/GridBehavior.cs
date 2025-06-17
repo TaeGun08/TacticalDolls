@@ -131,7 +131,15 @@ public class GridBehavior : MonoBehaviour
         List<Node> path = PathFindingManager.Instance.PathFind(Actor.transform.position, finalTargetPos);
         reservedTiles.Add(new Vector2Int(finalTargetPos.x, finalTargetPos.z));
         IsMove = true;
-        if (path == null) return;
+        if (path == null)
+        {
+            if (IsAutoMove)
+            { 
+                Actor.Excute(0);
+                Actor = null;
+            }
+            return;
+        }
         StartCoroutine(MovePlayerAlongPath(path, finalTargetPos));
     }
 
@@ -180,6 +188,11 @@ public class GridBehavior : MonoBehaviour
         {
             newTile.isUsingTile = true;
             newTile.SetOccupant(Actor.GetComponent<IDamageAble>());
+        }
+
+        if (IsAutoMove)
+        { 
+            Actor.Excute(0);
         }
         
         Actor = null;

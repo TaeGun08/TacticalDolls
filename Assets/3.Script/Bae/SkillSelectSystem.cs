@@ -69,6 +69,6 @@ public class SkillSelectSystem : MonoBehaviour
     public void TestCombat(int skillIndex)
     {
         Debug.Log($"skillIndex: {skillIndex}");
-        CombatSystem.Instance.ExecuteSkill(currentTarget, skillIndex, new TaskCompletionSource<bool>());
+        CombatSystem.Instance.ExecuteSkill(currentTarget, skillIndex);
     }
 }

@@ -22,6 +22,7 @@ public class Turn_Test : MonoBehaviour
     private bool isBlockedPlayerControl;
 
     public TaskCompletionSource<bool> MoveTcs;
+    public TaskCompletionSource<bool> SkillTcs;
 
     public List<Actor_Test> Ally;
     public List<Actor_Test> Enemy;
@@ -90,11 +91,10 @@ public class Turn_Test : MonoBehaviour
                 if (AllyChecker(ally) || IsAuto == false) continue;
                 
                 MoveTcs = new TaskCompletionSource<bool>();
+                SkillTcs = new TaskCompletionSource<bool>();
                 gridBehavior.Actor = ally;
                 await MoveTcs.Task;
-                
-                gridBehavior.Actor.Excute(Random.Range(1, 4));
-                await gridBehavior.Actor.SkillTcs.Task;
+                await SkillTcs.Task;
             }
 
             Debug.Log("Ally turn 종료");

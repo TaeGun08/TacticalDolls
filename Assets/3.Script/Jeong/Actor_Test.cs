@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public abstract class Actor_Test : MonoBehaviour, IDamageAble
+public abstract class Actor_Test : MonoBehaviour
 {
     protected GridBehavior gridBehavior;
     protected Turn_Test turn;
@@ -14,13 +15,7 @@ public abstract class Actor_Test : MonoBehaviour, IDamageAble
     [SerializeField] protected int attackRange;
 
     public TaskCompletionSource<bool> SkillTcs;
-    
-    public IStat Stat { get; }
-    
-    public Collider MainCollider { get; }
-    public GameObject GameObject => gameObject;
-    public int Team { get; }
-    
+
     protected virtual void Start()
     {
         gridBehavior = GridBehavior.Instance;
@@ -118,20 +113,8 @@ public abstract class Actor_Test : MonoBehaviour, IDamageAble
 
         return attackable.ToList();
     }
-    
-    public async Task Excute(int selectedSkill)
-    {
-        // //스킬 애니메이션
-        // //애니메이션에 맞춰 스킬 효과 적용 (데미지, 힐,)
-        // SamplePlayer samplePlayer = new SamplePlayer(); //쓰레기값
-        // SkillSample sampleSkill = new SkillSample(); //쓰레기값
-        // sampleSkill.MakeSkillSequence(samplePlayer, samplePlayer);
-        SkillTcs = new TaskCompletionSource<bool>();
-        Debug.Log("뿡");
-        combatSystem.ExecuteSkill(this, selectedSkill, SkillTcs);
-        await SkillTcs.Task;
-        Debug.Log("잉~긔뭐링~");
-    }
+
+    public abstract void Excute(int selectedSkill);
     
     public void TakeDamage(CombatEvent combatEvent)
     {
