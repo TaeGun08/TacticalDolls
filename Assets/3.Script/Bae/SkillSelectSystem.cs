@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -68,6 +69,6 @@ public class SkillSelectSystem : MonoBehaviour
     public void TestCombat(int skillIndex)
     {
         Debug.Log($"skillIndex: {skillIndex}");
-        CombatSystem.Instance.ExecuteSkill(currentTarget, skillIndex);
+        CombatSystem.Instance.ExecuteSkill(currentTarget, skillIndex, new TaskCompletionSource<bool>());
     }
 }

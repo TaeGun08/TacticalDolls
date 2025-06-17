@@ -1,20 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
-public abstract class Actor_Test : MonoBehaviour
+public abstract class Actor_Test : MonoBehaviour, IDamageAble
 {
-    protected GridBehavior_Test gridBehavior;
+    protected GridBehavior gridBehavior;
     protected Turn_Test turn;
+    protected CombatSystem combatSystem;
     
     [SerializeField] protected int moveRange;
     [SerializeField] protected int attackRange;
 
+    public TaskCompletionSource<bool> SkillTcs;
+    
+    public IStat Stat { get; }
+    
+    public Collider MainCollider { get; }
+    public GameObject GameObject => gameObject;
+    public int Team { get; }
+    
     protected virtual void Start()
     {
-        gridBehavior = GridBehavior_Test.Instance;
+        gridBehavior = GridBehavior.Instance;
         turn = Turn_Test.Instance;
+        combatSystem = CombatSystem.Instance;
     }
     
     public List<Vector2Int> GetReachableTiles()
@@ -106,5 +117,31 @@ public abstract class Actor_Test : MonoBehaviour
         }
 
         return attackable.ToList();
+    }
+    
+    public async Task Excute(int selectedSkill)
+    {
+        // //스킬 애니메이션
+        // //애니메이션에 맞춰 스킬 효과 적용 (데미지, 힐,)
+        // SamplePlayer samplePlayer = new SamplePlayer(); //쓰레기값
+        // SkillSample sampleSkill = new SkillSample(); //쓰레기값
+        // sampleSkill.MakeSkillSequence(samplePlayer, samplePlayer);
+        SkillTcs = new TaskCompletionSource<bool>();
+        Debug.Log("뿡");
+        combatSystem.ExecuteSkill(this, selectedSkill, SkillTcs);
+        await SkillTcs.Task;
+        Debug.Log("잉~긔뭐링~");
+    }
+    
+    public void TakeDamage(CombatEvent combatEvent)
+    {
+    }
+
+    public void TakeHeal(HealEvent combatEvent)
+    {
+    }
+
+    public void TakeBuff(BuffEvent combatEvent)
+    {
     }
 }

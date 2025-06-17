@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Firebase.Extensions;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.UI;
 
 public partial class TurnManager : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public partial class TurnManager : MonoBehaviour
 
     public TaskCompletionSource<bool> TurnEndedSource;
     
+    public Button startButton; 
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -26,16 +29,16 @@ public partial class TurnManager : MonoBehaviour
             return;
         }
         Instance = this;
-    }
-
-    private void Start()
-    {
-        //비동기로 게임 초기화를 기다립니다.
-        InGameInitialize().ContinueWithOnMainThread(task =>
+        
+        startButton.onClick.AddListener(() =>
         {
-            if (task.IsFaulted || task.IsCanceled) return;
-            //--초기화 완료 시점--
-            _= RunGameFlow();
+            //비동기로 게임 초기화를 기다립니다.
+            InGameInitialize().ContinueWithOnMainThread(task =>
+            {
+                if (task.IsFaulted || task.IsCanceled) return;
+                //--초기화 완료 시점--
+                _= RunGameFlow();
+            });
         });
     }
     

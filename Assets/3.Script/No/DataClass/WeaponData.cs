@@ -22,9 +22,9 @@ public class WeaponData : MonoBehaviour
             switch (skill.Type)
             {
                 case SkillType.Damage:
-                   
-                    skill.GetExtraDamage(attacker, target, skill);
-                    skill.ApplyAdditionalEffects(attacker, target, skill);
+                    OnDamageEffect(attacker, target, skill);
+                    // skill.GetExtraDamage(attacker, target, skill);
+                    // skill.ApplyAdditionalEffects(attacker, target, skill);
                     
                     break;
             

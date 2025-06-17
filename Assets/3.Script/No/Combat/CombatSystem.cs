@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class CombatSystem : MonoBehaviour
@@ -20,7 +21,7 @@ public class CombatSystem : MonoBehaviour
         };
     }
     
-    public void ExecuteSkill(IDamageAble attacker, int skillIndex)
+    public void ExecuteSkill(IDamageAble attacker, int skillIndex, TaskCompletionSource<bool>  skillTcs)
     {
         SkillEffectHandlerBase skill = attacker.Stat.Skills[skillIndex];
         var targets = SkillRangeSystem.Instance.damageAbles;
@@ -34,6 +35,8 @@ public class CombatSystem : MonoBehaviour
         {
             handler.Apply(attacker, target, skill);
         }
+        
+        skillTcs.TrySetResult(true);
     }
 
     // public void ExecuteSkill(IDamageAble attacker, int skillIndex)

@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class Turn_Test : MonoBehaviour
 {
     public static Turn_Test Instance;
 
-    private GridBehavior_Test gridBehavior;
+    private GridBehavior gridBehavior;
 
     public TurnManager turnManager;
     private ActorParent actorParent = ActorParent.None;
@@ -29,18 +30,14 @@ public class Turn_Test : MonoBehaviour
 
     public bool IsAuto;
 
-    public Button startButton;
-
     private void Awake()
     {
         Instance = this;
-
-        startButton.onClick.AddListener(() => { turnManager.gameObject.SetActive(true); });
     }
 
     private void Start()
     {
-        gridBehavior = GridBehavior_Test.Instance;
+        gridBehavior = GridBehavior.Instance;
 
         turnManager.ActorChanged += OnTurnChangedWrapper;
         turnManager.GameStateChanged += OnGameStateChanged;
@@ -95,6 +92,9 @@ public class Turn_Test : MonoBehaviour
                 MoveTcs = new TaskCompletionSource<bool>();
                 gridBehavior.Actor = ally;
                 await MoveTcs.Task;
+                
+                gridBehavior.Actor.Excute(Random.Range(1, 4));
+                await gridBehavior.Actor.SkillTcs.Task;
             }
 
             Debug.Log("Ally turn 종료");
@@ -110,6 +110,7 @@ public class Turn_Test : MonoBehaviour
                 await Task.Delay(10);
             }
 
+            //await gridBehavior.Actor.Excute();
             MoveTcs.TrySetResult(true);
             await Task.Delay(1000);
 

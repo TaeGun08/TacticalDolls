@@ -1761,7 +1761,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 182001976}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99999267
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1814,7 +1814,6 @@ GameObject:
   m_Component:
   - component: {fileID: 854237648}
   - component: {fileID: 854237647}
-  - component: {fileID: 854237649}
   m_Layer: 0
   m_Name: GridBehavior
   m_TagString: Untagged
@@ -1829,16 +1828,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 854237646}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 99c65f5cf550af04f90f7700d95a7da4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileManager: {fileID: 0}
-  currentPlayer: {fileID: 0}
-  unitLayer:
+  Actor: {fileID: 0}
+  characterLayer:
     serializedVersion: 2
     m_Bits: 256
+  Actors: []
 --- !u!4 &854237648
 Transform:
   m_ObjectHideFlags: 0
@@ -1854,23 +1853,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &854237649
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 854237646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6758ed010e71769478ca7414ab47bfab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Actor: {fileID: 0}
-  characterLayer:
-    serializedVersion: 2
-    m_Bits: 320
-  Actors: []
 --- !u!1 &911071565
 GameObject:
   m_ObjectHideFlags: 0
@@ -2525,7 +2507,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00004645787}
+  m_AnchoredPosition: {x: 0, y: 0.000030034222}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1192701331
@@ -4114,7 +4096,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1821377794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4127,6 +4109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3b27043e308ebd4fa14ccf5f677ddcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startButton: {fileID: 1456335610}
 --- !u!4 &1821377795
 Transform:
   m_ObjectHideFlags: 0
@@ -4249,7 +4232,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0

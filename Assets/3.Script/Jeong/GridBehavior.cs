@@ -1,107 +1,80 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public class GridBehavior : MonoBehaviour
 {
-    public class Node
-    {
-        public Vector3Int Position { get; set; }
-        public int G { get; set; }
-        public int H { get; set; }
-        public int F => G + H;
+    public static GridBehavior Instance;
 
-        public Node ParentNode { get; set; }
+    private TileManager tileManager;
+    private Turn_Test turn;
 
-        public Tile Tile { get; set; }
-        
-        public Node(Tile tile)
-        {
-            Position = new Vector3Int(tile.x, 0, tile.y);
-            Tile = tile;
-            G = int.MaxValue;
-        }
-    }
+    private Camera mainCam;
 
-    [SerializeField] private TileManager tileManager;
-    
-    private Vector3Int startPos;
-    private Vector3Int endPos;
-    
-    [SerializeField] private Transform currentPlayer;
-    [SerializeField] private LayerMask unitLayer;
+    public Actor_Test Actor;
+    [SerializeField] private LayerMask characterLayer;
 
-    private Animator playerAnimater;
-
-    //private Node[,,] nodeArray;
-    private Node[,] nodeArray;
-
-    //[SerializeField] private int depth = 5;
-
-    // private readonly Vector3Int[] directions = new Vector3Int[]
-    // {
-    //     new Vector3Int(1,0,0), new Vector3Int(-1,0,0),
-    //     new Vector3Int(0,1,0), new Vector3Int(0,-1,0),
-    //     new Vector3Int(0,0,1), new Vector3Int(0,0,-1),
-    //
-    //     new Vector3Int(1,1,0), new Vector3Int(1,-1,0), new Vector3Int(-1,1,0), new Vector3Int(-1,-1,0),
-    //     new Vector3Int(1,0,1), new Vector3Int(1,0,-1), new Vector3Int(-1,0,1), new Vector3Int(-1,0,-1),
-    //     new Vector3Int(0,1,1), new Vector3Int(0,1,-1), new Vector3Int(0,-1,1), new Vector3Int(0,-1,-1),
-    //
-    //     new Vector3Int(1,1,1), new Vector3Int(1,1,-1), new Vector3Int(1,-1,1), new Vector3Int(1,-1,-1),
-    //     new Vector3Int(-1,1,1), new Vector3Int(-1,1,-1), new Vector3Int(-1,-1,1), new Vector3Int(-1,-1,-1),
-    // };
-
-    private bool isMove;
-
+    public bool IsMove { get; set; }
+    public bool IsAutoMove { get; set; }
+    public List<Actor_Test> Actors;
     private float turnCalmVelocity;
-    
+
     private readonly Vector3Int[] directions = new Vector3Int[]
     {
-        new Vector3Int(1, 0, 0), 
-        new Vector3Int(-1, 0, 0),
-        new Vector3Int(0, 0, 1), 
-        new Vector3Int(0, 0, -1),
-
-        new Vector3Int(1, 0, 1),
-        new Vector3Int(1, 0, -1),
-        new Vector3Int(-1, 0, 1),
-        new Vector3Int(-1, 0, -1),
+        new Vector3Int(1, 0, 0), new Vector3Int(-1, 0, 0),
+        new Vector3Int(0, 0, 1), new Vector3Int(0, 0, -1),
+        new Vector3Int(1, 0, 1), new Vector3Int(1, 0, -1),
+        new Vector3Int(-1, 0, 1), new Vector3Int(-1, 0, -1),
     };
 
-    private IEnumerator Start()
-    {
-        yield return null;
-        nodeArray = new Node[51, 51];
+    private HashSet<Vector2Int> reservedTiles = new HashSet<Vector2Int>();
 
-        for (int x = 0; x < 51; x++)
-        {
-            for (int z = 0; z < 51; z++)
-            {
-                nodeArray[x, z] = new Node(tileManager.tiles[x, z]);
-            }
-        }
+    private void Awake()
+    {
+        Instance = this;
+    }
+
+    private void Start()
+    {
+        tileManager = TileManager.Instance;
+        turn = Turn_Test.Instance;
+        mainCam = Camera.main;
     }
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && isMove == false)
+        AllyInputMove();
+        AutoMove();
+    }
+
+    private void AllyInputMove()
+    {
+        if (Input.GetMouseButtonDown(0) && !IsMove)
         {
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hitCharacter, 100f, unitLayer))
+            if (Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out RaycastHit hitCharacter, 100f,
+                    characterLayer))
             {
-                currentPlayer = hitCharacter.transform;
+                Actor = hitCharacter.transform.GetComponent<Actor_Test>();
+                foreach (var actor in turn.TurnActor)
+                {
+                    if (actor.Equals(Actor))
+                    {
+                        Actor = null;
+                        return;
+                    }
+                }
             }
-            else if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out var hit))
+            else if (Physics.Raycast(mainCam.ScreenPointToRay(Input.mousePosition), out var hit))
             {
-                if (currentPlayer == null) return;
-                
-                Tile tile =  hit.collider.GetComponent<Tile>();
-                
-                if (tile == null) return;
-                if (tile.isWalkable == false) return;
-                
+                if (Actor == null) return;
+
+                Tile tile = hit.collider.GetComponent<Tile>();
+                if (tile == null || !tile.isWalkable) return;
+
                 if (!MoveRangeSystem.Instance.IsTileInMoveRange(tile))
                 {
                     Debug.Log("이동 불가능한 범위입니다.");
@@ -109,111 +82,71 @@ public class GridBehavior : MonoBehaviour
                     MoveRangeSystem.Instance.ResetMovableTiles();
                     return;
                 }
-                
-                // 이동 전 플레이어 타일 데이터 초기화
-                var  currentPlayerTilePos = TileManager.Instance.GetClosestTile(currentPlayer.position);
-                currentPlayerTilePos.isUsingTile = false;
-                currentPlayerTilePos.ClearOccupant();
-                
-                isMove = true;
+
+                IsMove = true;
                 MoveRangeSystem.Instance.ResetAllHighlights();
+                turn.TurnActor.Add(Actor);
 
-                playerAnimater = currentPlayer.GetComponent<Animator>();
-
-                if (playerAnimater != null)
-                {
-                    playerAnimater.SetBool("isRunning", true);
-                }
-                
-                PathFind(RoundToTilePosition(currentPlayer.position), new Vector3Int(tile.x, 0, tile.y));
+                List<Node> path =
+                    PathFindingManager.Instance.PathFind(Actor.transform.position, new Vector3Int(tile.x, 0, tile.y));
+                StartCoroutine(MovePlayerAlongPath(path, Vector3.zero));
             }
         }
     }
-    
-    private Vector3Int RoundToTilePosition(Vector3 position)
-    {
-        int x = Mathf.RoundToInt(position.x / tileManager.tileSize);
-        int z = Mathf.RoundToInt(position.z / tileManager.tileSize);
-        return new Vector3Int(x, 0, z);
-    }
 
-    public void PathFind(Vector3Int start, Vector3Int end)
+    private void AutoMove()
     {
-        foreach (var node in nodeArray)
+        if (IsMove || !IsAutoMove || Actor == null) return;
+
+        reservedTiles.Clear();
+        foreach (var actor in turn.Ally.Concat(turn.Enemy))
         {
-            node.G = int.MaxValue;
-            node.H = 0;
-            node.ParentNode = null;
+            if (actor != Actor)
+            {
+                var tilePos = new Vector2Int(
+                    Mathf.RoundToInt(actor.transform.position.x),
+                    Mathf.RoundToInt(actor.transform.position.z)
+                );
+                reservedTiles.Add(tilePos);
+            }
         }
 
-        Node startNode = nodeArray[start.x, start.z];
-        Node endNode = nodeArray[end.x, end.z];
+        Vector3Int targetPos = FindNearestTargetPos();
+        Vector3Int finalTargetPos = FindAvailableAdjacentTile(targetPos);
 
-        startNode.G = 0;
-        startNode.H = CalculateDistanceCost(startNode, endNode);
-
-        List<Node> openList = new List<Node> { startNode };
-        HashSet<Node> closedList = new HashSet<Node>();
-
-        while (openList.Count > 0)
+        if (finalTargetPos == Vector3Int.zero)
         {
-            Node currentNode = openList[0];
-            for (int i = 1; i < openList.Count; i++)
-            {
-                var node = openList[i];
-                if (node.F < currentNode.F || (node.F == currentNode.F && node.H < currentNode.H))
-                    currentNode = node;
-            }
-
-            if (currentNode == endNode)
-            {
-                RetracePath(startNode, endNode);
-                return;
-            }
-
-            openList.Remove(currentNode);
-            closedList.Add(currentNode);
-
-            foreach (Node neighbor in GetNeighbours(currentNode))
-            {
-                if (closedList.Contains(neighbor)) continue;
-
-                int tentativeG = currentNode.G + CalculateDistanceCost(currentNode, neighbor);
-
-                if (tentativeG < neighbor.G && neighbor.Tile.isWalkable)
-                {
-                    neighbor.ParentNode = currentNode;
-                    neighbor.G = tentativeG;
-                    neighbor.H = CalculateDistanceCost(neighbor, endNode);
-
-                    if (!openList.Contains(neighbor))
-                        openList.Add(neighbor);
-                }
-            }
+            Debug.Log("이동 가능한 위치가 없음");
+            return;
         }
+
+        // 자기 위치와 같으면 이동 생략
+        if (new Vector2Int(finalTargetPos.x, finalTargetPos.z) ==
+            new Vector2Int(Mathf.RoundToInt(Actor.transform.position.x), Mathf.RoundToInt(Actor.transform.position.z)))
+        {
+            IsMove = false;
+            return;
+        }
+
+        List<Node> path = PathFindingManager.Instance.PathFind(Actor.transform.position, finalTargetPos);
+        reservedTiles.Add(new Vector2Int(finalTargetPos.x, finalTargetPos.z));
+        IsMove = true;
+        if (path == null) return;
+        StartCoroutine(MovePlayerAlongPath(path, finalTargetPos));
     }
 
-    private void RetracePath(Node startNode, Node endNode)
+    private IEnumerator MovePlayerAlongPath(List<Node> path, Vector3 target)
     {
-        List<Node> path = new List<Node>();
-        Node current = endNode;
-
-        while (current != null && current != startNode)
+        // 현재 타일 비우기
+        Tile currentTile = TileManager.Instance.GetClosestTile(Actor.transform.position);
+        if (currentTile != null)
         {
-            path.Add(current);
-            current = current.ParentNode;
+            currentTile.isUsingTile = false;
+            currentTile.SetOccupant(null);
         }
-        
-        if(current == startNode)
-            path.Add(startNode);
 
-        path.Reverse();
+        List<Vector2Int> actorPos = Actor.GetReachableTiles();
 
-        StartCoroutine(MovePlayerAlongPath(path));
-    }
-    
-    private IEnumerator MovePlayerAlongPath(List<Node> path)
-    {
         foreach (Node node in path)
         {
             Vector3 targetPos = new Vector3(
@@ -222,71 +155,104 @@ public class GridBehavior : MonoBehaviour
                 node.Position.z * tileManager.tileSize
             );
 
-            while (Vector3.Distance(currentPlayer.position, targetPos) > 0.05f)
+            if (IsAutoMove)
             {
-                currentPlayer.position = Vector3.MoveTowards(currentPlayer.position, targetPos, 10f * Time.deltaTime);
-                
-                var temp = new Vector2(targetPos.x - currentPlayer.position.x, targetPos.z - currentPlayer.position.z);
-                UpdateRotation(currentPlayer, temp, 0.1f);
+                if (AttackRangeChecker(Actor.GetAttackableTilesFromReachable(),
+                        PathFindingManager.Instance.RoundToTilePosition(target))) break;
+                if (!MoveRangeChecker(actorPos, targetPos)) break;
+            }
+
+            while (Vector3.Distance(Actor.transform.position, targetPos) > 0.05f)
+            {
+                Actor.transform.position =
+                    Vector3.MoveTowards(Actor.transform.position, targetPos, 10f * Time.deltaTime);
+
+                var temp = new Vector2(targetPos.x - Actor.transform.position.x,
+                    targetPos.z - Actor.transform.position.z);
+                UpdateRotation(Actor.transform, temp, 0.1f);
                 yield return null;
             }
         }
-        
-        if (playerAnimater != null)
+
+        yield return null;
+        Tile newTile = TileManager.Instance.GetClosestTile(Actor.transform.position);
+        if (newTile != null)
         {
-            playerAnimater.SetBool("isRunning", false);
+            newTile.isUsingTile = true;
+            newTile.SetOccupant(Actor.GetComponent<IDamageAble>());
         }
         
-        isMove = false;
+        Actor = null;
+        turn.MoveTcs.TrySetResult(true);
+        IsMove = false;
         MoveRangeSystem.Instance.ResetMovableTiles();
-        
-        // 이동 후 플레이어 타일 데이터 셋팅
-        var  currentPlayerTilePos = TileManager.Instance.GetClosestTile(currentPlayer.position);
-        currentPlayerTilePos.isUsingTile = true;
-        currentPlayerTilePos.SetOccupant(currentPlayer.GetComponent<IDamageAble>());
     }
-    
+
+    private bool MoveRangeChecker(List<Vector2Int> actorPos, Vector3 targetPos)
+    {
+        return actorPos.Contains(new Vector2Int((int)targetPos.x, (int)targetPos.z));
+    }
+
+    private bool AttackRangeChecker(List<Vector2Int> attackRange, Vector3 targetPos)
+    {
+        return attackRange.Contains(new Vector2Int((int)targetPos.x, (int)targetPos.z));
+    }
+
+    private Vector3Int FindAvailableAdjacentTile(Vector3Int targetPos)
+    {
+        List<Vector3Int> candidates = new List<Vector3Int>();
+
+        foreach (var dir in directions.OrderBy(_ => Random.value))
+        {
+            Vector3Int candidate = targetPos + dir;
+
+            if (candidate.x < 0 || candidate.z < 0 || candidate.x >= 51 || candidate.z >= 51)
+                continue;
+
+            Tile tile = tileManager.GetTileAt(candidate.x, candidate.z);
+            if (tile == null || !tile.isWalkable) continue;
+
+            Vector2Int tilePos = new Vector2Int(candidate.x, candidate.z);
+            if (reservedTiles.Contains(tilePos) || tile.isUsingTile) continue;
+
+            candidates.Add(candidate);
+        }
+
+        if (candidates.Count == 0)
+            return Vector3Int.zero;
+
+        return candidates.OrderBy(pos =>
+            Vector3.Distance(Actor.transform.position, new Vector3(pos.x, 0, pos.z))).First();
+    }
+
+    private Vector3Int FindNearestTargetPos()
+    {
+        Vector3Int nearest = Vector3Int.zero;
+        float minDist = float.MaxValue;
+
+        foreach (var target in Actors)
+        {
+            if (target == Actor) continue;
+            float dist = Vector3.Distance(Actor.transform.position, target.transform.position);
+
+            if (dist < minDist)
+            {
+                minDist = dist;
+                nearest = new Vector3Int(
+                    Mathf.RoundToInt(target.transform.position.x),
+                    0,
+                    Mathf.RoundToInt(target.transform.position.z)
+                );
+            }
+        }
+
+        return nearest;
+    }
+
     private void UpdateRotation(Transform player, Vector2 inputAxis, float smoothTime)
     {
         float targetAngle = Mathf.Atan2(inputAxis.x, inputAxis.y) * Mathf.Rad2Deg;
-        float angle =
-            Mathf.SmoothDampAngle(player.eulerAngles.y, targetAngle, ref turnCalmVelocity, smoothTime);
+        float angle = Mathf.SmoothDampAngle(player.eulerAngles.y, targetAngle, ref turnCalmVelocity, smoothTime);
         player.rotation = Quaternion.Euler(0f, angle, 0f);
-    }
-    
-    private List<Node> GetNeighbours(Node node)
-    {
-        List<Node> neighbors = new List<Node>();
-
-        foreach (var dir in directions)
-        {
-            int nx = node.Position.x + dir.x;
-            int nz = node.Position.z + dir.z;
-            
-            if (nx < 0 || nz < 0 || nx >= 51 || nz >= 51)
-                continue;
-            
-            if (Mathf.Abs(dir.x) == 1 && Mathf.Abs(dir.z) == 1)
-            {
-                Node nodeA = nodeArray[node.Position.x + dir.x, node.Position.z];
-                Node nodeB = nodeArray[node.Position.x, node.Position.z + dir.z];
-
-                if (!nodeA.Tile.isWalkable || !nodeB.Tile.isWalkable)
-                    continue;
-            }
-
-            neighbors.Add(nodeArray[nx, nz]);
-        }
-
-        return neighbors;
-    }
-
-    private int CalculateDistanceCost(Node a, Node b)
-    {
-        int dx = Mathf.Abs(a.Position.x - b.Position.x);
-        int dz = Mathf.Abs(a.Position.z - b.Position.z);
-
-        int max = Mathf.Max(dx, dz);
-        return 10 * max;
     }
 }
