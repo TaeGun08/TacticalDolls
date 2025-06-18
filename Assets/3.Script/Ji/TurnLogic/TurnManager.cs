@@ -10,13 +10,23 @@ public partial class TurnManager : MonoBehaviour
 {
     public static TurnManager Instance { get; private set; }
 
+    // 턴 조작권 -> player/ enemy
     public event EventHandler<ActorParent> ActorChanged;
+    
+    // 턴 진행 상황
+    
     public event EventHandler<GameStateEventArgs> GameStateChanged;
 
+    // 초기 턴 상태 waitting 으로 시작
     public GameState State { get; private set; } = GameState.Waiting;
-    public ActorParent CurrentTurn { get; private set; } = ActorParent.None;
+    
+    // 초기 턴 시작 none
+    public ActorParent CurrentTurn { get; private set; }
+    
+    // 턴 수량
     public int TurnCount { get; private set; } = 0;
 
+    // 턴 종료 여부 -> callback
     public TaskCompletionSource<bool> TurnEndedSource;
     
     public Button startButton; 
@@ -30,19 +40,20 @@ public partial class TurnManager : MonoBehaviour
         }
         Instance = this;
         
-        startButton.onClick.AddListener(() =>
-        {
-            //비동기로 게임 초기화를 기다립니다.
-            InGameInitialize().ContinueWithOnMainThread(task =>
-            {
-                if (task.IsFaulted || task.IsCanceled) return;
-                //--초기화 완료 시점--
-                _= RunGameFlow();
-            });
-        });
+        // startButton.onClick.AddListener(() =>
+        // {
+        //     //비동기로 게임 초기화를 기다립니다.
+        //     InGameInitialize().ContinueWithOnMainThread(task =>
+        //     {
+        //         if (task.IsFaulted || task.IsCanceled) return;
+        //         
+        //         //--초기화 완료 시점--
+        //         _= RunGameFlow();
+        //     });
+        // });
     }
     
-    private async Task RunGameFlow()
+    public async Task RunGameFlow()
     {
         await Task.Delay(1000);
     
@@ -80,6 +91,26 @@ public partial class TurnManager : MonoBehaviour
         TurnStart(CurrentTurn);
     }
 
+    private void StartGame()
+    {
+        Debug.Log("게임 시작");
+        State = GameState.Playing;
+        GameStateChanged?.Invoke(this, new GameStateEventArgs(State));
+    }
+    
+    private void TurnStart(ActorParent actor)
+    {
+        CurrentTurn = actor;
+        ActorChanged?.Invoke(this, CurrentTurn);
+    }
+    
+    private void EndGame(ActorParent winner)
+    {
+        Debug.Log($"게임 종료. 승자: {winner}");
+        State = GameState.Ended;
+        GameStateChanged?.Invoke(this, new GameStateEventArgs(State));
+    }
+
     private bool CheckWinCondition() //승자가 나올 겨우 true, 아니라면 false 반환
     {
         return false; //please fix
@@ -111,26 +142,6 @@ public partial class TurnManager : MonoBehaviour
         
         winner = ActorParent.None;
         return false;
-    }
-
-    private void StartGame()
-    {
-        Debug.Log("게임 시작");
-        State = GameState.Playing;
-        GameStateChanged?.Invoke(this, new GameStateEventArgs(State));
-    }
-    
-    private void TurnStart(ActorParent actor)
-    {
-        CurrentTurn = actor;
-        ActorChanged?.Invoke(this, CurrentTurn);
-    }
-    
-    private void EndGame(ActorParent winner)
-    {
-        Debug.Log($"게임 종료. 승자: {winner}");
-        State = GameState.Ended;
-        GameStateChanged?.Invoke(this, new GameStateEventArgs(State));
     }
 }
 

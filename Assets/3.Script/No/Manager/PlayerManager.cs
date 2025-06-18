@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance;
-
+    
     public PlayerDataSample player;
     public List<int> usingCharacter;
     public List<CharacterData> usingCharacterData;
@@ -103,8 +103,23 @@ public class PlayerManager : MonoBehaviour
     public void StartGame()
     {
         TileManager.Instance.combatScript.SetActive(true);
-        MoveRangeSystem.Instance.ResetAllHighlights();
+        RangeSystem.Instance.ResetAllTiles();
         SelectedCharacterPanel.SetActive(false);
+
+        // add player unit 
+        // foreach (var character in usingCharacterData)
+        // {
+        //     Tile spawnPointCheck = TileManager.Instance.GetClosestTile(character.transform.position);
+        //     
+        //     Debug.Log($"{spawnPointCheck.isUsingTile}");
+        //     
+        //     if (spawnPointCheck.isUsingTile)
+        //     {
+        //         GameManager.Instance.PlayerUnits.Add(character);
+        //     }
+        // }
+
+        GameManager.Instance.UnitInitializeStarSetting();
     }
     
     public void ResetCachedCharacterData()

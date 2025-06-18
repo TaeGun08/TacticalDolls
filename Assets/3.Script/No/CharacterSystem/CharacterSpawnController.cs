@@ -115,6 +115,7 @@ public class CharacterSpawnController : MonoBehaviour
         applyTileObj.SetOccupant(spawnedData);
 
         Debug.Log("캐릭터 배치 완료");
+        GameManager.Instance.PlayerUnits.Add(spawnedData);
     }
     
     private void ActiveCancelBtn(GameObject character)
@@ -134,6 +135,7 @@ public class CharacterSpawnController : MonoBehaviour
         int charID = revertCharacter.GetComponent<CharacterData>().CharacterID;
 
         PlayerManager.Instance.usingCharacter.Remove(charID);
+        GameManager.Instance.PlayerUnits.Remove(revertCharacter.GetComponent<CharacterData>());
         
         if (characterTileMap.TryGetValue(charID, out Tile tile))
         {

@@ -71,13 +71,12 @@ public class TileManager : MonoBehaviour
     {
         Instance = this;
     }
-
+    
     private void Start()
     {
         LoadMap();
         
-        SkillRangeSystem.Instance.SetAllTiles();
-        MoveRangeSystem.Instance.SetAllTiles();
+        RangeSystem.Instance.SetAllTiles();
         
         combatScript.SetActive(false);
     }
@@ -135,7 +134,9 @@ public class TileManager : MonoBehaviour
                         var spawnEnemey = Instantiate(enemyData.GameObject,tileComp.transform.position + Vector3.up, Quaternion.identity);
                         Tile applyTileObj = GetClosestTile(spawnEnemey.transform.position);
                         applyTileObj.SetOccupant(spawnEnemey.GetComponent<IDamageAble>());
-                        // Instantiate(enemyData.GameObject,tileComp.transform.position + Vector3.up, Quaternion.identity);
+                         
+                        // add enemy unit 
+                        GameManager.Instance.EnemyUnits.Add(enemyData);
                     }
                 }
             }
@@ -241,6 +242,11 @@ public class TileManager : MonoBehaviour
         return tiles[x, y];
     }
     
+    public Tile GetCurrentTileByIDamageAble(IDamageAble damageAble)
+    {
+        return GetClosestTile(damageAble.GameObject.transform.position);
+    }
+    
     public void SetSelectedTile(Tile tile)
     {
         defaultMaterial = tile.GetComponent<Renderer>().material;
@@ -252,6 +258,27 @@ public class TileManager : MonoBehaviour
         selectedTile.SetOutline(true);
 
         previousSelectedTile = selectedTile;
+    }
+    
+    public List<Vector2Int> GetReachableTiles(Vector2Int origin, int range)
+    {
+        List<Vector2Int> reachable = new List<Vector2Int>();
+        for (int dx = -range; dx <= range; dx++)
+        {
+            for (int dy = -range; dy <= range; dy++)
+            {
+                int dist = Mathf.Abs(dx) + Mathf.Abs(dy);
+                if (dist <= range)
+                {
+                    int x = origin.x + dx;
+                    int y = origin.y + dy;
+                    if (x >= 0 && y >= 0)
+                        reachable.Add(new Vector2Int(x, y));
+                }
+            }
+        }
+
+        return reachable;
     }
 }
 

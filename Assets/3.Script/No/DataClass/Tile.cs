@@ -35,15 +35,13 @@ public class Tile : MonoBehaviour
     
     private void OnMouseDown()
     {
-        Debug.Log($"Clicked tile at ({x}, {y})");
-        Debug.Log($"Clicked tile at ({isUsingTile})");
-
-        
+        // Debug.Log($"Clicked tile at ({x}, {y})");
+        // Debug.Log($"Clicked tile at ({isUsingTile})");
         if (tileType == 1)
         {
             TileManager.Instance.SetSelectedTile(this);
         }
-
+        
         // 중앙 관리자로 클릭 알림 보내기
         // SkillRangeTester.Instance.OnTileClicked(this);
     }

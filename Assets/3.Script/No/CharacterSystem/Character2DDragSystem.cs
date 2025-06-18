@@ -73,8 +73,9 @@ public class Character2DDragSystem : MonoBehaviour, IBeginDragHandler, IDragHand
             
             // 이벤트 구독
             OnCharacterSpawned?.Invoke(spawned);
-
+            
             Debug.Log("캐릭터 배치 완료");
+            GameManager.Instance.PlayerUnits.Add(spawnedData);
         }
     }
 }

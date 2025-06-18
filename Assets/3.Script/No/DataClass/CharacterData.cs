@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class CharacterData : MonoBehaviour, IDamageAble
+public class CharacterData : MonoBehaviour, IDamageAble 
 {
     public int CharacterID;
     public string PrefabName;
 
     [SerializeField] private StatDataSO baseStatSO;
     [SerializeField] private StatData runtimeStat;
-    
+    private IDamageAble damageAbleImplementation;
+
     public IStat Stat => runtimeStat;
 
     public Collider MainCollider { get; }
     public GameObject GameObject => gameObject;
     public int Team => 0;
-
+    
     private void Awake()
     {
-            runtimeStat = new StatData(baseStatSO);
+        runtimeStat = new StatData(baseStatSO);
     }
 
     public void TakeDamage(CombatEvent combatEvent)

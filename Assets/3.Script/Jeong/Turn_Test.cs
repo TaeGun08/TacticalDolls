@@ -9,7 +9,7 @@ using Random = UnityEngine.Random;
 public class Turn_Test : MonoBehaviour
 {
     public static Turn_Test Instance;
-
+    
     private GridBehavior gridBehavior;
 
     public TurnManager turnManager;
@@ -20,14 +20,16 @@ public class Turn_Test : MonoBehaviour
     private int onSelectSkill;
     private int aiSelectSkill;
     private bool isBlockedPlayerControl;
-
+    
+    // 행동 확인
     public TaskCompletionSource<bool> MoveTcs;
+    
     public TaskCompletionSource<bool> SkillTcs;
 
-    public List<Actor_Test> Ally;
-    public List<Actor_Test> Enemy;
-
-    public List<Actor_Test> TurnActor;
+    // public List<Actor_Test> Ally;
+    // public List<Actor_Test> Enemy;
+    
+    public List<CharacterData> TurnActor;
 
     public bool IsAuto;
 
@@ -64,83 +66,84 @@ public class Turn_Test : MonoBehaviour
         currentTurn = turnManager.TurnCount + 1;
         actorParent = actor;
         Debug.Log($"{actor.ToString()}의 {currentTurn}턴이 시작되었습니다.");
-        TurnActor = new List<Actor_Test>();
-
+        
+        
         if (actor.Equals(ActorParent.Player))
         {
-            await AllyTest();
+            GameManager.Instance.InitCharacterTurnSetting(GameManager.Instance.PlayerUnits[0]);
+            
+            TurnActor = GameManager.Instance.PlayerUnits;
+            
+            // 모든 캐릭터 행동 종료 체크
+            //await OnCheckEndCharacterActor();
         }
         else if (actor.Equals(ActorParent.Enemy))
         {
+            Debug.Log("확인");
             await EnemyTest();
         }
 
         turnManager.TurnEndedSource.TrySetResult(true);
     }
 
-    private async Task AllyTest()
+    private async Task OnCheckEndCharacterActor()
     {
         if (IsAuto)
         {
-            gridBehavior.IsAutoMove = true;
-
-            gridBehavior.Actors = Enemy;
-
-            foreach (var ally in Ally)
-            {
-                if (AllyChecker(ally) || IsAuto == false) continue;
-                MoveTcs = new TaskCompletionSource<bool>();
-                SkillTcs = new TaskCompletionSource<bool>();
-                gridBehavior.Actor = ally;
-                await MoveTcs.Task;
-                await SkillTcs.Task;
-            }
-
-            Debug.Log("Ally turn 종료");
-            
-            gridBehavior.IsAutoMove = false;
+            // gridBehavior.IsAutoMove = true;
+            //
+            // gridBehavior.Actors = Enemy;
+            //
+            // foreach (var ally in Ally)
+            // {
+            //     if (AllyChecker(ally) || IsAuto == false) continue;
+            //     MoveTcs = new TaskCompletionSource<bool>();
+            //     SkillTcs = new TaskCompletionSource<bool>();
+            //     gridBehavior.Actor = ally;
+            //     await MoveTcs.Task;
+            //     await SkillTcs.Task;
+            // }
+            //
+            // Debug.Log("Ally turn 종료");
+            //
+            // gridBehavior.IsAutoMove = false;
         }
         else
         {
-            MoveTcs = new TaskCompletionSource<bool>();
-
-            while (TurnActor.Count < Ally.Count || IsAuto)
-            {
-                await Task.Delay(10);
-            }
-
-            //await gridBehavior.Actor.Excute();
-            MoveTcs.TrySetResult(true);
-            await Task.Delay(1000);
-
-            await MoveTcs.Task;
+            // MoveTcs = new TaskCompletionSource<bool>();
+            //
+            // while (TurnActor.Count > 0)
+            // {
+            //     await Task.Delay(10);
+            // }
+            //
+            // MoveTcs.TrySetResult(true);
+            // await Task.Delay(1000);
+            // await MoveTcs.Task;
+            //
+            // Debug.Log("플레이어 행동 종료");
         }
     }
 
     private async Task EnemyTest()
     {
-        gridBehavior.IsAutoMove = true;
-
-        gridBehavior.Actors = Ally;
-
-        foreach (var enemy in Enemy)
-        {
-            MoveTcs = new TaskCompletionSource<bool>();
-            gridBehavior.Actor = enemy;
-            await MoveTcs.Task;
-        }
-
-        gridBehavior.IsAutoMove = false;
-    }
-
-    private bool AllyChecker(Actor_Test actor)
-    {
-        foreach (var turnActor in TurnActor)
-        {
-            if (turnActor.Equals(actor)) return true;
-        }
-
-        return false;
+        // foreach (var player in GameManager.Instance.PlayerUnits)
+        // {
+        //     gridBehavior.Actors.Add(player);
+        // }
+        //
+        // gridBehavior.IsAutoMove = true;
+        //
+        // foreach (var enemy in GameManager.Instance.EnemyUnits)
+        // {
+        //     MoveTcs = new TaskCompletionSource<bool>();
+        //     gridBehavior.Actor = enemy;
+        //     await MoveTcs.Task;
+        // }
+        //
+        // gridBehavior.IsAutoMove = false;
+        MoveTcs = new TaskCompletionSource<bool>();
+        await MoveTcs.Task;
     }
 
     #endregion

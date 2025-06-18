@@ -796,7 +796,6 @@ GameObject:
   - component: {fileID: 8705938668380462047}
   - component: {fileID: 2117041887504147084}
   - component: {fileID: 4234192337372336795}
-  - component: {fileID: -4923782803460717467}
   m_Layer: 8
   m_Name: Shooter
   m_TagString: Untagged
@@ -947,29 +946,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
---- !u!114 &-4923782803460717467
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1054886437853045308}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 723ec5d78ab34fa488600415a2a97e01, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveRange: 6
-  attackRange: 5
-  baseStatSO: {fileID: 11400000, guid: c24d3475c95a7cf4d94d5a0866131bde, type: 2}
-  runtimeStat:
-    level: 0
-    hp: 0
-    attack: 0
-    defense: 0
-    moveRange: 0
-    skills: []
-    weapon: {fileID: 0}
 --- !u!1 &1087375589216768300
 GameObject:
   m_ObjectHideFlags: 0

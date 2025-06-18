@@ -11,4 +11,7 @@ public interface IStat
     int MoveRange { get; set; }
     List<SkillEffectHandlerBase> Skills { get; set; }
     WeaponData Weapon { get; set; }
+    
+    bool IsDead { get; set;  }
+    bool IsCompleteAction { get; set; }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,12 +8,24 @@ using UnityEngine.UI;
 
 public class SkillSelectSystem : MonoBehaviour
 {
+    public static SkillSelectSystem Instance;
+    
     public GameObject panel;
     public Button[] skillButtons = new Button[4];
     public TMP_Text[] skillNameTexts = new TMP_Text[4];
 
-    private IDamageAble currentTarget;
+    public Button cancelButton;
+    public Button selectButton;
     
+    public bool IsSelectingSkill { get; set; }
+
+    private IDamageAble currentTarget;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Start()
     {
         for (int i = 0; i < skillButtons.Length; i++)
@@ -20,6 +33,39 @@ public class SkillSelectSystem : MonoBehaviour
             int index = i;
             skillButtons[i].onClick.AddListener(() => OnSkillButtonClicked(index));
         }
+        
+        cancelButton.onClick.AddListener(() =>
+        {
+            IsSelectingSkill = false;
+            
+            GameManager.Instance.EndTurnBtn.gameObject.SetActive(true);
+            cancelButton.gameObject.SetActive(false);
+            selectButton.gameObject.SetActive(false);
+            
+            GameManager.Instance.CurrentEnemy = null;
+            
+            RangeSystem.Instance.ResetAllTiles();
+            RangeSystem.Instance.ShowMoveRange(
+                TileManager.Instance.GetCurrentTileByIDamageAble(currentTarget), 
+                currentTarget.Stat.MoveRange);
+        });
+        
+        selectButton.onClick.AddListener(() =>
+        {
+            IsSelectingSkill = false;
+            
+            GameManager.Instance.OnCharacterEndTurn();
+            
+            cancelButton.gameObject.SetActive(false);
+            selectButton.gameObject.SetActive(false);
+            
+            GameManager.Instance.CurrentEnemy = null;
+            
+            GameManager.Instance.MoveChoiceTile = null;
+            
+            // 스킬 사용 처리
+            
+        });
     }
 
     public void Open(IDamageAble targetData)
@@ -58,6 +104,24 @@ public class SkillSelectSystem : MonoBehaviour
 
         SkillEffectHandlerBase skill = currentTarget.Stat.Skills[index];
         if (skill == null) return;
+
+        GameManager.Instance.EndTurnBtn.gameObject.SetActive(false);
+        cancelButton.gameObject.SetActive(true);
+        selectButton.gameObject.SetActive(true);
+
+        if (GameManager.Instance.CurrentEnemy == null)
+        {
+            selectButton.interactable = false;
+        }
+        
+        IsSelectingSkill = true;
+        
+        Tile tempTile = GameManager.Instance.MoveChoiceTile == null
+            ? TileManager.Instance.GetCurrentTileByIDamageAble(currentTarget)
+            : GameManager.Instance.MoveChoiceTile;
+        
+        RangeSystem.Instance.ResetAllTiles();
+        RangeSystem.Instance.ShowAttackRange(tempTile, currentTarget.Stat.MoveRange);  // TODO MoveRange -> AttackRange로 수정 필요
 
         // SkillRangeSystem.Instance.ClearUsableTiles();
         // SkillRangeSystem.Instance.ClearDamageAbles();

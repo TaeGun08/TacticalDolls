@@ -24,10 +24,9 @@ public class CombatSystem : MonoBehaviour
     public void ExecuteSkill(IDamageAble attackAble, IDamageAble targetAble, int skillIndex)
     { 
         SkillEffectHandlerBase skill = attackAble.Stat.Skills[skillIndex];
-        SkillRangeSystem.Instance.ClearDamageAbles();
-        SkillRangeSystem.Instance.ClearUsableTiles();
-        SkillRangeSystem.Instance.ShowSkillRange(attackAble, targetAble, skillIndex);
-        var targets = SkillRangeSystem.Instance.damageAbles;
+        RangeSystem.Instance.ResetAllTiles();
+        RangeSystem.Instance.ShowSkillRange(attackAble, targetAble, skillIndex);
+        var targets = RangeSystem.Instance.damageAbles;
         if (!_skillHandlers.TryGetValue(skill.Type, out var handler))
         {
             return;

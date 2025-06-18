@@ -204,17 +204,17 @@ public class PathFindingManager : MonoBehaviour
         switch (TurnManager.Instance.CurrentTurn)
         {
             case ActorParent.Player:
-                foreach (Actor_Test enemy in turn.Enemy)
+                foreach (EnemyData enemy in GameManager.Instance.EnemyUnits)
                 {
                     if (RoundToTilePosition(enemy.transform.position) == pos)
                         return true;
                 }
                 break;
-
+        
             case ActorParent.Enemy:
-                foreach (Actor_Test ally in turn.Ally)
+                foreach (CharacterData character in GameManager.Instance.PlayerUnits)
                 {
-                    if (RoundToTilePosition(ally.transform.position) == pos)
+                    if (RoundToTilePosition(character.transform.position) == pos)
                         return true;
                 }
                 break;
