@@ -67,6 +67,7 @@ public partial class TurnManager : MonoBehaviour
         
             if (CheckWinCondition())
             {
+                // 게임 종료 조건 체크
                 break;
             }
             

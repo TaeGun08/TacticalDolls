@@ -59,6 +59,8 @@ public class Turn_Test : MonoBehaviour
     private void OnTurnChangedWrapper(object sender, ActorParent actor)
     {
         _ = OnTurnChanged(sender, actor);
+     
+        //MoveTcs.TrySetResult(true);
     }
 
     private async Task OnTurnChanged(object sender, ActorParent actor)
@@ -126,6 +128,9 @@ public class Turn_Test : MonoBehaviour
 
     private async Task EnemyTest()
     {
+        MoveTcs = new TaskCompletionSource<bool>();
+        await MoveTcs.Task;
+        
         foreach (var player in GameManager.Instance.PlayerUnits)
         {
             gridBehavior.Actors.Add(player);
