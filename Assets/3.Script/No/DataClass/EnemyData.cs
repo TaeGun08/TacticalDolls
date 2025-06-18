@@ -25,22 +25,21 @@ public class EnemyData : MonoBehaviour, IDamageAble
     public void TakeDamage(CombatEvent combatEvent)
     {
         Debug.Log($"{PrefabName} Enemy Take damage :: {EnemyID}");
-        
         Stat.HP -= combatEvent.Damage;
         
-        combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
+        //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
     }
 
     public void TakeHeal(HealEvent combatEvent)
     {
         Debug.Log($"{PrefabName} Enemy Take Heal :: {EnemyID}");
-        combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
+        //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
     }
     
     public void TakeBuff(BuffEvent combatEvent)
     {
         Debug.Log($"{PrefabName} Enemy Take Buff :: {EnemyID}");
-        combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
+        //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
     }
 }
 

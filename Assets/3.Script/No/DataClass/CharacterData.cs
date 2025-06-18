@@ -26,21 +26,20 @@ public class CharacterData : MonoBehaviour, IDamageAble
     public void TakeDamage(CombatEvent combatEvent)
     {
         Debug.Log($"{PrefabName} Character Take damage :: {CharacterID}");
-
         Stat.HP -= combatEvent.Damage;
-        combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
+        //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
     }
 
     public void TakeHeal(HealEvent combatEvent)
     {
         Debug.Log($"{PrefabName} Character Take Heal :: {CharacterID}");
-        combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
+        //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
     }
 
     public void TakeBuff(BuffEvent combatEvent)
     {
         Debug.Log($"{PrefabName} Character Take Buff :: {CharacterID}");
-        combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
+        //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
     }
 
     // 임시 스텟 계산 및 적용

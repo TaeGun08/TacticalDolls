@@ -26,12 +26,14 @@ public class SkillSelectSystem : MonoBehaviour
         Instance = this;
     }
 
+    public int currentSkill;
+
     private void Start()
     {
         for (int i = 0; i < skillButtons.Length; i++)
         {
-            int index = i;
-            skillButtons[i].onClick.AddListener(() => OnSkillButtonClicked(index));
+            currentSkill = i;
+            skillButtons[i].onClick.AddListener(() => OnSkillButtonClicked(currentSkill));
         }
         
         cancelButton.onClick.AddListener(() =>
@@ -54,17 +56,19 @@ public class SkillSelectSystem : MonoBehaviour
         {
             IsSelectingSkill = false;
             
-            GameManager.Instance.OnCharacterEndTurn();
+            Debug.Log($"target :: {currentTarget}, selectskill :: {currentSkill}");
+            // TODO 스킬 사용 처리
+            CombatSystem.Instance.ExecuteSkill(currentTarget, currentSkill);
             
+            
+            // 스킬 사용후 초기화 되어야 할 내용
             cancelButton.gameObject.SetActive(false);
             selectButton.gameObject.SetActive(false);
             
             GameManager.Instance.CurrentEnemy = null;
-            
             GameManager.Instance.MoveChoiceTile = null;
             
-            // 스킬 사용 처리
-            
+            //GameManager.Instance.OnCharacterEndTurn();
         });
     }
 
@@ -98,11 +102,11 @@ public class SkillSelectSystem : MonoBehaviour
         currentTarget = null;
     }
 
-    private void OnSkillButtonClicked(int index)
+    private void OnSkillButtonClicked(int skillIndex)
     {
-        if (index >= currentTarget.Stat.Skills.Count) return;
+        if (skillIndex >= currentTarget.Stat.Skills.Count) return;
 
-        SkillEffectHandlerBase skill = currentTarget.Stat.Skills[index];
+        SkillEffectHandlerBase skill = currentTarget.Stat.Skills[skillIndex];
         if (skill == null) return;
 
         GameManager.Instance.EndTurnBtn.gameObject.SetActive(false);
@@ -123,6 +127,7 @@ public class SkillSelectSystem : MonoBehaviour
         RangeSystem.Instance.ResetAllTiles();
         RangeSystem.Instance.ShowAttackRange(tempTile, currentTarget.Stat.MoveRange);  // TODO MoveRange -> AttackRange로 수정 필요
 
+        currentSkill = skillIndex;
         // SkillRangeSystem.Instance.ClearUsableTiles();
         // SkillRangeSystem.Instance.ClearDamageAbles();
         //SkillRangeSystem.Instance.ShowSkillRange(currentTarget, ,index);

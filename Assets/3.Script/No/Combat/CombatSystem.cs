@@ -7,108 +7,106 @@ public class CombatSystem : MonoBehaviour
 {
     public static CombatSystem Instance;
     
-    private Dictionary<SkillType, SkillEffectHandlerBase> _skillHandlers;
+    //private Dictionary<SkillType, SkillEffectHandlerBase> _skillHandlers;
 
     private void Awake()
     {
         Instance = this;
-
-        _skillHandlers = new Dictionary<SkillType, SkillEffectHandlerBase>
-        {
-            { SkillType.Damage, new DamageSkillHandler() },
-            { SkillType.Heal, new HealSkillHandler() },
-            { SkillType.Buff, new BuffSkillHandler() }
-        };
+    
+        // _skillHandlers = new Dictionary<SkillType, SkillEffectHandlerBase>
+        // {
+        //     { SkillType.Damage, new DamageSkillHandler() },
+        //     { SkillType.Heal, new HealSkillHandler() },
+        //     { SkillType.Buff, new BuffSkillHandler() }
+        // };
     }
     
-    public void ExecuteSkill(IDamageAble attackAble, IDamageAble targetAble, int skillIndex)
-    { 
-        SkillEffectHandlerBase skill = attackAble.Stat.Skills[skillIndex];
-        RangeSystem.Instance.ResetAllTiles();
-        RangeSystem.Instance.ShowSkillRange(attackAble, targetAble, skillIndex);
-        var targets = RangeSystem.Instance.damageAbles;
-        if (!_skillHandlers.TryGetValue(skill.Type, out var handler))
-        {
-            return;
-        }
+    // public void ExecuteSkill(IDamageAble attackAble, IDamageAble targetAble, int skillIndex)
+    // { 
+    //     SkillEffectHandlerBase skill = attackAble.Stat.Skills[skillIndex];
+    //     RangeSystem.Instance.ResetAllTiles();
+    //     RangeSystem.Instance.ShowSkillRange(attackAble, targetAble, skillIndex);
+    //     var targets = RangeSystem.Instance.damageAbles;
+    //     if (!_skillHandlers.TryGetValue(skill.Type, out var handler))
+    //     {
+    //         return;
+    //     }
+    //     
+    //     foreach (var target in targets)
+    //     {
+    //         handler.Apply(attackAble, target, skill);
+    //     }
+    //     
+    //     Turn_Test.Instance.SkillTcs.TrySetResult(true);
+    // }
+
+    public void ExecuteSkill(IDamageAble attacker, int skillIndex)
+    {
+        SkillEffectHandlerBase skill = attacker.Stat.Skills[skillIndex];
+        List<IDamageAble> targetList = RangeSystem.Instance.damageAbles;
         
-        foreach (var target in targets)
+        Debug.Log($"targetList:: {targetList.Count}");
+
+        foreach (IDamageAble target in targetList)
         {
-            handler.Apply(attackAble, target, skill);
+            Debug.Log($"ExecuteSkill target :: {target}, skill.Type :: {skill.Type}");
+            
+            switch (skill.Type)
+            {
+                case SkillType.Damage:
+                    ApplyDamage(attacker, target, attacker.Stat.Attack);
+                    break;
+    
+                case SkillType.Heal:
+                    ApplyHeal(attacker, target, attacker.Stat.Attack);
+                    break;
+                
+                case SkillType.Buff:
+                    ApplyBuff(attacker, target, attacker.Stat.Attack);
+    
+                    break;
+                
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
-        
-        Turn_Test.Instance.SkillTcs.TrySetResult(true);
     }
 
-    // public void ExecuteSkill(IDamageAble attacker, int skillIndex)
-    // {
-    //     SkillSO skill = attacker.Stat.Skills[skillIndex];
-    //     List<IDamageAble> targetList = SkillRangeSystem.Instance.damageAbles;
-    //
-    //     foreach (IDamageAble target in targetList)
-    //     {
-    //         switch (skill.Type)
-    //         {
-    //             case SkillType.Damage:
-    //                 if (IsSameTeam(attacker, target))
-    //                 {
-    //                     Debug.Log("같은 팀으로 피격을 넘어갑니다.");
-    //                     break;
-    //                 }
-    //                 
-    //                 ApplyDamage(attacker, target, attacker.Stat.Attack);
-    //                 break;
-    //
-    //             case SkillType.Heal:
-    //                 ApplyHeal(attacker, target, attacker.Stat.Attack);
-    //                 break;
-    //             
-    //             case SkillType.Buff:
-    //                 ApplyBuff(attacker, target, attacker.Stat.Attack);
-    //
-    //                 break;
-    //             
-    //             default:
-    //                 throw new ArgumentOutOfRangeException();
-    //         }
-    //     }
-    // }
-
-    // private void ApplyDamage(IDamageAble attacker, IDamageAble target, int amount)
-    // {
-    //     var combatEvent = new CombatEvent
-    //     {
-    //         Sender = attacker,
-    //         Target = target,
-    //         Damage = amount
-    //     };
-    //     
-    //     target.TakeDamage(combatEvent);
-    // }
-    //
-    // private void ApplyHeal(IDamageAble healer, IDamageAble target, int amount)
-    // {
-    //     var healEvent = new HealEvent
-    //     {
-    //         Sender = healer,
-    //         Target = target,
-    //         Heal = amount,
-    //         Position = target.GameObject.transform.position
-    //     };
-    //     
-    //     target.TakeHeal(healEvent);
-    // }
-    //
-    // private void ApplyBuff(IDamageAble healer, IDamageAble target, int amount)
-    // {
-    //     var buffEvent = new BuffEvent
-    //     {
-    //         Sender = healer,
-    //         Target = target,
-    //         Buff = amount,
-    //         Position = target.GameObject.transform.position
-    //     };
-    //     
-    //     target.TakeBuff(buffEvent);
-    // }
+    private void ApplyDamage(IDamageAble attacker, IDamageAble target, int amount)
+    {
+        var combatEvent = new CombatEvent
+        {
+            Sender = attacker,
+            Target = target,
+            Damage = amount
+        };
+        
+        target.TakeDamage(combatEvent);
+    }
+    
+    private void ApplyHeal(IDamageAble healer, IDamageAble target, int amount)
+    {
+        var healEvent = new HealEvent
+        {
+            Sender = healer,
+            Target = target,
+            Heal = amount,
+            Position = target.GameObject.transform.position
+        };
+        
+        target.TakeHeal(healEvent);
+    }
+    
+    private void ApplyBuff(IDamageAble healer, IDamageAble target, int amount)
+    {
+        var buffEvent = new BuffEvent
+        {
+            Sender = healer,
+            Target = target,
+            Buff = amount,
+            Position = target.GameObject.transform.position
+        };
+        
+        target.TakeBuff(buffEvent);
+    }
 }
