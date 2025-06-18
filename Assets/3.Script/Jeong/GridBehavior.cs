@@ -94,13 +94,15 @@ public class GridBehavior : MonoBehaviour
             return;
         }
         
+        Debug.Log(Actor.GameObject.transform.position);
+        
+        Debug.Log(finalTargetPos);
         List<Node> path = PathFindingManager.Instance.PathFind(Actor.GameObject.transform.position, finalTargetPos);
         reservedTiles.Add(new Vector2Int(finalTargetPos.x, finalTargetPos.z));
-        
-        StartCoroutine(MovePlayerAlongPath(path, finalTargetPos));
+        _= MovePlayerAlongPath(path, finalTargetPos);
     }
-
-    private IEnumerator MovePlayerAlongPath(List<Node> path, Vector3 target)
+    
+    public async Task MovePlayerAlongPath(List<Node> path, Vector3 target)
     {
         IsMove = true;
         Tile currentTile = TileManager.Instance.GetClosestTile(Actor.GameObject.transform.position);
@@ -139,12 +141,10 @@ public class GridBehavior : MonoBehaviour
                 var temp = new Vector2(targetPos.x - Actor.GameObject.transform.position.x,
                     targetPos.z - Actor.GameObject.transform.position.z);
                 UpdateRotation(Actor.GameObject.transform, temp, 0.1f);
-                yield return null;
+                await Task.Delay(10);
             }
         }
         
-        
-        yield return null;
         Tile newTile = TileManager.Instance.GetClosestTile(Actor.GameObject.transform.position);
         if (newTile != null)
         {

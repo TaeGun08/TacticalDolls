@@ -79,7 +79,6 @@ public class Turn_Test : MonoBehaviour
         }
         else if (actor.Equals(ActorParent.Enemy))
         {
-            Debug.Log("확인");
             await EnemyTest();
         }
 
@@ -127,23 +126,24 @@ public class Turn_Test : MonoBehaviour
 
     private async Task EnemyTest()
     {
-        // foreach (var player in GameManager.Instance.PlayerUnits)
-        // {
-        //     gridBehavior.Actors.Add(player);
-        // }
-        //
-        // gridBehavior.IsAutoMove = true;
-        //
-        // foreach (var enemy in GameManager.Instance.EnemyUnits)
-        // {
-        //     MoveTcs = new TaskCompletionSource<bool>();
-        //     gridBehavior.Actor = enemy;
-        //     await MoveTcs.Task;
-        // }
-        //
-        // gridBehavior.IsAutoMove = false;
-        MoveTcs = new TaskCompletionSource<bool>();
-        await MoveTcs.Task;
+        foreach (var player in GameManager.Instance.PlayerUnits)
+        {
+            gridBehavior.Actors.Add(player);
+        }
+        
+        gridBehavior.IsAutoMove = true;
+        
+        foreach (var enemy in GameManager.Instance.EnemyUnits)
+        {
+            MoveTcs = new TaskCompletionSource<bool>();
+            gridBehavior.Actor = enemy;
+            await MoveTcs.Task;
+        }
+        
+        gridBehavior.IsAutoMove = false;
+        
+        // MoveTcs = new TaskCompletionSource<bool>();
+        // await MoveTcs.Task;
     }
 
     #endregion
