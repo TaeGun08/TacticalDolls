@@ -120,7 +120,7 @@ public class TurnManager : MonoBehaviour
         // 추가할 것 - 양쪽에 //&& 맵 승리조건이 있고, 그게 달성되었으면 && mapWinLogic?.Invoke ?
         
         //playerAllDead
-        if (GameManager.Instance.PlayerUnits.All(unit => unit.Stat.HP < 0)) 
+        if (GameManager.Instance.PlayerUnits.All(unit => unit.Stat.HP <= 0)) 
         {
             winner = ActorParent.Enemy;
             EndGame(winner);
@@ -132,7 +132,7 @@ public class TurnManager : MonoBehaviour
         }
         
         //enemyAllDead
-        if (GameManager.Instance.EnemyUnits.All(unit => unit.Stat.HP < 0)) 
+        if (GameManager.Instance.EnemyUnits.All(unit => unit.Stat.HP <= 0)) 
         {
             winner = ActorParent.Player;
             EndGame(winner);

@@ -150,6 +150,8 @@ public class GridBehavior : MonoBehaviour
             newTile.isUsingTile = true;
             newTile.SetOccupant(Actor);
         }
+
+        Actor.Stat.IsCompleteAction = true;
         
         Actor = null;
         turn.MoveTcs.TrySetResult(true);

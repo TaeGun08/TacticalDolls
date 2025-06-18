@@ -124,7 +124,7 @@ public class GameManager : MonoBehaviour
     }
 
     // 캐릭터 전체 행동 체크 후 턴 전환
-    private void CheckCharacterAction()
+    private async Task CheckCharacterAction()
     {
         bool checkCharacterAction = true;
 
@@ -137,14 +137,7 @@ public class GameManager : MonoBehaviour
         if (checkCharacterAction)
         {
             TurnManager.Instance.TurnEndedSource.TrySetResult(true);
-            StartCoroutine(TestTimerCoroutine());
         }
-    }
-
-    private IEnumerator TestTimerCoroutine()
-    {
-        yield return new WaitForSeconds(0.5f);
-        Turn_Test.Instance.MoveTcs.TrySetResult(true);
     }
 
     // 캐릭터 행동 종료 -> 다음 캐릭터 전환
