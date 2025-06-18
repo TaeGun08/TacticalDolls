@@ -722,6 +722,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3b27043e308ebd4fa14ccf5f677ddcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startButton: {fileID: 0}
 --- !u!4 &326072167
 Transform:
   m_ObjectHideFlags: 0
@@ -1264,8 +1265,8 @@ GameObject:
   - component: {fileID: 703426791}
   - component: {fileID: 703426790}
   - component: {fileID: 703426789}
-  - component: {fileID: 703426795}
   - component: {fileID: 703426796}
+  - component: {fileID: 703426797}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -1376,7 +1377,7 @@ Transform:
   m_GameObject: {fileID: 703426788}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -8.38}
+  m_LocalPosition: {x: 6.66, y: 1, z: -8.38}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1384,81 +1385,6 @@ Transform:
   - {fileID: 921865083}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!320 &703426795
-PlayableDirector:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 703426788}
-  m_Enabled: 0
-  serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: f215478e5ff87784192b189b20c16f8f, type: 2}
-  m_InitialState: 0
-  m_WrapMode: 2
-  m_DirectorUpdateMode: 1
-  m_InitialTime: 0
-  m_SceneBindings:
-  - key: {fileID: -6948001750282935565, guid: f215478e5ff87784192b189b20c16f8f, type: 2}
-    value: {fileID: 703426793}
-  - key: {fileID: 8753507412916525239, guid: f215478e5ff87784192b189b20c16f8f, type: 2}
-    value: {fileID: 0}
-  - key: {fileID: 8237926170005112681, guid: f215478e5ff87784192b189b20c16f8f, type: 2}
-    value: {fileID: 0}
-  - key: {fileID: 1829347643383295640, guid: f215478e5ff87784192b189b20c16f8f, type: 2}
-    value: {fileID: 0}
-  - key: {fileID: 0}
-    value: {fileID: 703426789}
-  - key: {fileID: 340211204817272066, guid: f215478e5ff87784192b189b20c16f8f, type: 2}
-    value: {fileID: 921865083}
-  - key: {fileID: 3128665705579802407, guid: f215478e5ff87784192b189b20c16f8f, type: 2}
-    value: {fileID: 921865082}
-  - key: {fileID: 1663687879733273236, guid: f215478e5ff87784192b189b20c16f8f, type: 2}
-    value: {fileID: 0}
-  - key: {fileID: -502232686528543081, guid: f215478e5ff87784192b189b20c16f8f, type: 2}
-    value: {fileID: 0}
-  - key: {fileID: 0}
-    value: {fileID: 0}
-  - key: {fileID: 0}
-    value: {fileID: 0}
-  - key: {fileID: 0}
-    value: {fileID: 0}
-  - key: {fileID: 0}
-    value: {fileID: 0}
-  - key: {fileID: 0}
-    value: {fileID: 703426789}
-  - key: {fileID: 0}
-    value: {fileID: 703426789}
-  - key: {fileID: 4762924682176658394, guid: f215478e5ff87784192b189b20c16f8f, type: 2}
-    value: {fileID: 0}
-  - key: {fileID: 3662922157081052708, guid: f215478e5ff87784192b189b20c16f8f, type: 2}
-    value: {fileID: 0}
-  m_ExposedReferences:
-    m_References:
-    - c06700f8124f3794cb248939219133d1: {fileID: 1917725558}
-    - a945d5875ab73454fa80dcf7e27386fa: {fileID: 196270483}
-    - 0a10c0a843bf5f446b33fe63c46afe1b: {fileID: 703426793}
-    - 4392e7e5c5c422146a5d870f8498feaa: {fileID: 703426793}
-    - fff75f337f769e14db3afd7c731e2d94: {fileID: 196270483}
-    - e60d494af788d694d83609f1de34be75: {fileID: 703426793}
-    - 49526be2cfde7034a97fba0ce44d0ddd: {fileID: 703426793}
-    - 94679870ee7962b4483643512c146a6e: {fileID: 0}
-    - 3979404e31c1b8e4697a79f8f01d8b52: {fileID: 703426793}
-    - 82424f4893750c34daf3b2289ac02f80: {fileID: 196270483}
-    - 26323e5d060407d4c9fa5c3e5d787485: {fileID: 1112873881}
-    - baf58dcdfc5fc814f9a86391e144784c: {fileID: 703426793}
-    - a79336e496b6c2f4e81651cd7a2b5ec5: {fileID: 0}
-    - 79ee2a24f68a3354a897ae0700a92be0: {fileID: 196270483}
-    - 0b21df528ced79d43864da993a4b1833: {fileID: 196270483}
-    - 7708a2123e7e9214e910ebc7cb591672: {fileID: 0}
-    - 07d08dece70b8f145be7cb01b50d9527: {fileID: 196270483}
-    - 565a9440f2baf3f44b761273aa068dcc: {fileID: 0}
-    - 901dce98d27ecbc4bbab71715aee338b: {fileID: 703426793}
-    - 3bd5c978f84d92d43af9a5092f2f22dc: {fileID: 0}
-    - c01d05f78101f8c469f377c2771141b6: {fileID: 0}
-    - 52ceee085c787f8449b56027c9e56ae8: {fileID: 703426793}
-    - b92442688a635594bba48ccdf17a7a85: {fileID: 0}
-    - 9448372ea57c17b4883f47cb997fcfa3: {fileID: 703426793}
 --- !u!114 &703426796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1476,6 +1402,32 @@ MonoBehaviour:
   animator: {fileID: 0}
   SkillSamples: []
   testTargets: []
+--- !u!114 &703426797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 703426788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9962c534960090e4fbfd1d105be98100, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CharacterID: 0
+  PrefabName: 
+  baseStatSO: {fileID: 11400000, guid: 49ab79f5437eb0741a6b012b36dd5e17, type: 2}
+  runtimeStat:
+    level: 0
+    hp: 0
+    attack: 0
+    defense: 0
+    moveRange: 0
+    skills: []
+    weapon: {fileID: 0}
+    isDead: 0
+    isCompleteAction: 0
+  HasSkills: []
 --- !u!1 &728550572
 GameObject:
   m_ObjectHideFlags: 0
@@ -7531,7 +7483,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4339ad936d65aed4d9721999e78b18f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedCharacter: {fileID: 1508686647}
+  selectedCharacter: {fileID: 1508686648}
+  testTarget: {fileID: 703426788}
 --- !u!4 &1226934495
 Transform:
   m_ObjectHideFlags: 0
@@ -7591,7 +7544,7 @@ PlayableDirector:
   m_GameObject: {fileID: 1239450346}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 293c2360688b1ed49a4428e6b0e74996, type: 2}
+  m_PlayableAsset: {fileID: 11400000, guid: 545f5405911138d4eb740664205b5b36, type: 2}
   m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
@@ -7651,6 +7604,26 @@ PlayableDirector:
     value: {fileID: 1397905978}
   - key: {fileID: -766238214650819475, guid: 293c2360688b1ed49a4428e6b0e74996, type: 2}
     value: {fileID: 1508686646}
+  - key: {fileID: 3796423341760689613, guid: 545f5405911138d4eb740664205b5b36, type: 2}
+    value: {fileID: 1261172539}
+  - key: {fileID: 2008726965138717826, guid: 545f5405911138d4eb740664205b5b36, type: 2}
+    value: {fileID: 1397905978}
+  - key: {fileID: -766238214650819475, guid: 545f5405911138d4eb740664205b5b36, type: 2}
+    value: {fileID: 1261172537}
+  - key: {fileID: -5348832365746549252, guid: 545f5405911138d4eb740664205b5b36, type: 2}
+    value: {fileID: 332061869}
+  - key: {fileID: 7927645286234705580, guid: 545f5405911138d4eb740664205b5b36, type: 2}
+    value: {fileID: 1480207774}
+  - key: {fileID: -2867864328214399615, guid: 545f5405911138d4eb740664205b5b36, type: 2}
+    value: {fileID: 753680588}
+  - key: {fileID: -9177986427698505729, guid: 545f5405911138d4eb740664205b5b36, type: 2}
+    value: {fileID: 663451518}
+  - key: {fileID: -6856186000616978848, guid: 545f5405911138d4eb740664205b5b36, type: 2}
+    value: {fileID: 950595392}
+  - key: {fileID: -6658613886868492317, guid: 545f5405911138d4eb740664205b5b36, type: 2}
+    value: {fileID: 1655882242}
+  - key: {fileID: -755369590798029774, guid: 545f5405911138d4eb740664205b5b36, type: 2}
+    value: {fileID: 798269209}
   m_ExposedReferences:
     m_References:
     - 6c4ea097198ab6448a1e2eeab18c96c0: {fileID: 196270483}
@@ -7688,18 +7661,18 @@ MonoBehaviour:
   projectilePathType: 1
   skillName: "\uC0D8\uD50C"
   skillInfoText: "\uC0D8\uD50C\uC785\uB2C8\uB2E4."
-  unitSkillComponents:
-    characterData: {fileID: 1508686647}
-    skillIconSprite: {fileID: 0}
-    skillVFX: {fileID: 1115970467}
-    director: {fileID: 1239450348}
-    ultClip: {fileID: 0}
-    castTransform: {fileID: 1019224874}
   unitSkillDetails:
     skillValue: 10
     areaOfEffect: 1
     splitHitCount: 7
     vfxDuration: 1
+  unitSkillComponents:
+    characterData: {fileID: 0}
+    skillIconSprite: {fileID: 0}
+    skillVFX: {fileID: 1115970467}
+    director: {fileID: 1239450348}
+    ultClip: {fileID: 0}
+    castTransform: {fileID: 1019224874}
 --- !u!1 &1251619199
 GameObject:
   m_ObjectHideFlags: 0
@@ -8528,12 +8501,7 @@ PrefabInstance:
     - target: {fileID: 3567940229423300850, guid: 86734caebf421da498dcb78fa65934f7,
         type: 3}
       propertyPath: m_WarningMessage
-      value: "\nBinding warning: Some generic clip(s) animate transforms that are
-        already bound by a Humanoid avatar. These transforms can only be changed
-        by Humanoid clips.\n\tTransform 'clavicle_r'\n\tTransform 'index_metacarpal_l'\n\tTransform
-        'pinky_01_l'\n\tTransform 'lowerarm_r'\n\tTransform 'ring_02_l'\n\tTransform
-        'index_metacarpal_r'\n\tTransform 'root'\n\tTransform 'spine_04'\n\tTransform
-        'ring_metacarpal_r'\n\tTransform 'middle_01_r'\n\tand more ..."
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3608563937654882528, guid: 86734caebf421da498dcb78fa65934f7,
         type: 3}
@@ -10188,7 +10156,7 @@ Transform:
   m_GameObject: {fileID: 1397905975}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.7244493, y: -7.5911813, z: 12.2676525}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10206,6 +10174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af63b2b3e0b5535459b070523bec48e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  signalReceiver: {fileID: 1397905978}
   touchCamera: {fileID: 1367270649281649908}
 --- !u!114 &1397905978
 MonoBehaviour:
@@ -10237,6 +10206,50 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!1 &1430619522
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1430619524}
+  - component: {fileID: 1430619523}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1430619523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1430619522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1575bf85baa7ea648be813c53227b939, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1430619524
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1430619522}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.3237243, y: 2.5756204, z: -0.9784647}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1446895869
 GameObject:
   m_ObjectHideFlags: 0
@@ -10502,6 +10515,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1508686646}
   - component: {fileID: 1508686647}
+  - component: {fileID: 1508686648}
   m_Layer: 0
   m_Name: ShooterParent
   m_TagString: Untagged
@@ -10545,6 +10559,33 @@ MonoBehaviour:
   - {fileID: 1239450349}
   testTargets:
   - {fileID: 703426796}
+--- !u!114 &1508686648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508686645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9962c534960090e4fbfd1d105be98100, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CharacterID: 0
+  PrefabName: test
+  baseStatSO: {fileID: 11400000, guid: c24d3475c95a7cf4d94d5a0866131bde, type: 2}
+  runtimeStat:
+    level: 0
+    hp: 0
+    attack: 0
+    defense: 0
+    moveRange: 0
+    skills: []
+    weapon: {fileID: 0}
+    isDead: 0
+    isCompleteAction: 0
+  HasSkills:
+  - {fileID: 1239450349}
 --- !u!1 &1542042825
 GameObject:
   m_ObjectHideFlags: 0
@@ -11654,13 +11695,9 @@ SceneRoots:
   - {fileID: 1251619202}
   - {fileID: 1542042827}
   - {fileID: 1000378089}
-  - {fileID: 1367270649281649864}
-  - {fileID: 4797536564005461363}
-  - {fileID: 342922519}
   - {fileID: 910057878}
   - {fileID: 361419585}
   - {fileID: 2038658183}
-  - {fileID: 1508686646}
   - {fileID: 703426793}
   - {fileID: 728550577}
   - {fileID: 1112873881}
@@ -11673,3 +11710,8 @@ SceneRoots:
   - {fileID: 1464778322}
   - {fileID: 492374574}
   - {fileID: 1397905976}
+  - {fileID: 1508686646}
+  - {fileID: 1367270649281649864}
+  - {fileID: 4797536564005461363}
+  - {fileID: 342922519}
+  - {fileID: 1430619524}

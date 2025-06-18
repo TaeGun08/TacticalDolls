@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 [System.Serializable]
@@ -11,6 +12,8 @@ public class EnemyData : MonoBehaviour, IDamageAble
     [SerializeField] private StatDataSO baseStatSO;
     [SerializeField] private StatData runtimeStat;
     
+    [SerializeField] private SkillBase[] HasSkills;
+    
     public IStat Stat => runtimeStat;
     
     public Collider MainCollider { get; }
@@ -20,6 +23,16 @@ public class EnemyData : MonoBehaviour, IDamageAble
     private void Awake()
     {
         runtimeStat = new StatData(baseStatSO);
+    }
+    
+    public async Task Excute(int selectedSkill, List<IDamageAble> targets, Transform targetPoint)
+    {
+        if (HasSkills[selectedSkill] == null)
+        {
+            Debug.Log("No Skill Found");
+            return;
+        }
+        await CharacterSequenceManager.Instance.MakeSequence(HasSkills[selectedSkill], targets, targetPoint);
     }
     
     public void TakeDamage(CombatEvent combatEvent)

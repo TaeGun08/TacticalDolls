@@ -9,37 +9,40 @@ using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
 using UnityEngine.Video;
+using Object = System.Object;
 
 public class CharacterSequenceManager : MonoBehaviour
 {
     public static CharacterSequenceManager Instance;
+    public SignalReceiver signalReceiver;
     
-    // private static readonly int ANIMATION_TRIGGER1 = Animator.StringToHash("Skill_1");
-    // private static readonly int ANIMATION_TRIGGER2 = Animator.StringToHash("Skill_2");
-    // private static readonly int ANIMATION_TRIGGER3 = Animator.StringToHash("Skill_3");
-    
-    public CameraPerspective touchCamera;
-    private SkillSample cashedSkill;
+    [SerializeField] private CameraPerspective touchCamera;
+    private SkillBase cashedSkill;
     private SkillParent.UnitSkillDetails cashedSkillDetails;
     private SkillParent.UnitSkillComponents cashedSkillComponents;
-    
+    private List<IDamageAble> cashedSkillTargets;
+
     private void Awake()
     {
         Instance = this;
     }
 
     public async Task MakeSequence(
-        SkillSample skillSample,
-        SamplePlayer[] listeners,
+        SkillBase skillSample,
+        List<IDamageAble> listeners,
         Transform targetPosition
         )
     {
+        
         cashedSkill = skillSample;
         cashedSkillDetails = skillSample.unitSkillDetails;
         cashedSkillComponents =  skillSample.unitSkillComponents;
+        cashedSkillTargets =  listeners;
+        
+        await cashedSkill.StartSkillAction(listeners);
         
         // 1. 포커스 처리
-        CharacterFocus(cashedSkillComponents.characterData.transform.position);
+        // CharacterFocus(cashedSkillComponents.characterData.transform.position);
         
         // 2. 컷신 재생
         //동영상으로 교체
@@ -57,24 +60,44 @@ public class CharacterSequenceManager : MonoBehaviour
             {
                 await ChangeTweenLocationByType<CustomBezierCurveTweenTrack>(cashedSkillComponents.director, targetPosition);
             }
-        
-            cashedSkillComponents.director.Play();
+            
+            await AwaitTimelineEnd(cashedSkillComponents.director);
         }
         
         //적과 자신 사이 중간을 포커스
-        {   
-            // Debug.Log($"touchCamera.transform.position.y {touchCamera.transform.position.y}");
-            Vector3 midXZ = (cashedSkillComponents.characterData.transform.position + targetPosition.position) / 2f;
-            Vector3 focusPoint = new Vector3(midXZ.x, touchCamera.transform.position.y, midXZ.z);
-            CharacterFocus(focusPoint); 
-        }
+        // {   
+        //     // Debug.Log($"touchCamera.transform.position.y {touchCamera.transform.position.y}");
+        //     Vector3 midXZ = (cashedSkillComponents.characterData.transform.position + targetPosition.position) / 2f;
+        //     Vector3 focusPoint = new Vector3(midXZ.x, touchCamera.transform.position.y, midXZ.z);
+        //     CharacterFocus(focusPoint); 
+        // }
         
+        
+        await cashedSkill.EndSkillAction(listeners);
         // 시퀀스 완료까지 대기
+    }
+    
+    //타임라인이 끝날 때까지 기다립니다.
+    private Task AwaitTimelineEnd(PlayableDirector director)
+    {
+        TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
+
+        void OnStopped(PlayableDirector d)
+        {
+            director.stopped -= OnStopped;
+            tcs.TrySetResult(true);
+        }
+
+        director.stopped += OnStopped;
+        director.Play(); // 타임라인 재생
+
+        return tcs.Task; // 끝날 때까지 await 대기
     }
     
     //탄환 도착 지점 동적할당
     private Task ChangeTweenLocationByType<T>(PlayableDirector director, Transform newEndLocation = null, Transform newStartLocation = null) where T : class //명시적 클래스 보장
     {
+        // Debug.Log($"ChangeTweenLocationByType {newEndLocation.gameObject.name}");
         TimelineAsset timeline = director.playableAsset as TimelineAsset;
 
         if (!timeline)
@@ -88,17 +111,19 @@ public class CharacterSequenceManager : MonoBehaviour
             // if(track.name != targetTrack) continue; //이름으로 트랙 찾기
             if(track.GetType() != typeof(T)) continue; //타입으로 트랙 찾기
             
-            T targetClip = track.GetClips().First().asset as T;
+            var targetClip = track.GetClips().First().asset;
             
             if (targetClip is TransformTweenClip tweenClip) //형변환
             {
                 // 새 Location을 PlayableDirector에 등록
+                Debug.Log("Changing tween location");
                 if(newStartLocation != null)
                     director.SetReferenceValue(tweenClip.startLocation.exposedName, newStartLocation); 
                 director.SetReferenceValue(tweenClip.endLocation.exposedName, newEndLocation); //동적할당 하기 위해선 exposedName사용
             }
             else if (targetClip is CustomBezierCurveTweenClip bezierCurveTweenClip) //형변환
             {
+                Debug.Log("Changing CustomBezierCurveTweenClip location");
                 if(newStartLocation != null)
                     director.SetReferenceValue(bezierCurveTweenClip.startLocation.exposedName, newStartLocation); 
                 director.SetReferenceValue(bezierCurveTweenClip.endLocation.exposedName, newEndLocation);
@@ -126,9 +151,7 @@ public class CharacterSequenceManager : MonoBehaviour
 
     public void ProjectileSignalListener() //발사체가 맞을 경우 수치를 틱으로 나눠 적용합니다.
     {
-        //Debug.Log($"{cashedSkillDetails.skillValue} / {cashedSkillDetails.splitHitCount} = {cashedSkillDetails.skillValue / cashedSkillDetails.splitHitCount}");
-        
-        //ToDo 캐릭터 스킬 데미지 (캐릭터 공격력) 을 적용해야 합니다.
-        //cashedSkillDetails.skillValue / skillValuecashedSkillDetails.splitHitCount //틱 데미지
+        Debug.Log("ProjectileSignalListener");
+        cashedSkill.AffectSkillAction(cashedSkillTargets);
     }
 }

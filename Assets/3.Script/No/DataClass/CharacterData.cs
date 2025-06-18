@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 [System.Serializable]
@@ -12,20 +13,34 @@ public class CharacterData : MonoBehaviour, IDamageAble
     [SerializeField] private StatData runtimeStat;
     private IDamageAble damageAbleImplementation;
 
+
     public IStat Stat => runtimeStat;
 
     public Collider MainCollider { get; }
     public GameObject GameObject => gameObject;
     public int Team => 0;
     
+    [SerializeField] private SkillParent[] HasSkills;
+    
     private void Awake()
     {
         runtimeStat = new StatData(baseStatSO);
     }
 
+    public async Task Excute(int selectedSkill, List<IDamageAble> targets, Transform targetPoint)
+    {
+        if (HasSkills[selectedSkill] == null)
+        {
+            Debug.Log("No Skill Found");
+            return;
+        }
+        await CharacterSequenceManager.Instance.MakeSequence(HasSkills[selectedSkill] as SkillBase, targets, targetPoint);
+    }
+    
+
     public void TakeDamage(CombatEvent combatEvent)
     {
-        Debug.Log($"{PrefabName} Character Take damage :: {CharacterID}");
+        Debug.Log($"{PrefabName} Character Take damage :: CharacterID {CharacterID} _ {combatEvent.Damage}");
         Stat.HP -= combatEvent.Damage;
         //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
     }

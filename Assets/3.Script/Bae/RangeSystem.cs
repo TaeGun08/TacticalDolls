@@ -9,7 +9,7 @@ public class RangeSystem : MonoBehaviour
 
     [Header("Tile Settings")]
     private Tile[,] tiles;
-    private Tile currentTile;
+    public Tile currentTile;
 
     private List<Tile> movableTiles = new List<Tile>();
     private List<Tile> usableTiles = new List<Tile>();
