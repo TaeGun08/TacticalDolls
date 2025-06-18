@@ -17,12 +17,17 @@ using UnityEngine.Serialization;
 
 public class SkillSample : SkillParent
 {
-    private static readonly int ANIMATION_TRIGGER = Animator.StringToHash("ANIMATION_TRIGGER");
-    public override ActorParent ActorParent => ActorParent.Player;
-    public override UltType UltType => UltType.Ultimate;
-    public override SkillType SkillType => SkillType.Damage;
-    public override RangeType RangeType => RangeType.Straight;
-
+    public override async Task SkillAction()
+    {
+        Debug.Log("Skill Action");
+        await Task.Delay(1000);
+    }
+    
+    // private static readonly int ANIMATION_TRIGGER = Animator.StringToHash("ANIMATION_TRIGGER");
+    // public override SkillType SkillType => SkillType.Damage;
+    // public override RangeType RangeType => RangeType.Single;
+    // public override ProjectileType ProjectileType => ProjectileType.FireRate;
+    // public override UltType UltType => UltType.Ultimate;
     // private void Start()
     // {
     //     Initialize();
@@ -42,7 +47,7 @@ public class SkillSample : SkillParent
     //     
     //     SkillEffectTcs =  new TaskCompletionSource<bool>(); //Tcs소스 활성화
     // }
-    
+
     // public async Task ExcuteSkill(SamplePlayer[] targets, Vector3 targetPosition)
     // {
     //     Debug.Log("ExcuteSkill");
@@ -50,7 +55,7 @@ public class SkillSample : SkillParent
     //     
     //     // SkillEffectTcs.TrySetResult(true); //스킬 적용 종료
     // }
-    
+
     // public override string SkillName => "샘플스킬 1";
     // public override string SkillInfoText => $"포탄을 발사해 4X4 범위로 {unitSkillDetails.skillValue} 피해를 가합니다.";
     //
@@ -65,7 +70,7 @@ public class SkillSample : SkillParent
     //     CasterCharacter = samplePlayer;
     // }
     // #endregion
-    
+
     //Animation Sender가 실행시킵니다.
     //애니메이션에서 정의한 타이밍에 호출
     // private void HandleAnimationStart(string param, GameObject characterObject) 
@@ -82,7 +87,7 @@ public class SkillSample : SkillParent
     //     
     //     _= SkillExcute(); //스킬 발동
     // }
-        
+
     // public override async Task MakeSkillSequence(SamplePlayer sender, SamplePlayer reciver) //스킬 실행
     // {
     //     Initialize(); //재활용 초기화
@@ -131,7 +136,7 @@ public class SkillSample : SkillParent
     //             SkillEffectTcs.TrySetResult(true); //스킬 적용 종료
     //         });
     // }
-    
+
     // public override async Task SkillExcute() //스킬 이벤트 //카메라 무브
     // {
     //     //공격 패턴
@@ -153,4 +158,5 @@ public class SkillSample : SkillParent
     //     
     //     SkillEffectTcs.TrySetResult(true); //스킬 적용 종료
     // }
+
 }

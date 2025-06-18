@@ -5,19 +5,25 @@ using UnityEngine.Playables;
 public class TransformTweenMixerBehaviour : PlayableBehaviour
 {
     bool m_FirstFrameHappened;
-
+    //Harang
+    private GameObject trackedTarget;
+    private bool isProjectileActive = false;
+    
     public override void ProcessFrame(Playable playable, FrameData info, object playerData)
     {
         Transform trackBinding = playerData as Transform;
 
         if(trackBinding == null)
             return;
-
+        //Harang
+        if (trackedTarget == null)
+            trackedTarget = trackBinding.gameObject;
+        
         Vector3 defaultPosition = trackBinding.position;
         Quaternion defaultRotation = trackBinding.rotation;
 
         int inputCount = playable.GetInputCount ();
-
+        
         float positionTotalWeight = 0f;
         float rotationTotalWeight = 0f;
 
@@ -39,7 +45,19 @@ public class TransformTweenMixerBehaviour : PlayableBehaviour
                 input.startingPosition = defaultPosition;
                 input.startingRotation = defaultRotation;
             }
-
+            
+            //Harang
+            if (!isProjectileActive && inputWeight > 0f)
+            {
+                isProjectileActive = true;
+                trackedTarget.SetActive(true);
+            }
+            else if (isProjectileActive && inputWeight <= 0f)
+            {
+                isProjectileActive = false;
+                trackedTarget.SetActive(false);
+            }
+            
             float normalisedTime = (float)(playableInput.GetTime() / playableInput.GetDuration ());
             float tweenProgress = input.EvaluateCurrentCurve(normalisedTime);
 
@@ -81,6 +99,12 @@ public class TransformTweenMixerBehaviour : PlayableBehaviour
     public override void OnPlayableDestroy (Playable playable)
     {
         m_FirstFrameHappened = false;
+        
+        //Harang
+        if (trackedTarget != null)
+        {
+            trackedTarget.SetActive(false);
+        }
     }
 
     static Quaternion AddQuaternions (Quaternion first, Quaternion second)
@@ -115,5 +139,10 @@ public class TransformTweenMixerBehaviour : PlayableBehaviour
 
         Debug.LogWarning ("Cannot normalize a quaternion with zero magnitude.");
         return Quaternion.identity;
+    }
+    
+    public override void OnBehaviourPause(Playable playable, FrameData info)
+    {
+        m_FirstFrameHappened = false; // 다음에 다시 실행되도록
     }
 }

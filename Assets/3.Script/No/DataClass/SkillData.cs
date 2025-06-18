@@ -1,5 +1,5 @@
 public enum SkillType { Damage, Heal, Buff }
-public enum RangeType { Straight, Plus, Cross, Around }
+public enum RangeType { Single, Straight, Plus, Cross, Around }
 
 [System.Serializable]
 public class SkillData
