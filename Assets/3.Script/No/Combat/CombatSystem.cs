@@ -46,7 +46,7 @@ public class CombatSystem : MonoBehaviour
         List<IDamageAble> targetList = RangeSystem.Instance.damageAbles;
         
         Debug.Log($"targetList:: {targetList.Count}");
-
+    
         foreach (IDamageAble target in targetList)
         {
             Debug.Log($"ExecuteSkill target :: {target}, skill.Type :: {skill.Type}");
@@ -72,7 +72,7 @@ public class CombatSystem : MonoBehaviour
         }
     }
 
-    private void ApplyDamage(IDamageAble attacker, IDamageAble target, int amount)
+    public void ApplyDamage(IDamageAble attacker, IDamageAble target, int amount)
     {
         var combatEvent = new CombatEvent
         {
@@ -84,7 +84,7 @@ public class CombatSystem : MonoBehaviour
         target.TakeDamage(combatEvent);
     }
     
-    private void ApplyHeal(IDamageAble healer, IDamageAble target, int amount)
+    public void ApplyHeal(IDamageAble healer, IDamageAble target, int amount)
     {
         var healEvent = new HealEvent
         {
@@ -97,7 +97,7 @@ public class CombatSystem : MonoBehaviour
         target.TakeHeal(healEvent);
     }
     
-    private void ApplyBuff(IDamageAble healer, IDamageAble target, int amount)
+    public void ApplyBuff(IDamageAble healer, IDamageAble target, int amount)
     {
         var buffEvent = new BuffEvent
         {

@@ -722,6 +722,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3b27043e308ebd4fa14ccf5f677ddcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startButton: {fileID: 0}
 --- !u!4 &326072167
 Transform:
   m_ObjectHideFlags: 0
@@ -8528,12 +8529,7 @@ PrefabInstance:
     - target: {fileID: 3567940229423300850, guid: 86734caebf421da498dcb78fa65934f7,
         type: 3}
       propertyPath: m_WarningMessage
-      value: "\nBinding warning: Some generic clip(s) animate transforms that are
-        already bound by a Humanoid avatar. These transforms can only be changed
-        by Humanoid clips.\n\tTransform 'clavicle_r'\n\tTransform 'index_metacarpal_l'\n\tTransform
-        'pinky_01_l'\n\tTransform 'lowerarm_r'\n\tTransform 'ring_02_l'\n\tTransform
-        'index_metacarpal_r'\n\tTransform 'root'\n\tTransform 'spine_04'\n\tTransform
-        'ring_metacarpal_r'\n\tTransform 'middle_01_r'\n\tand more ..."
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3608563937654882528, guid: 86734caebf421da498dcb78fa65934f7,
         type: 3}
@@ -10502,6 +10498,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1508686646}
   - component: {fileID: 1508686647}
+  - component: {fileID: 1508686648}
   m_Layer: 0
   m_Name: ShooterParent
   m_TagString: Untagged
@@ -10545,6 +10542,33 @@ MonoBehaviour:
   - {fileID: 1239450349}
   testTargets:
   - {fileID: 703426796}
+--- !u!114 &1508686648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508686645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9962c534960090e4fbfd1d105be98100, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CharacterID: 0
+  PrefabName: test
+  baseStatSO: {fileID: 11400000, guid: c24d3475c95a7cf4d94d5a0866131bde, type: 2}
+  runtimeStat:
+    level: 0
+    hp: 0
+    attack: 0
+    defense: 0
+    moveRange: 0
+    skills: []
+    weapon: {fileID: 0}
+    isDead: 0
+    isCompleteAction: 0
+  HasSkills:
+  - {fileID: 1239450349}
 --- !u!1 &1542042825
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ public class InGameUIManager : MonoBehaviour
     private TurnManager turnManager;                    //싱글톤 캐싱
     private ActorParent actorParent = ActorParent.None; //턴 가진 주체 캐싱
     
-    public SamplePlayer selectedCharacter;              //선택한 개체
+    public CharacterData selectedCharacter;              //선택한 개체
     private int currentTurn;                            //현재 턴
     private int onSelectSkill;                          //스킬을 선택하는 로직 필요
     private int aiSelectSkill;                          //Ai가 자동으로 선택한 스킬
@@ -237,20 +237,22 @@ public class InGameUIManager : MonoBehaviour
     
     private async Task ExcuteSkill(bool isAiSkill = false)
     {
-        if(selectedCharacter.isCompleteAction) return;
+        // if(selectedCharacter.isActiveAndEnabled) return;
         
-        if (isAiSkill)
-        {
-            int aiRandomSkill = Random.Range(1, 4); //please fix - 캐릭터마다 자동으로 스킬을 선택하는 로직을 두기?
-            await selectedCharacter.Excute(aiRandomSkill); //스킬 실행 중 대기 ai전용
-        }
-        else
-        {
-            await selectedCharacter.Excute(onSelectSkill-1); //스킬 실행 중 대기
-        }
+        // if (isAiSkill)
+        // {
+        //     int aiRandomSkill = Random.Range(1, 4); //please fix - 캐릭터마다 자동으로 스킬을 선택하는 로직을 두기?
+        //     await selectedCharacter.Excute(aiRandomSkill); //스킬 실행 중 대기 ai전용
+        // }
+        // else
+        // {
+        //     await selectedCharacter.Excute(onSelectSkill-1); //스킬 실행 중 대기
+        // }
+        
+        // await selectedCharacter.Excute(); //스킬 실행 중 대기
         
         //스킬 실행 완료
-        _= FocusCharacter(selectedCharacter); //행동한 캐릭터 자신을 포커스
+        // _= FocusCharacter(selectedCharacter); //행동한 캐릭터 자신을 포커스
         
         await Task.Delay(1000); //잠깐 대기
             

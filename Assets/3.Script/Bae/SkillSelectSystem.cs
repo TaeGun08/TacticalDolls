@@ -57,19 +57,24 @@ public class SkillSelectSystem : MonoBehaviour
             IsSelectingSkill = false;
             
             Debug.Log($"target :: {currentTarget}, selectskill :: {currentSkill}");
-            // TODO 스킬 사용 처리
-            CombatSystem.Instance.ExecuteSkill(currentTarget, currentSkill);
+
+            List<IDamageAble> targetList = RangeSystem.Instance.damageAbles;
+            Transform targetTransform = RangeSystem.Instance.currentTile.transform;
             
-            
-            // 스킬 사용후 초기화 되어야 할 내용
-            cancelButton.gameObject.SetActive(false);
-            selectButton.gameObject.SetActive(false);
-            
-            GameManager.Instance.CurrentEnemy = null;
-            GameManager.Instance.MoveChoiceTile = null;
-            
-            GameManager.Instance.OnCharacterEndTurn();
+            currentTarget.Excute(currentSkill, targetList, targetTransform);
         });
+    }
+
+    public void InintializeAfterSkillExcute()
+    {
+        // 스킬 사용후 초기화 되어야 할 내용
+        cancelButton.gameObject.SetActive(false);
+        selectButton.gameObject.SetActive(false);
+            
+        GameManager.Instance.CurrentEnemy = null;
+        GameManager.Instance.MoveChoiceTile = null;
+            
+        GameManager.Instance.OnCharacterEndTurn();
     }
 
     public void Open(IDamageAble targetData)

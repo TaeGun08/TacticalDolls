@@ -15,7 +15,7 @@ using UnityEngine.Serialization;
 //애니메이션 종료
 //스킬 종료
 
-public class SkillSample : SkillParent
+public class SkillBase : SkillParent
 {
     public override async Task SkillAction()
     {

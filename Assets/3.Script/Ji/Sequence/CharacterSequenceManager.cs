@@ -18,8 +18,8 @@ public class CharacterSequenceManager : MonoBehaviour
     // private static readonly int ANIMATION_TRIGGER2 = Animator.StringToHash("Skill_2");
     // private static readonly int ANIMATION_TRIGGER3 = Animator.StringToHash("Skill_3");
     
-    public CameraPerspective touchCamera;
-    private SkillSample cashedSkill;
+    [SerializeField] private CameraPerspective touchCamera;
+    private SkillBase cashedSkill;
     private SkillParent.UnitSkillDetails cashedSkillDetails;
     private SkillParent.UnitSkillComponents cashedSkillComponents;
     
@@ -29,8 +29,8 @@ public class CharacterSequenceManager : MonoBehaviour
     }
 
     public async Task MakeSequence(
-        SkillSample skillSample,
-        SamplePlayer[] listeners,
+        SkillBase skillSample,
+        List<IDamageAble> listeners,
         Transform targetPosition
         )
     {
