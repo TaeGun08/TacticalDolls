@@ -110,6 +110,10 @@ public class RangeSystem : MonoBehaviour
     
     public void ShowSkillRange(IDamageAble attackAble, IDamageAble targetAble, int index)
     {
+        ShowAttackRange(GameManager.Instance.MoveChoiceTile, attackAble.Stat.MoveRange);
+        usableTiles.Clear();
+        damageAbles.Clear();
+        
         currentTile = TileManager.Instance.GetCurrentTileByIDamageAble(targetAble);
 
         if (currentTile == null) return;
@@ -155,8 +159,8 @@ public class RangeSystem : MonoBehaviour
                         tile.Highlight(Color.cyan);
                         usableTiles.Add(tile);
                     }
-                    else
-                        tile.ResetHighlight();
+                    // else
+                    //     tile.ResetHighlight();
                 }
             }
         }

@@ -68,7 +68,7 @@ public class SkillSelectSystem : MonoBehaviour
             GameManager.Instance.CurrentEnemy = null;
             GameManager.Instance.MoveChoiceTile = null;
             
-            //GameManager.Instance.OnCharacterEndTurn();
+            GameManager.Instance.OnCharacterEndTurn();
         });
     }
 

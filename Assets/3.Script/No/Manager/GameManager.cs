@@ -179,7 +179,7 @@ public class GameManager : MonoBehaviour
                     
                         if (isEnemyInAttackRange)
                         {
-                            // RangeSystem.Instance.ShowSkillRange(currentCharacter, CurrentEnemy, );
+                            RangeSystem.Instance.ShowSkillRange(currentCharacter, CurrentEnemy, skillUI.currentSkill);
                             
                             currentEnemyTile.Highlight(Color.black);
                         }
