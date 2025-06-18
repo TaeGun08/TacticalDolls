@@ -163,10 +163,10 @@ public class RangeSystem : MonoBehaviour
                         tile.Highlight(Color.cyan);
                         usableTiles.Add(tile);
                     }
-                    // else
-                    //     tile.ResetHighlight();
                 }
             }
+            
+            currentTile.Highlight(Color.black);
         }
         
         void SetDamageAbles()

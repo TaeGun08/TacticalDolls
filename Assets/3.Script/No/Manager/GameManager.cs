@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
     private Tile currentEnemyTile;
 
     public Tile MoveChoiceTile { get; set; }
+
+    private bool isEnemyInAttackRange;
     
     private void Awake()
     {
@@ -180,14 +182,9 @@ public class GameManager : MonoBehaviour
                     
                     else if (unitHit.collider.TryGetComponent(out EnemyData enemyData))
                     {
-                        if (CurrentEnemy != null)
-                        {
-                            currentEnemyTile.Highlight(Color.yellow);
-                        }
-
                         currentEnemyTile =
                             TileManager.Instance.GetCurrentTileByIDamageAble(enemyData);
-                        bool isEnemyInAttackRange =
+                        isEnemyInAttackRange =
                             RangeSystem.Instance.attackableTiles.Contains(currentEnemyTile);
 
                         if (isEnemyInAttackRange)
@@ -197,8 +194,6 @@ public class GameManager : MonoBehaviour
                             RangeSystem.Instance.ShowSkillRange(currentCharacter, CurrentEnemy,
                                 skillUI.currentSkill);
                             SkillSelectSystem.Instance.selectButton.interactable = true;
-
-                            currentEnemyTile.Highlight(Color.black);
                         }
                     }
                 }
