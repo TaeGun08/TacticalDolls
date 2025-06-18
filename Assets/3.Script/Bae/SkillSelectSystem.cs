@@ -57,25 +57,29 @@ public class SkillSelectSystem : MonoBehaviour
             IsSelectingSkill = false;
             
             Debug.Log($"target :: {currentTarget}, selectskill :: {currentSkill}");
-
-            List<IDamageAble> targetList = RangeSystem.Instance.damageAbles;
-            Transform targetTransform = RangeSystem.Instance.currentTile.transform;
             
-            currentTarget.Excute(currentSkill, targetList, targetTransform);
+            // TODO 스킬 사용 처리
+            CombatSystem.Instance.ExecuteSkill(currentTarget, currentSkill);
+            
+            if (GameManager.Instance.MoveChoiceTile != null)
+            {
+                GridBehavior.Instance.Actor = currentTarget;
+                List<Node> path = PathFindingManager.Instance.PathFind(currentTarget.GameObject.transform.position, GameManager.Instance.MoveChoiceTile.transform.position);
+                _= GridBehavior.Instance.MovePlayerAlongPath(path, Vector3.zero);
+            }
+            
+            // 스킬 사용후 초기화 되어야 할 내용
+            cancelButton.gameObject.SetActive(false);
+            selectButton.gameObject.SetActive(false);
+            
+            GameManager.Instance.CurrentEnemy = null;
+            GameManager.Instance.MoveChoiceTile = null;
+            
+            GameManager.Instance.OnCharacterEndTurn();
         });
     }
-
-    public void InintializeAfterSkillExcute()
-    {
-        // 스킬 사용후 초기화 되어야 할 내용
-        cancelButton.gameObject.SetActive(false);
-        selectButton.gameObject.SetActive(false);
-            
-        GameManager.Instance.CurrentEnemy = null;
-        GameManager.Instance.MoveChoiceTile = null;
-            
-        GameManager.Instance.OnCharacterEndTurn();
-    }
+    
+    
 
     public void Open(IDamageAble targetData)
     {

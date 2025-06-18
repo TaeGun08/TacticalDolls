@@ -59,6 +59,8 @@ public class Turn_Test : MonoBehaviour
     private void OnTurnChangedWrapper(object sender, ActorParent actor)
     {
         _ = OnTurnChanged(sender, actor);
+     
+        //MoveTcs.TrySetResult(true);
     }
 
     private async Task OnTurnChanged(object sender, ActorParent actor)
