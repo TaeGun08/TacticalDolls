@@ -10,9 +10,6 @@ public class RangeSystem : MonoBehaviour
     [Header("Tile Settings")]
     private Tile[,] tiles;
     private Tile currentTile;
-    
-    [Header("Skill Range Settings")]
-    private int selectedSkillIndex;
 
     private List<Tile> movableTiles = new List<Tile>();
     private List<Tile> usableTiles = new List<Tile>();
@@ -114,7 +111,6 @@ public class RangeSystem : MonoBehaviour
     public void ShowSkillRange(IDamageAble attackAble, IDamageAble targetAble, int index)
     {
         currentTile = TileManager.Instance.GetCurrentTileByIDamageAble(targetAble);
-        selectedSkillIndex = index;
 
         if (currentTile == null) return;
 

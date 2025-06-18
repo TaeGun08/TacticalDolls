@@ -179,7 +179,9 @@ public class GameManager : MonoBehaviour
                     
                         if (isEnemyInAttackRange)
                         {
-                            currentEnemyTile.Highlight(Color.red);
+                            // RangeSystem.Instance.ShowSkillRange(currentCharacter, CurrentEnemy, );
+                            
+                            currentEnemyTile.Highlight(Color.black);
                         }
                         
                         SkillSelectSystem.Instance.selectButton.interactable = true;
@@ -190,8 +192,12 @@ public class GameManager : MonoBehaviour
             {
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit characterHit, 100f, unitLayer))
                 {
-                    currentCharacter = characterHit.collider.GetComponent<CharacterData>();
-                
+                    if (characterHit.collider.TryGetComponent(out CharacterData characterData))
+                    {
+                        currentCharacter = characterData;
+                    }
+                    else return;
+                    
                     // TODO 행동 완료 UI 추가
                 
                     if (currentCharacter != null && !currentCharacter.Stat.IsCompleteAction)
