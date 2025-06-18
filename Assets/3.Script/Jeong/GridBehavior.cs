@@ -74,7 +74,6 @@ public class GridBehavior : MonoBehaviour
     private void AutoMove()
     {
         if (IsMove || IsAutoMove == false || Actor == null) return;
-        //Ran.Instance.ResetAllHighlights();
         reservedTiles.Clear();
         Test();
         
@@ -129,7 +128,7 @@ public class GridBehavior : MonoBehaviour
             {
                 // if (AttackRangeChecker(Actor.GetAttackableTilesFromReachable(),
                 //         PathFindingManager.Instance.RoundToTilePosition(target))) break;
-                if (!MoveRangeChecker(actorPos, targetPos)) break;
+                if (MoveRangeChecker(actorPos, targetPos) == false) break;
             }
         
             while (Vector3.Distance(Actor.GameObject.transform.position, targetPos) > 0.05f)
@@ -155,7 +154,6 @@ public class GridBehavior : MonoBehaviour
         Actor = null;
         turn.MoveTcs.TrySetResult(true);
         IsMove = false;
-        //MoveRangeSystem.Instance.ResetMovableTiles();
     }
 
     private void Test()
