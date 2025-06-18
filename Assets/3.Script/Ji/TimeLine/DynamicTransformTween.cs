@@ -106,6 +106,22 @@ public class DynamicTransformTweenChanger : MonoBehaviour
         director.RebuildGraph();
     }
     
+    public void ChangeTweenLocation<T>(PlayableDirector director, Transform newStartLocation = null, Transform newEndLocation = null)
+    {
+        cashTweenClip = FindClipByType<CustomBezierCurveTweenTrack>(director) as CustomBezierCurveTweenClip;
+        
+        if (cashTweenClip is CustomBezierCurveTweenClip tweenClip) //형변환
+        {
+            // 새 Location을 PlayableDirector에 등록
+            if(newStartLocation != null)
+                director.SetReferenceValue(tweenClip.startLocation.exposedName, newStartLocation); //동적할당 하기 위해선 exposedName사용
+            director.SetReferenceValue(tweenClip.endLocation.exposedName, newEndLocation);
+        }
+        
+        // 변경사항 적용
+        director.RebuildGraph();
+    }
+    
     private PlayableAsset FindClipByType<T>(PlayableDirector director) //탄환 도착 지점 동적할당
     {
         TimelineAsset timeline = director.playableAsset as TimelineAsset;

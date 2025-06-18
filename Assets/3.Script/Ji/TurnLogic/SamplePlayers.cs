@@ -14,7 +14,7 @@ public class SamplePlayer : MonoBehaviour
     
     public async Task Excute(int selectedSkill) //스킬 사용
     {
-        await CharacterSequenceManager.Instance.MakeSequence(SkillSamples[selectedSkill], testTargets, testTargets[0].transform.position);
+        await CharacterSequenceManager.Instance.MakeSequence(SkillSamples[selectedSkill], testTargets, testTargets[0].transform);
         // await SkillSamples[selectedSkill].ExcuteSkill(testTargets, testTargets[0].transform.position); 태스크 단계 줄임
     }
 }

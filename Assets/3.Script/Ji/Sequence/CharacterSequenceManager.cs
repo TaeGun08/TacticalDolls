@@ -1,111 +1,134 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DG.Tweening;
 using Exoa.Cameras;
 using UnityEngine;
 using UnityEngine.Playables;
-
-// public class SkillSequenceInfo
-// {
-//     public SamplePlayer Sender;
-//     public SamplePlayer[] Listeners;
-//     public SkillSample SkillSample;
-// }
+using UnityEngine.Timeline;
+using UnityEngine.Video;
 
 public class CharacterSequenceManager : MonoBehaviour
 {
     public static CharacterSequenceManager Instance;
     
+    // private static readonly int ANIMATION_TRIGGER1 = Animator.StringToHash("Skill_1");
+    // private static readonly int ANIMATION_TRIGGER2 = Animator.StringToHash("Skill_2");
+    // private static readonly int ANIMATION_TRIGGER3 = Animator.StringToHash("Skill_3");
+    
     public CameraPerspective touchCamera;
-
+    private SkillSample cashedSkill;
+    private SkillParent.UnitSkillDetails cashedSkillDetails;
+    private SkillParent.UnitSkillComponents cashedSkillComponents;
+    
     private void Awake()
     {
         Instance = this;
     }
 
     public async Task MakeSequence(
-        // Vector2Int movePosition,
         SkillSample skillSample,
         SamplePlayer[] listeners,
-        Vector3 targetPosition
+        Transform targetPosition
         )
     {
-        
-        SkillParent.UnitSkillDetails skillDetails = skillSample.unitSkillDetails;
+        cashedSkill = skillSample;
+        cashedSkillDetails = skillSample.unitSkillDetails;
+        cashedSkillComponents =  skillSample.unitSkillComponents;
         
         // 1. 포커스 처리
-        CharacterFocus(skillDetails.characterData.transform.position);
+        CharacterFocus(cashedSkillComponents.characterData.transform.position);
         
         // 2. 컷신 재생
-        // if (skillDetails.director != null)
-        // {
-        //     // await PlayCutscene(skillDetails.ultClip.length);
-        // }
-        
         //동영상으로 교체
-        if(skillDetails.ultClip !=null) //ultClip은 애니메이션 클립입니다. 변경하기
-            await PlayCutscene(skillDetails.ultClip.length);
+        if (cashedSkillComponents.ultClip != null) //ultClip은 애니메이션 클립입니다. 변경하기
+            await PlayCutscene(cashedSkillComponents.ultClip);
         
-        Debug.Log("MakeSequence2");
-        // 3. 발사체 이동
-        await Task.Delay((int)(skillDetails.animationDelay * 1000f));
+        // 3. 애니메이션 & 탄환 발사 타임라인 재생
+        if (cashedSkillComponents.director != null)
+        {
+            if (cashedSkill.projectilePathType == ProjectilePathType.Straight)
+            {
+                await ChangeTweenLocationByType<TransformTweenTrack>(cashedSkillComponents.director, targetPosition);
+            }
+            else if (cashedSkill.projectilePathType == ProjectilePathType.Curved)
+            {
+                await ChangeTweenLocationByType<CustomBezierCurveTweenTrack>(cashedSkillComponents.director, targetPosition);
+            }
         
-        await ShotProjectile(skillDetails, listeners, targetPosition);
+            cashedSkillComponents.director.Play();
+        }
+        
+        //적과 자신 사이 중간을 포커스
+        {   
+            // Debug.Log($"touchCamera.transform.position.y {touchCamera.transform.position.y}");
+            Vector3 midXZ = (cashedSkillComponents.characterData.transform.position + targetPosition.position) / 2f;
+            Vector3 focusPoint = new Vector3(midXZ.x, touchCamera.transform.position.y, midXZ.z);
+            CharacterFocus(focusPoint); 
+        }
         
         // 시퀀스 완료까지 대기
     }
     
-    public async Task PlayCutscene(float ultDuration)
+    //탄환 도착 지점 동적할당
+    private Task ChangeTweenLocationByType<T>(PlayableDirector director, Transform newEndLocation = null, Transform newStartLocation = null) where T : class //명시적 클래스 보장
+    {
+        TimelineAsset timeline = director.playableAsset as TimelineAsset;
+
+        if (!timeline)
+        {
+            Debug.LogError(" missing timeline asset");
+            return Task.CompletedTask;
+        }
+        
+        foreach (TrackAsset track in timeline.GetOutputTracks()) //트랙 찾기
+        {
+            // if(track.name != targetTrack) continue; //이름으로 트랙 찾기
+            if(track.GetType() != typeof(T)) continue; //타입으로 트랙 찾기
+            
+            T targetClip = track.GetClips().First().asset as T;
+            
+            if (targetClip is TransformTweenClip tweenClip) //형변환
+            {
+                // 새 Location을 PlayableDirector에 등록
+                if(newStartLocation != null)
+                    director.SetReferenceValue(tweenClip.startLocation.exposedName, newStartLocation); 
+                director.SetReferenceValue(tweenClip.endLocation.exposedName, newEndLocation); //동적할당 하기 위해선 exposedName사용
+            }
+            else if (targetClip is CustomBezierCurveTweenClip bezierCurveTweenClip) //형변환
+            {
+                if(newStartLocation != null)
+                    director.SetReferenceValue(bezierCurveTweenClip.startLocation.exposedName, newStartLocation); 
+                director.SetReferenceValue(bezierCurveTweenClip.endLocation.exposedName, newEndLocation);
+            }
+        }
+        
+        cashedSkillComponents.director.RebuildGraph(); //타임라인 재구성
+        
+        return Task.CompletedTask;
+    }
+    
+    public async Task PlayCutscene(VideoClip videoClip)
     {
         Debug.Log("PlayCutscene");
         
         //ToDo :: 동영상 실행으로 수정
-        await Task.Delay((int)(ultDuration * 1000));
-        
-        Debug.Log("PlayCutscene");
-        // int originalLayer = sender.gameObject.layer;
-        //
-        // // 컷신 주체만 특정 레이어로
-        // sender.gameObject.layer = LayerMask.NameToLayer("CutsceneActor");
-        // sender.animator.SetTrigger("Attack"); //타임라인에서 애니메이션 실행 - sender 캐릭터 바인딩 필요
-        // // director.Play();
-        //
-        // await EndCutSceneTcs.Task;
-        //
-        // // 레이어 복원
-        // sender.gameObject.layer = originalLayer;
-    }
-
-    private async Task ShotProjectile(SkillParent.UnitSkillDetails skillDetails, SamplePlayer[] targets, Vector3 targetPosition)
-    {
-        Debug.Log($"touchCamera.transform.position.y {touchCamera.transform.position.y}");
-        
-        Vector3 midXZ = (skillDetails.characterData.transform.position + targetPosition) / 2f;
-        Vector3 focusPoint = new Vector3(midXZ.x, touchCamera.transform.position.y, midXZ.z);
-        CharacterFocus(focusPoint); //적과 자신 사이 중간을 포커스
-        
-        skillDetails.projectile.transform.position = skillDetails.castTransform.position;
-        skillDetails.projectile.SetActive(true);
-        
-        await skillDetails.projectile.transform.DOMove(targets[0].transform.position, skillDetails.projectileSpeed).AsyncWaitForCompletion(); //투사체 발사
-        skillDetails.projectile.SetActive(false); //투사체 비활성화
-        Debug.Log("탄환 도착");
-        
-        skillDetails.skillVFX.transform.position = targetPosition; //적 위치로 파티클 이동
-        skillDetails.skillVFX.SetActive(true); //이펙트 활성화
-        await Task.Delay((int)(skillDetails.vfxDuration * 1000f)); //파티클 지속시간만큼 대기 - 변경하기 ToDo
-        skillDetails.skillVFX.SetActive(false); //이펙트 활성화
-        
-        //ToDo :: 컴뱃시스템 콜
-        //foreach
-        //await CombatSystem(this, targets);
+        await Task.Delay((int)((videoClip ? videoClip.length : 1f) * 1000)); //비디오 시간만큼 대기
     }
     
     private void CharacterFocus(Vector3 go)
     {
         Debug.Log("CharacterFocus");
         touchCamera.MoveCameraTo(go);
+    }
+
+    public void ProjectileSignalListener() //발사체가 맞을 경우 수치를 틱으로 나눠 적용합니다.
+    {
+        //Debug.Log($"{cashedSkillDetails.skillValue} / {cashedSkillDetails.splitHitCount} = {cashedSkillDetails.skillValue / cashedSkillDetails.splitHitCount}");
+        
+        //ToDo 캐릭터 스킬 데미지 (캐릭터 공격력) 을 적용해야 합니다.
+        //cashedSkillDetails.skillValue / skillValuecashedSkillDetails.splitHitCount //틱 데미지
     }
 }
