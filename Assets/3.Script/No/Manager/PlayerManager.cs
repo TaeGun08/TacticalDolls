@@ -46,7 +46,7 @@ public class PlayerManager : MonoBehaviour
             new CharacterDataSample
             {
                 characterCode = 0,
-                level = 1,
+                level = 5,
                 skills = new SkillDataSample[]
                 {
                     new SkillDataSample { skillCode = 1, level = 1 },
@@ -56,7 +56,7 @@ public class PlayerManager : MonoBehaviour
             new CharacterDataSample
             {
                 characterCode = 1,
-                level = 2,
+                level = 5,
                 skills = new SkillDataSample[]
                 {
                     new SkillDataSample { skillCode = 0, level = 1 },
@@ -66,7 +66,7 @@ public class PlayerManager : MonoBehaviour
             new CharacterDataSample
             {
                 characterCode = 2,
-                level = 3,
+                level = 5,
                 skills = new SkillDataSample[]
                 {
                     new SkillDataSample { skillCode = 0, level = 1 },
