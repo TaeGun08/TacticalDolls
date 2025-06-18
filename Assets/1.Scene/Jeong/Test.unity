@@ -2421,7 +2421,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 182001976}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99830866
+  m_Size: 0.9992657
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2543,6 +2543,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterTable: {fileID: 11400000, guid: e728d627f5039624fa321c0e1aa98879, type: 2}
   ExitButton: {fileID: 2099790312}
+  EndGamePanel: {fileID: 424275800}
+  EndPanelTxt: {fileID: 948659699}
   PlayerUnits: []
   EnemyUnits: []
   unitLayer:
@@ -3443,7 +3445,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: 0.00003500505}
+  m_AnchoredPosition: {x: -0.000061035156, y: 0.0009802199}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1192701331
@@ -3506,37 +3508,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1253627483
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1253627484}
-  m_Layer: 0
-  m_Name: ------------------
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1253627484
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1253627483}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1315017368
 GameObject:
   m_ObjectHideFlags: 0
@@ -4353,6 +4324,7 @@ MonoBehaviour:
   - {fileID: 1315017370}
   cancelButton: {fileID: 385367470}
   selectButton: {fileID: 665208300}
+  currentSkill: 0
 --- !u!1 &1521545984
 GameObject:
   m_ObjectHideFlags: 0
@@ -5540,13 +5512,12 @@ SceneRoots:
   - {fileID: 1521545987}
   - {fileID: 1706074594}
   - {fileID: 1693132228}
-  - {fileID: 1821377795}
-  - {fileID: 607837857}
   - {fileID: 854237648}
   - {fileID: 1442460291}
+  - {fileID: 1821377795}
+  - {fileID: 607837857}
   - {fileID: 561137267}
   - {fileID: 911071567}
-  - {fileID: 1253627484}
   - {fileID: 659407647}
   - {fileID: 1826570348}
   - {fileID: 1403177484}

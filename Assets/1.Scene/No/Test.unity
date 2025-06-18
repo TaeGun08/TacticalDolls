@@ -2679,6 +2679,7 @@ MonoBehaviour:
   CharacterTable: {fileID: 11400000, guid: e728d627f5039624fa321c0e1aa98879, type: 2}
   ExitButton: {fileID: 2099790312}
   EndGamePanel: {fileID: 1814397446}
+  EndPanelTxt: {fileID: 102127404}
   PlayerUnits: []
   EnemyUnits: []
   unitLayer:

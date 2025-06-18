@@ -69,6 +69,7 @@ public class Turn_Test : MonoBehaviour
         actorParent = actor;
         Debug.Log($"{actor.ToString()}의 {currentTurn}턴이 시작되었습니다.");
         
+        MoveTcs = new TaskCompletionSource<bool>();
         
         if (actor.Equals(ActorParent.Player))
         {
@@ -109,27 +110,14 @@ public class Turn_Test : MonoBehaviour
             //
             // gridBehavior.IsAutoMove = false;
         }
-        else
-        {
-            // MoveTcs = new TaskCompletionSource<bool>();
-            //
-            // while (TurnActor.Count > 0)
-            // {
-            //     await Task.Delay(10);
-            // }
-            //
-            // MoveTcs.TrySetResult(true);
-            // await Task.Delay(1000);
-            // await MoveTcs.Task;
-            //
-            // Debug.Log("플레이어 행동 종료");
-        }
     }
 
     private async Task EnemyTest()
     {
-        MoveTcs = new TaskCompletionSource<bool>();
-        await MoveTcs.Task;
+        while (GridBehavior.Instance.Actor != null)
+        {
+            await Task.Delay(10);
+        }
         
         foreach (var player in GameManager.Instance.PlayerUnits)
         {
