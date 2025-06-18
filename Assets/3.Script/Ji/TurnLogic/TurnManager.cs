@@ -6,7 +6,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
-public partial class TurnManager : MonoBehaviour
+public class TurnManager : MonoBehaviour
 {
     public static TurnManager Instance { get; private set; }
 
@@ -25,7 +25,8 @@ public partial class TurnManager : MonoBehaviour
     
     // 턴 수량
     public int TurnCount { get; private set; } = 0;
-
+    private int maxTurnCount = 30;
+    
     // 턴 종료 여부 -> callback
     public TaskCompletionSource<bool> TurnEndedSource;
     
@@ -65,9 +66,9 @@ public partial class TurnManager : MonoBehaviour
             TurnEndedSource = new TaskCompletionSource<bool>();
             await TurnEndedSource.Task;
         
+            // 게임 종료 조건 체크
             if (CheckWinCondition())
             {
-                // 게임 종료 조건 체크
                 break;
             }
             
@@ -114,30 +115,43 @@ public partial class TurnManager : MonoBehaviour
 
     private bool CheckWinCondition() //승자가 나올 겨우 true, 아니라면 false 반환
     {
-        return false; //please fix
-        
         ActorParent winner;
         
         // 추가할 것 - 양쪽에 //&& 맵 승리조건이 있고, 그게 달성되었으면 && mapWinLogic?.Invoke ?
         
-        if (playerUnits.All(unit => unit.isDead)) //playerAllDead
+        //playerAllDead
+        if (GameManager.Instance.PlayerUnits.All(unit => unit.Stat.HP < 0)) 
         {
             winner = ActorParent.Enemy;
             EndGame(winner);
+            
+            GameManager.Instance.EndGamePanel.SetActive(true);
+            GameManager.Instance.EndPanelTxt.text = "enemy win";
+            
             return true;
         }
         
-        if (monsterUnits.All(unit => unit.isDead)) //enemyAllDead
+        //enemyAllDead
+        if (GameManager.Instance.EnemyUnits.All(unit => unit.Stat.HP < 0)) 
         {
             winner = ActorParent.Player;
             EndGame(winner);
+            
+            GameManager.Instance.EndGamePanel.SetActive(true);
+            GameManager.Instance.EndPanelTxt.text = "player win";
+
             return true;
         }
         
-        if (TurnCount >= maxTurnCount) // 턴이 최대 턴 수를 지나 패배 처리
+        // 턴이 최대 턴 수를 지나 패배 처리
+        if (TurnCount >= maxTurnCount) 
         {
             winner = ActorParent.Enemy;
             EndGame(winner);
+            
+            GameManager.Instance.EndGamePanel.SetActive(true);
+            GameManager.Instance.EndPanelTxt.text = "enemy win";
+            
             return true;
         }
         

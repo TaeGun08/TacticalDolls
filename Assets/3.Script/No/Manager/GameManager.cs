@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -14,7 +15,8 @@ public class GameManager : MonoBehaviour
     public PrefabsTable CharacterTable;
     public Button ExitButton;
     public GameObject EndGamePanel;
-    
+    public TMP_Text EndPanelTxt;
+
     // 게임에 배치된 유닛    
     public List<CharacterData> PlayerUnits;
     public List<EnemyData> EnemyUnits;

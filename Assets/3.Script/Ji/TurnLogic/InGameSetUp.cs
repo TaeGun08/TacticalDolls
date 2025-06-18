@@ -1,38 +1,38 @@
-using System.Threading.Tasks;
-using Sirenix.OdinInspector;
-using UnityEngine;
-
-public partial class TurnManager : MonoBehaviour
-{
-    private int maxTurnCount = 10;
-    
-    [ReadOnly] private SamplePlayer[] playerUnits;
-    [ReadOnly] private SamplePlayer[] monsterUnits;
-    
-    public SamplePlayer[] PlayerUnits => playerUnits;
-    public SamplePlayer[] MonsterUnits => monsterUnits;
-    
-    // [Header("PrefabsTable")]
-    // [SerializeField] private PrefabsTable playerPrefabsTable;
-    // [SerializeField] private PrefabsTable monsterPrefabsTable;
-    // [SerializeField] private PrefabsTable playerSkillPrefabsTable;
-    
-    private Task<bool> InGameInitialize() //게임 시작 초기화
-    {
-        // maxTurnCount = 50; //맵의 최대 턴 수 정보로
-        // playerUnits = new SamplePlayer[10];
-        //적 monsterUnits
-        
-        playerUnits = new SamplePlayer[3];
-        monsterUnits = new SamplePlayer[3];
-
-        // for (int i = 0; i < 3; i++)
-        // {
-        //     playerUnits[i] = new SamplePlayer();
-        //     monsterUnits[i] = new SamplePlayer();
-        // }
-        
-        return Task.FromResult(true);
-    }
-}
-
+// using System.Threading.Tasks;
+// using Sirenix.OdinInspector;
+// using UnityEngine;
+//
+// public partial class TurnManager : MonoBehaviour
+// {
+//     private int maxTurnCount = 10;
+//     
+//     [ReadOnly] private SamplePlayer[] playerUnits;
+//     [ReadOnly] private SamplePlayer[] monsterUnits;
+//     
+//     public SamplePlayer[] PlayerUnits => playerUnits;
+//     public SamplePlayer[] MonsterUnits => monsterUnits;
+//     
+//     // [Header("PrefabsTable")]
+//     // [SerializeField] private PrefabsTable playerPrefabsTable;
+//     // [SerializeField] private PrefabsTable monsterPrefabsTable;
+//     // [SerializeField] private PrefabsTable playerSkillPrefabsTable;
+//     
+//     private Task<bool> InGameInitialize() //게임 시작 초기화
+//     {
+//         // maxTurnCount = 50; //맵의 최대 턴 수 정보로
+//         // playerUnits = new SamplePlayer[10];
+//         //적 monsterUnits
+//         
+//         playerUnits = new SamplePlayer[3];
+//         monsterUnits = new SamplePlayer[3];
+//
+//         // for (int i = 0; i < 3; i++)
+//         // {
+//         //     playerUnits[i] = new SamplePlayer();
+//         //     monsterUnits[i] = new SamplePlayer();
+//         // }
+//         
+//         return Task.FromResult(true);
+//     }
+// }
+//
