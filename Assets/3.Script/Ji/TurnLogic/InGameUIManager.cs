@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -14,6 +15,9 @@ public class InGameUIManager : MonoBehaviour
     private int onSelectSkill;                          //스킬을 선택하는 로직 필요
     private int aiSelectSkill;                          //Ai가 자동으로 선택한 스킬
     private bool isBlockedPlayerControl;                //스킬 사용 중 플레이어 입력 막음
+
+    public List<IDamageAble> testTargets =  new List<IDamageAble>();
+    public GameObject testTarget;
     
     private void Start()
     {
@@ -24,6 +28,8 @@ public class InGameUIManager : MonoBehaviour
             return;
         }
         
+        testTargets.Add(testTarget.GetComponent<IDamageAble>());
+            
         turnManager.ActorChanged += OnTurnChangedWrapper;
         turnManager.GameStateChanged += OnGameStateChanged;
     }
@@ -219,8 +225,8 @@ public class InGameUIManager : MonoBehaviour
     
     private void OnClickedConfirmSelectSkillButton() //실제 스킬이 사용되는 메서드 //플레이어 전용
     {
-        if (isBlockedPlayerControl) return; 
-        isBlockedPlayerControl = true; //플레이어 입력 차단
+        // if (isBlockedPlayerControl) return; 
+        // isBlockedPlayerControl = true; //플레이어 입력 차단
 
         if (selectedCharacter == null || onSelectSkill == 0)
         {
@@ -249,25 +255,27 @@ public class InGameUIManager : MonoBehaviour
         //     await selectedCharacter.Excute(onSelectSkill-1); //스킬 실행 중 대기
         // }
         
-        // await selectedCharacter.Excute(); //스킬 실행 중 대기
+        Debug.Log("ExcuteSkill");
+        
+        await selectedCharacter.Excute(onSelectSkill-1, testTargets, testTarget.transform ); //스킬 실행 중 대기
         
         //스킬 실행 완료
         // _= FocusCharacter(selectedCharacter); //행동한 캐릭터 자신을 포커스
         
-        await Task.Delay(1000); //잠깐 대기
-            
-        foreach (var player in turnManager.PlayerUnits) //스킬 사용 후 행동 가능 캐릭터 검사
-        {
-            if (player.isCompleteAction) continue; //행동완료된 캐릭터는 지나침
-            
-            OnGUI();                               //GUI 활성화
-            _= FocusCharacter(player);                //행동할 수 있는 캐릭터 포커스
-            isBlockedPlayerControl = false;        //플레이어 입력 차단 비활성화
-            return;
-        }
-        
-        //여기까지 왔다면 모두 행동을 완료했습니다.
-        turnManager.TurnEndedSource?.TrySetResult(true); //턴 종료
+        // await Task.Delay(1000); //잠깐 대기
+        //     
+        // foreach (var player in turnManager.PlayerUnits) //스킬 사용 후 행동 가능 캐릭터 검사
+        // {
+        //     if (player.isCompleteAction) continue; //행동완료된 캐릭터는 지나침
+        //     
+        //     OnGUI();                               //GUI 활성화
+        //     _= FocusCharacter(player);                //행동할 수 있는 캐릭터 포커스
+        //     isBlockedPlayerControl = false;        //플레이어 입력 차단 비활성화
+        //     return;
+        // }
+        //
+        // //여기까지 왔다면 모두 행동을 완료했습니다.
+        // turnManager.TurnEndedSource?.TrySetResult(true); //턴 종료
     }
     
     private void OnGameStateChanged(object sender, GameStateEventArgs e)

@@ -17,12 +17,51 @@ using UnityEngine.Serialization;
 
 public class SkillBase : SkillParent
 {
-    public override async Task SkillAction()
+    public override async Task StartSkillAction(List<IDamageAble> targets)
     {
-        Debug.Log("Skill Action");
-        await Task.Delay(1000);
+        Debug.Log("StartSkillAction");
+        
+        if (StartSkillEvents != null)
+            foreach (var t in StartSkillEvents)
+            {
+                t?.Invoke();
+            }
+        
+        // await Task.Delay(100);
     }
-    
+
+    public override Task AffectSkillAction(List<IDamageAble> targets)
+    {
+        Debug.Log("AffectSkillAction");
+
+        if (AffectSkillEvents != null)
+            foreach (var t in AffectSkillEvents)
+            {
+                t?.Invoke();
+            }
+        
+        //ToDo 소수점 탈락함으로 float으로 교체하기
+        // int amount = unitSkillDetails.skillValue / unitSkillDetails.splitHitCount;
+        int amount = 10;
+        CombatSystem.Instance.ApplyDamage(unitSkillComponents.characterData, targets, amount);
+        
+        return Task.CompletedTask;
+    }
+
+    public override async Task EndSkillAction(List<IDamageAble> targets)
+    {
+        Debug.Log("EndSkillAction");
+        
+        if (EndSkillEvents != null)
+            foreach (var t in EndSkillEvents)
+            {
+                t?.Invoke();
+            }
+        
+        //await Task.Delay(100);
+    }
+
+    #region OldCode
     // private static readonly int ANIMATION_TRIGGER = Animator.StringToHash("ANIMATION_TRIGGER");
     // public override SkillType SkillType => SkillType.Damage;
     // public override RangeType RangeType => RangeType.Single;
@@ -158,5 +197,7 @@ public class SkillBase : SkillParent
     //     
     //     SkillEffectTcs.TrySetResult(true); //스킬 적용 종료
     // }
-
+    
+    #endregion
+    
 }

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2028351747548310683
+--- !u!1 &4409047874068816009
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,27 +8,27 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4231791077877921153}
-  - component: {fileID: 6171852125360726229}
-  - component: {fileID: 735051944440560035}
-  - component: {fileID: 3784537943139497080}
-  - component: {fileID: -6534194406593813175}
-  - component: {fileID: 8586753269948602528}
-  - component: {fileID: 3770169189969299345}
+  - component: {fileID: 6797914585256609027}
+  - component: {fileID: 6812312075058337421}
+  - component: {fileID: 5953677568592372665}
+  - component: {fileID: 7539079894860485151}
+  - component: {fileID: -6968983817259881828}
+  - component: {fileID: -6054153073456231944}
+  - component: {fileID: -8808516436154472114}
   m_Layer: 5
-  m_Name: Vanguard
+  m_Name: UI_Supporter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &4231791077877921153
+--- !u!224 &6797914585256609027
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2028351747548310683}
+  m_GameObject: {fileID: 4409047874068816009}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -38,24 +38,24 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 256, y: 0}
+  m_AnchoredPosition: {x: 126, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &6171852125360726229
+--- !u!222 &6812312075058337421
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2028351747548310683}
+  m_GameObject: {fileID: 4409047874068816009}
   m_CullTransparentMesh: 1
---- !u!114 &735051944440560035
+--- !u!114 &5953677568592372665
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2028351747548310683}
+  m_GameObject: {fileID: 4409047874068816009}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -69,7 +69,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300008, guid: 358b5d9f23bc9413e87c9948acc67ee1, type: 3}
+  m_Sprite: {fileID: 21300012, guid: 358b5d9f23bc9413e87c9948acc67ee1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -79,21 +79,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3784537943139497080
+--- !u!114 &7539079894860485151
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2028351747548310683}
+  m_GameObject: {fileID: 4409047874068816009}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9962c534960090e4fbfd1d105be98100, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterID: 2
-  PrefabName: Vanguard
-  baseStatSO: {fileID: 11400000, guid: 96bc17ed5b8608c4abde132b2bd7edc2, type: 2}
+  CharacterID: 1
+  PrefabName: Suporter
+  baseStatSO: {fileID: 11400000, guid: 1da04776241776a4abba08b51d3777fa, type: 2}
   runtimeStat:
     level: 0
     hp: 0
@@ -102,39 +102,39 @@ MonoBehaviour:
     moveRange: 0
     skills: []
     weapon: {fileID: 0}
---- !u!114 &-6534194406593813175
+--- !u!114 &-6968983817259881828
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2028351747548310683}
+  m_GameObject: {fileID: 4409047874068816009}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2b5f0ceb28dbbe246895b76ade27252f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterPrefab3D: {fileID: 1054886437853045308, guid: 9cb8b85914ff02741877d596db561fcc,
+  characterPrefab3D: {fileID: 1054886437853045308, guid: a7b939bd49658ad4b8d483dfd14cf59b,
     type: 3}
---- !u!225 &8586753269948602528
+--- !u!225 &-6054153073456231944
 CanvasGroup:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2028351747548310683}
+  m_GameObject: {fileID: 4409047874068816009}
   m_Enabled: 1
   m_Alpha: 1
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &3770169189969299345
+--- !u!114 &-8808516436154472114
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2028351747548310683}
+  m_GameObject: {fileID: 4409047874068816009}
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}

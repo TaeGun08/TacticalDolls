@@ -1,11 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Febucci.UI.Core;
 using Sirenix.OdinInspector;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Playables;
-using UnityEngine.Serialization;
+using UnityEngine.Timeline;
 using UnityEngine.Video;
 
 // public enum UltType
@@ -94,7 +96,7 @@ public abstract class SkillParent : MonoBehaviour //, IUnitSkill
         [Space] [Header("컴포넌트")] [Space]
         
         [LabelText("스킬 보유 캐릭터")] [Required]
-        [Tooltip("스킬을 가진 캐릭터입니다.")]  public SamplePlayer characterData;
+        [Tooltip("스킬을 가진 캐릭터입니다.")]  public CharacterData characterData;
         
         [LabelText("스킬 아이콘")] [Required]
         [Tooltip("스킬 아이콘입니다.")] public Sprite skillIconSprite;
@@ -111,8 +113,40 @@ public abstract class SkillParent : MonoBehaviour //, IUnitSkill
         [LabelText("발사체 시작 위치")] 
         [Tooltip("스킬 투사체가 발사될 위치입니다.")] public Transform castTransform;
     }
-
-    public UnitSkillComponents unitSkillComponents;
+    
     public UnitSkillDetails unitSkillDetails;
-    public abstract Task SkillAction();
+    public UnitSkillComponents unitSkillComponents;
+
+
+    //ToDo 리스트로 바꾸고 초기화
+    public Action[] StartSkillEvents;
+    public Action[] AffectSkillEvents;
+    public Action[] EndSkillEvents;
+    
+    public abstract Task StartSkillAction(List<IDamageAble> targets);
+    public abstract Task AffectSkillAction(List<IDamageAble> targets);
+    public abstract Task EndSkillAction(List<IDamageAble> targets);
+    
+    private void Start()
+    {
+        BindSignalReceiver();
+    }
+    
+    void BindSignalReceiver()
+    {
+        TimelineAsset timeline = unitSkillComponents.director.playableAsset as TimelineAsset;
+        if (timeline == null)
+        {
+            Debug.LogError("PlayableAsset is not a TimelineAsset");
+            return;
+        }
+        foreach (var track in timeline.GetOutputTracks())
+        {
+            if (track is SignalTrack signalTrack)
+            {
+                unitSkillComponents.director.SetGenericBinding(signalTrack, CharacterSequenceManager.Instance);
+                Debug.Log("SignalTrack 바인딩 완료");
+            }
+        }
+    }
 }
