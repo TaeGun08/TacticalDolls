@@ -211,16 +211,15 @@ public class PathFindingManager : MonoBehaviour
     {
         if (TurnManager.Instance == null || turn == null)
             return false;
-        Debug.Log("여긴가");
         switch (TurnManager.Instance.CurrentTurn)
         {
-            case ActorParent.Player:
-                foreach (EnemyData enemy in GameManager.Instance.EnemyUnits)
-                {
-                    if (RoundToTilePosition(enemy.transform.position) == pos)
-                        return true;
-                }
-                break;
+            // case ActorParent.Player:
+            //     foreach (EnemyData enemy in GameManager.Instance.EnemyUnits)
+            //     {
+            //         if (RoundToTilePosition(enemy.transform.position) == pos)
+            //             return true;
+            //     }
+            //     break;
 
             case ActorParent.Enemy:
                 foreach (CharacterData player in GameManager.Instance.PlayerUnits)

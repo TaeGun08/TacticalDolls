@@ -136,7 +136,7 @@ public class TileManager : MonoBehaviour
                         applyTileObj.SetOccupant(spawnEnemey.GetComponent<IDamageAble>());
                          
                         // add enemy unit 
-                        GameManager.Instance.EnemyUnits.Add(enemyData);
+                        GameManager.Instance.EnemyUnits.Add(spawnEnemey.GetComponent<EnemyData>());
                     }
                 }
             }

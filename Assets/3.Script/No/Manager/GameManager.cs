@@ -96,7 +96,13 @@ public class GameManager : MonoBehaviour
     }
     
     public void OnCharacterEndTurn()
-    { 
+    {
+        if (MoveChoiceTile != null)
+        {
+            List<Node> path = PathFindingManager.Instance.PathFind(currentCharacter.transform.position, MoveChoiceTile.transform.position);
+            _= GridBehavior.Instance.MovePlayerAlongPath(path, Vector3.zero);
+        }
+        
         MoveChoiceTile = null;
         SkillSelectSystem.Instance.IsSelectingSkill = false;
         
@@ -110,26 +116,21 @@ public class GameManager : MonoBehaviour
 
         CheckCharacterAction();
         NextCharacterSetting();
+        
     }
 
     // 캐릭터 전체 행동 체크 후 턴 전환
     private void CheckCharacterAction()
     {
-        //int checkCharacterAction = 0;
         bool checkCharacterAction = true;
         
         foreach (var character in PlayerUnits)
         {
             if (character.Stat.IsCompleteAction) continue;
             checkCharacterAction = false;
-            // if (character.Stat.IsCompleteAction)
-            // {
-            //     checkCharacterAction += 1;
-            // }    
         }
 
         if (checkCharacterAction)
-        // if (checkCharacterAction == PlayerUnits.Count)
         {
             TurnManager.Instance.TurnEndedSource.TrySetResult(true);
         }
