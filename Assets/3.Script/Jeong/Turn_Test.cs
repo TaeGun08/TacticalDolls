@@ -126,6 +126,9 @@ public class Turn_Test : MonoBehaviour
 
     private async Task EnemyTest()
     {
+        MoveTcs = new TaskCompletionSource<bool>();
+        await MoveTcs.Task;
+        
         foreach (var player in GameManager.Instance.PlayerUnits)
         {
             gridBehavior.Actors.Add(player);

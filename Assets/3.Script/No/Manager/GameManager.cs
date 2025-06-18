@@ -99,6 +99,7 @@ public class GameManager : MonoBehaviour
     {
         if (MoveChoiceTile != null)
         {
+            GridBehavior.Instance.Actor = currentCharacter;
             List<Node> path = PathFindingManager.Instance.PathFind(currentCharacter.transform.position, MoveChoiceTile.transform.position);
             _= GridBehavior.Instance.MovePlayerAlongPath(path, Vector3.zero);
         }
