@@ -111,6 +111,8 @@ public class SkillSelectSystem : MonoBehaviour
 
     private void OnSkillButtonClicked(int skillIndex)
     {
+        GameManager.Instance.CurrentEnemy = null;
+        
         if (skillIndex >= currentTarget.Stat.Skills.Count) return;
 
         SkillEffectHandlerBase skill = currentTarget.Stat.Skills[skillIndex];
