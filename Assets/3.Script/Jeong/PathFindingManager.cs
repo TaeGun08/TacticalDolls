@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class Node
@@ -52,14 +53,15 @@ public class PathFindingManager : MonoBehaviour
 
     private IEnumerator Start()
     {
+        yield return null;
         tileManager = TileManager.Instance;
         turn = Turn_Test.Instance;
-        yield return null;
-        nodeArray = new Node[51, 51];
+        
+        nodeArray = new Node[tileManager.tiles.GetLength(0), tileManager.tiles.GetLength(0)];
 
-        for (int x = 0; x < 51; x++)
+        for (int x = 0; x < nodeArray.GetLength(0); x++)
         {
-            for (int z = 0; z < 51; z++)
+            for (int z = 0; z < nodeArray.GetLength(1); z++)
             {
                 nodeArray[x, z] = new Node(tileManager.tiles[x, z]);
             }
@@ -112,7 +114,7 @@ public class PathFindingManager : MonoBehaviour
 
                 int tentativeG = currentNode.G + CalculateDistanceCost(currentNode, neighbor);
                 
-                Vector2Int neighborPos = new Vector2Int(neighbor.Position.x, neighbor.Position.z);
+                //Vector2Int neighborPos = new Vector2Int(neighbor.Position.x, neighbor.Position.z);
 
                 // bool canPass = neighbor.Tile.isWalkable && 
                 //                (neighbor.Tile.isUsingTile == false || (reser))
@@ -163,18 +165,24 @@ public class PathFindingManager : MonoBehaviour
     private List<Node> GetNeighbours(Node node)
     {
         List<Node> neighbors = new List<Node>();
-
+        
         foreach (var dir in directions)
         {
             int nx = node.Position.x + dir.x;
             int nz = node.Position.z + dir.z;
 
             if (nx < 0 || nz < 0 || nx >= 51 || nz >= 51)
+            {
+                Debug.Log("탐색 타일 벗어남");
                 continue;
+            }
 
             Node neighbor = nodeArray[nx, nz];
             if (neighbor == null || !neighbor.Tile.isWalkable)
+            {
+                Debug.Log("이웃 노드 없거나 또는 밟을 수 없는 타일임");
                 continue;
+            }
 
             bool isDiagonal = Mathf.Abs(dir.x) == 1 && Mathf.Abs(dir.z) == 1;
 
@@ -184,7 +192,10 @@ public class PathFindingManager : MonoBehaviour
                 Node nodeB = nodeArray[node.Position.x, node.Position.z + dir.z];
 
                 if (nodeA == null || nodeB == null || !nodeA.Tile.isWalkable || !nodeB.Tile.isWalkable)
+                {
+                    Debug.Log("이웃 노드가 없거나 또는 밟을 수 없는 타일임 ( A노드와 B 노드 관련)");
                     continue;
+                }
             }
 
             if (IsTargetAtPosition(neighbor.Position))
@@ -200,7 +211,7 @@ public class PathFindingManager : MonoBehaviour
     {
         if (TurnManager.Instance == null || turn == null)
             return false;
-
+        Debug.Log("여긴가");
         switch (TurnManager.Instance.CurrentTurn)
         {
             case ActorParent.Player:
@@ -210,11 +221,11 @@ public class PathFindingManager : MonoBehaviour
                         return true;
                 }
                 break;
-        
+
             case ActorParent.Enemy:
-                foreach (CharacterData character in GameManager.Instance.PlayerUnits)
+                foreach (CharacterData player in GameManager.Instance.PlayerUnits)
                 {
-                    if (RoundToTilePosition(character.transform.position) == pos)
+                    if (RoundToTilePosition(player.transform.position) == pos)
                         return true;
                 }
                 break;
