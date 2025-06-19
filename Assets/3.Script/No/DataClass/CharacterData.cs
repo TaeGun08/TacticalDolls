@@ -19,8 +19,9 @@ public class CharacterData : MonoBehaviour, IDamageAble
     public Collider MainCollider { get; }
     public GameObject GameObject => gameObject;
     public int Team => 0;
+    public SkillParent[] HasSkills { get => hasSkills; set => hasSkills = value; }
     
-    [SerializeField] private SkillParent[] HasSkills;
+    public SkillParent[] hasSkills;
     
     private void Awake()
     {

@@ -20,6 +20,7 @@ public class SkillSelectSystem : MonoBehaviour
     public bool IsSelectingSkill { get; set; }
 
     private IDamageAble currentTarget;
+    public List<IDamageAble> CashedDamageAbles;
 
     private void Awake()
     {
@@ -57,13 +58,12 @@ public class SkillSelectSystem : MonoBehaviour
         {
             cancelButton.gameObject.SetActive(false);
             selectButton.gameObject.SetActive(false);
-            RangeSystem.Instance.ResetAllTiles();
+            // RangeSystem.Instance.ResetAllTiles();
             
             IsSelectingSkill = false;
             
             Debug.Log($"target :: {currentTarget}, selectskill :: {currentSkill}");
             
-            Debug.Log("StartMove");
             if (GameManager.Instance.MoveChoiceTile != null)
             {
                 GridBehavior.Instance.Actor = currentTarget;
@@ -71,12 +71,12 @@ public class SkillSelectSystem : MonoBehaviour
                 await GridBehavior.Instance.MovePlayerAlongPath(path, Vector3.zero);
             }
             
-            Debug.Log("EndMove");
-            
             // List<IDamageAble> targetList = RangeSystem.Instance.damageAbles;
             // Transform targetTransform = RangeSystem.Instance.currentTile.transform;
+            Debug.Log($"RangeSystem.Instance.damageAbles.Count : {RangeSystem.Instance.damageAbles.Count}");
+            Debug.Log($"CashedDamageAbles.Count : {CashedDamageAbles.Count}");
             
-            await currentTarget.Excute(currentSkill, RangeSystem.Instance.damageAbles, RangeSystem.Instance.currentTile.transform);
+            await currentTarget.Excute(currentSkill, CashedDamageAbles, RangeSystem.Instance.currentTile.transform);
             
             InintializeAfterSkillExcute();
         });
@@ -96,7 +96,6 @@ public class SkillSelectSystem : MonoBehaviour
     {
         panel.SetActive(true);
         currentTarget = targetData;
-
         OpenSkills(currentTarget);
     }
 
@@ -104,9 +103,9 @@ public class SkillSelectSystem : MonoBehaviour
     {
         for (int i = 0; i < skillNameTexts.Length; i++)
         {
-            if (i < unit.Stat.Skills.Count && unit.Stat.Skills[i] != null)
+            if (i < unit.HasSkills.Length && unit.HasSkills[i] != null)
             {
-                skillNameTexts[i].text = unit.Stat.Skills[i].Name;
+                skillNameTexts[i].text = unit.HasSkills[i].skillName;
                 skillButtons[i].interactable = true;
 
                 int capturedIndex = i;
@@ -126,9 +125,9 @@ public class SkillSelectSystem : MonoBehaviour
     {
         GameManager.Instance.CurrentEnemy = null;
         
-        if (skillIndex >= currentTarget.Stat.Skills.Count) return;
+        if (skillIndex >= currentTarget.HasSkills.Length) return;
 
-        SkillEffectHandlerBase skill = currentTarget.Stat.Skills[skillIndex];
+        SkillParent skill = currentTarget.HasSkills[skillIndex];
         if (skill == null) return;
 
         GameManager.Instance.EndTurnBtn.gameObject.SetActive(false);

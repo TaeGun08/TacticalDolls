@@ -10,6 +10,7 @@ public interface IDamageAble
     GameObject GameObject { get; }
     int Team { get; }
 
+    SkillParent[] HasSkills { get; set; }
     Task Excute(int selectedSkill, List<IDamageAble> targets, Transform targetPoint);
     void TakeDamage(CombatEvent combatEvent);
     void TakeHeal(HealEvent combatEvent);

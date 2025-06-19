@@ -40,6 +40,12 @@ public class SkillBase : SkillParent
                 t?.Invoke();
             }
         
+        
+        for (int i =0; i<RangeSystem.Instance.damageAbles.Count;i++)
+        {
+            Debug.Log(RangeSystem.Instance.damageAbles[i].GameObject.name);
+        }
+        
         //ToDo 소수점 탈락함으로 float으로 교체하기
         // int amount = unitSkillDetails.skillValue / unitSkillDetails.splitHitCount;
         int amount = 10;
