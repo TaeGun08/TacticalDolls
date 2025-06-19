@@ -186,8 +186,9 @@ public class GameManager : MonoBehaviour
                         {
                             CurrentEnemy = enemyData;
 
-                            RangeSystem.Instance.ShowSkillRange(currentCharacter, CurrentEnemy,
+                            SkillSelectSystem.Instance.CashedDamageAbles = RangeSystem.Instance.ShowSkillRange(currentCharacter, CurrentEnemy,
                                 skillUI.currentSkill);
+                            Debug.Log($"Gm SkillSelectSystem.Instance.CashedDamageAbles.Count {SkillSelectSystem.Instance.CashedDamageAbles.Count}");
                             SkillSelectSystem.Instance.selectButton.interactable = true;
                         }
                     }

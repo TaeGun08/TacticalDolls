@@ -12,7 +12,9 @@ public class EnemyData : MonoBehaviour, IDamageAble
     [SerializeField] private StatDataSO baseStatSO;
     [SerializeField] private StatData runtimeStat;
     
-    [SerializeField] private SkillBase[] HasSkills;
+    public SkillParent[] HasSkills { get => hasSkills; set => hasSkills = value; }
+
+    public SkillParent[] hasSkills;
     
     public IStat Stat => runtimeStat;
     
@@ -32,7 +34,7 @@ public class EnemyData : MonoBehaviour, IDamageAble
             Debug.Log("No Skill Found");
             return;
         }
-        await CharacterSequenceManager.Instance.MakeSequence(HasSkills[selectedSkill], targets, targetPoint);
+        await CharacterSequenceManager.Instance.MakeSequence(HasSkills[selectedSkill] as SkillBase, targets, targetPoint);
     }
     
     public void TakeDamage(CombatEvent combatEvent)
