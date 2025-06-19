@@ -126,7 +126,8 @@ public class GridBehavior : MonoBehaviour
         
             if (IsAutoMove)
             {
-                // if (AttackRangeChecker(Actor.GetAttackableTilesFromReachable(),
+                // if (AttackRangeChecker(TileManager.Instance.GetAttackableTilesFromReachable(dollPos,
+                //             Actor.Stat.MoveRange, Actor.Stat.MoveRange),
                 //         PathFindingManager.Instance.RoundToTilePosition(target))) break;
                 if (MoveRangeChecker(actorPos, targetPos) == false) break;
             }
@@ -160,29 +161,35 @@ public class GridBehavior : MonoBehaviour
 
     private void Test()
     {
-        foreach (IDamageAble actor in GameManager.Instance.PlayerUnits)
+        switch (TurnManager.Instance.CurrentTurn)
         {
-            if (actor != Actor)
-            {
-                var tilePos = new Vector2Int(
-                    Mathf.RoundToInt(actor.GameObject.transform.position.x),
-                    Mathf.RoundToInt(actor.GameObject.transform.position.z)
-                );
-                reservedTiles.Add(tilePos);
-            }
+            case ActorParent.Player:
+                foreach (IDamageAble actor in GameManager.Instance.EnemyUnits)
+                {
+                    if (actor != Actor)
+                    {
+                        var tilePos = new Vector2Int(
+                            Mathf.RoundToInt(actor.GameObject.transform.position.x),
+                            Mathf.RoundToInt(actor.GameObject.transform.position.z)
+                        );
+                        reservedTiles.Add(tilePos);
+                    }
+                }
+                break;
+            case ActorParent.Enemy:
+                foreach (IDamageAble actor in GameManager.Instance.PlayerUnits)
+                {
+                    if (actor != Actor)
+                    {
+                        var tilePos = new Vector2Int(
+                            Mathf.RoundToInt(actor.GameObject.transform.position.x),
+                            Mathf.RoundToInt(actor.GameObject.transform.position.z)
+                        );
+                        reservedTiles.Add(tilePos);
+                    }
+                }
+                break;
         }
-        
-        // foreach (IDamageAble actor in GameManager.Instance.EnemyUnits)
-        // {
-        //     if (actor != Actor)
-        //     {
-        //         var tilePos = new Vector2Int(
-        //             Mathf.RoundToInt(actor.GameObject.transform.position.x),
-        //             Mathf.RoundToInt(actor.GameObject.transform.position.z)
-        //         );
-        //         reservedTiles.Add(tilePos);
-        //     }
-        // }
     }
 
     private bool MoveRangeChecker(List<Vector2Int> actorPos, Vector3 targetPos)
