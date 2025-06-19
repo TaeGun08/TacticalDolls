@@ -116,7 +116,7 @@ public class Turn_Test : MonoBehaviour
     {
         while (GridBehavior.Instance.Actor != null)
         {
-            await Task.Delay(10);
+            await Task.Delay(100);
         }
         
         foreach (var player in GameManager.Instance.PlayerUnits)

@@ -254,54 +254,37 @@ public class TileManager : MonoBehaviour
 
         previousSelectedTile = selectedTile;
     }
+
     
     public Vector2Int origin;
-    public int moveRange = 6;
-    public int attackRange = 6;
-
-    public Color moveColor = Color.blue;
-    public Color attackColor = Color.red;
-
-    private List<Vector2Int> reachableTiles;
+    public int range;
+    public Color gizmoColor = Color.cyan;
 
     private void OnDrawGizmos()
     {
-        var reachableTiles = GetReachableTiles(origin, moveRange);
-        var attackMap = GetAttackableTilesPerReachableTile(origin, moveRange, attackRange);
+        Gizmos.color = gizmoColor;
 
-        // 이동 타일 (파란색)
-        Gizmos.color = moveColor;
-        foreach (var moveTile in reachableTiles)
+        List<Vector2Int> tiles = GetReachableTiles(origin, range);
+
+        foreach (Vector2Int tile in tiles)
         {
-            Gizmos.DrawCube(new Vector3(moveTile.x, 0, moveTile.y), Vector3.one * 0.9f);
+            Vector3 pos = new Vector3(tile.x, 0, tile.y); // y → z로 바꿔서 3D 공간 상에서 xz 평면으로 보이게 함
+            Gizmos.DrawWireCube(pos, Vector3.one);
         }
-
-        // 공격 범위 (보라색 등 다른 색으로 시각화)
-        Gizmos.color = attackColor;
-        foreach (var kvp in attackMap)
-        {
-            foreach (var attackTile in kvp.Value)
-            {
-                if (!reachableTiles.Contains(attackTile)) // 이동 타일과 겹치지 않을 때만
-                    Gizmos.DrawCube(new Vector3(attackTile.x, 0.1f, attackTile.y), Vector3.one * 0.5f); // 크기 작게
-            }
-        }
-
-        // 원점
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(new Vector3(origin.x, 0, origin.y), 0.3f);
     }
     
     public List<Vector2Int> GetReachableTiles(Vector2Int origin, int range)
     {
         List<Vector2Int> reachable = new List<Vector2Int>();
-        this.moveRange = range;
+        this.origin = origin;
+        this.range = range;
+
         for (int dx = -range; dx <= range; dx++)
         {
             for (int dy = -range; dy <= range; dy++)
             {
-                int dist = Mathf.Abs(dx) + Mathf.Abs(dy);
-                if (dist <= range)
+                int manhattanDistance = Mathf.Abs(dx) + Mathf.Abs(dy);
+                if (manhattanDistance <= range)
                 {
                     int x = origin.x + dx;
                     int y = origin.y + dy;
@@ -312,38 +295,6 @@ public class TileManager : MonoBehaviour
         }
 
         return reachable;
-    }
-
-    public Dictionary<Vector2Int, List<Vector2Int>> GetAttackableTilesPerReachableTile(Vector2Int origin, int moveRange, int attackRange)
-    {
-        Dictionary<Vector2Int, List<Vector2Int>> result = new Dictionary<Vector2Int, List<Vector2Int>>();
-        this.attackRange = attackRange;
-
-        var reachableTiles = GetReachableTiles(origin, moveRange);
-
-        foreach (var moveTile in reachableTiles)
-        {
-            List<Vector2Int> localAttackable = new List<Vector2Int>();
-
-            for (int dx = -attackRange; dx <= attackRange; dx++)
-            {
-                for (int dy = -attackRange; dy <= attackRange; dy++)
-                {
-                    int dist = Mathf.Abs(dx) + Mathf.Abs(dy);
-                    if (dist <= attackRange)
-                    {
-                        int x = moveTile.x + dx;
-                        int y = moveTile.y + dy;
-                        if (x >= 0 && y >= 0)
-                            localAttackable.Add(new Vector2Int(x, y));
-                    }
-                }
-            }
-
-            result[moveTile] = localAttackable;
-        }
-
-        return result;
     }
 }
 

@@ -36,7 +36,7 @@ public class Actor_Test
         {
             for (int dy = -range; dy <= range; dy++)
             {
-                int dist = Mathf.Abs(dx) + Mathf.Abs(dy);
+                float dist = Mathf.Sqrt(dx * dx + dy * dy); // 유클리드 거리
                 if (dist <= range)
                 {
                     int x = origin.x + dx;
@@ -61,7 +61,8 @@ public class Actor_Test
             {
                 for (int dy = -attackRange; dy <= attackRange; dy++)
                 {
-                    if (Mathf.Abs(dx) + Mathf.Abs(dy) <= attackRange)
+                    float dist = Mathf.Sqrt(dx * dx + dy * dy); // 유클리드 거리
+                    if (dist <= attackRange)
                     {
                         int x = moveTile.x + dx;
                         int y = moveTile.y + dy;
