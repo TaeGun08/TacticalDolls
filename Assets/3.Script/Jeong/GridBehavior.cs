@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -38,13 +39,15 @@ public class GridBehavior : MonoBehaviour
     private Tile moveChoiceTile;
     private Tile skillChoiceTile;
 
-    [SerializeField] private Button enemyTurnEnd;
+    [SerializeField] private Button playerAutoButton;
 
+    private IDamageAble nearestTarget;
+    
     private void Awake()
     {
         Instance = this;
 
-        enemyTurnEnd.onClick.AddListener(() => { Turn_Test.Instance.MoveTcs.TrySetResult(true); });
+        playerAutoButton.onClick.AddListener(() => {  });
     }
 
     private void Start()
@@ -56,18 +59,12 @@ public class GridBehavior : MonoBehaviour
 
     private void Update()
     {
-        //AllyInputMove();
-
-        // 이동 처리
-        // if (Turn_Test.Instance.IsAuto)
-        // {
-        //     // 자동
-        //     AutoMove();
-        // }
-
         AutoMove();
     }
 
+    /// <summary>
+    /// 자동 이동을 위한 함수, 자신과 가까운 거리의 Actor를 찾아서 8방향 주위에 있는 경로를 탐색함
+    /// </summary>
     private void AutoMove()
     {
         if (IsMove || IsAutoMove == false || Actor == null) return;
@@ -92,17 +89,24 @@ public class GridBehavior : MonoBehaviour
 
         List<Node> path = PathFindingManager.Instance.PathFind(Actor.GameObject.transform.position, finalTargetPos);
         reservedTiles.Add(new Vector2Int(finalTargetPos.x, finalTargetPos.z));
-
-        Vector3 nearestTargetPos = Actors
+        
+        nearestTarget = Actors
             .Where(target => target != Actor)
             .OrderBy(target =>
                 Vector3.Distance(Actor.GameObject.transform.position, target.GameObject.transform.position))
-            .Select(target => target.GameObject.transform.position)
             .FirstOrDefault();
-
-        _ = MovePlayerAlongPath(path, PathFindingManager.Instance.RoundToTilePosition(nearestTargetPos));
+        
+        Vector3 targetPos = nearestTarget == null ? Vector3.zero: 
+        PathFindingManager.Instance.RoundToTilePosition(nearestTarget.GameObject.transform.position);
+        
+            _ = MovePlayerAlongPath(path, targetPos);
     }
 
+    /// <summary>
+    /// 경로를 넣어주면 그 경로에 맞는 위치로 이동하는 함수
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="target"></param>
     public async Task MovePlayerAlongPath(List<Node> path, Vector3 target)
     {
         IsMove = true;
@@ -121,7 +125,7 @@ public class GridBehavior : MonoBehaviour
         {
             Vector3 targetPos = new Vector3(
                 node.Position.x * tileManager.tileSize,
-                0.5f,
+                0f,
                 node.Position.z * tileManager.tileSize
             );
 
@@ -139,7 +143,7 @@ public class GridBehavior : MonoBehaviour
             
             if (IsAutoMove)
             {
-                if (AttackRangeChecker(targetPos)) break;
+                if (AttackRangeChecker(target)) break;
                 if (MoveRangeChecker(actorPosList, targetPos) == false) break;
             }
         }
@@ -151,13 +155,21 @@ public class GridBehavior : MonoBehaviour
             newTile.SetOccupant(Actor);
         }
 
+        if (IsAutoMove)
+        {
+            List<IDamageAble> targets = new List<IDamageAble> { nearestTarget };
+            // TODO await Actor.Excute(0, targets, targets[0].GameObject.transform);
+            await Task.Delay(1000);
+        }
+        
         Actor.Stat.IsCompleteAction = true;
 
         Actor = null;
+        nearestTarget = null;
         turn.MoveTcs.TrySetResult(true);
         IsMove = false;
     }
-
+    
     private void TargetActors()
     {
         switch (TurnManager.Instance.CurrentTurn)
@@ -197,23 +209,14 @@ public class GridBehavior : MonoBehaviour
     {
         return actorPos.Contains(new Vector2Int((int)targetPos.x, (int)targetPos.z));
     }
-
+    
     private bool AttackRangeChecker(Vector3 targetPos)
     {
-        Vector2Int actorTile = new Vector2Int(
-            Mathf.RoundToInt(Actor.GameObject.transform.position.x),
-            Mathf.RoundToInt(Actor.GameObject.transform.position.z)
-        );
-
-        List<Vector2Int> attackRangeTiles = TileManager.Instance.GetReachableTiles(actorTile, Actor.Stat.MoveRange);
-
-        Vector2Int targetTile = new Vector2Int(
-            Mathf.RoundToInt(targetPos.x),
-            Mathf.RoundToInt(targetPos.z)
-        );
-
-        Debug.Log($"공격 가능한 타일에 대상 위치 {targetTile}이 있는가? : {attackRangeTiles.Contains(targetTile)}");
-        return attackRangeTiles.Contains(targetTile);
+        Vector2Int actorPos = new Vector2Int((int)Actor.GameObject.transform.position.x,
+            (int)Actor.GameObject.transform.position.z);
+        List<Vector2Int> actorPosList = TileManager.Instance.GetReachableTiles(actorPos, Actor.Stat.MoveRange);
+        
+        return actorPosList.Contains(new Vector2Int((int)targetPos.x, (int)targetPos.z));
     }
 
     /// <summary>

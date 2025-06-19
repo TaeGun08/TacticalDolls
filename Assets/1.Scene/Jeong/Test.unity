@@ -2338,7 +2338,7 @@ MonoBehaviour:
   selectedTile: {fileID: 0}
   defaultMaterial: {fileID: 0}
   outlineMaterial: {fileID: 2100000, guid: b1a2efc8b1c9e4943a0973eff5b13bce, type: 2}
-  selectedStage: 1
+  selectedStage: 0
   origin: {x: 0, y: 0}
   range: 3
   gizmoColor: {r: 0, g: 1, b: 1, a: 1}
@@ -3312,7 +3312,7 @@ MonoBehaviour:
   characterLayer:
     serializedVersion: 2
     m_Bits: 256
-  enemyTurnEnd: {fileID: 424275802}
+  playerAutoButton: {fileID: 0}
 --- !u!4 &854237648
 Transform:
   m_ObjectHideFlags: 0
@@ -4261,7 +4261,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: -0.00001335144}
+  m_AnchoredPosition: {x: -0.000061035156, y: -0.000014020438}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1192701331

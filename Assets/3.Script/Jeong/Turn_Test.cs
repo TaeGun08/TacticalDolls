@@ -78,11 +78,11 @@ public class Turn_Test : MonoBehaviour
             TurnActor = GameManager.Instance.PlayerUnits;
             
             // 모든 캐릭터 행동 종료 체크
-            //await OnCheckEndCharacterActor();
+            await OnCheckEndCharacterActor();
         }
         else if (actor.Equals(ActorParent.Enemy))
         {
-            await EnemyTest();
+            await OnCheckEndEnemyActor();
         }
 
         turnManager.TurnEndedSource.TrySetResult(true);
@@ -90,34 +90,37 @@ public class Turn_Test : MonoBehaviour
 
     private async Task OnCheckEndCharacterActor()
     {
-        if (IsAuto)
+        while (GridBehavior.Instance.Actor != null)
         {
-            // gridBehavior.IsAutoMove = true;
-            //
-            // gridBehavior.Actors = Enemy;
-            //
-            // foreach (var ally in Ally)
-            // {
-            //     if (AllyChecker(ally) || IsAuto == false) continue;
-            //     MoveTcs = new TaskCompletionSource<bool>();
-            //     SkillTcs = new TaskCompletionSource<bool>();
-            //     gridBehavior.Actor = ally;
-            //     await MoveTcs.Task;
-            //     await SkillTcs.Task;
-            // }
-            //
-            // Debug.Log("Ally turn 종료");
-            //
-            // gridBehavior.IsAutoMove = false;
+            await Task.Delay(100);
         }
+        
+        gridBehavior.Actors = new List<IDamageAble>();
+        
+        foreach (var enemy in GameManager.Instance.EnemyUnits)
+        {
+            gridBehavior.Actors.Add(enemy);
+        }
+        
+        gridBehavior.IsAutoMove = true;
+        
+        foreach (var player in GameManager.Instance.PlayerUnits)
+        {
+            MoveTcs = new TaskCompletionSource<bool>();
+            gridBehavior.Actor = player;
+            await MoveTcs.Task;
+        }
+        gridBehavior.IsAutoMove = false;
     }
 
-    private async Task EnemyTest()
+    private async Task OnCheckEndEnemyActor()
     {
         while (GridBehavior.Instance.Actor != null)
         {
             await Task.Delay(100);
         }
+        
+        gridBehavior.Actors = new List<IDamageAble>();
         
         foreach (var player in GameManager.Instance.PlayerUnits)
         {
@@ -134,9 +137,6 @@ public class Turn_Test : MonoBehaviour
         }
         
         gridBehavior.IsAutoMove = false;
-        
-        // MoveTcs = new TaskCompletionSource<bool>();
-        // await MoveTcs.Task;
     }
 
     #endregion
