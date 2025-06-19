@@ -6,26 +6,28 @@ using UnityEngine;
 public enum FirebaseCollections
 {
     Players,
-    Rooms,
-    MatchHistorys,
-    Ranks,
-    Invitations,
+    // Rooms,
+    // MatchHistorys,
+    // Ranks,
+    // Invitations,
 }
 
 
-
-// [FirestoreData]
-// public class PlayerData  //key : GUID
-// {
-//     [FirestoreProperty] public string Email { get; set; }
-//     [FirestoreProperty] public string NickName { get; set; }
-//     [FirestoreProperty] public string Role { get; set; }
-//     [FirestoreProperty] public Timestamp CreatedAt { get; set; }
-//     [FirestoreProperty] public bool IsTutorialCompleted { get; set; }
-//     [FirestoreProperty] public int RankPoint { get; set; }
-//     [FirestoreProperty] public List<string> Friends { get; set; } =  new List<string>();
-//     [FirestoreProperty] public List<string> MatchHistorys { get; set; } =  new List<string>();
-// }
+// 계정 정보 
+[FirestoreData]
+public class PlayerData  //key : GUID
+{
+    [FirestoreProperty] public string Email { get; set; }
+    [FirestoreProperty] public string NickName { get; set; }
+    [FirestoreProperty] public string Role { get; set; }
+    [FirestoreProperty] public Timestamp CreatedAt { get; set; }
+    [FirestoreProperty] public bool IsTutorialCompleted { get; set; }
+    
+    [FirestoreProperty] public List<CharacterDataSample> HasCharacter { get; set; } = new();
+    // [FirestoreProperty] public int RankPoint { get; set; }
+    // [FirestoreProperty] public List<string> Friends { get; set; } =  new List<string>();
+    // [FirestoreProperty] public List<string> MatchHistorys { get; set; } =  new List<string>();
+}
 
 [FirestoreData]
 public class WeaponDataSample

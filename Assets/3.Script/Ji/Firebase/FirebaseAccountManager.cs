@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -109,6 +110,7 @@ public class FirebaseAccountManager : MonoBehaviour
         return request;
     }
 
+    // 회원가입 요청
     public Task<bool> CreateAccount(string email, string password, string nickname) //계정 생성
     {
         if (isInitialized.Equals(false))
@@ -155,6 +157,7 @@ public class FirebaseAccountManager : MonoBehaviour
         user.UpdateUserProfileAsync(profile);
     }
 
+    // 계정에 담길 정보 -> db저장
     private void CreateUserDocument(string uid, string email, string nickname)
     {
         if (isInitialized.Equals(false))
@@ -162,18 +165,45 @@ public class FirebaseAccountManager : MonoBehaviour
             Debug.LogError("Firebase is not initialized.");
             return;
         }
-
-        PlayerDataSample userData = new PlayerDataSample() //please fix
+        
+        // 초기 캐릭터 설정
+        CharacterDataSample sampleCharacter = new CharacterDataSample
         {
-            // Email = email,
-            // NickName = nickname,
-            // CreatedAt = Timestamp.GetCurrentTimestamp(),
-            // Role = "user",
-            // IsTutorialCompleted = false
-            // //Freiends
+            characterCode = 0,
+            level = 1,
+
+            weapon = new WeaponDataSample
+            {
+                weaponCode = 0,
+                level = 1,
+            },
+
+            skills = new SkillDataSample[2]
+            {
+                new SkillDataSample
+                {
+                    skillCode = 1,
+                    level = 1
+                },
+                new SkillDataSample
+                {
+                    skillCode = 2,
+                    level = 3
+                }
+            }
+        };
+        
+        PlayerData userData = new PlayerData() 
+        {
+            Email = email,
+            NickName = nickname,
+            CreatedAt = Timestamp.GetCurrentTimestamp(),
+            Role = "user",
+            IsTutorialCompleted = false,
+            HasCharacter = new List<CharacterDataSample> { sampleCharacter }
         };
 
-        FirestoreManager.Instance.WriteDataAsync<PlayerDataSample>(FirebaseCollections.Players, uid, userData)
+        FirestoreManager.Instance.WriteDataAsync<PlayerData>(FirebaseCollections.Players, uid, userData)
             .ContinueWithOnMainThread(
                 task =>
                 {
@@ -187,7 +217,8 @@ public class FirebaseAccountManager : MonoBehaviour
                 });
     }
 
-    public async Task<bool> SignIn(string email, string password) //로그인
+    // 로그인
+    public async Task<bool> SignIn(string email, string password) 
     {
         bool isSignIn = false;
 
@@ -210,7 +241,7 @@ public class FirebaseAccountManager : MonoBehaviour
             var result = task.Result;
             Firebase.Auth.FirebaseUser user = result.User;
         
-            FirestoreManager.Instance.ReadDataAsync<PlayerDataSample>(FirebaseCollections.Players, user.UserId)
+            FirestoreManager.Instance.ReadDataAsync<PlayerData>(FirebaseCollections.Players, user.UserId)
                 .ContinueWithOnMainThread(
                     task =>
                     {
@@ -219,14 +250,16 @@ public class FirebaseAccountManager : MonoBehaviour
                             return;
                         }
         
-                        // FirebaseMainSession.Instance.SetUserData(user, task.Result.NickName); //please fix
+                        FirebaseMainSession.Instance.SetUserData(user, task.Result.NickName); 
                     });
         });
 
         return isSignIn;
     }
 
-    public void SignOut() //실행하는곳에서 login false 하기
+    // 로그아웃 : 실행하는곳에서 login false 하기
+    // SetUserData 유지
+    public void SignOut() 
     {
         auth.SignOut();
         FirebaseMainSession.Instance.SetUserData(null, null);

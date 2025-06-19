@@ -13,7 +13,7 @@ public class FirebaseTester : MonoBehaviour
         {
             CharacterDataSample sampleCharacter = new CharacterDataSample
             {
-                characterCode = 1,
+                characterCode = 0,
                 level = 1,
                 
                 weapon = new WeaponDataSample

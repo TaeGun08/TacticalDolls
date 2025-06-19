@@ -45,7 +45,7 @@ public class SkillSelectSystem : MonoBehaviour
             cancelButton.gameObject.SetActive(false);
             selectButton.gameObject.SetActive(false);
             
-            GameManager.Instance.CurrentEnemy = null;
+            GameManager.Instance.CurrentSkillTarget = null;
             
             RangeSystem.Instance.ResetAllTiles();
             RangeSystem.Instance.ShowMoveRange(
@@ -90,7 +90,7 @@ public class SkillSelectSystem : MonoBehaviour
     public void InintializeAfterSkillExcute()
     {
         // 스킬 사용후 초기화 되어야 할 내용
-        GameManager.Instance.CurrentEnemy = null;
+        GameManager.Instance.CurrentSkillTarget = null;
         GameManager.Instance.MoveChoiceTile = null;
                 
         GameManager.Instance.OnCharacterEndTurn();
@@ -127,7 +127,7 @@ public class SkillSelectSystem : MonoBehaviour
 
     private void OnSkillButtonClicked(int skillIndex)
     {
-        GameManager.Instance.CurrentEnemy = null;
+        GameManager.Instance.CurrentSkillTarget = null;
         
         if (skillIndex >= currentTarget.HasSkills.Length) return;
 
@@ -138,7 +138,7 @@ public class SkillSelectSystem : MonoBehaviour
         cancelButton.gameObject.SetActive(true);
         selectButton.gameObject.SetActive(true);
 
-        if (GameManager.Instance.CurrentEnemy == null)
+        if (GameManager.Instance.CurrentSkillTarget == null)
         {
             selectButton.interactable = false;
         }
@@ -158,6 +158,11 @@ public class SkillSelectSystem : MonoBehaviour
         //SkillRangeSystem.Instance.ShowSkillRange(currentTarget, ,index);
 
         //TestCombat(index);
+    }
+
+    public int GetCurrentSkillIndex()
+    {
+        return currentSkill;
     }
 
     // public void TestCombat(int skillIndex)
