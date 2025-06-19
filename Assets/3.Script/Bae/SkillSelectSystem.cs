@@ -62,7 +62,6 @@ public class SkillSelectSystem : MonoBehaviour
             
             IsSelectingSkill = false;
             
-            Debug.Log($"target :: {currentTarget}, selectskill :: {currentSkill}");
             
             if (GameManager.Instance.MoveChoiceTile != null)
             {
@@ -73,14 +72,18 @@ public class SkillSelectSystem : MonoBehaviour
             
             // List<IDamageAble> targetList = RangeSystem.Instance.damageAbles;
             // Transform targetTransform = RangeSystem.Instance.currentTile.transform;
-            Debug.Log($"RangeSystem.Instance.damageAbles.Count : {RangeSystem.Instance.damageAbles.Count}");
-            Debug.Log($"CashedDamageAbles.Count : {CashedDamageAbles.Count}");
-            
             
             // currentEnemyTile =
             //     TileManager.Instance.GetCurrentTileByIDamageAble(enemyData);
             
-            await currentTarget.Excute(currentSkill, CashedDamageAbles, RangeSystem.Instance.currentTile.transform);
+            if (currentTarget.HasSkills[currentSkill].targetType == TargetType.Tile)
+            {
+                await currentTarget.Excute(currentSkill, CashedDamageAbles, RangeSystem.Instance.currentTile.transform);
+            }
+            else
+            {
+                await currentTarget.Excute(currentSkill, CashedDamageAbles, GameManager.Instance.CurrentSkillTarget.GameObject.transform);
+            }
             
             InintializeAfterSkillExcute();
         });

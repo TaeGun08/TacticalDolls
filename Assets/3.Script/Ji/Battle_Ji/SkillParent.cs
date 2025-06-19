@@ -77,7 +77,10 @@ public abstract class SkillParent : MonoBehaviour //, IUnitSkill
     {
         [Space] [Header("값")] [Space]
         
-        [LabelText("스킬 효과 값")] 
+        [LabelText("스킬 ID")]
+        [Tooltip("스킬을 식별하기 위한 ID값 입니다.")] public string skillID;
+        
+        [LabelText("스킬 효과 값")]
         [Tooltip("데미지, 힐, 보호막 등이 적용될 수치입니다.")] public int skillValue = 0;
         
         [LabelText("공격 범위")] 
@@ -132,9 +135,10 @@ public abstract class SkillParent : MonoBehaviour //, IUnitSkill
         BindSignalReceiver();
     }
     
-    void BindSignalReceiver()
+    void BindSignalReceiver() //시그널 바인딩
     {
         TimelineAsset timeline = unitSkillComponents.director.playableAsset as TimelineAsset;
+        
         if (timeline == null)
         {
             Debug.LogError("PlayableAsset is not a TimelineAsset");
@@ -144,7 +148,7 @@ public abstract class SkillParent : MonoBehaviour //, IUnitSkill
         {
             if (track is SignalTrack signalTrack)
             {
-                unitSkillComponents.director.SetGenericBinding(signalTrack, CharacterSequenceManager.Instance);
+                unitSkillComponents.director.SetGenericBinding(signalTrack, CharacterSequenceManager.Instance.signalReceiver);
                 Debug.Log("SignalTrack 바인딩 완료");
             }
         }

@@ -172,6 +172,14 @@
 //         currentTurn = turnManager.TurnCount + 1;
 //         actorParent = actor;
 //         Debug.Log($"{actor.ToString()}의 {currentTurn}턴이 시작되었습니다.");
+
+
+
+
+
+
+
+
 //         
 //         if (actor.Equals(ActorParent.Player)) //플레이어 조작
 //         {
