@@ -76,6 +76,10 @@ public class SkillSelectSystem : MonoBehaviour
             Debug.Log($"RangeSystem.Instance.damageAbles.Count : {RangeSystem.Instance.damageAbles.Count}");
             Debug.Log($"CashedDamageAbles.Count : {CashedDamageAbles.Count}");
             
+            
+            // currentEnemyTile =
+            //     TileManager.Instance.GetCurrentTileByIDamageAble(enemyData);
+            
             await currentTarget.Excute(currentSkill, CashedDamageAbles, RangeSystem.Instance.currentTile.transform);
             
             InintializeAfterSkillExcute();
