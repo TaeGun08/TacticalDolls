@@ -108,7 +108,7 @@ public class RangeSystem : MonoBehaviour
         }
     }
     
-    public List<IDamageAble> ShowSkillRange(IDamageAble attackAble, IDamageAble targetAble, int index)
+    public List<IDamageAble> ShowSkillRange(IDamageAble attackAble, Tile targetTile, int index)
     {
         Tile tempTile = GameManager.Instance.MoveChoiceTile == null
             ? TileManager.Instance.GetCurrentTileByIDamageAble(attackAble)
@@ -118,7 +118,7 @@ public class RangeSystem : MonoBehaviour
         usableTiles.Clear();
         damageAbles.Clear();
         
-        currentTile = TileManager.Instance.GetCurrentTileByIDamageAble(targetAble);
+        currentTile = targetTile;
 
         if (currentTile == null) return null;
 
@@ -131,7 +131,6 @@ public class RangeSystem : MonoBehaviour
         HighlightAllTilesInRange(currentTile, skill.rangeType, skill.unitSkillDetails.areaOfEffect);
         SetDamageAbles();
 
-        Debug.Log($"damageAbles = {damageAbles.Count}");
         return damageAbles;
         
         void HighlightAllTilesInRange(Tile centerTile, RangeType rangeType, int range)

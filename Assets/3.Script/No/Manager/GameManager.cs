@@ -25,19 +25,19 @@ public class GameManager : MonoBehaviour
 
     // 캐릭터 클릭
     [SerializeField] private LayerMask unitLayer;
+    [SerializeField] private LayerMask tileLayer;
     [SerializeField] private SkillSelectSystem skillUI;
     [SerializeField] private Button endTurnBtn;
 
     public Button EndTurnBtn => endTurnBtn;
 
     private CharacterData currentCharacter;
-    public EnemyData CurrentEnemy { get; set; }
-
-    private Tile currentEnemyTile;
+    public IDamageAble CurrentSkillTarget { get; set; }
+    private Tile currentSkillTargetTile;
 
     public Tile MoveChoiceTile { get; set; }
 
-    private bool isEnemyInAttackRange;
+    private bool isTargetInAttackRange;
     
     private void Awake()
     {
@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
         endTurnBtn.gameObject.SetActive(false);
         skillUI.Close();
 
-        CurrentEnemy = null;
+        CurrentSkillTarget = null;
 
         currentCharacter.Stat.IsCompleteAction = true;
 
@@ -168,29 +168,88 @@ public class GameManager : MonoBehaviour
             if (SkillSelectSystem.Instance.IsSelectingSkill)
             {
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
-                        out RaycastHit unitHit, 100f, unitLayer))
+                        out RaycastHit unitHit, 100f, unitLayer | tileLayer))
                 {
-                    if (unitHit.collider.TryGetComponent(out CharacterData characterData))
+                    int currentSkillIndex = SkillSelectSystem.Instance.GetCurrentSkillIndex();
+                    switch (currentCharacter.HasSkills[currentSkillIndex].targetType)
                     {
-                        // TODO 같은 팀한테 스킬 사용할 때 구현 해야함
-                    }
-                    
-                    else if (unitHit.collider.TryGetComponent(out EnemyData enemyData))
-                    {
-                        currentEnemyTile =
-                            TileManager.Instance.GetCurrentTileByIDamageAble(enemyData);
-                        isEnemyInAttackRange =
-                            RangeSystem.Instance.attackableTiles.Contains(currentEnemyTile);
+                        case TargetType.Tile:
+                            if (unitHit.collider.TryGetComponent(out Tile tile))
+                            {
+                                currentSkillTargetTile = tile;
+                                isTargetInAttackRange =
+                                    RangeSystem.Instance.attackableTiles.Contains(currentSkillTargetTile);
 
-                        if (isEnemyInAttackRange)
-                        {
-                            CurrentEnemy = enemyData;
+                                if (isTargetInAttackRange)
+                                {
+                                    SkillSelectSystem.Instance.CashedDamageAbles = 
+                                        RangeSystem.Instance.ShowSkillRange(
+                                            currentCharacter, 
+                                            currentSkillTargetTile, 
+                                            skillUI.currentSkill);
+                                    Debug.Log($"Gm SkillSelectSystem.Instance.CashedDamageAbles.Count {SkillSelectSystem.Instance.CashedDamageAbles.Count}");
+                                    SkillSelectSystem.Instance.selectButton.interactable = true;
+                                }
+                            }
+                            else
+                            {
+                                Debug.Log("지정 대상이 잘못되었습니다.");
+                            }
+                            break;
+                        case TargetType.Ally:
+                            if (unitHit.collider.TryGetComponent(out CharacterData characterData))
+                            {
+                                currentSkillTargetTile =
+                                    TileManager.Instance.GetCurrentTileByIDamageAble(characterData);
+                                isTargetInAttackRange =
+                                    RangeSystem.Instance.attackableTiles.Contains(currentSkillTargetTile);
 
-                            SkillSelectSystem.Instance.CashedDamageAbles = RangeSystem.Instance.ShowSkillRange(currentCharacter, CurrentEnemy,
-                                skillUI.currentSkill);
-                            Debug.Log($"Gm SkillSelectSystem.Instance.CashedDamageAbles.Count {SkillSelectSystem.Instance.CashedDamageAbles.Count}");
-                            SkillSelectSystem.Instance.selectButton.interactable = true;
-                        }
+                                if (isTargetInAttackRange)
+                                {
+                                    CurrentSkillTarget = characterData;
+
+                                    SkillSelectSystem.Instance.CashedDamageAbles = 
+                                        RangeSystem.Instance.ShowSkillRange(
+                                            currentCharacter, 
+                                            currentSkillTargetTile, 
+                                            skillUI.currentSkill);
+                                    Debug.Log($"Gm SkillSelectSystem.Instance.CashedDamageAbles.Count {SkillSelectSystem.Instance.CashedDamageAbles.Count}");
+                                    SkillSelectSystem.Instance.selectButton.interactable = true;
+                                }
+                            }
+                            else
+                            {
+                                Debug.Log("지정 대상이 잘못되었습니다.");
+                            }
+                            break;
+                        case TargetType.Enemy:
+                            if (unitHit.collider.TryGetComponent(out EnemyData enemyData))
+                            {
+                                currentSkillTargetTile =
+                                    TileManager.Instance.GetCurrentTileByIDamageAble(enemyData);
+                                isTargetInAttackRange =
+                                    RangeSystem.Instance.attackableTiles.Contains(currentSkillTargetTile);
+
+                                if (isTargetInAttackRange)
+                                {
+                                    CurrentSkillTarget = enemyData;
+
+                                    SkillSelectSystem.Instance.CashedDamageAbles = 
+                                        RangeSystem.Instance.ShowSkillRange(
+                                            currentCharacter, 
+                                            currentSkillTargetTile, 
+                                            skillUI.currentSkill);
+                                    Debug.Log($"Gm SkillSelectSystem.Instance.CashedDamageAbles.Count {SkillSelectSystem.Instance.CashedDamageAbles.Count}");
+                                    SkillSelectSystem.Instance.selectButton.interactable = true;
+                                }
+                            }
+                            else
+                            {
+                                Debug.Log("지정 대상이 잘못되었습니다.");
+                            }
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
                 }
             }
