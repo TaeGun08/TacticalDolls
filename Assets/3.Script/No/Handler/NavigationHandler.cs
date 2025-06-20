@@ -11,6 +11,7 @@ public class NavigationHandler : MonoBehaviour
     public GameObject Lobby;
     public GameObject Stage;
     public GameObject CharacterRoom;
+    public GameObject WeaponRoom;
     public GameObject Order;
     public GameObject My;
     
@@ -18,6 +19,7 @@ public class NavigationHandler : MonoBehaviour
     public GameObject LobbyRender;
     public GameObject StageRender;
     public GameObject CharacterRender;
+    public GameObject WeaponRender;
     public GameObject OrderRender;
     public GameObject MyRender;
 
@@ -27,6 +29,7 @@ public class NavigationHandler : MonoBehaviour
     [Header("Lobby Button Settings")]
     public Button StageRoomButton;
     public Button CharacterRoomButton;
+    public Button WeaponRoomButton;
     public Button OrderRoomButton;
     public Button MyRoomButton;
     
@@ -45,6 +48,7 @@ public class NavigationHandler : MonoBehaviour
         BackButton.onClick.AddListener(OnMoveLobby);
         StageRoomButton.onClick.AddListener(OnMoveStageRoom);
         CharacterRoomButton.onClick.AddListener(OnMoveCharacterRoom);
+        WeaponRoomButton.onClick.AddListener(OnMoveWeaponRoom);
         OrderRoomButton.onClick.AddListener(OnMoveOrderRoom);
         MyRoomButton.onClick.AddListener(OnMoveMyRoom);
         
@@ -59,6 +63,7 @@ public class NavigationHandler : MonoBehaviour
         Lobby.SetActive(false);
         Stage.SetActive(false);
         CharacterRoom.SetActive(false);
+        WeaponRoom.SetActive(false);
         Order.SetActive(false);
         My.SetActive(false);
         Stage1.SetActive(false);
@@ -67,6 +72,7 @@ public class NavigationHandler : MonoBehaviour
         LobbyRender.SetActive(false);
         StageRender.SetActive(false);
         CharacterRender.SetActive(false);
+        WeaponRender.SetActive(false);
         OrderRender.SetActive(false);
         MyRender.SetActive(false);
         
@@ -77,6 +83,7 @@ public class NavigationHandler : MonoBehaviour
     private void OnMoveLobby() => ShowRoom(Lobby, LobbyRender);
     private void OnMoveStageRoom() => ShowRoom(Stage, StageRender);
     private void OnMoveCharacterRoom() => ShowRoom(CharacterRoom, CharacterRender);
+    private void OnMoveWeaponRoom() => ShowRoom(WeaponRoom, WeaponRender);
     private void OnMoveOrderRoom() => ShowRoom(Order, OrderRender);
     private void OnMoveMyRoom() => ShowRoom(My, MyRender);
     private void OnMoveChapter() => OnMoverStagePage();

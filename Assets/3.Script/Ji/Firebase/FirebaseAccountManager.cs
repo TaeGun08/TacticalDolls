@@ -166,7 +166,7 @@ public class FirebaseAccountManager : MonoBehaviour
             return;
         }
         
-        // 초기 캐릭터 설정
+        // 초기 캐릭터 리스트 설정
         CharacterDataSample sampleCharacter = new CharacterDataSample
         {
             characterCode = 0,
@@ -182,15 +182,22 @@ public class FirebaseAccountManager : MonoBehaviour
             {
                 new SkillDataSample
                 {
-                    skillCode = 1,
+                    skillCode = 0,
                     level = 1
                 },
                 new SkillDataSample
                 {
-                    skillCode = 2,
-                    level = 3
+                    skillCode = 1,
+                    level = 1
                 }
             }
+        };
+        
+        // 초기 무기 리스트 설정
+        WeaponDataSample sampleWeapon = new WeaponDataSample
+        {
+            weaponCode = 0,
+            level = 1,
         };
         
         PlayerData userData = new PlayerData() 
@@ -200,7 +207,8 @@ public class FirebaseAccountManager : MonoBehaviour
             CreatedAt = Timestamp.GetCurrentTimestamp(),
             Role = "user",
             IsTutorialCompleted = false,
-            HasCharacter = new List<CharacterDataSample> { sampleCharacter }
+            HasCharacter = new List<CharacterDataSample> { sampleCharacter },
+            HasWeapon = new List<WeaponDataSample> { sampleWeapon }
         };
 
         FirestoreManager.Instance.WriteDataAsync<PlayerData>(FirebaseCollections.Players, uid, userData)
