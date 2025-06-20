@@ -21,6 +21,10 @@ public class PlayerManager : MonoBehaviour
     // 플레이어가 사용 가능한 무기
     public List<WeaponData> usingWeaponData;
     
+    // 로비 Panel
+    [SerializeField] private GameObject lobbyPanel;
+    [SerializeField] private GameObject lobbyRender;
+    
     private void Awake()
     {
         if (Instance != null)
@@ -55,6 +59,9 @@ public class PlayerManager : MonoBehaviour
             
             InitializeCharacterSampleData(weapon);
         }
+        
+        lobbyPanel.SetActive(true);
+        lobbyRender.SetActive(true);
     }
     
     public CharacterDataSample InitializeCharacterSampleData(CharacterDataSample character)
