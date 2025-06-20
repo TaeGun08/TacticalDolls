@@ -1069,7 +1069,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 988210603290645289}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7fc00f0d635103c469ee3c8cec237d63, type: 3}
   m_Name: 
@@ -9734,7 +9734,7 @@ MonoBehaviour:
     moveRange: 0
     skills:
     - {fileID: 11400000, guid: bcf42b402ce89dd4e9ce8653ccdcab75, type: 2}
-    weapon: {fileID: -8985103076616876387, guid: 9098ebe93f92a804b808393bab6d1c39,
+    weapon: {fileID: 1169428410338001786, guid: 7ce6622ba8c35c14d8cf468be744c972,
       type: 3}
     isDead: 0
     isCompleteAction: 0

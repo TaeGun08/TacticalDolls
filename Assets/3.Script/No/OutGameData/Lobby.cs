@@ -2,8 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Looby : MonoBehaviour
+public class Lobby : MonoBehaviour
 {
+    [SerializeField]
+    private Transform rawImageSpawnPoint;
+
     private void Start()
     {
         // 플레이어 데이터 조회 테스트 디버그
@@ -19,5 +22,15 @@ public class Looby : MonoBehaviour
         // {
         //     Debug.Log($"무기 코드: {weapon.weaponCode}, 레벨: {weapon.level}");
         // }
+    }
+
+    private void OnEnable()
+    {
+        foreach (Transform child in rawImageSpawnPoint)
+        {
+            Destroy(child.gameObject);
+        }
+        
+        Instantiate(PlayerManager.Instance.usingCharacterData[0].GameObject, rawImageSpawnPoint.position, rawImageSpawnPoint.rotation, rawImageSpawnPoint);
     }
 }

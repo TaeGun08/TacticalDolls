@@ -1,17 +1,100 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CharacterRoom : MonoBehaviour
 {
-    [SerializeField] private GameObject characterRoomPanel;
+    [SerializeField] private Transform iconSpawnPoint;
+    [SerializeField] private Transform rawImageSpawnPoint;
 
-    private CharacterDataSample currentCharacter;
+    private List<CharacterData> playerCharacters;
+    private List<CharacterData> characterIcons;
     
+    [SerializeField] private TMP_Text characterPosition;
+    [SerializeField] private TMP_Text characterName;
+    [SerializeField] private TMP_Text characterLevel;
+    [SerializeField] private TMP_Text characterAttack;
+    [SerializeField] private TMP_Text characterHp;
+    [SerializeField] private TMP_Text characterDefense;
+    
+    private CharacterData selectedCharacter;
+
+    public Button LevelUpButton;
+
     private void OnEnable()
     {
-        currentCharacter = FirebaseMainSession.Instance.FirebaseUser.playerData.HasCharacter[0];
+        SetUIPlayerCharacters();
+        SetInfoPlayerCharacter(selectedCharacter);
+    }
+
+    private void Awake()
+    {
+        LevelUpButton.onClick.AddListener(RequestUpdateCharacterLevelUp);
+    }
+
+    private void SetUIPlayerCharacters()
+    {
+        foreach (Transform child in iconSpawnPoint)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (Transform child in rawImageSpawnPoint)
+        {
+            Destroy(child.gameObject);
+        }
         
+        playerCharacters = PlayerManager.Instance.usingCharacterData;
+        characterIcons = PlayerManager.Instance.characterIcons;
+        
+        for (int i = 0; i < playerCharacters.Count; i++)
+        {
+            for (int j = 0; j < characterIcons.Count; j++)
+            {
+                if (playerCharacters[i].CharacterID == characterIcons[j].CharacterID)
+                {
+                    var SpawnCharacterUI = Instantiate(characterIcons[i].GameObject, iconSpawnPoint.position, iconSpawnPoint.rotation, iconSpawnPoint);
+                    Button btn = SpawnCharacterUI.AddComponent<Button>();
+                    
+                    btn.onClick.AddListener(() => selectedCharacter = playerCharacters[i]);
+                }
+            }
+        }
+        
+        selectedCharacter = playerCharacters[0];
+        Instantiate(selectedCharacter.GameObject, rawImageSpawnPoint.position, rawImageSpawnPoint.rotation, rawImageSpawnPoint);
+    }
+
+    private void SetInfoPlayerCharacter(CharacterData characterData)
+    {
+        characterPosition.text = "No Position";
+        characterName.text = characterData.PrefabName;
+        characterLevel.text = "Lv. " + characterData.Stat.Level + "/ 20";
+        characterAttack.text = characterData.Stat.Attack.ToString();
+        characterHp.text = characterData.Stat.HP.ToString();
+        characterDefense.text = characterData.Stat.Defense.ToString();
+    }
+    
+    private async void RequestUpdateCharacterLevelUp()
+    {
+        Debug.Log($"RequestUpdateCharacterLevelUp :: {selectedCharacter.CharacterID}");
+
+        var result = await selectedCharacter.UpdateCharacterLevel(selectedCharacter.CharacterID, 1);
+
+        if (result)
+        {
+            await FirebaseMainSession.Instance.FirestoreLoader();
+            PlayerManager.Instance.UpdateCharacterData();
+            SetUIPlayerCharacters();
+            SetInfoPlayerCharacter(selectedCharacter);
+        }
+        else
+        {
+            Debug.LogWarning("캐릭터 레벨업 실패");
+        }
     }
 }
