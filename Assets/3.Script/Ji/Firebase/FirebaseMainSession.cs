@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class FirebaseUser
@@ -37,7 +38,7 @@ public class FirebaseMainSession : MonoBehaviour
         FirestoreLoader();
     }
 
-    public async void FirestoreLoader()
+    public async Task FirestoreLoader()
     {
         string userId = FirebaseUser.UserData.UserId;
         

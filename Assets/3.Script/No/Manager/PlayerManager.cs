@@ -17,8 +17,13 @@ public class PlayerManager : MonoBehaviour
     // 플레이어가 사용 가능한 캐릭터 
     public List<int> usingCharacter;
     public List<CharacterData> usingCharacterData;
+    public List<CharacterData> characterIcons;
     // 플레이어가 사용 가능한 무기
     public List<WeaponData> usingWeaponData;
+    
+    // 로비 Panel
+    [SerializeField] private GameObject lobbyPanel;
+    [SerializeField] private GameObject lobbyRender;
     
     private void Awake()
     {
@@ -40,26 +45,16 @@ public class PlayerManager : MonoBehaviour
         ResetCachedCharacterData();
         
         // 플레이어 데이터 조회 테스트 디버그
-        Debug.Log(FirebaseMainSession.Instance.FirebaseUser.UserData.Email);
-        Debug.Log(FirebaseMainSession.Instance.FirebaseUser.UserData);
-
-        foreach (var character in FirebaseMainSession.Instance.FirebaseUser.playerData.HasCharacter)
-        {
-            //Debug.Log($"캐릭터 코드: {character.characterCode}, 레벨: {character.level}");
-            
-            var initializedSample = InitializeCharacterSampleData(character);
-            player.HasCharacter.Add(initializedSample);
-        }
-
-        foreach (var weapon in FirebaseMainSession.Instance.FirebaseUser.playerData.HasWeapon)
-        {
-            //Debug.Log($"무기 코드: {weapon.weaponCode}, 레벨: {weapon.level}");
-            
-            InitializeCharacterSampleData(weapon);
-        }
+        // Debug.Log(FirebaseMainSession.Instance.FirebaseUser.UserData.Email);
+        // Debug.Log(FirebaseMainSession.Instance.FirebaseUser.UserData);
+        
+        UpdateCharacterData();
+        
+        lobbyPanel.SetActive(true);
+        lobbyRender.SetActive(true);
     }
     
-    public CharacterDataSample InitializeCharacterSampleData(CharacterDataSample character)
+    public CharacterDataSample InitializeCharacterData(CharacterDataSample character)
     {
         GameObject prefab = CharacterTable.GetPrefabByIndex(character.characterCode);
 
@@ -71,7 +66,7 @@ public class PlayerManager : MonoBehaviour
         return character;
     }
     
-    public void InitializeCharacterSampleData(WeaponDataSample weapon)
+    public void InitializeCharacterData(WeaponDataSample weapon)
     {
         GameObject prefab = WeaponTable.GetPrefabByIndex(weapon.weaponCode);
 
@@ -80,12 +75,28 @@ public class PlayerManager : MonoBehaviour
         usingWeaponData.Add(SyncWeaponData);
     }
     
-    // 프리팹 초기화
-    public void ResetCachedCharacterData()
+    // 플레이어 정보 동기화 ( 초기값 셋팅 / 캐릭터 무기 강화 시 호출 )
+    public void UpdateCharacterData()
     {
+        Debug.Log("UpdateCharacterData");
         usingCharacterData.Clear();
         usingWeaponData.Clear();
         
+        foreach (var character in FirebaseMainSession.Instance.FirebaseUser.playerData.HasCharacter)
+        {
+            var initializedSample = InitializeCharacterData(character);
+            player.HasCharacter.Add(initializedSample);
+        }
+
+        foreach (var weapon in FirebaseMainSession.Instance.FirebaseUser.playerData.HasWeapon)
+        {
+            InitializeCharacterData(weapon);
+        }
+    }
+    
+    // 프리팹 초기화
+    public void ResetCachedCharacterData()
+    {
         for (int i = 0; i < usingCharacterData.Count; i++)
         {
             CharacterData cachedData = usingCharacterData[i];
