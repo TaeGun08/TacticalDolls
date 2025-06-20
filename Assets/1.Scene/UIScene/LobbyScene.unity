@@ -4151,6 +4151,7 @@ MonoBehaviour:
   characterAttack: {fileID: 53948181}
   characterHp: {fileID: 459680564}
   characterDefense: {fileID: 240557711}
+  LevelUpButton: {fileID: 1831212648}
 --- !u!1 &397952249
 GameObject:
   m_ObjectHideFlags: 0
