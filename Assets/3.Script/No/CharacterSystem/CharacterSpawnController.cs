@@ -40,12 +40,14 @@ public class CharacterSpawnController : MonoBehaviour
             foreach (var characterUI in characterUIPrefab)
             {
                 var character = characterUI.GetComponent<Character2DDragSystem>().characterPrefab3D.GetComponent<CharacterData>();
-        
+                
+                Debug.Log($"CharacterSpawnController::Start({characterCode}, {character.CharacterID})");
+                
                 if (characterCode == character.CharacterID)
                 {
                     var SpawnCharacter = Instantiate(characterUIPrefab[characterCode], HasCharacterContent.transform);
                     var _2DDragSystem = SpawnCharacter.GetComponent<Character2DDragSystem>();
-
+            
                     _2DDragSystem.OnCharacterSpawned += (spawnedCharacter3D) =>
                     {
                         CancelApplyEvent(spawnedCharacter3D);

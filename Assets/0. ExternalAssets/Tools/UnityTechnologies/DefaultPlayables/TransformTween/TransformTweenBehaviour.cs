@@ -15,10 +15,11 @@ public class TransformTweenBehaviour : PlayableBehaviour
         Custom,
     }
 
+    public GameObject particle;
     public Transform startLocation;
     public Transform endLocation;
     public bool tweenPosition = true;
-    public bool tweenRotation = true;
+    public bool tweenRotation = false;
     public TweenType tweenType;
     public AnimationCurve customCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
     
@@ -42,6 +43,11 @@ public class TransformTweenBehaviour : PlayableBehaviour
             startingPosition = startLocation.position;
             startingRotation = startLocation.rotation;
         }
+        
+        double duration = playable.GetDuration();
+        double currentTime = playable.GetTime();
+        
+        Debug.Log (currentTime >= duration);
     }
 
     public float EvaluateCurrentCurve (float time)

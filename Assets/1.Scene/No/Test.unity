@@ -1930,55 +1930,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4653797037080125075}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &561137265
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 561137267}
-  - component: {fileID: 561137266}
-  m_Layer: 0
-  m_Name: PlayerManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &561137266
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 561137265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d712f579aa0e4d71adf300803d5768de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  usingCharacter: 
-  usingCharacterData: []
-  SelectedCharacterPanel: {fileID: 1103959013}
-  StartBtn: {fileID: 1456335610}
-  CharacterSpawnController: {fileID: 1103959015}
---- !u!4 &561137267
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 561137265}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &569796881
 GameObject:
   m_ObjectHideFlags: 0
@@ -2370,6 +2321,9 @@ MonoBehaviour:
   defaultMaterial: {fileID: 0}
   outlineMaterial: {fileID: 2100000, guid: b1a2efc8b1c9e4943a0973eff5b13bce, type: 2}
   selectedStage: 1
+  origin: {x: 0, y: 0}
+  range: 0
+  gizmoColor: {r: 0, g: 1, b: 1, a: 1}
 --- !u!4 &659407647
 Transform:
   m_ObjectHideFlags: 0
@@ -3034,7 +2988,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 182001976}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99999195
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3340,7 +3294,8 @@ MonoBehaviour:
   characterLayer:
     serializedVersion: 2
     m_Bits: 256
-  enemyTurnEnd: {fileID: 424275802}
+  autoButton: {fileID: 424275802}
+  IsAuto: 0
 --- !u!4 &854237648
 Transform:
   m_ObjectHideFlags: 0
@@ -3385,7 +3340,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 936c6d2a73dddc4438a9e5f6120a7bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterTable: {fileID: 11400000, guid: e728d627f5039624fa321c0e1aa98879, type: 2}
   ExitButton: {fileID: 2099790312}
   EndGamePanel: {fileID: 1814397446}
   EndPanelTxt: {fileID: 102127404}
@@ -3399,6 +3353,9 @@ MonoBehaviour:
     m_Bits: 1024
   skillUI: {fileID: 1513809591}
   endTurnBtn: {fileID: 521459176}
+  CharacterSpawnController: {fileID: 1103959015}
+  SelectedCharacterPanel: {fileID: 1103959013}
+  StartBtn: {fileID: 1456335610}
 --- !u!4 &911071567
 Transform:
   m_ObjectHideFlags: 0
@@ -4217,8 +4174,6 @@ MonoBehaviour:
   HasCharacterContent: {fileID: 1192701330}
   characterUIPrefab:
   - {fileID: 4523403451643908191, guid: 10ac623fce32eaf4a97172c834a6d94f, type: 3}
-  - {fileID: 4409047874068816009, guid: f52b48445a840a748ba3b39dd1866fdd, type: 3}
-  - {fileID: 2028351747548310683, guid: 8c286959b56ce964682ac04da1944531, type: 3}
   Apply: {fileID: 643945350}
   CancelApply: {fileID: 110243651}
 --- !u!114 &1103959016
@@ -4292,7 +4247,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: 0.00008083197}
+  m_AnchoredPosition: {x: -0.000061035156, y: -0.0000010908665}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1192701331
@@ -9107,6 +9062,7 @@ MonoBehaviour:
   skillName: "\uC0D8\uD50C"
   skillInfoText: "\uC0D8\uD50C\uC785\uB2C8\uB2E4."
   unitSkillDetails:
+    skillID: 
     skillValue: 10
     areaOfEffect: 1
     splitHitCount: 7
@@ -19915,7 +19871,6 @@ SceneRoots:
   - {fileID: 607837857}
   - {fileID: 854237648}
   - {fileID: 1442460291}
-  - {fileID: 561137267}
   - {fileID: 911071567}
   - {fileID: 1253627484}
   - {fileID: 659407647}

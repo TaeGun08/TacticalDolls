@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     
-    public PrefabsTable CharacterTable;
+    //public PrefabsTable CharacterTable;
     public Button ExitButton;
     public GameObject EndGamePanel;
     public TMP_Text EndPanelTxt;
@@ -29,6 +29,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SkillSelectSystem skillUI;
     [SerializeField] private Button endTurnBtn;
 
+    // 캐릭터 스폰
+    public CharacterSpawnController CharacterSpawnController;
+    public GameObject SelectedCharacterPanel;
+    public Button StartBtn;
+    
     public Button EndTurnBtn => endTurnBtn;
 
     private CharacterData currentCharacter;
@@ -53,6 +58,8 @@ public class GameManager : MonoBehaviour
         ExitButton.onClick.AddListener(OnExitButtonClicked);
 
         endTurnBtn.onClick.AddListener(OnCharacterEndTurn);
+        
+        StartBtn.onClick.AddListener(StartGame);
     }
 
     private void Start()
@@ -159,8 +166,10 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        StartBtn.gameObject.SetActive(PlayerManager.Instance.usingCharacter.Count > 0);
+        
         if (!isGameStart) return;
-
+        
         if (Input.GetMouseButtonDown(0))
         {
             if (EventSystem.current.IsPointerOverGameObject()) return;
@@ -316,5 +325,15 @@ public class GameManager : MonoBehaviour
         endTurnBtn.gameObject.SetActive(true);
         skillUI.Open(target);
         currentCharacter = target;
+    }
+    
+    // 게임 시작
+    public void StartGame()
+    {
+        TileManager.Instance.combatScript.SetActive(true);
+        RangeSystem.Instance.ResetAllTiles();
+        SelectedCharacterPanel.SetActive(false);
+        
+        UnitInitializeStarSetting();
     }
 }

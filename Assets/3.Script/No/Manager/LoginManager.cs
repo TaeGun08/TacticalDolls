@@ -17,6 +17,9 @@ public class LoginManager : MonoBehaviour
     
     private void Awake()
     {
+        // 로그인 초기화시 테스트로 켜
+        //PlayerPrefs.DeleteAll();
+        
         Instance = this;
     }
     

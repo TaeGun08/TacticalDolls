@@ -69,7 +69,7 @@ public class Character2DDragSystem : MonoBehaviour, IBeginDragHandler, IDragHand
             Tile applyTileObj = TileManager.Instance.GetClosestTile(spawned.transform.position);
             applyTileObj.SetOccupant(spawnedData);
             
-            PlayerManager.Instance.CharacterSpawnController.characterTileMap[spawnedData.CharacterID] = applyTileObj;
+            GameManager.Instance.CharacterSpawnController.characterTileMap[spawnedData.CharacterID] = applyTileObj;
             
             // 이벤트 구독
             OnCharacterSpawned?.Invoke(spawned);

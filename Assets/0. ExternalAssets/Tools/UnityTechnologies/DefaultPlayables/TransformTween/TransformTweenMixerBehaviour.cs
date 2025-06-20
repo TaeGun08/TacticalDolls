@@ -8,6 +8,7 @@ public class TransformTweenMixerBehaviour : PlayableBehaviour
     //Harang
     private GameObject trackedTarget;
     private bool isProjectileActive = false;
+    private GameObject cashedParticle;
     
     public override void ProcessFrame(Playable playable, FrameData info, object playerData)
     {
@@ -30,6 +31,7 @@ public class TransformTweenMixerBehaviour : PlayableBehaviour
         Vector3 blendedPosition = Vector3.zero;
         Quaternion blendedRotation = new Quaternion(0f, 0f, 0f, 0f);
 
+        
         for (int i = 0; i < inputCount; i++)
         {
             ScriptPlayable<TransformTweenBehaviour> playableInput = (ScriptPlayable<TransformTweenBehaviour>)playable.GetInput (i);
@@ -38,6 +40,12 @@ public class TransformTweenMixerBehaviour : PlayableBehaviour
             if(input.endLocation == null)
                 continue;
 
+            if (cashedParticle == null)
+            {
+                cashedParticle = input.particle;
+            }
+
+            
             float inputWeight = playable.GetInputWeight(i);
 
             if (!m_FirstFrameHappened && !input.startLocation)
@@ -47,7 +55,7 @@ public class TransformTweenMixerBehaviour : PlayableBehaviour
             }
             
             //Harang
-            if (!isProjectileActive && inputWeight > 0f)
+            if (!isProjectileActive && inputWeight > 0f) //탄환 생성 안됨 && 클립이 시작됨
             {
                 isProjectileActive = true;
                 trackedTarget.SetActive(true);
@@ -56,7 +64,15 @@ public class TransformTweenMixerBehaviour : PlayableBehaviour
             {
                 isProjectileActive = false;
                 trackedTarget.SetActive(false);
+                
+                if (cashedParticle)
+                {
+                    cashedParticle.transform.position = trackBinding.position;
+                    cashedParticle.SetActive(true);
+                }
             }
+            
+
             
             float normalisedTime = (float)(playableInput.GetTime() / playableInput.GetDuration ());
             float tweenProgress = input.EvaluateCurrentCurve(normalisedTime);
@@ -105,8 +121,13 @@ public class TransformTweenMixerBehaviour : PlayableBehaviour
         {
             trackedTarget.SetActive(false);
         }
+        
+        if (cashedParticle != null)
+        {
+            cashedParticle.SetActive(false);
+        }
     }
-
+    
     static Quaternion AddQuaternions (Quaternion first, Quaternion second)
     {
         first.w += second.w;
@@ -144,5 +165,6 @@ public class TransformTweenMixerBehaviour : PlayableBehaviour
     public override void OnBehaviourPause(Playable playable, FrameData info)
     {
         m_FirstFrameHappened = false; // 다음에 다시 실행되도록
+        isProjectileActive = false;
     }
 }
