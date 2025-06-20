@@ -821,7 +821,6 @@ Transform:
   - {fileID: 1428117109}
   - {fileID: 767307455}
   - {fileID: 1370827010}
-  - {fileID: 956672463}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &42184273
@@ -5037,7 +5036,7 @@ GameObject:
   - component: {fileID: 525579368}
   - component: {fileID: 525579367}
   m_Layer: 5
-  m_Name: Sound
+  m_Name: SoundButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6195,7 +6194,7 @@ GameObject:
   - component: {fileID: 718153482}
   - component: {fileID: 718153481}
   m_Layer: 5
-  m_Name: Language
+  m_Name: LanguageButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7826,50 +7825,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 946401365}
   m_CullTransparentMesh: 1
---- !u!1 &956672462
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 956672463}
-  - component: {fileID: 956672464}
-  m_Layer: 0
-  m_Name: MyRoom
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &956672463
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 956672462}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 40751014}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &956672464
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 956672462}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2507e25e5c66084484d0756265eea3a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &959214667
 GameObject:
   m_ObjectHideFlags: 0
@@ -14325,6 +14280,7 @@ GameObject:
   - component: {fileID: 1814942491}
   - component: {fileID: 1814942493}
   - component: {fileID: 1814942492}
+  - component: {fileID: 1814942494}
   m_Layer: 5
   m_Name: MyRoomPanel
   m_TagString: Untagged
@@ -14393,6 +14349,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1814942490}
   m_CullTransparentMesh: 1
+--- !u!114 &1814942494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1814942490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2507e25e5c66084484d0756265eea3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myInfoButton: {fileID: 1776829450}
+  optionButton: {fileID: 1580762675}
+  myInfoPanel: {fileID: 1608687791}
+  optionPanel: {fileID: 1700612813}
+  languageButton: {fileID: 718153481}
+  soundButton: {fileID: 525579367}
+  languagePanel: {fileID: 1680467505}
+  soundPanel: {fileID: 318875182}
 --- !u!1 &1815362096
 GameObject:
   m_ObjectHideFlags: 0
