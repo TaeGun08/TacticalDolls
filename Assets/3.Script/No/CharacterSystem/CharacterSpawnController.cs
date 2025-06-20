@@ -41,8 +41,6 @@ public class CharacterSpawnController : MonoBehaviour
             {
                 var character = characterUI.GetComponent<Character2DDragSystem>().characterPrefab3D.GetComponent<CharacterData>();
                 
-                Debug.Log($"CharacterSpawnController::Start({characterCode}, {character.CharacterID})");
-                
                 if (characterCode == character.CharacterID)
                 {
                     var SpawnCharacter = Instantiate(characterUIPrefab[characterCode], HasCharacterContent.transform);
@@ -101,7 +99,7 @@ public class CharacterSpawnController : MonoBehaviour
         CancelApplyEvent(revertCharacter);
         
         // 캐싱된 데이터를 기반으로 스탯 초기화 (복사)
-        spawnedData.CalculateStatFromLevel(cachedData.Stat.Level);
+        spawnedData.CalculateStatFromLevel(cachedData.Stat.Level, cachedData.Stat.Weapon.Level);
 
         // 타일 상태 업데이트
         TileManager.Instance.selectedTile.isUsingTile = true;
