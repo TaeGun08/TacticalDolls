@@ -24,6 +24,8 @@ public class PlayerData  //key : GUID
     [FirestoreProperty] public bool IsTutorialCompleted { get; set; }
     
     [FirestoreProperty] public List<CharacterDataSample> HasCharacter { get; set; } = new();
+    
+    [FirestoreProperty] public List<WeaponDataSample> HasWeapon { get; set; } = new();
     // [FirestoreProperty] public int RankPoint { get; set; }
     // [FirestoreProperty] public List<string> Friends { get; set; } =  new List<string>();
     // [FirestoreProperty] public List<string> MatchHistorys { get; set; } =  new List<string>();
@@ -56,6 +58,7 @@ public class CharacterDataSample
 public class PlayerDataSample  //key : GUID
 {
     [FirestoreProperty] public List<CharacterDataSample> HasCharacter { get; set; } =  new List<CharacterDataSample>();
+    [FirestoreProperty] public List<WeaponDataSample> HasWeapon { get; set; } =  new List<WeaponDataSample>();
 }
 
 // [FirestoreData]
