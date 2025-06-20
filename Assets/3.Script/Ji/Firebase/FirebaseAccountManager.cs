@@ -198,6 +198,7 @@ public class FirebaseAccountManager : MonoBehaviour
         {
             weaponCode = 0,
             level = 1,
+            currentCharacter = 0,
         };
         
         PlayerData userData = new PlayerData() 

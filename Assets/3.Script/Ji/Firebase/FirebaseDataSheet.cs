@@ -36,6 +36,8 @@ public class WeaponDataSample
 {
     [FirestoreProperty] public int weaponCode { get; set; }
     [FirestoreProperty] public int level { get; set; }
+    
+    [FirestoreProperty] public int currentCharacter { get; set; }
 }
 
 [FirestoreData]
