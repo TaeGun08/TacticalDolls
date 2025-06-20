@@ -14,11 +14,12 @@ public class CustomBezierCurveTweenBehaviour : PlayableBehaviour
         Custom,
     }
     
+    public GameObject particle;
     public float arcHeight = 2f; // 포물선 높이
     public Transform startLocation;
     public Transform endLocation;
     public bool tweenPosition = true;
-    public bool tweenRotation = true;
+    public bool tweenRotation = false;
     public TweenType tweenType;
     public AnimationCurve customCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
     

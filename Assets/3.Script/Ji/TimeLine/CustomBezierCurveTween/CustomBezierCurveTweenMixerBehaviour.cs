@@ -8,6 +8,7 @@ public class CustomBezierCurveTweenMixerBehaviour : PlayableBehaviour
     bool m_FirstFrameHappened;
     private GameObject trackedTarget;
     private bool isProjectileActive = false;
+    private GameObject cashedParticle;
     
     public override void ProcessFrame(Playable playable, FrameData info, object playerData)
     {
@@ -57,6 +58,12 @@ public class CustomBezierCurveTweenMixerBehaviour : PlayableBehaviour
             {
                 isProjectileActive = false;
                 trackedTarget.SetActive(false);
+                
+                if (cashedParticle)
+                {
+                    cashedParticle.transform.position = trackBinding.position;
+                    cashedParticle.SetActive(true);
+                }
             }
             
             float normalisedTime = (float)(playableInput.GetTime() / playableInput.GetDuration ());
@@ -162,5 +169,6 @@ public class CustomBezierCurveTweenMixerBehaviour : PlayableBehaviour
     public override void OnBehaviourPause(Playable playable, FrameData info)
     {
         m_FirstFrameHappened = false; // 다음에 다시 실행되도록
+        isProjectileActive = false;
     }
 }
