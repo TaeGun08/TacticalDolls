@@ -104,9 +104,6 @@ public abstract class SkillParent : MonoBehaviour //, IUnitSkill
         [LabelText("스킬 아이콘")] [Required]
         [Tooltip("스킬 아이콘입니다.")] public Sprite skillIconSprite;
         
-        [LabelText("스킬 파티클")] [Required]
-        [Tooltip("투사체가 적중할 때 활성화 시킬 파티클입니다.")] public GameObject skillVFX;
-        
         [LabelText("타임라인 디렉터")] [Required]
         [Tooltip("스킬 타임라인을 실행하는  디렉터입니다.")] public PlayableDirector director;
         

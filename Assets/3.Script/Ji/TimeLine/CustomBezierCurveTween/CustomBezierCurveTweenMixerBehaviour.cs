@@ -8,7 +8,6 @@ public class CustomBezierCurveTweenMixerBehaviour : PlayableBehaviour
     bool m_FirstFrameHappened;
     private GameObject trackedTarget;
     private bool isProjectileActive = false;
-    private GameObject cashedParticle;
     
     public override void ProcessFrame(Playable playable, FrameData info, object playerData)
     {
@@ -53,16 +52,22 @@ public class CustomBezierCurveTweenMixerBehaviour : PlayableBehaviour
             {
                 isProjectileActive = true;
                 trackedTarget.SetActive(true);
+                
+                if (input.flashParticle) //시작지점에서 Flash 파티클
+                {
+                    input.flashParticle.transform.position = trackBinding.position; 
+                    input.flashParticle.SetActive(true);
+                }
             }
             else if (isProjectileActive && inputWeight <= 0f)
             {
                 isProjectileActive = false;
                 trackedTarget.SetActive(false);
                 
-                if (cashedParticle)
+                if (input.hitParticle) //끝나는 지점에서 Hit 파티클
                 {
-                    cashedParticle.transform.position = trackBinding.position;
-                    cashedParticle.SetActive(true);
+                    input.hitParticle.transform.position = trackBinding.position;
+                    input.hitParticle.SetActive(true);
                 }
             }
             

@@ -14,7 +14,8 @@ public class CustomBezierCurveTweenBehaviour : PlayableBehaviour
         Custom,
     }
     
-    public GameObject particle;
+    public GameObject flashParticle;
+    public GameObject hitParticle;
     public float arcHeight = 2f; // 포물선 높이
     public Transform startLocation;
     public Transform endLocation;
