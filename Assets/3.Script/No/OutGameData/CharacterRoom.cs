@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CharacterRoom : MonoBehaviour
 {
@@ -21,11 +23,17 @@ public class CharacterRoom : MonoBehaviour
     
     private CharacterData selectedCharacter;
 
+    public Button LevelUpButton;
 
     private void OnEnable()
     {
         SetUIPlayerCharacters();
         SetInfoPlayerCharacter(selectedCharacter);
+    }
+
+    private void Awake()
+    {
+        LevelUpButton.onClick.AddListener(RequestUpdateCharacterLevelUp);
     }
 
     private void SetUIPlayerCharacters()
@@ -49,7 +57,10 @@ public class CharacterRoom : MonoBehaviour
             {
                 if (playerCharacters[i].CharacterID == characterIcons[j].CharacterID)
                 {
-                    Instantiate(characterIcons[i].GameObject, iconSpawnPoint.position, iconSpawnPoint.rotation, iconSpawnPoint);
+                    var SpawnCharacterUI = Instantiate(characterIcons[i].GameObject, iconSpawnPoint.position, iconSpawnPoint.rotation, iconSpawnPoint);
+                    Button btn = SpawnCharacterUI.AddComponent<Button>();
+                    
+                    btn.onClick.AddListener(() => selectedCharacter = playerCharacters[i]);
                 }
             }
         }
@@ -66,5 +77,24 @@ public class CharacterRoom : MonoBehaviour
         characterAttack.text = characterData.Stat.Attack.ToString();
         characterHp.text = characterData.Stat.HP.ToString();
         characterDefense.text = characterData.Stat.Defense.ToString();
+    }
+    
+    private async void RequestUpdateCharacterLevelUp()
+    {
+        Debug.Log($"RequestUpdateCharacterLevelUp :: {selectedCharacter.CharacterID}");
+
+        var result = await selectedCharacter.UpdateCharacterLevel(selectedCharacter.CharacterID, 1);
+
+        if (result)
+        {
+            await FirebaseMainSession.Instance.FirestoreLoader();
+            PlayerManager.Instance.UpdateCharacterData();
+            SetUIPlayerCharacters();
+            SetInfoPlayerCharacter(selectedCharacter);
+        }
+        else
+        {
+            Debug.LogWarning("캐릭터 레벨업 실패");
+        }
     }
 }
