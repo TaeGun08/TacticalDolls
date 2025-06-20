@@ -90,7 +90,7 @@ public class CharacterData : MonoBehaviour, IDamageAble
     }
     
     // 캐릭터 레벨업 요청
-    public async void UpdateCharacterLevel(int characterCode, int levelPoint)
+    public async Task<bool> UpdateCharacterLevel(int characterCode, int levelPoint)
     {
         string userId = FirebaseMainSession.Instance.FirebaseUser.UserData.UserId;
     
@@ -105,7 +105,7 @@ public class CharacterData : MonoBehaviour, IDamageAble
         if (playerData == null)
         {
             Debug.LogWarning("플레이어 데이터를 찾을 수 없습니다.");
-            return;
+            return false;
         }
 
         // 2. 캐릭터 찾기
@@ -114,7 +114,7 @@ public class CharacterData : MonoBehaviour, IDamageAble
         if (characterToUpdate == null)
         {
             Debug.LogWarning($"characterCode {characterCode} 에 해당하는 캐릭터를 찾을 수 없습니다.");
-            return;
+            return false;
         }
 
         // 3. 캐릭터 레벨 업데이트
@@ -129,11 +129,10 @@ public class CharacterData : MonoBehaviour, IDamageAble
         // 5. Firestore에 반영
         await FirestoreManager.Instance.UpdateDataAsync(FirebaseCollections.Players, userId, updates);
     
-        PlayerManager.Instance.UpdateCharacterData();
-    
         Debug.Log($"캐릭터 {characterCode} 레벨이 {levelPoint}만큼 증가했습니다.");
+        
+        return true;
     }
-
 }
 
 // [System.Serializable]

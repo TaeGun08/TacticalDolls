@@ -41,8 +41,8 @@ public class PlayerManager : MonoBehaviour
         ResetCachedCharacterData();
         
         // 플레이어 데이터 조회 테스트 디버그
-        Debug.Log(FirebaseMainSession.Instance.FirebaseUser.UserData.Email);
-        Debug.Log(FirebaseMainSession.Instance.FirebaseUser.UserData);
+        // Debug.Log(FirebaseMainSession.Instance.FirebaseUser.UserData.Email);
+        // Debug.Log(FirebaseMainSession.Instance.FirebaseUser.UserData);
         
         UpdateCharacterData();
     }
@@ -71,6 +71,7 @@ public class PlayerManager : MonoBehaviour
     // 플레이어 정보 동기화 ( 초기값 셋팅 / 캐릭터 무기 강화 시 호출 )
     public void UpdateCharacterData()
     {
+        Debug.Log("UpdateCharacterData");
         usingCharacterData.Clear();
         usingWeaponData.Clear();
         
