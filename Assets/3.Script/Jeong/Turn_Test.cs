@@ -110,21 +110,19 @@ public class Turn_Test : MonoBehaviour
 
         while (checkCharacterAction < playerUnits.Count)
         {
+            Debug.Log("플레이어 턴");
             foreach (var character in playerUnits)
             {
                 if (character.Stat.IsCompleteAction) continue;
                 checkCharacterAction++;
             }
 
-            if (checkCharacterAction < playerUnits.Count)
-            {
-                break;
-            }
-
             if (gridBehavior.IsAuto)
             {
                 foreach (var player in playerUnits)
                 {
+                    if (gridBehavior.IsAuto == false) break;
+                    
                     MoveTcs = new TaskCompletionSource<bool>();
                     RangeSystem.Instance.ResetAllTiles();
                     GameManager.Instance.EndTurnBtn.gameObject.SetActive(false);
