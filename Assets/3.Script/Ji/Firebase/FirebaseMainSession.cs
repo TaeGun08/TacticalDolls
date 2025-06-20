@@ -48,16 +48,7 @@ public class FirebaseMainSession : MonoBehaviour
         
         if (playerData != null)
         {
-            Debug.Log("플레이어 데이터 로드 성공!");
-            // foreach (var character in playerData.HasCharacter)
-            // {
-            //     Debug.Log($"캐릭터 코드: {character.characterCode}, 레벨: {character.level}");
-            // }
-            //
-            // foreach (var weapon in playerData.HasWeapon)
-            // {
-            //     Debug.Log($"무기 코드: {weapon.weaponCode}, 레벨: {weapon.level}");
-            // }
+            Debug.Log("플레이어 데이터 로드 성공");
             FirebaseUser.playerData = playerData;
         }
         else
@@ -65,34 +56,4 @@ public class FirebaseMainSession : MonoBehaviour
             Debug.LogWarning("플레이어 데이터가 존재하지 않음.");
         }
     }
-    
-    // public async Task<PlayerDataSample> FirestoreLoader()
-    // {
-    //     string userId = FirebaseUser.UserData.UserId;
-    //     
-    //     PlayerDataSample playerData = await FirestoreManager.Instance.ReadDataAsync<PlayerDataSample>(
-    //         FirebaseCollections.Players,
-    //         userId
-    //     );
-    //
-    //     if (playerData != null)
-    //     {
-    //         Debug.Log("플레이어 데이터 로드 성공");
-    //         foreach (var character in playerData.HasCharacter)
-    //         {
-    //             Debug.Log($"캐릭터 코드: {character.characterCode}, 레벨: {character.level}");
-    //         }
-    //
-    //         foreach (var weapon in playerData.HasWeapon)
-    //         {
-    //             Debug.Log($"무기 코드: {weapon.weaponCode}, 레벨: {weapon.level}");
-    //         }
-    //     }
-    //     else
-    //     {
-    //         Debug.LogWarning("플레이어 데이터가 존재하지 않음.");
-    //     }
-    //
-    //     return playerData;
-    // }
 }

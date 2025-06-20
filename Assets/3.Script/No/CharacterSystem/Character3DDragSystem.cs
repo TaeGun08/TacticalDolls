@@ -64,7 +64,7 @@ public class Character3DDragSystem : MonoBehaviour, IBeginDragHandler, IDragHand
                 var charID = characterData.CharacterID;
                 
                 // 타일 초기화
-                if (PlayerManager.Instance.CharacterSpawnController.characterTileMap.TryGetValue(charID, out Tile oldTile))
+                if (GameManager.Instance.CharacterSpawnController.characterTileMap.TryGetValue(charID, out Tile oldTile))
                 {
                     oldTile.isUsingTile = false;
                     oldTile.ClearOccupant();
@@ -72,7 +72,7 @@ public class Character3DDragSystem : MonoBehaviour, IBeginDragHandler, IDragHand
                 
                 // 타일 재설정
                 targetTile.isUsingTile = true;
-                PlayerManager.Instance.CharacterSpawnController.characterTileMap[characterData.CharacterID] = targetTile;
+                GameManager.Instance.CharacterSpawnController.characterTileMap[characterData.CharacterID] = targetTile;
                 
                 Debug.Log("Valid tile. Character moved.");
             }
