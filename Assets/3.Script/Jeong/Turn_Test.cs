@@ -9,7 +9,7 @@ using Random = UnityEngine.Random;
 public class Turn_Test : MonoBehaviour
 {
     public static Turn_Test Instance;
-    
+
     private GridBehavior gridBehavior;
 
     public TurnManager turnManager;
@@ -20,15 +20,15 @@ public class Turn_Test : MonoBehaviour
     private int onSelectSkill;
     private int aiSelectSkill;
     private bool isBlockedPlayerControl;
-    
+
     // 행동 확인
     public TaskCompletionSource<bool> MoveTcs;
-    
+
     public TaskCompletionSource<bool> SkillTcs;
 
     // public List<Actor_Test> Ally;
     // public List<Actor_Test> Enemy;
-    
+
     public List<CharacterData> TurnActor;
 
     public bool IsAuto;
@@ -59,7 +59,7 @@ public class Turn_Test : MonoBehaviour
     private void OnTurnChangedWrapper(object sender, ActorParent actor)
     {
         _ = OnTurnChanged(sender, actor);
-     
+
         //MoveTcs.TrySetResult(true);
     }
 
@@ -68,15 +68,15 @@ public class Turn_Test : MonoBehaviour
         currentTurn = turnManager.TurnCount + 1;
         actorParent = actor;
         Debug.Log($"{actor.ToString()}의 {currentTurn}턴이 시작되었습니다.");
-        
+
         MoveTcs = new TaskCompletionSource<bool>();
-        
+
         if (actor.Equals(ActorParent.Player))
         {
             GameManager.Instance.InitCharacterTurnSetting(GameManager.Instance.PlayerUnits[0]);
-            
+
             TurnActor = GameManager.Instance.PlayerUnits;
-            
+
             // 모든 캐릭터 행동 종료 체크
             await OnCheckEndCharacterActor();
         }
@@ -94,22 +94,52 @@ public class Turn_Test : MonoBehaviour
         {
             await Task.Delay(100);
         }
-        
+
         gridBehavior.Actors = new List<IDamageAble>();
-        
+
         foreach (var enemy in GameManager.Instance.EnemyUnits)
         {
             gridBehavior.Actors.Add(enemy);
         }
-        
+
+        int checkCharacterAction = 0;
+
         gridBehavior.IsAutoMove = true;
-        
-        foreach (var player in GameManager.Instance.PlayerUnits)
+
+        List<CharacterData> playerUnits = GameManager.Instance.PlayerUnits;
+
+        while (checkCharacterAction < playerUnits.Count)
         {
-            MoveTcs = new TaskCompletionSource<bool>();
-            gridBehavior.Actor = player;
-            await MoveTcs.Task;
+            foreach (var character in playerUnits)
+            {
+                if (character.Stat.IsCompleteAction) continue;
+                checkCharacterAction++;
+            }
+
+            if (checkCharacterAction < playerUnits.Count)
+            {
+                break;
+            }
+
+            if (gridBehavior.IsAuto)
+            {
+                foreach (var player in playerUnits)
+                {
+                    MoveTcs = new TaskCompletionSource<bool>();
+                    RangeSystem.Instance.ResetAllTiles();
+                    GameManager.Instance.EndTurnBtn.gameObject.SetActive(false);
+                    SkillSelectSystem.Instance.cancelButton.gameObject.SetActive(false);
+                    SkillSelectSystem.Instance.selectButton.gameObject.SetActive(false);
+                    gridBehavior.Actor = player;
+                    await MoveTcs.Task;
+                }
+            }
+
+            checkCharacterAction = 0;
+
+            await Task.Delay(100);
         }
+
         gridBehavior.IsAutoMove = false;
     }
 
@@ -119,23 +149,23 @@ public class Turn_Test : MonoBehaviour
         {
             await Task.Delay(100);
         }
-        
+
         gridBehavior.Actors = new List<IDamageAble>();
-        
+
         foreach (var player in GameManager.Instance.PlayerUnits)
         {
             gridBehavior.Actors.Add(player);
         }
-        
+
         gridBehavior.IsAutoMove = true;
-        
+
         foreach (var enemy in GameManager.Instance.EnemyUnits)
         {
             MoveTcs = new TaskCompletionSource<bool>();
             gridBehavior.Actor = enemy;
             await MoveTcs.Task;
         }
-        
+
         gridBehavior.IsAutoMove = false;
     }
 

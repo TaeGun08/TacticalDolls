@@ -39,7 +39,8 @@ public class GridBehavior : MonoBehaviour
     private Tile moveChoiceTile;
     private Tile skillChoiceTile;
 
-    [SerializeField] private Button playerAutoButton;
+    [SerializeField] private Button autoButton;
+    public bool IsAuto; // { get; private set; }
 
     private IDamageAble nearestTarget;
     
@@ -47,7 +48,7 @@ public class GridBehavior : MonoBehaviour
     {
         Instance = this;
 
-        playerAutoButton.onClick.AddListener(() => {  });
+        autoButton.onClick.AddListener(() => { IsAuto = IsAuto == false; });
     }
 
     private void Start()
@@ -158,7 +159,7 @@ public class GridBehavior : MonoBehaviour
         if (IsAutoMove)
         {
             List<IDamageAble> targets = new List<IDamageAble> { nearestTarget };
-            // TODO await Actor.Excute(0, targets, targets[0].GameObject.transform);
+            //await Actor.Excute(0, targets, targets[0].GameObject.transform);
             await Task.Delay(1000);
         }
         

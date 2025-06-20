@@ -1130,7 +1130,7 @@ GameObject:
   - component: {fileID: 424275803}
   - component: {fileID: 424275802}
   m_Layer: 5
-  m_Name: EnemyTurnEnd
+  m_Name: AutoMode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3006,7 +3006,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 182001976}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.9773776
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3312,7 +3312,8 @@ MonoBehaviour:
   characterLayer:
     serializedVersion: 2
     m_Bits: 256
-  playerAutoButton: {fileID: 0}
+  autoButton: {fileID: 424275802}
+  IsAuto: 0
 --- !u!4 &854237648
 Transform:
   m_ObjectHideFlags: 0
@@ -3366,6 +3367,9 @@ MonoBehaviour:
   unitLayer:
     serializedVersion: 2
     m_Bits: 256
+  tileLayer:
+    serializedVersion: 2
+    m_Bits: 0
   skillUI: {fileID: 1513809591}
   endTurnBtn: {fileID: 521459176}
 --- !u!4 &911071567
@@ -3440,7 +3444,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: EnemyTurnEnd
+  m_text: AutoMode
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fa328c1ae3ffb6b4583cf371153b0be6, type: 2}
   m_sharedMaterial: {fileID: 21918420405216288, guid: fa328c1ae3ffb6b4583cf371153b0be6,
@@ -4261,7 +4265,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: -0.000014020438}
+  m_AnchoredPosition: {x: -0.000061035156, y: -0.000012731976}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1192701331
@@ -9035,6 +9039,7 @@ MonoBehaviour:
   skillName: "\uC0D8\uD50C"
   skillInfoText: "\uC0D8\uD50C\uC785\uB2C8\uB2E4."
   unitSkillDetails:
+    skillID: 
     skillValue: 10
     areaOfEffect: 1
     splitHitCount: 7
