@@ -14,8 +14,8 @@ public class TransformTweenBehaviour : PlayableBehaviour
         Harmonic,
         Custom,
     }
-
-    public GameObject particle;
+    public GameObject hitParticle;
+    public GameObject flashParticle;
     public Transform startLocation;
     public Transform endLocation;
     public bool tweenPosition = true;
@@ -43,11 +43,6 @@ public class TransformTweenBehaviour : PlayableBehaviour
             startingPosition = startLocation.position;
             startingRotation = startLocation.rotation;
         }
-        
-        double duration = playable.GetDuration();
-        double currentTime = playable.GetTime();
-        
-        Debug.Log (currentTime >= duration);
     }
 
     public float EvaluateCurrentCurve (float time)

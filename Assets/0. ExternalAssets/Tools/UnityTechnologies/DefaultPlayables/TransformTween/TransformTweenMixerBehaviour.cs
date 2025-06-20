@@ -8,7 +8,9 @@ public class TransformTweenMixerBehaviour : PlayableBehaviour
     //Harang
     private GameObject trackedTarget;
     private bool isProjectileActive = false;
-    private GameObject cashedParticle;
+
+    private GameObject cashedFlashParticle;
+    private GameObject cashedHitParticle;
     
     public override void ProcessFrame(Playable playable, FrameData info, object playerData)
     {
@@ -39,36 +41,46 @@ public class TransformTweenMixerBehaviour : PlayableBehaviour
 
             if(input.endLocation == null)
                 continue;
-
-            if (cashedParticle == null)
-            {
-                cashedParticle = input.particle;
-            }
-
             
             float inputWeight = playable.GetInputWeight(i);
 
-            if (!m_FirstFrameHappened && !input.startLocation)
+            //Harang
+            if (!m_FirstFrameHappened)
             {
-                input.startingPosition = defaultPosition;
-                input.startingRotation = defaultRotation;
+                if(input.flashParticle)
+                    cashedFlashParticle = input.flashParticle;
+                
+                if(input.hitParticle)
+                    cashedHitParticle = input.hitParticle;
+                
+                if (!input.startLocation)
+                {
+                    input.startingPosition = defaultPosition;
+                    input.startingRotation = defaultRotation;
+                }
             }
             
             //Harang
-            if (!isProjectileActive && inputWeight > 0f) //탄환 생성 안됨 && 클립이 시작됨
+            if (!isProjectileActive && inputWeight > 0f)
             {
                 isProjectileActive = true;
                 trackedTarget.SetActive(true);
+                
+                if (input.flashParticle) //시작지점에서 Flash 파티클
+                {
+                    input.flashParticle.transform.position = input.startLocation.position; 
+                    input.flashParticle.SetActive(true);
+                }
             }
             else if (isProjectileActive && inputWeight <= 0f)
             {
                 isProjectileActive = false;
                 trackedTarget.SetActive(false);
                 
-                if (cashedParticle)
+                if (input.hitParticle) //끝나는 지점에서 Hit 파티클
                 {
-                    cashedParticle.transform.position = trackBinding.position;
-                    cashedParticle.SetActive(true);
+                    input.hitParticle.transform.position = input.endLocation.position;
+                    input.hitParticle.SetActive(true);
                 }
             }
             
@@ -121,11 +133,6 @@ public class TransformTweenMixerBehaviour : PlayableBehaviour
         {
             trackedTarget.SetActive(false);
         }
-        
-        if (cashedParticle != null)
-        {
-            cashedParticle.SetActive(false);
-        }
     }
     
     static Quaternion AddQuaternions (Quaternion first, Quaternion second)
@@ -166,5 +173,10 @@ public class TransformTweenMixerBehaviour : PlayableBehaviour
     {
         m_FirstFrameHappened = false; // 다음에 다시 실행되도록
         isProjectileActive = false;
+        
+        if(cashedHitParticle)
+            cashedFlashParticle.SetActive(false);
+        if(cashedHitParticle)
+            cashedHitParticle.SetActive(false);
     }
 }
