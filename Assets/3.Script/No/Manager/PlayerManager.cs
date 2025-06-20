@@ -7,14 +7,17 @@ public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance;
     
+    // 임시 캐릭터 프리랩 리스트
+    public PrefabsTable CharacterTable;
+    public PrefabsTable WeaponTable;
+
     public PlayerDataSample player;
+    
+    // 플레이어가 사용 가능한 캐릭터 
     public List<int> usingCharacter;
     public List<CharacterData> usingCharacterData;
-
-    public GameObject SelectedCharacterPanel;
-    public Button StartBtn;
-
-    public CharacterSpawnController CharacterSpawnController;
+    // 플레이어가 사용 가능한 무기
+    public List<WeaponData> usingWeaponData;
     
     private void Awake()
     {
@@ -26,102 +29,54 @@ public class PlayerManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        
+        player = new PlayerDataSample();
     }
 
     private void Start()
     {
-        player = new PlayerDataSample();
+        // 플레이어 데이터 조회 테스트 디버그
+        Debug.Log(FirebaseMainSession.Instance.FirebaseUser.UserData.Email);
+        Debug.Log(FirebaseMainSession.Instance.FirebaseUser.UserData);
 
-        // test data 생성
-        TestPlayerHasCharacter();
-
-        StartBtn.onClick.AddListener(StartGame);
-    }
-
-    public void TestPlayerHasCharacter()
-    {
-        // 초기 플레이어가 사용가능한 캐릭터 데이터 조회
-        var sampleCharacters = new List<CharacterDataSample>
+        foreach (var character in FirebaseMainSession.Instance.FirebaseUser.playerData.HasCharacter)
         {
-            new CharacterDataSample
-            {
-                characterCode = 0,
-                level = 5,
-                skills = new SkillDataSample[]
-                {
-                    new SkillDataSample { skillCode = 1, level = 1 },
-                    new SkillDataSample { skillCode = 2, level = 3 }
-                }
-            },
-            new CharacterDataSample
-            {
-                characterCode = 1,
-                level = 5,
-                skills = new SkillDataSample[]
-                {
-                    new SkillDataSample { skillCode = 0, level = 1 },
-                    new SkillDataSample { skillCode = 2, level = 3 }
-                }
-            },
-            new CharacterDataSample
-            {
-                characterCode = 2,
-                level = 5,
-                skills = new SkillDataSample[]
-                {
-                    new SkillDataSample { skillCode = 0, level = 1 },
-                    new SkillDataSample { skillCode = 2, level = 3 }
-                }
-            }
-        };
-
-        // 사용가능한 캐릭터 데이터 캐싱
-        foreach (var sample in sampleCharacters)
-        {
-            var initializedSample = InitializeCharacterSampleData(sample);
+            //Debug.Log($"캐릭터 코드: {character.characterCode}, 레벨: {character.level}");
+            
+            var initializedSample = InitializeCharacterSampleData(character);
             player.HasCharacter.Add(initializedSample);
+        }
+
+        foreach (var weapon in FirebaseMainSession.Instance.FirebaseUser.playerData.HasWeapon)
+        {
+            //Debug.Log($"무기 코드: {weapon.weaponCode}, 레벨: {weapon.level}");
+            
+            InitializeCharacterSampleData(weapon);
         }
     }
     
-    public CharacterDataSample InitializeCharacterSampleData(CharacterDataSample sample)
+    public CharacterDataSample InitializeCharacterSampleData(CharacterDataSample character)
     {
-        GameObject prefab = GameManager.Instance.CharacterTable.GetPrefabByIndex(sample.characterCode);
+        GameObject prefab = CharacterTable.GetPrefabByIndex(character.characterCode);
 
-        CharacterData character = prefab.GetComponent<CharacterData>();
-        character.CalculateStatFromLevel(sample.level);
+        CharacterData SyncCharacterData = prefab.GetComponent<CharacterData>();
+        SyncCharacterData.CalculateStatFromLevel(character.level);
         
-        usingCharacterData.Add(character);
+        usingCharacterData.Add(SyncCharacterData);
         
-        return sample;
-    }
-
-    private void Update()
-    {
-        StartBtn.gameObject.SetActive(usingCharacter.Count > 0);
-    }
-
-    public void StartGame()
-    {
-        TileManager.Instance.combatScript.SetActive(true);
-        RangeSystem.Instance.ResetAllTiles();
-        SelectedCharacterPanel.SetActive(false);
-
-        // add player unit 
-        // foreach (var character in usingCharacterData)
-        // {
-        //     Tile spawnPointCheck = TileManager.Instance.GetClosestTile(character.transform.position);
-        //     
-        //     Debug.Log($"{spawnPointCheck.isUsingTile}");
-        //     
-        //     if (spawnPointCheck.isUsingTile)
-        //     {
-        //         GameManager.Instance.PlayerUnits.Add(character);
-        //     }
-        // }
-
-        GameManager.Instance.UnitInitializeStarSetting();
+        return character;
     }
     
+    public void InitializeCharacterSampleData(WeaponDataSample weapon)
+    {
+        GameObject prefab = WeaponTable.GetPrefabByIndex(weapon.weaponCode);
+
+        WeaponData SyncWeaponData = prefab.GetComponent<WeaponData>();
+        SyncWeaponData.Level = weapon.level;
+        usingWeaponData.Add(SyncWeaponData);
+    }
+    
+    // 프리팹 초기화
     public void ResetCachedCharacterData()
     {
         for (int i = 0; i < usingCharacterData.Count; i++)
@@ -130,7 +85,7 @@ public class PlayerManager : MonoBehaviour
             int charID = cachedData.CharacterID;
 
             // 원본 프리팹 가져오기
-            GameObject prefab = GameManager.Instance.CharacterTable.GetPrefabByIndex(charID);
+            GameObject prefab = CharacterTable.GetPrefabByIndex(charID);
             CharacterData prefabData = prefab.GetComponent<CharacterData>();
 
             if (prefabData == null)

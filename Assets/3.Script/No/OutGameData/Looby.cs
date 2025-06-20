@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class Looby : MonoBehaviour
 {
-    void Start()
+    [SerializeField] private List<GameObject> characterPrefabs; 
+     public PrefabsTable prefabsTable;
+
+    private void Start()
     {
         // 플레이어 데이터 조회 테스트 디버그
         // Debug.Log(FirebaseMainSession.Instance.FirebaseUser.UserData.Email);

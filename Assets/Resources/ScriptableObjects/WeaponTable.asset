@@ -10,15 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bfa79f0d8456cc3498e416fa292ef899, type: 3}
-  m_Name: ChracterTable
+  m_Name: WeaponTable
   m_EditorClassIdentifier: 
   prefabEntries:
   - prefabKey: 0
-    prefab: {fileID: 5609527761483769844, guid: 13126c66bbdd175408bf1b0678ba18be,
-      type: 3}
+    prefab: {fileID: 433131571881629062, guid: 7ce6622ba8c35c14d8cf468be744c972, type: 3}
   - prefabKey: 1
-    prefab: {fileID: 6184168543780760037, guid: dc488787fb3791c49a17841483bdfd5a,
+    prefab: {fileID: 7257292289926141734, guid: 9098ebe93f92a804b808393bab6d1c39,
       type: 3}
   - prefabKey: 2
-    prefab: {fileID: 1534682781436584893, guid: c7dd1f2c01374b84eb08c1368e05413a,
+    prefab: {fileID: 2015130090010470781, guid: 54be0897d98795b49afb61f3731d7645,
       type: 3}
