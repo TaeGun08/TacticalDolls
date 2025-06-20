@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class Looby : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> characterPrefabs; 
-     public PrefabsTable prefabsTable;
-
     private void Start()
     {
         // 플레이어 데이터 조회 테스트 디버그
