@@ -42,10 +42,16 @@ public class NavigationHandler : MonoBehaviour
     [Header("Stage Settings")]
     public GameObject Stage1;
     public GameObject Stage2;
+
+    private Stack<GameObject> panelHistory = new Stack<GameObject>();
+    private Stack<GameObject> renderHistory = new Stack<GameObject>();
+
+    private GameObject currentPanel;
+    private GameObject currentRender;
     
     void Start()
     {
-        BackButton.onClick.AddListener(OnMoveLobby);
+        BackButton.onClick.AddListener(BackButtonClicked);
         StageRoomButton.onClick.AddListener(OnMoveStageRoom);
         CharacterRoomButton.onClick.AddListener(OnMoveCharacterRoom);
         WeaponRoomButton.onClick.AddListener(OnMoveWeaponRoom);
@@ -56,10 +62,19 @@ public class NavigationHandler : MonoBehaviour
         Chapter2.onClick.AddListener(()=> OnSelectChapter(Stage2));
         
         Check.onClick.AddListener(OnMoveChapter);
+
+        currentPanel = Lobby;
+        currentRender = LobbyRender;
     }
 
-    void ShowRoom(GameObject panel, GameObject render)
+    void ShowRoom(GameObject panel, GameObject render, bool pushToHistory = true)
     {
+        if (pushToHistory && currentPanel != null && currentPanel != panel)
+        {
+            panelHistory.Push(currentPanel);
+            renderHistory.Push(currentRender);
+        }
+        
         Lobby.SetActive(false);
         Stage.SetActive(false);
         CharacterRoom.SetActive(false);
@@ -72,12 +87,24 @@ public class NavigationHandler : MonoBehaviour
         LobbyRender.SetActive(false);
         StageRender.SetActive(false);
         CharacterRender.SetActive(false);
-        WeaponRender.SetActive(false);
+        
+        if (panel == CharacterRoom || panel == WeaponRoom)
+        {
+            WeaponRender.SetActive(true);
+        }
+        else
+        {
+            WeaponRender.SetActive(false);
+        }
+        
         OrderRender.SetActive(false);
         MyRender.SetActive(false);
         
         panel.SetActive(true);
         render.SetActive(true);
+
+        currentPanel = panel;
+        currentRender = render;
     }
 
     private void OnMoveLobby() => ShowRoom(Lobby, LobbyRender);
@@ -99,7 +126,21 @@ public class NavigationHandler : MonoBehaviour
         Stage2.SetActive(false);
         SelectedChapter.SetActive(true);  
     }
-    
+
+    private void BackButtonClicked()
+    {
+        if (panelHistory.Count > 0 && renderHistory.Count > 0)
+        {
+            var prevPanel = panelHistory.Pop();
+            var prevRender = renderHistory.Pop();
+            ShowRoom(prevPanel, prevRender, false);
+        }
+        else
+        {
+            ShowRoom(Lobby, LobbyRender, false);
+        }
+    }
+
     // FireBase요청 필요하면 구조 변경할때 사용하면 됨
     // void OnMoveLobby()
     // {
