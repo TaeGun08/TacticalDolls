@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -253,16 +254,37 @@ public class TileManager : MonoBehaviour
 
         previousSelectedTile = selectedTile;
     }
+
+    
+    public Vector2Int origin;
+    public int range;
+    public Color gizmoColor = Color.cyan;
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = gizmoColor;
+
+        List<Vector2Int> tiles = GetReachableTiles(origin, range);
+
+        foreach (Vector2Int tile in tiles)
+        {
+            Vector3 pos = new Vector3(tile.x, 0, tile.y); // y → z로 바꿔서 3D 공간 상에서 xz 평면으로 보이게 함
+            Gizmos.DrawWireCube(pos, Vector3.one);
+        }
+    }
     
     public List<Vector2Int> GetReachableTiles(Vector2Int origin, int range)
     {
         List<Vector2Int> reachable = new List<Vector2Int>();
+        this.origin = origin;
+        this.range = range;
+
         for (int dx = -range; dx <= range; dx++)
         {
             for (int dy = -range; dy <= range; dy++)
             {
-                int dist = Mathf.Abs(dx) + Mathf.Abs(dy);
-                if (dist <= range)
+                int manhattanDistance = Mathf.Abs(dx) + Mathf.Abs(dy);
+                if (manhattanDistance <= range)
                 {
                     int x = origin.x + dx;
                     int y = origin.y + dy;

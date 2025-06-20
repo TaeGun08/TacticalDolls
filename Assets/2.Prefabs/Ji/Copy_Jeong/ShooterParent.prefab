@@ -639,7 +639,7 @@ Transform:
   m_GameObject: {fileID: 642509813678533990}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -667,12 +667,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'clavicle_r'\n\tTransform 'index_metacarpal_l'\n\tTransform
-    'pinky_01_l'\n\tTransform 'lowerarm_r'\n\tTransform 'ring_02_l'\n\tTransform
-    'index_metacarpal_r'\n\tTransform 'root'\n\tTransform 'spine_04'\n\tTransform
-    'ring_metacarpal_r'\n\tTransform 'middle_01_r'\n\tand more ..."
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -1044,7 +1039,7 @@ GameObject:
   - component: {fileID: 2695639123770911391}
   - component: {fileID: 951362106729725865}
   m_Layer: 0
-  m_Name: Skill 1
+  m_Name: ShooterSkill 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1086,6 +1081,7 @@ MonoBehaviour:
   skillName: Text
   skillInfoText: "\uC0D8\uD50C\uC785\uB2C8\uB2E4."
   unitSkillDetails:
+    skillID: Shooter_Skill2
     skillValue: 10
     areaOfEffect: 3
     splitHitCount: 7
@@ -6468,7 +6464,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6662643787920271454}
   m_Layer: 0
-  m_Name: Skill 3
+  m_Name: ShooterSkill 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7643,7 +7639,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2970562846497961511}
   m_Layer: 0
-  m_Name: Skill 2
+  m_Name: ShooterSkill 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

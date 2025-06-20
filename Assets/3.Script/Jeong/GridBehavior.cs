@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -34,20 +35,19 @@ public class GridBehavior : MonoBehaviour
     };
 
     private HashSet<Vector2Int> reservedTiles = new HashSet<Vector2Int>();
-    
+
     private Tile moveChoiceTile;
     private Tile skillChoiceTile;
 
-    [SerializeField] private Button enemyTurnEnd; 
+    [SerializeField] private Button playerAutoButton;
 
+    private IDamageAble nearestTarget;
+    
     private void Awake()
     {
         Instance = this;
-        
-        enemyTurnEnd.onClick.AddListener(() =>
-        {
-            Turn_Test.Instance.MoveTcs.TrySetResult(true);
-        });
+
+        playerAutoButton.onClick.AddListener(() => {  });
     }
 
     private void Start()
@@ -59,48 +59,54 @@ public class GridBehavior : MonoBehaviour
 
     private void Update()
     {
-        //AllyInputMove();
-        
-        // 이동 처리
-        // if (Turn_Test.Instance.IsAuto)
-        // {
-        //     // 자동
-        //     AutoMove();
-        // }
-        
         AutoMove();
     }
 
+    /// <summary>
+    /// 자동 이동을 위한 함수, 자신과 가까운 거리의 Actor를 찾아서 8방향 주위에 있는 경로를 탐색함
+    /// </summary>
     private void AutoMove()
     {
         if (IsMove || IsAutoMove == false || Actor == null) return;
         reservedTiles.Clear();
-        Test();
-        
-        Vector3Int targetPos = FindNearestTargetPos();
-        Vector3Int finalTargetPos = FindAvailableAdjacentTile(targetPos);
-        
+        TargetActors();
+
+        Vector3Int finalTargetPos = FindAvailableAdjacentTileToNearestTargets();
+
         if (finalTargetPos == Vector3Int.zero)
         {
             Debug.Log("이동 가능한 위치가 없음");
             return;
         }
-        
+
         if (new Vector2Int(finalTargetPos.x, finalTargetPos.z) ==
-            new Vector2Int(Mathf.RoundToInt(Actor.GameObject.transform.position.x), Mathf.RoundToInt(Actor.GameObject.transform.position.z)))
+            new Vector2Int(Mathf.RoundToInt(Actor.GameObject.transform.position.x),
+                Mathf.RoundToInt(Actor.GameObject.transform.position.z)))
         {
             IsMove = false;
             return;
         }
-        
-        Debug.Log(Actor.GameObject.transform.position);
-        
-        Debug.Log(finalTargetPos);
+
         List<Node> path = PathFindingManager.Instance.PathFind(Actor.GameObject.transform.position, finalTargetPos);
         reservedTiles.Add(new Vector2Int(finalTargetPos.x, finalTargetPos.z));
-        _= MovePlayerAlongPath(path, finalTargetPos);
+        
+        nearestTarget = Actors
+            .Where(target => target != Actor)
+            .OrderBy(target =>
+                Vector3.Distance(Actor.GameObject.transform.position, target.GameObject.transform.position))
+            .FirstOrDefault();
+        
+        Vector3 targetPos = nearestTarget == null ? Vector3.zero: 
+        PathFindingManager.Instance.RoundToTilePosition(nearestTarget.GameObject.transform.position);
+        
+            _ = MovePlayerAlongPath(path, targetPos);
     }
-    
+
+    /// <summary>
+    /// 경로를 넣어주면 그 경로에 맞는 위치로 이동하는 함수
+    /// </summary>
+    /// <param name="path"></param>
+    /// <param name="target"></param>
     public async Task MovePlayerAlongPath(List<Node> path, Vector3 target)
     {
         IsMove = true;
@@ -110,40 +116,38 @@ public class GridBehavior : MonoBehaviour
             currentTile.isUsingTile = false;
             currentTile.SetOccupant(null);
         }
-        
-        Vector2Int dollPos = new Vector2Int((int)Actor.GameObject.transform.position.x, 
+
+        Vector2Int actorPos = new Vector2Int((int)Actor.GameObject.transform.position.x,
             (int)Actor.GameObject.transform.position.z);
-        List<Vector2Int> actorPos = TileManager.Instance.GetReachableTiles(dollPos, Actor.Stat.MoveRange);
-        
+        List<Vector2Int> actorPosList = TileManager.Instance.GetReachableTiles(actorPos, Actor.Stat.MoveRange);
+
         foreach (Node node in path)
         {
-            Debug.Log("노드 선택");
             Vector3 targetPos = new Vector3(
                 node.Position.x * tileManager.tileSize,
-                0.5f,
+                0f,
                 node.Position.z * tileManager.tileSize
             );
-        
-            if (IsAutoMove)
-            {
-                // if (AttackRangeChecker(Actor.GetAttackableTilesFromReachable(),
-                //         PathFindingManager.Instance.RoundToTilePosition(target))) break;
-                if (MoveRangeChecker(actorPos, targetPos) == false) break;
-            }
-        
+
             while (Vector3.Distance(Actor.GameObject.transform.position, targetPos) > 0.05f)
             {
                 Debug.Log("이동 시작");
                 Actor.GameObject.transform.position =
                     Vector3.MoveTowards(Actor.GameObject.transform.position, targetPos, 10f * Time.deltaTime);
-        
+
                 var temp = new Vector2(targetPos.x - Actor.GameObject.transform.position.x,
                     targetPos.z - Actor.GameObject.transform.position.z);
                 UpdateRotation(Actor.GameObject.transform, temp, 0.1f);
                 await Task.Delay(10);
             }
+            
+            if (IsAutoMove)
+            {
+                if (AttackRangeChecker(target)) break;
+                if (MoveRangeChecker(actorPosList, targetPos) == false) break;
+            }
         }
-        
+
         Tile newTile = TileManager.Instance.GetClosestTile(Actor.GameObject.transform.position);
         if (newTile != null)
         {
@@ -151,99 +155,110 @@ public class GridBehavior : MonoBehaviour
             newTile.SetOccupant(Actor);
         }
 
-        Actor.Stat.IsCompleteAction = true;
+        if (IsAutoMove)
+        {
+            List<IDamageAble> targets = new List<IDamageAble> { nearestTarget };
+            // TODO await Actor.Excute(0, targets, targets[0].GameObject.transform);
+            await Task.Delay(1000);
+        }
         
+        Actor.Stat.IsCompleteAction = true;
+
         Actor = null;
+        nearestTarget = null;
         turn.MoveTcs.TrySetResult(true);
         IsMove = false;
     }
-
-    private void Test()
+    
+    private void TargetActors()
     {
-        foreach (IDamageAble actor in GameManager.Instance.PlayerUnits)
+        switch (TurnManager.Instance.CurrentTurn)
         {
-            if (actor != Actor)
-            {
-                var tilePos = new Vector2Int(
-                    Mathf.RoundToInt(actor.GameObject.transform.position.x),
-                    Mathf.RoundToInt(actor.GameObject.transform.position.z)
-                );
-                reservedTiles.Add(tilePos);
-            }
+            case ActorParent.Player:
+                foreach (IDamageAble actor in GameManager.Instance.EnemyUnits)
+                {
+                    if (actor != Actor)
+                    {
+                        var tilePos = new Vector2Int(
+                            Mathf.RoundToInt(actor.GameObject.transform.position.x),
+                            Mathf.RoundToInt(actor.GameObject.transform.position.z)
+                        );
+                        reservedTiles.Add(tilePos);
+                    }
+                }
+
+                break;
+            case ActorParent.Enemy:
+                foreach (IDamageAble actor in GameManager.Instance.PlayerUnits)
+                {
+                    if (actor != Actor)
+                    {
+                        var tilePos = new Vector2Int(
+                            Mathf.RoundToInt(actor.GameObject.transform.position.x),
+                            Mathf.RoundToInt(actor.GameObject.transform.position.z)
+                        );
+                        reservedTiles.Add(tilePos);
+                    }
+                }
+
+                break;
         }
-        
-        // foreach (IDamageAble actor in GameManager.Instance.EnemyUnits)
-        // {
-        //     if (actor != Actor)
-        //     {
-        //         var tilePos = new Vector2Int(
-        //             Mathf.RoundToInt(actor.GameObject.transform.position.x),
-        //             Mathf.RoundToInt(actor.GameObject.transform.position.z)
-        //         );
-        //         reservedTiles.Add(tilePos);
-        //     }
-        // }
     }
 
     private bool MoveRangeChecker(List<Vector2Int> actorPos, Vector3 targetPos)
     {
         return actorPos.Contains(new Vector2Int((int)targetPos.x, (int)targetPos.z));
     }
-
-    private bool AttackRangeChecker(List<Vector2Int> attackRange, Vector3 targetPos)
+    
+    private bool AttackRangeChecker(Vector3 targetPos)
     {
-        return attackRange.Contains(new Vector2Int((int)targetPos.x, (int)targetPos.z));
-    }
-
-    private Vector3Int FindAvailableAdjacentTile(Vector3Int targetPos)
-    {
-        List<Vector3Int> candidates = new List<Vector3Int>();
-
-        foreach (var dir in directions.OrderBy(_ => Random.value))
-        {
-            Vector3Int candidate = targetPos + dir;
-
-            if (candidate.x < 0 || candidate.z < 0 || candidate.x >= 51 || candidate.z >= 51)
-                continue;
-
-            Tile tile = tileManager.GetTileAt(candidate.x, candidate.z);
-            if (tile == null || !tile.isWalkable) continue;
-
-            Vector2Int tilePos = new Vector2Int(candidate.x, candidate.z);
-            if (reservedTiles.Contains(tilePos) || tile.isUsingTile) continue;
-
-            candidates.Add(candidate);
-        }
-
-        if (candidates.Count == 0)
-            return Vector3Int.zero;
-
-        return candidates.OrderBy(pos =>
-            Vector3.Distance(Actor.GameObject.transform.position, new Vector3(pos.x, 0, pos.z))).First();
-    }
-
-    private Vector3Int FindNearestTargetPos()
-    {
-        Vector3Int nearest = Vector3Int.zero;
-        float minDist = float.MaxValue;
-
-        foreach (var target in Actors)
-        {
-            if (target == Actor) continue;
-            float dist = Vector3.Distance(Actor.GameObject.transform.position, target.GameObject.transform.position);
+        Vector2Int actorPos = new Vector2Int((int)Actor.GameObject.transform.position.x,
+            (int)Actor.GameObject.transform.position.z);
+        List<Vector2Int> actorPosList = TileManager.Instance.GetReachableTiles(actorPos, Actor.Stat.MoveRange);
         
-            if (dist < minDist)
+        return actorPosList.Contains(new Vector2Int((int)targetPos.x, (int)targetPos.z));
+    }
+
+    /// <summary>
+    /// 대상을 탐색했을 때, 대상의 위치가 아닌 대상의 주위 랜덤한 위치로 지정하기 위한 함수
+    /// </summary>
+    /// <returns></returns>
+    private Vector3Int FindAvailableAdjacentTileToNearestTargets()
+    {
+        // 대상들을 거리 기준으로 정렬
+        var sortedTargets = Actors
+            .Where(target => target != Actor)
+            .OrderBy(target =>
+                Vector3.Distance(Actor.GameObject.transform.position, target.GameObject.transform.position));
+
+        foreach (var target in sortedTargets)
+        {
+            Vector3Int targetPos = new Vector3Int(
+                Mathf.RoundToInt(target.GameObject.transform.position.x),
+                0,
+                Mathf.RoundToInt(target.GameObject.transform.position.z)
+            );
+
+            foreach (var dir in directions.OrderBy(_ => Random.value))
             {
-                minDist = dist;
-                nearest = new Vector3Int(
-                    Mathf.RoundToInt(target.GameObject.transform.position.x),
-                    0,
-                    Mathf.RoundToInt(target.GameObject.transform.position.z)
-                );
+                Vector3Int candidate = targetPos + dir;
+
+                if (candidate.x < 0 || candidate.z < 0 ||
+                    candidate.x >= tileManager.tiles.GetLength(0) ||
+                    candidate.z >= tileManager.tiles.GetLength(1))
+                    continue;
+
+                Tile tile = tileManager.GetTileAt(candidate.x, candidate.z);
+                if (tile == null || !tile.isWalkable) continue;
+
+                Vector2Int tilePos = new Vector2Int(candidate.x, candidate.z);
+                if (reservedTiles.Contains(tilePos) || tile.isUsingTile) continue;
+
+                return candidate; // 가능한 위치 발견 시 즉시 반환
             }
         }
 
-        return nearest;
+        return Vector3Int.zero; // 모든 대상 주위에 유효한 타일이 없을 경우
     }
 
     private void UpdateRotation(Transform player, Vector2 inputAxis, float smoothTime)

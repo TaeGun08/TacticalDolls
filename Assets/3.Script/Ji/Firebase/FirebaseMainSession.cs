@@ -6,6 +6,7 @@ public class FirebaseUser
     public string Username { get; set; }
 }
 
+// 로그인 유저 정보 계속 유지
 public class FirebaseMainSession : MonoBehaviour
 {
     public static FirebaseMainSession Instance { get; private set; }
@@ -28,12 +29,7 @@ public class FirebaseMainSession : MonoBehaviour
         if (user != null) //디버그용
         {
             Debug.Log($"MainSystem UserId ::: {FirebaseUser.UserData.UserId}");
-            Debug.Log($"MainSystem DisplayName ::: {FirebaseUser.UserData.DisplayName}");
+            Debug.Log($"MainSystem userName ::: {username}");
         }
     }
-    
-    // public void SetFusionPlayerRef(PlayerRef playerRef)
-    // {
-    //     SampleUser.FusionPlayerRef = playerRef;
-    // }
 }
