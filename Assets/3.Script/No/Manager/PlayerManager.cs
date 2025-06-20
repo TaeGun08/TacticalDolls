@@ -19,8 +19,6 @@ public class PlayerManager : MonoBehaviour
     public List<CharacterData> usingCharacterData;
     // 플레이어가 사용 가능한 무기
     public List<WeaponData> usingWeaponData;
-
-    public Button testbtn;
     
     private void Awake()
     {
@@ -34,12 +32,13 @@ public class PlayerManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         
         player = new PlayerDataSample();
-        
-        testbtn.onClick.AddListener(()=> SceneManager.LoadScene("Test"));
     }
 
     private void Start()
     {
+        // 로비로 돌아올시 프리팹 초기화
+        ResetCachedCharacterData();
+        
         // 플레이어 데이터 조회 테스트 디버그
         Debug.Log(FirebaseMainSession.Instance.FirebaseUser.UserData.Email);
         Debug.Log(FirebaseMainSession.Instance.FirebaseUser.UserData);
@@ -65,7 +64,7 @@ public class PlayerManager : MonoBehaviour
         GameObject prefab = CharacterTable.GetPrefabByIndex(character.characterCode);
 
         CharacterData SyncCharacterData = prefab.GetComponent<CharacterData>();
-        SyncCharacterData.CalculateStatFromLevel(character.level);
+        SyncCharacterData.CalculateStatFromLevel(character.level, character.weapon.level);
         
         usingCharacterData.Add(SyncCharacterData);
         
@@ -84,6 +83,9 @@ public class PlayerManager : MonoBehaviour
     // 프리팹 초기화
     public void ResetCachedCharacterData()
     {
+        usingCharacterData.Clear();
+        usingWeaponData.Clear();
+        
         for (int i = 0; i < usingCharacterData.Count; i++)
         {
             CharacterData cachedData = usingCharacterData[i];

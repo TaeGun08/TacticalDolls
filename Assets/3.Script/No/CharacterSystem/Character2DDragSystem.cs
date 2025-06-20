@@ -58,7 +58,7 @@ public class Character2DDragSystem : MonoBehaviour, IBeginDragHandler, IDragHand
             CharacterData spawnedData = spawned.GetComponent<CharacterData>();
 
             // 캐싱된 데이터를 복사해서 스탯 초기화
-            spawnedData.CalculateStatFromLevel(cachedData.Stat.Level);
+            spawnedData.CalculateStatFromLevel(cachedData.Stat.Level, cachedData.Stat.Weapon.Level);
 
             tile.isUsingTile = true;
 
