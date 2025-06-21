@@ -108,9 +108,9 @@ public abstract class SkillParent : MonoBehaviour //, IUnitSkill
         [Tooltip("스킬 타임라인을 실행하는  디렉터입니다.")] public PlayableDirector director;
         
         [LabelText("필살기 비디오클립")] 
-        [Tooltip("필살기 동영상 클립 입니다.")] public VideoClip ultClip;
+        [Tooltip("필살기 동영상 클립 입니다.")] public VideoClip ultClip; //ToDo:타임라인으로 변경하기
         
-        [LabelText("발사체 시작 위치")] 
+        [LabelText("발사체 시작 위치")]
         [Tooltip("스킬 투사체가 발사될 위치입니다.")] public Transform castTransform;
     }
     

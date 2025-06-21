@@ -21,7 +21,9 @@ public class CharacterSequenceManager : MonoBehaviour
     private SkillParent.UnitSkillDetails cashedSkillDetails;
     private SkillParent.UnitSkillComponents cashedSkillComponents;
     private List<IDamageAble> cashedSkillTargets;
-
+    private Quaternion originalRotation;
+    private Vector3 direction;
+    
     private void Awake()
     {
         Instance = this;
@@ -44,10 +46,21 @@ public class CharacterSequenceManager : MonoBehaviour
         // 1. 포커스 처리
         // CharacterFocus(cashedSkillComponents.characterData.transform.position);
         
+        originalRotation = cashedSkillComponents.characterData.gameObject.transform.rotation; //원래 회전값 저장
+        
+        direction = (targetPosition.position - cashedSkillComponents.characterData.gameObject.transform.position).normalized;
+        direction.y = 0f; // Y축은 무시
+
+
+        await transform.DORotateQuaternion(Quaternion.LookRotation(direction), 0.5f) //적 방향으로 회전
+            .SetEase(Ease.OutSine)
+            .AsyncWaitForCompletion();
+        
         // 2. 컷신 재생
         //동영상으로 교체
         if (cashedSkillComponents.ultClip != null) //ultClip은 애니메이션 클립입니다. 변경하기
             await PlayCutscene(cashedSkillComponents.ultClip);
+        
         
         // 3. 애니메이션 & 탄환 발사 타임라인 재생
         if (cashedSkillComponents.director != null)
@@ -72,8 +85,11 @@ public class CharacterSequenceManager : MonoBehaviour
         //     CharacterFocus(focusPoint); 
         // }
         
-        
+
         await cashedSkill.EndSkillAction(listeners);
+        
+        await transform.DORotateQuaternion(originalRotation, 0.5f).SetEase(Ease.InSine).AsyncWaitForCompletion(); //원래 회전값으로 복귀
+
         // 시퀀스 완료까지 대기
     }
     
@@ -116,14 +132,12 @@ public class CharacterSequenceManager : MonoBehaviour
             if (targetClip is TransformTweenClip tweenClip) //형변환
             {
                 // 새 Location을 PlayableDirector에 등록
-                Debug.Log("Changing tween location");
                 if(newStartLocation != null)
                     director.SetReferenceValue(tweenClip.startLocation.exposedName, newStartLocation); 
                 director.SetReferenceValue(tweenClip.endLocation.exposedName, newEndLocation); //동적할당 하기 위해선 exposedName사용
             }
             else if (targetClip is CustomBezierCurveTweenClip bezierCurveTweenClip) //형변환
             {
-                Debug.Log("Changing CustomBezierCurveTweenClip location");
                 if(newStartLocation != null)
                     director.SetReferenceValue(bezierCurveTweenClip.startLocation.exposedName, newStartLocation); 
                 director.SetReferenceValue(bezierCurveTweenClip.endLocation.exposedName, newEndLocation);
@@ -137,15 +151,12 @@ public class CharacterSequenceManager : MonoBehaviour
     
     public async Task PlayCutscene(VideoClip videoClip)
     {
-        Debug.Log("PlayCutscene");
-        
         //ToDo :: 동영상 실행으로 수정
         await Task.Delay((int)((videoClip ? videoClip.length : 1f) * 1000)); //비디오 시간만큼 대기
     }
     
     private void CharacterFocus(Vector3 go)
     {
-        Debug.Log("CharacterFocus");
         touchCamera.MoveCameraTo(go);
     }
 
