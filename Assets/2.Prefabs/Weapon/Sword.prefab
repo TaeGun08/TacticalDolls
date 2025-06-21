@@ -131,6 +131,5 @@ MonoBehaviour:
   ID: 2
   WeaponName: Sword
   Level: 1
-  BaseDamage: 5
-  Skills:
-  - {fileID: 11400000, guid: 355f49512152d4845a1ea900a86f48f3, type: 2}
+  WeaponType: 2
+  WeaponIcon: {fileID: 21300008, guid: 358b5d9f23bc9413e87c9948acc67ee1, type: 3}

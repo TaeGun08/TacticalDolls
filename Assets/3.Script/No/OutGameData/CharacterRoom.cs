@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class CharacterRoom : MonoBehaviour
 {
     [SerializeField] private Transform iconSpawnPoint;
-    [SerializeField] private Transform rawImageSpawnPoint;
+    [SerializeField] private Transform playerRawImageSpawnPoint;
+    [SerializeField] private Transform weaponRawImageSpawnPoint;
 
     private List<CharacterData> playerCharacters;
     private List<CharacterData> characterIcons;
@@ -20,20 +22,23 @@ public class CharacterRoom : MonoBehaviour
     [SerializeField] private TMP_Text characterAttack;
     [SerializeField] private TMP_Text characterHp;
     [SerializeField] private TMP_Text characterDefense;
-    
-    private CharacterData selectedCharacter;
+    [SerializeField] private TMP_Text weaponLevel;
 
-    public Button LevelUpButton;
+    public CharacterData SelectedCharacter { get; private set; }
+
+    [SerializeField] private Button levelUpButton;
 
     private void OnEnable()
     {
         SetUIPlayerCharacters();
-        SetInfoPlayerCharacter(selectedCharacter);
+        SetInfoPlayerCharacter(SelectedCharacter);
     }
 
     private void Awake()
     {
-        LevelUpButton.onClick.AddListener(RequestUpdateCharacterLevelUp);
+        levelUpButton.onClick.AddListener(RequestUpdateCharacterLevelUp);
+        
+        // Debug.Log($"playerCharacters[0].Stat.Weapon.Level :: {playerCharacters[0].Stat.Weapon.Level}");
     }
 
     private void SetUIPlayerCharacters()
@@ -43,7 +48,12 @@ public class CharacterRoom : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        foreach (Transform child in rawImageSpawnPoint)
+        foreach (Transform child in playerRawImageSpawnPoint)
+        {
+            Destroy(child.gameObject);
+        }
+        
+        foreach (Transform child in weaponRawImageSpawnPoint)
         {
             Destroy(child.gameObject);
         }
@@ -57,16 +67,26 @@ public class CharacterRoom : MonoBehaviour
             {
                 if (playerCharacters[i].CharacterID == characterIcons[j].CharacterID)
                 {
-                    var SpawnCharacterUI = Instantiate(characterIcons[i].GameObject, iconSpawnPoint.position, iconSpawnPoint.rotation, iconSpawnPoint);
-                    Button btn = SpawnCharacterUI.AddComponent<Button>();
+                    var spawnCharacterUI = Instantiate(characterIcons[i].GameObject, iconSpawnPoint.position, iconSpawnPoint.rotation, iconSpawnPoint);
+                    Button btn = spawnCharacterUI.AddComponent<Button>();
                     
-                    btn.onClick.AddListener(() => selectedCharacter = playerCharacters[i]);
+                    btn.onClick.AddListener(() =>
+                    {
+                        SelectedCharacter = playerCharacters[i];
+                    });
                 }
             }
         }
         
-        selectedCharacter = playerCharacters[0];
-        Instantiate(selectedCharacter.GameObject, rawImageSpawnPoint.position, rawImageSpawnPoint.rotation, rawImageSpawnPoint);
+        SelectedCharacter = playerCharacters[0];
+        Instantiate(SelectedCharacter.GameObject, 
+            playerRawImageSpawnPoint.position, 
+            playerRawImageSpawnPoint.rotation, 
+            playerRawImageSpawnPoint);
+        Instantiate(SelectedCharacter.Stat.Weapon.gameObject, 
+            Vector3.zero, 
+            Quaternion.identity,
+            weaponRawImageSpawnPoint);
     }
 
     private void SetInfoPlayerCharacter(CharacterData characterData)
@@ -77,20 +97,21 @@ public class CharacterRoom : MonoBehaviour
         characterAttack.text = characterData.Stat.Attack.ToString();
         characterHp.text = characterData.Stat.HP.ToString();
         characterDefense.text = characterData.Stat.Defense.ToString();
+        weaponLevel.text = "Lv. " + characterData.Stat.Weapon.Level;
     }
     
     private async void RequestUpdateCharacterLevelUp()
     {
-        Debug.Log($"RequestUpdateCharacterLevelUp :: {selectedCharacter.CharacterID}");
+        Debug.Log($"RequestUpdateCharacterLevelUp :: {SelectedCharacter.CharacterID}");
 
-        var result = await selectedCharacter.UpdateCharacterLevel(selectedCharacter.CharacterID, 1);
+        var result = await SelectedCharacter.UpdateCharacterLevel(SelectedCharacter.CharacterID, 1);
 
         if (result)
         {
             await FirebaseMainSession.Instance.FirestoreLoader();
             PlayerManager.Instance.UpdateCharacterData();
             SetUIPlayerCharacters();
-            SetInfoPlayerCharacter(selectedCharacter);
+            SetInfoPlayerCharacter(SelectedCharacter);
         }
         else
         {
