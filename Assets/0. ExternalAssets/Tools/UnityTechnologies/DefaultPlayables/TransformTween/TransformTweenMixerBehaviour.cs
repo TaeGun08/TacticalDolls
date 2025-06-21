@@ -70,6 +70,11 @@ public class TransformTweenMixerBehaviour : PlayableBehaviour
                 {
                     input.flashParticle.transform.position = input.startLocation.position; 
                     input.flashParticle.SetActive(true);
+                    input.flashParticle.GetComponent<ParticleSystem>().Play();
+                    
+                    #if UNITY_EDITOR
+                    UnityEditor.SceneView.RepaintAll();
+                    #endif
                 }
             }
             else if (isProjectileActive && inputWeight <= 0f)

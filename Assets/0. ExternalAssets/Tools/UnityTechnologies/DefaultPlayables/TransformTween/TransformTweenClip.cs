@@ -9,8 +9,9 @@ public class TransformTweenClip : PlayableAsset, ITimelineClipAsset
     public TransformTweenBehaviour template = new TransformTweenBehaviour ();
     public ExposedReference<Transform> startLocation;
     public ExposedReference<Transform> endLocation;
-    public ExposedReference<GameObject> hitParticle;
     public ExposedReference<GameObject> flashParticle;
+    public ExposedReference<GameObject> hitParticle;
+
     
     public ClipCaps clipCaps
     {

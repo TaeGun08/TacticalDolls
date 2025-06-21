@@ -39,7 +39,7 @@ public class CustomBezierCurveTweenBehaviour : PlayableBehaviour
 
     public override void OnBehaviourPlay(Playable playable, FrameData info)
     {
-        if (startLocation != null)
+        if (startLocation)
         {
             startingPosition = startLocation.position;
             startingRotation = startLocation.rotation;
