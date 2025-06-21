@@ -3705,6 +3705,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rifle
       objectReference: {fileID: 0}
+    - target: {fileID: 433131571881629062, guid: 7ce6622ba8c35c14d8cf468be744c972,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4273787581450301403, guid: 7ce6622ba8c35c14d8cf468be744c972,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -4144,13 +4149,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iconSpawnPoint: {fileID: 72810248}
-  rawImageSpawnPoint: {fileID: 1734466692}
+  playerRawImageSpawnPoint: {fileID: 1734466692}
+  weaponRawImageSpawnPoint: {fileID: 1915404298}
   characterPosition: {fileID: 1026773417}
   characterName: {fileID: 1818916526}
   characterLevel: {fileID: 766719900}
   characterAttack: {fileID: 53948181}
   characterHp: {fileID: 459680564}
   characterDefense: {fileID: 240557711}
+  weaponLevel: {fileID: 303119605}
   LevelUpButton: {fileID: 1831212648}
 --- !u!1 &397952249
 GameObject:
@@ -15462,6 +15469,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1909033522}
   m_CullTransparentMesh: 1
+--- !u!1 &1915404297
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1915404298}
+  m_Layer: 0
+  m_Name: SpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1915404298
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1915404297}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 10, y: 1.2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2085909209}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1920271936
 GameObject:
   m_ObjectHideFlags: 0
@@ -16861,6 +16899,7 @@ Transform:
   - {fileID: 1126526971}
   - {fileID: 355619161}
   - {fileID: 1742212209}
+  - {fileID: 1915404298}
   m_Father: {fileID: 2140190345}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2107976814
