@@ -66,7 +66,7 @@ public class PlayerManager : MonoBehaviour
         return character;
     }
     
-    public void InitializeCharacterData(WeaponDataSample weapon)
+    public void InitializeWeaponData(WeaponDataSample weapon)
     {
         GameObject prefab = WeaponTable.GetPrefabByIndex(weapon.weaponCode);
 
@@ -90,7 +90,7 @@ public class PlayerManager : MonoBehaviour
 
         foreach (var weapon in FirebaseMainSession.Instance.FirebaseUser.playerData.HasWeapon)
         {
-            InitializeCharacterData(weapon);
+            InitializeWeaponData(weapon);
         }
     }
     

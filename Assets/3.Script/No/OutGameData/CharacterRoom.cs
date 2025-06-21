@@ -37,6 +37,8 @@ public class CharacterRoom : MonoBehaviour
     private void Awake()
     {
         LevelUpButton.onClick.AddListener(RequestUpdateCharacterLevelUp);
+        
+        Debug.Log($"playerCharacters[0].Stat.Weapon.Level :: {playerCharacters[0].Stat.Weapon.Level}");
     }
 
     private void SetUIPlayerCharacters()

@@ -6,7 +6,7 @@ public class WeaponData : MonoBehaviour
     public int ID;
     public string WeaponName;
     public int Level;
-    //public int BaseDamage;
+    //public int CurrentCharacter;
 
     public async void UpdateWeaponLevel(int weaponCode, int levelPoint)
     {
