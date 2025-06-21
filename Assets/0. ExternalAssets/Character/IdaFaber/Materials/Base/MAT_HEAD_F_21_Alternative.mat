@@ -62,6 +62,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap:
     MotionVector: User
+    RenderType: Opaque
   disabledShaderPasses:
   - TransparentDepthPrepass
   - TransparentDepthPostpass
@@ -354,7 +355,6 @@ Material:
     - _DoubleSidedGIMode: 0
     - _DoubleSidedNormalMode: 2
     - _DstBlend: 0
-    - _ENABLE_ADDITIVE: 0
     - _ENABLE_BLOOD: 0
     - _ENABLE_DIRT: 0
     - _EmissiveColorMode: 1
