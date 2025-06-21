@@ -42,7 +42,8 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _ENABLE_ADDITIVE
+  - _BUILTIN_ALPHATEST_ON
+  - _BUILTIN_AlphaClip
   - _USE_LERP_FOR_ADDITIVE
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -278,13 +279,13 @@ Material:
     - _AO_Strength: 1
     - _ATDistance: 1
     - _AddPrecomputedVelocity: 0
-    - _Additive_Metallic_Strength: 0
+    - _Additive_Metallic_Strength: 1
     - _Additive_Normal_Strength: 0
     - _Additive_PositionOffsetX: 0
     - _Additive_PositionOffsetY: 0
     - _Additive_Rotation: 0
     - _Additive_Scale: 0.21
-    - _Additive_Smoothness_Strength: 10.1
+    - _Additive_Smoothness_Strength: 1
     - _Additive_TileNumber: 1
     - _AlbedoAffectEmissive: 0
     - _AlphaClip: 1
@@ -344,7 +345,7 @@ Material:
     - _DoubleSidedGIMode: 0
     - _DoubleSidedNormalMode: 2
     - _DstBlend: 0
-    - _ENABLE_ADDITIVE: 1
+    - _ENABLE_ADDITIVE: 0
     - _ENABLE_BLOOD: 0
     - _ENABLE_DIRT: 0
     - _EmissiveColorMode: 1

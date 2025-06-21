@@ -247,7 +247,6 @@ Material:
     - _BUILTIN_ZTest: 4
     - _BUILTIN_ZWrite: 1
     - _BUILTIN_ZWriteControl: 0
-    - _BaseColor_contains_alpha: 0
     - _Blend: 0
     - _BlendMode: 0
     - _BlendModePreserveSpecular: 0
@@ -285,7 +284,6 @@ Material:
     - _EnableGeometricSpecularAA: 0
     - _EnergyConservingSpecularColor: 1
     - _EnvironmentReflections: 1
-    - _Final_Color_Multiply: 1
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1

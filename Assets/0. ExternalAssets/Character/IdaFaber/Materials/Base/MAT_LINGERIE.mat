@@ -28,6 +28,8 @@ Material:
   m_ValidKeywords:
   - _ALPHATEST_ON
   - _BASECOLOR_CONTAINS_ALPHA
+  - _BUILTIN_ALPHATEST_ON
+  - _BUILTIN_AlphaClip
   m_InvalidKeywords:
   - _ALPHATOMASK_ON
   - _DISABLE_SSR_TRANSPARENT
