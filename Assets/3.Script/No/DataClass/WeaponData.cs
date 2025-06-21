@@ -1,6 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum WeaponType
+{
+    Rifle,
+    Pistol,
+    Sword
+}
+
 public class WeaponData : MonoBehaviour
 {
     public int ID;
@@ -8,6 +15,10 @@ public class WeaponData : MonoBehaviour
     public int Level;
     //public int CurrentCharacter;
 
+    public WeaponType WeaponType;
+
+    public Sprite WeaponIcon;
+    
     public async void UpdateWeaponLevel(int weaponCode, int levelPoint)
     {
         string userId = FirebaseMainSession.Instance.FirebaseUser.UserData.UserId;
