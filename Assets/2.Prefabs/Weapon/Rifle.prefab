@@ -102,9 +102,8 @@ MonoBehaviour:
   ID: 0
   WeaponName: Rifle
   Level: 1
-  BaseDamage: 5
-  Skills:
-  - {fileID: 11400000, guid: bcf42b402ce89dd4e9ce8653ccdcab75, type: 2}
+  WeaponType: 0
+  WeaponIcon: {fileID: 21300002, guid: 358b5d9f23bc9413e87c9948acc67ee1, type: 3}
 --- !u!1 &2018381188510630566
 GameObject:
   m_ObjectHideFlags: 0

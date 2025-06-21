@@ -23,22 +23,22 @@ public class CharacterRoom : MonoBehaviour
     [SerializeField] private TMP_Text characterHp;
     [SerializeField] private TMP_Text characterDefense;
     [SerializeField] private TMP_Text weaponLevel;
-    
-    private CharacterData selectedCharacter;
 
-    public Button LevelUpButton;
+    public CharacterData SelectedCharacter { get; private set; }
+
+    [SerializeField] private Button levelUpButton;
 
     private void OnEnable()
     {
         SetUIPlayerCharacters();
-        SetInfoPlayerCharacter(selectedCharacter);
+        SetInfoPlayerCharacter(SelectedCharacter);
     }
 
     private void Awake()
     {
-        LevelUpButton.onClick.AddListener(RequestUpdateCharacterLevelUp);
+        levelUpButton.onClick.AddListener(RequestUpdateCharacterLevelUp);
         
-        Debug.Log($"playerCharacters[0].Stat.Weapon.Level :: {playerCharacters[0].Stat.Weapon.Level}");
+        // Debug.Log($"playerCharacters[0].Stat.Weapon.Level :: {playerCharacters[0].Stat.Weapon.Level}");
     }
 
     private void SetUIPlayerCharacters()
@@ -72,18 +72,18 @@ public class CharacterRoom : MonoBehaviour
                     
                     btn.onClick.AddListener(() =>
                     {
-                        selectedCharacter = playerCharacters[i];
+                        SelectedCharacter = playerCharacters[i];
                     });
                 }
             }
         }
         
-        selectedCharacter = playerCharacters[0];
-        Instantiate(selectedCharacter.GameObject, 
+        SelectedCharacter = playerCharacters[0];
+        Instantiate(SelectedCharacter.GameObject, 
             playerRawImageSpawnPoint.position, 
             playerRawImageSpawnPoint.rotation, 
             playerRawImageSpawnPoint);
-        Instantiate(selectedCharacter.Stat.Weapon.gameObject, 
+        Instantiate(SelectedCharacter.Stat.Weapon.gameObject, 
             Vector3.zero, 
             Quaternion.identity,
             weaponRawImageSpawnPoint);
@@ -102,16 +102,16 @@ public class CharacterRoom : MonoBehaviour
     
     private async void RequestUpdateCharacterLevelUp()
     {
-        Debug.Log($"RequestUpdateCharacterLevelUp :: {selectedCharacter.CharacterID}");
+        Debug.Log($"RequestUpdateCharacterLevelUp :: {SelectedCharacter.CharacterID}");
 
-        var result = await selectedCharacter.UpdateCharacterLevel(selectedCharacter.CharacterID, 1);
+        var result = await SelectedCharacter.UpdateCharacterLevel(SelectedCharacter.CharacterID, 1);
 
         if (result)
         {
             await FirebaseMainSession.Instance.FirestoreLoader();
             PlayerManager.Instance.UpdateCharacterData();
             SetUIPlayerCharacters();
-            SetInfoPlayerCharacter(selectedCharacter);
+            SetInfoPlayerCharacter(SelectedCharacter);
         }
         else
         {
