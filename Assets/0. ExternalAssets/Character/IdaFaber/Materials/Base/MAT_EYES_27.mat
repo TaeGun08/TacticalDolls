@@ -44,6 +44,7 @@ Material:
   m_ValidKeywords:
   - _BUILTIN_ALPHATEST_ON
   - _BUILTIN_AlphaClip
+  - _ENABLE_ADDITIVE
   - _USE_LERP_FOR_ADDITIVE
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -279,7 +280,7 @@ Material:
     - _AO_Strength: 1
     - _ATDistance: 1
     - _AddPrecomputedVelocity: 0
-    - _Additive_Metallic_Strength: 1
+    - _Additive_Metallic_Strength: 0
     - _Additive_Normal_Strength: 0
     - _Additive_PositionOffsetX: 0
     - _Additive_PositionOffsetY: 0
@@ -345,7 +346,7 @@ Material:
     - _DoubleSidedGIMode: 0
     - _DoubleSidedNormalMode: 2
     - _DstBlend: 0
-    - _ENABLE_ADDITIVE: 0
+    - _ENABLE_ADDITIVE: 1
     - _ENABLE_BLOOD: 0
     - _ENABLE_DIRT: 0
     - _EmissiveColorMode: 1

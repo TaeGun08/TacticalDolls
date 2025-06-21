@@ -42,11 +42,18 @@ Material:
   - _ADD_MICRODETAIL
   - _ENABLE_BLOOD
   - _ENABLE_DIRT
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _DISABLE_SSR_TRANSPARENT
+  - _DOUBLESIDED_ON
+  - _MASKMAP
+  - _METALLICGLOSSMAP
+  - _METALLICSPECGLOSSMAP
+  - _NORMALMAP
+  - _NORMALMAP_TANGENT_SPACE
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 1
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2000
   stringTagMap: {}
   disabledShaderPasses:
   - TransparentDepthPrepass
@@ -267,8 +274,8 @@ Material:
     - _3_Blood_Intensity: 1
     - _3_Dirt_Intensity: 1
     - _ADD_MICRODETAIL: 1
-    - _AORemapMax: 0.23224968
-    - _AORemapMin: 0
+    - _AORemapMax: 1
+    - _AORemapMin: 0.7677502
     - _AO_Strength: 1
     - _ATDistance: 1
     - _AddPrecomputedVelocity: 0
@@ -315,7 +322,7 @@ Material:
     - _ClearCoatSmoothness: 0
     - _CoatMask: 0
     - _ConservativeDepthOffsetEnable: 0
-    - _Cull: 2
+    - _Cull: 0
     - _CullMode: 0
     - _CullModeForward: 0
     - _Cutoff: 0.5
@@ -370,12 +377,12 @@ Material:
     - _IridescenceThickness: 1
     - _LinkDetailsWithBase: 0
     - _MaterialID: 1
-    - _Metallic: 1
+    - _Metallic: 0
     - _MetallicRemapMax: 0.0303859
     - _MetallicRemapMin: 0
     - _Metallic_Strength: 0.3
     - _Microdetail_Size: 84.9
-    - _Microdetail_Strength: 0.895
+    - _Microdetail_Strength: 0
     - _Mode: 0
     - _NormalMapSpace: 0
     - _NormalScale: 1
@@ -408,10 +415,10 @@ Material:
     - _RequireSplitLighting: 0
     - _SSSConcentration: 0
     - _SSSScale: 0
-    - _Smoothness: 0.5
-    - _SmoothnessRemapMax: 0.51210934
-    - _SmoothnessRemapMin: 0.35652786
-    - _SmoothnessTextureChannel: 1
+    - _Smoothness: 1
+    - _SmoothnessRemapMax: 0.30969018
+    - _SmoothnessRemapMin: 0.15410872
+    - _SmoothnessTextureChannel: 0
     - _Smoothness_Strength: 1
     - _SpecularAAScreenSpaceVariance: 0.1
     - _SpecularAAThreshold: 0.2
