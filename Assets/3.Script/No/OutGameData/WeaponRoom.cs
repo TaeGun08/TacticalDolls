@@ -21,7 +21,7 @@ public class WeaponRoom : MonoBehaviour
     private List<WeaponData> equipableWeapons =  new List<WeaponData>();
     
     public WeaponData SelectedWeapon { get; private set; }
-
+    
     [SerializeField] private Button levelUpButton;
     
     private void Awake()
@@ -70,9 +70,24 @@ public class WeaponRoom : MonoBehaviour
     private void SetInfoWeapon(WeaponData weaponData)
     {
         weaponName.text = weaponData.WeaponName;
-        // weaponUser.text = weaponData.;
+        weaponUser.text = GetWeaponUserOrNull() + " Using";
         weaponLevel.text = "Lv. " + weaponData.Level + "/ 20";
         weaponAttack.text = "Up seo yo...";
+    }
+
+    private string GetWeaponUserOrNull()
+    {
+        var characters = PlayerManager.Instance.usingCharacterData;
+        
+        for (int i = 0; i < characters.Count; i++)
+        {
+            if (characters[i].Stat.Weapon.ID == SelectedWeapon.ID)
+            {
+                return characters[i].PrefabName;
+            }
+        }
+        
+        return null;
     }
     
     private async void RequestUpdateWeaponLevelUp(int weaponId)
