@@ -284,7 +284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 030f85c3f73729f4f976f66ffb23b875, type: 3}
   m_Name: AnimationPlayableAsset(Clone)(Clone)
   m_EditorClassIdentifier: 
-  m_Clip: {fileID: -203655887218126122, guid: 9fcc155508bb2b3428366db4d947bd1b, type: 3}
+  m_Clip: {fileID: -203655887218126122, guid: eaa3cdd2c8521e24dbd4a04c796c1118, type: 3}
   m_Position: {x: 0, y: 0, z: 0}
   m_EulerAngles: {x: 0, y: 0, z: 0}
   m_UseTrackMatchFields: 1
@@ -329,6 +329,8 @@ MonoBehaviour:
   m_Name: CustomBezierCurveTweenClip
   m_EditorClassIdentifier: 
   template:
+    flashParticle: {fileID: 0}
+    hitParticle: {fileID: 0}
     arcHeight: 2
     startLocation: {fileID: 0}
     endLocation: {fileID: 0}
@@ -366,6 +368,12 @@ MonoBehaviour:
     defaultValue: {fileID: 0}
   endLocation:
     exposedName: 687b3344355c4954cb5147a87467a276
+    defaultValue: {fileID: 0}
+  flashParticle:
+    exposedName: 
+    defaultValue: {fileID: 0}
+  hitParticle:
+    exposedName: 
     defaultValue: {fileID: 0}
 --- !u!114 &8235301845445875381
 MonoBehaviour:
