@@ -98,7 +98,7 @@ public class WeaponData : MonoBehaviour
         foreach (var w in playerData.HasWeapon)
         {
             if (w.currentCharacter == characterCode)
-                w.currentCharacter = 0;
+                w.currentCharacter = null;
         }
 
         // 6. 무기 장착
