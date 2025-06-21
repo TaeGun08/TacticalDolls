@@ -18,6 +18,6 @@ MonoBehaviour:
   defense: 100
   moveRange: 5
   skills: []
-  weapon: {fileID: -8985103076616876387, guid: 9098ebe93f92a804b808393bab6d1c39, type: 3}
+  weapon: {fileID: 1169428410338001786, guid: 7ce6622ba8c35c14d8cf468be744c972, type: 3}
   isDead: 0
   isCompleteAction: 0
