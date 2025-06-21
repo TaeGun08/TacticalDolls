@@ -37,14 +37,23 @@ public class CustomBezierCurveTweenBehaviour : PlayableBehaviour
 
     const float k_RightAngleInRads = Mathf.PI * 0.5f;
 
-    public override void PrepareFrame (Playable playable, FrameData info)
+    public override void OnBehaviourPlay(Playable playable, FrameData info)
     {
-        if (startLocation)
+        if (startLocation != null)
         {
             startingPosition = startLocation.position;
             startingRotation = startLocation.rotation;
         }
     }
+    
+    // public override void PrepareFrame (Playable playable, FrameData info)
+    // {
+    //     if (startLocation)
+    //     {
+    //         startingPosition = startLocation.position;
+    //         startingRotation = startLocation.rotation;
+    //     }
+    // }
 
     public float EvaluateCurrentCurve (float time)
     {
