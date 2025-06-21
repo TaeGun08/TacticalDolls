@@ -15,9 +15,6 @@ Material:
   m_ValidKeywords:
   - _ALPHATEST_ON
   - _BASECOLOR_CONTAINS_ALPHA
-  - _BUILTIN_ALPHATEST_ON
-  - _BUILTIN_AlphaClip
-  - _BUILTIN_SURFACE_TYPE_TRANSPARENT
   - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords:
   - _DISABLE_SSR_TRANSPARENT
@@ -241,6 +238,7 @@ Material:
     - _BUILTIN_ZWriteControl: 0
     - _Blend: 0
     - _BlendMode: 0
+    - _BlendModePreserveSpecular: 0
     - _Blur_1: 0.31
     - _Blur_2: 0
     - _Blur_3: 0

@@ -356,6 +356,7 @@ Material:
     - _DoubleSidedGIMode: 0
     - _DoubleSidedNormalMode: 2
     - _DstBlend: 0
+    - _ENABLE_ADDITIVE: 0
     - _ENABLE_BLOOD: 1
     - _ENABLE_DIRT: 1
     - _EmissiveColorMode: 1
