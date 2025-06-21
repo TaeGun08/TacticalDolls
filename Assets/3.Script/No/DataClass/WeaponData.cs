@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public enum WeaponType
@@ -19,7 +20,7 @@ public class WeaponData : MonoBehaviour
 
     public Sprite WeaponIcon;
     
-    public async void UpdateWeaponLevel(int weaponCode, int levelPoint)
+    public async Task<bool> UpdateWeaponLevel(int weaponCode, int levelPoint)
     {
         string userId = FirebaseMainSession.Instance.FirebaseUser.UserData.UserId;
         
@@ -34,7 +35,7 @@ public class WeaponData : MonoBehaviour
         if (playerData == null)
         {
             Debug.LogWarning("플레이어 데이터를 찾을 수 없습니다.");
-            return;
+            return false;
         }
 
         // 2. 무기 찾기
@@ -43,7 +44,7 @@ public class WeaponData : MonoBehaviour
         if (weaponToUpdate == null)
         {
             Debug.LogWarning($"weaponCode {weaponCode} 에 해당하는 무기를 찾을 수 없습니다.");
-            return;
+            return false;
         }
 
         // 3. 무기 레벨 업데이트
@@ -52,13 +53,24 @@ public class WeaponData : MonoBehaviour
         // 4. 전체 무기 리스트를 업데이트 필드로 설정
         Dictionary<string, object> updates = new Dictionary<string, object>
         {
-            { "HasWeapon", playerData.HasWeapon }
+            { "HasWeapon", playerData.HasWeapon },
+            { "HasCharacter", playerData.HasCharacter }
         };
-
-        // 5. Firestore에 반영
+        
+        // 5. 무기가 적용된 캐릭터 스텟도 업데이트
+        foreach (var c in playerData.HasCharacter)
+        {
+            if (c.weapon.weaponCode == weaponCode)
+            {
+                c.weapon.weaponCode = weaponToUpdate.weaponCode;
+                c.weapon.level = weaponToUpdate.level;
+            }
+        }
+        
+        // 6. Firestore에 반영
         await FirestoreManager.Instance.UpdateDataAsync(FirebaseCollections.Players, userId, updates);
         
-        PlayerManager.Instance.UpdateCharacterData();
+        return true;
     }
     
     // 장착중인 캐릭터가 있는지 체크 추가 필요
@@ -109,7 +121,7 @@ public class WeaponData : MonoBehaviour
         foreach (var w in playerData.HasWeapon)
         {
             if (w.currentCharacter == characterCode)
-                w.currentCharacter = null;
+                w.currentCharacter = 0;
         }
 
         // 6. 무기 장착
