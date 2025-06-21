@@ -176,6 +176,7 @@ public class FirebaseAccountManager : MonoBehaviour
             {
                 weaponCode = 0,
                 level = 5,
+                currentCharacter = 0,
             },
 
             skills = new SkillDataSample[2]

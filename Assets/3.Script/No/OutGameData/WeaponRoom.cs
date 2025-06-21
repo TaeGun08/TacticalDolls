@@ -93,5 +93,20 @@ public class WeaponRoom : MonoBehaviour
     private async void RequestUpdateWeaponLevelUp(int weaponId)
     {
         // 무기 레벨업 구현하면 됩니다래끼
+        Debug.Log($"RequestUpdateWeaponLevelUp :: {weaponId}");
+        
+        var result = await SelectedWeapon.UpdateWeaponLevel(weaponId, 1);
+        
+        if (result)
+        {
+            await FirebaseMainSession.Instance.FirestoreLoader();
+            PlayerManager.Instance.UpdateCharacterData();
+            SetUIWeapon();
+            SetInfoWeapon(SelectedWeapon);
+        }
+        else
+        {
+            Debug.LogWarning("무기 레벨업 실패");
+        }
     }
 }
