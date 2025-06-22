@@ -5,3 +5,4 @@ Assets/Firebase/Plugins/x86_64/*.bundle filter=lfs diff=lfs merge=lfs -text
 assets/5.Animation/*.fbx filter=lfs diff=lfs merge=lfs -text
 assets/5.Animation/RifleCharacter/*.fbx filter=lfs diff=lfs merge=lfs -text
 assets/0.[[:space:]]ExternalAssets/Pistol[[:space:]]92/Textures/*.png filter=lfs diff=lfs merge=lfs -text
+Assets/0.[[:space:]]ExternalAssets/Character/Sci_Fi_Super_Pack/Sci_Fi_Character_010/Textures/Defender_Body/*.tga filter=lfs diff=lfs merge=lfs -text
