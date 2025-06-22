@@ -11,10 +11,9 @@ public class CharacterRoom : MonoBehaviour
 {
     [SerializeField] private Transform iconSpawnPoint;
     [SerializeField] private Transform playerRawImageSpawnPoint;
-    [SerializeField] private Transform weaponRawImageSpawnPoint;
-
-    private List<CharacterData> playerCharacters;
-    private List<CharacterData> characterIcons;
+    
+    [SerializeField] private GameObject pistolRawImage;
+    [SerializeField] private GameObject weaponRawImage;
     
     [SerializeField] private TMP_Text characterPosition;
     [SerializeField] private TMP_Text characterName;
@@ -24,42 +23,28 @@ public class CharacterRoom : MonoBehaviour
     [SerializeField] private TMP_Text characterDefense;
     [SerializeField] private TMP_Text weaponLevel;
 
+    private List<CharacterData> playerCharacters;
+    private List<CharacterData> characterIcons;
+
     public CharacterData SelectedCharacter { get; private set; }
+    private CharacterData selectedCharacterIcon;
 
     [SerializeField] private Button levelUpButton;
-
-    private void OnEnable()
-    {
-        SetUIPlayerCharacters();
-        SetInfoPlayerCharacter(SelectedCharacter);
-    }
 
     private void Awake()
     {
         levelUpButton.onClick.AddListener(RequestUpdateCharacterLevelUp);
-        
-        // Debug.Log($"playerCharacters[0].Stat.Weapon.Level :: {playerCharacters[0].Stat.Weapon.Level}");
     }
-
-    private void SetUIPlayerCharacters()
+    
+    private void OnEnable()
     {
+        playerCharacters = PlayerManager.Instance.usingCharacterData;
+        characterIcons = PlayerManager.Instance.characterIcons;
+        
         foreach (Transform child in iconSpawnPoint)
         {
             Destroy(child.gameObject);
         }
-
-        foreach (Transform child in playerRawImageSpawnPoint)
-        {
-            Destroy(child.gameObject);
-        }
-        
-        foreach (Transform child in weaponRawImageSpawnPoint)
-        {
-            Destroy(child.gameObject);
-        }
-        
-        playerCharacters = PlayerManager.Instance.usingCharacterData;
-        characterIcons = PlayerManager.Instance.characterIcons;
         
         for (int i = 0; i < playerCharacters.Count; i++)
         {
@@ -67,26 +52,54 @@ public class CharacterRoom : MonoBehaviour
             {
                 if (playerCharacters[i].CharacterID == characterIcons[j].CharacterID)
                 {
-                    var spawnCharacterUI = Instantiate(characterIcons[i].GameObject, iconSpawnPoint.position, iconSpawnPoint.rotation, iconSpawnPoint);
+                    var spawnCharacterUI = Instantiate(characterIcons[j].GameObject, iconSpawnPoint.position, iconSpawnPoint.rotation, iconSpawnPoint);
                     Button btn = spawnCharacterUI.AddComponent<Button>();
+                    
+                    int currentIndex_i = i;
+                    int currentIndex_j = j;
                     
                     btn.onClick.AddListener(() =>
                     {
-                        SelectedCharacter = playerCharacters[i];
+                        if (selectedCharacterIcon != null)
+                        {
+                            selectedCharacterIcon.gameObject.GetComponent<Outline>().enabled = false;
+                        }
+
+                        SelectedCharacter = playerCharacters[currentIndex_i];
+                        selectedCharacterIcon = characterIcons[currentIndex_j];
+                        
+                        SetUIPlayerCharacters();
+                        SetInfoPlayerCharacter(SelectedCharacter);
                     });
+
+                    if (selectedCharacterIcon != null) continue;
+                    selectedCharacterIcon = characterIcons[j];
+                    Debug.Log($"selectedCharacterIcon ::: {selectedCharacterIcon}");
                 }
             }
         }
         
         SelectedCharacter = playerCharacters[0];
+        
+        SetInfoPlayerCharacter(SelectedCharacter);
+        SetUIPlayerCharacters();
+    }
+
+    private void SetUIPlayerCharacters()
+    {
+        selectedCharacterIcon.gameObject.GetComponent<Outline>().enabled = true;
+        
+        foreach (Transform child in playerRawImageSpawnPoint)
+        {
+            Destroy(child.gameObject);
+        }
+        
         Instantiate(SelectedCharacter.GameObject, 
             playerRawImageSpawnPoint.position, 
             playerRawImageSpawnPoint.rotation, 
             playerRawImageSpawnPoint);
-        Instantiate(SelectedCharacter.Stat.Weapon.gameObject, 
-            Vector3.zero, 
-            Quaternion.identity,
-            weaponRawImageSpawnPoint);
+
+        OnWeaponRawImage(SelectedCharacter.Stat.Weapon);
     }
 
     private void SetInfoPlayerCharacter(CharacterData characterData)
@@ -98,6 +111,28 @@ public class CharacterRoom : MonoBehaviour
         characterHp.text = characterData.Stat.HP.ToString();
         characterDefense.text = characterData.Stat.Defense.ToString();
         weaponLevel.text = "Lv. " + characterData.Stat.Weapon.Level;
+    }
+
+    private void OnWeaponRawImage(WeaponData weaponData)
+    {
+        weaponRawImage.SetActive(false);
+        pistolRawImage.SetActive(false);
+        
+        var weaponType = weaponData.WeaponType;
+
+        switch (weaponType)
+        {
+            case WeaponType.Rifle:
+                weaponRawImage.SetActive(true);
+                break;
+            case WeaponType.Pistol:
+                pistolRawImage.SetActive(true);
+                break;
+            case WeaponType.Sword:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
     
     private async void RequestUpdateCharacterLevelUp()

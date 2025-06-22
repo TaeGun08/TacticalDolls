@@ -104,7 +104,7 @@ MonoBehaviour:
     weapon: {fileID: 0}
     isDead: 0
     isCompleteAction: 0
-  HasSkills: []
+  hasSkills: []
 --- !u!114 &4442200570086932641
 MonoBehaviour:
   m_ObjectHideFlags: 0
