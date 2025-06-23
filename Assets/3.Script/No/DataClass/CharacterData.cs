@@ -70,7 +70,6 @@ public class CharacterData : MonoBehaviour, IDamageAble
         runtimeStat.MoveRange = baseStatSO.moveRange + characterLevel / 5; // 5레벨마다 1 증가
 
         // 스킬 및 무기 정보 복사
-        runtimeStat.Skills = new List<SkillEffectHandlerBase>(baseStatSO.skills);
         runtimeStat.Weapon = baseStatSO.weapon;
 
         return runtimeStat;
@@ -83,7 +82,6 @@ public class CharacterData : MonoBehaviour, IDamageAble
         runtimeStat.Attack = 100;
         runtimeStat.Defense = 100;
         runtimeStat.MoveRange = 5;
-        runtimeStat.Skills = new List<SkillEffectHandlerBase>();
         runtimeStat.Weapon = baseStatSO.weapon;
         
         return runtimeStat;
