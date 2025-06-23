@@ -38,6 +38,12 @@ public class WeaponRoom : MonoBehaviour
         
         allWeapons = PlayerManager.Instance.usingWeaponData;
         
+        SetUIWeapon();
+        SetInfoWeapon(SelectedWeapon);
+    }
+
+    private void SetUIWeapon()
+    {
         foreach (Transform child in weaponIconSpawnPoint)
         {
             Destroy(child.gameObject);
@@ -47,7 +53,16 @@ public class WeaponRoom : MonoBehaviour
         {
             if (characterRoom.SelectedCharacter.Stat.Weapon.WeaponType == allWeapons[i].WeaponType)
             {
-                var icon = Instantiate(weaponIconPrefab, weaponIconSpawnPoint);
+                var background = Instantiate(weaponIconPrefab, weaponIconSpawnPoint);
+                
+                if (characterRoom.SelectedCharacter.Stat.Weapon.ID == allWeapons[i].ID)
+                {
+                    background.GetComponent<Outline>().enabled = true;
+                }
+
+                background.GetComponent<Image>().color = SetWeaponBackgroundColor(allWeapons[i].WeaponGrade);
+                
+                var icon = Instantiate(weaponIconPrefab, background.transform);
                 icon.GetComponent<Image>().sprite = allWeapons[i].WeaponIcon;
                 
                 var button = icon.AddComponent<Button>();
@@ -62,13 +77,6 @@ public class WeaponRoom : MonoBehaviour
         }
         
         SelectedWeapon = characterRoom.SelectedCharacter.Stat.Weapon;
-        
-        SetUIWeapon();
-        SetInfoWeapon(SelectedWeapon);
-    }
-
-    private void SetUIWeapon()
-    {
         weaponImage.sprite = SelectedWeapon.WeaponIcon;
     }
     
@@ -77,7 +85,7 @@ public class WeaponRoom : MonoBehaviour
         weaponName.text = weaponData.WeaponName;
         weaponUser.text = GetWeaponUserOrNull() + " Using";
         weaponLevel.text = "Lv. " + weaponData.Level + "/ 20";
-        weaponAttack.text = "Up seo yo...";
+        weaponAttack.text = weaponData.Damage.ToString();
     }
 
     private string GetWeaponUserOrNull()
@@ -97,6 +105,23 @@ public class WeaponRoom : MonoBehaviour
         }
         
         return null;
+    }
+
+    private Color SetWeaponBackgroundColor(WeaponGrade weaponGrade)
+    {
+        switch (weaponGrade)
+        {
+            case WeaponGrade.Normal:
+                return Color.gray;
+            case WeaponGrade.Rare:
+                return Color.cyan;
+            case WeaponGrade.Epic:
+                return Color.magenta;
+            case WeaponGrade.Unique:
+                return Color.yellow;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(weaponGrade), weaponGrade, null);
+        }
     }
     
     // 무기 레벨업
