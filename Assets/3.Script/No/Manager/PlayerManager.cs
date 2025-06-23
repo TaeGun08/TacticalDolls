@@ -44,10 +44,6 @@ public class PlayerManager : MonoBehaviour
         // 로비로 돌아올시 프리팹 초기화
         ResetCachedCharacterData();
         
-        // 플레이어 데이터 조회 테스트 디버그
-        // Debug.Log(FirebaseMainSession.Instance.FirebaseUser.UserData.Email);
-        // Debug.Log(FirebaseMainSession.Instance.FirebaseUser.UserData);
-        
         UpdateCharacterData();
         
         lobbyPanel.SetActive(true);
@@ -81,6 +77,7 @@ public class PlayerManager : MonoBehaviour
         Debug.Log("UpdateCharacterData");
         usingCharacterData.Clear();
         usingWeaponData.Clear();
+        player = new PlayerDataSample();
         
         foreach (var character in FirebaseMainSession.Instance.FirebaseUser.playerData.HasCharacter)
         {

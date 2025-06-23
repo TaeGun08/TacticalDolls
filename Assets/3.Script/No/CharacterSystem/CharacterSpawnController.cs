@@ -33,15 +33,15 @@ public class CharacterSpawnController : MonoBehaviour
         
         characterUseAbleTiles = TileManager.Instance.CharacterSpawnUseTiles;
         
-        foreach (var characterDataSample in PlayerManager.Instance.player.HasCharacter)
+        foreach (var characterDataSample in PlayerManager.Instance.usingCharacterData)
         {
-            int characterCode = characterDataSample.characterCode;
+            int characterCode = characterDataSample.CharacterID;
         
             foreach (var characterUI in characterUIPrefab)
             {
-                var character = characterUI.GetComponent<Character2DDragSystem>().characterPrefab3D.GetComponent<CharacterData>();
+                var characterIcon = characterUI.GetComponent<Character2DDragSystem>().characterPrefab3D.GetComponent<CharacterData>();
                 
-                if (characterCode == character.CharacterID)
+                if (characterCode == characterIcon.CharacterID)
                 {
                     var SpawnCharacter = Instantiate(characterUIPrefab[characterCode], HasCharacterContent.transform);
                     var _2DDragSystem = SpawnCharacter.GetComponent<Character2DDragSystem>();
