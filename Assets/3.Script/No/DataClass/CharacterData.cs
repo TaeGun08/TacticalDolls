@@ -6,6 +6,7 @@ using UnityEngine;
 [System.Serializable]
 public class CharacterData : MonoBehaviour, IDamageAble 
 {
+    private static readonly int ATTACKED = Animator.StringToHash("Attacked");
     public int CharacterID;
     public string PrefabName;
 
@@ -23,10 +24,40 @@ public class CharacterData : MonoBehaviour, IDamageAble
     
     public SkillParent[] hasSkills;
     
+    public Animator animator;
+
+    //InGame
+    // private List<BuffParent> Buffs = new List<BuffParent>();
+    
     private void Awake()
     {
         runtimeStat = new StatData(baseStatSO);
     }
+
+    // private void OnEnable()
+    // {
+    //     if(TurnManager.Instance != null)
+    //         TurnManager.Instance.TurnEnded += BuffTurnMinus;
+    // }
+    //
+    // private void OnDisable()
+    // {
+    //     if(TurnManager.Instance != null)
+    //         TurnManager.Instance.TurnEnded -= BuffTurnMinus;
+    // }
+    //
+    // public void BuffTurnMinus() //버프 턴 감소, 0이 될 시 제거
+    // {
+    //     for (int i = 0; i < Buffs.Count; i++)
+    //     {
+    //         Buffs[i].remainingTurns -= 1;
+    //         
+    //         if (Buffs[i].remainingTurns <= 0)
+    //         {
+    //             Buffs.RemoveAt(i);
+    //         }
+    //     }
+    // }
 
     public async Task Excute(int selectedSkill, List<IDamageAble> targets, Transform targetPoint)
     {
@@ -43,6 +74,8 @@ public class CharacterData : MonoBehaviour, IDamageAble
     {
         Debug.Log($"{PrefabName} Character Take damage :: CharacterID {CharacterID} _ {combatEvent.Damage}");
         Stat.HP -= combatEvent.Damage;
+        
+        animator.SetTrigger(ATTACKED);
         //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
     }
 

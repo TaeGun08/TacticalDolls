@@ -47,7 +47,7 @@ public static class ChildAttachmentWatcher
         var activeScene = SceneManager.GetActiveScene(); //현재 위치한 씬을 받아옵니다.
         
         //작업할 씬 이름을 넣어주세요.
-        if (activeScene.name != "SkillMakeScene")
+        if (activeScene.name != "None")
         {
             EditorApplication.hierarchyChanged -= OnHierarchyChanged;
             return;
