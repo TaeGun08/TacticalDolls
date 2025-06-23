@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using System.IO;
 
-public static class Capture_Test
+public static class CaptureMachine
 {
     [MenuItem("Tools/Capture Scene View with Transparency")]
     static void Capture()
@@ -41,7 +41,7 @@ public static class Capture_Test
         // PNG 저장
         string folder = Path.Combine(Application.dataPath, "4.Sprite/Captures");
         Directory.CreateDirectory(folder);
-        string path = Path.Combine(folder, $"GameViewCapture_{System.DateTime.Now:yyyyMMdd_HHmmss}.png");
+        string path = Path.Combine(folder, $"GameViewCapture{System.DateTime.Now:yyyyMMdd_HHmmss}.png");    // 파일 이름 설정
         File.WriteAllBytes(path, tex.EncodeToPNG());
 
         // 복원
