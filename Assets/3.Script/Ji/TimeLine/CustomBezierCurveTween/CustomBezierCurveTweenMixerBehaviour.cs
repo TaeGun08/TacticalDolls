@@ -189,7 +189,7 @@ public class CustomBezierCurveTweenMixerBehaviour : PlayableBehaviour
         m_FirstFrameHappened = false; // 다음에 다시 실행되도록
         isProjectileActive = false;
         
-        if(cashedHitParticle)
+        if(cashedFlashParticle)
             cashedFlashParticle.SetActive(false);
         if(cashedHitParticle)
             cashedHitParticle.SetActive(false);
