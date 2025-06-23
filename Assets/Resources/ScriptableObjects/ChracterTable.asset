@@ -14,5 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabEntries:
   - prefabKey: 0
-    prefab: {fileID: 5609527761483769844, guid: 13126c66bbdd175408bf1b0678ba18be,
+    prefab: {fileID: 7252184665146118528, guid: 76553ef5c92aa8648ac197df4fe37fbc,
       type: 3}
+  - prefabKey: 1
+    prefab: {fileID: 1363621083032692715, guid: 08ab36c3fd3a61a4ba0aa40a02f5d70a,
+      type: 3}
+  - prefabKey: 2
+    prefab: {fileID: 620485998743106144, guid: 940163d088ee94244b9ab2069d621a24, type: 3}
