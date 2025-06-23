@@ -19,6 +19,8 @@ public enum WeaponGrade
 
 public class WeaponData : MonoBehaviour
 {
+    private const int NO_CHARACTER = -1; 
+    
     public int ID;
     public string WeaponName;
     public int Level;
@@ -100,7 +102,7 @@ public class WeaponData : MonoBehaviour
             return;
         }
 
-        // 2. 장착 대상 캐릭터 및 무기 찾기
+        // 2. 장착 대상 캐릭터 및 장착 무기
         CharacterDataSample character = playerData.HasCharacter.Find(c => c.characterCode == characterCode);
         WeaponDataSample newWeapon = playerData.HasWeapon.Find(w => w.weaponCode == weaponCodeToEquip);
 
@@ -111,17 +113,16 @@ public class WeaponData : MonoBehaviour
         }
 
         // 3. 이미 다른 캐릭터가 이 무기를 장착 중인지 확인
-        if (newWeapon.currentCharacter != 0 && newWeapon.currentCharacter != characterCode)
+        if (newWeapon.currentCharacter != characterCode)
         {
             Debug.LogWarning($"이 무기는 캐릭터 {newWeapon.currentCharacter}가 사용 중입니다.");
-            // TODO: 여기에 UI 알림 팝업 연결
             return;
         }
 
-        // 4. 기존에 무기 끼고 있던 캐릭터 해제 처리 (서로 무기 공유 불가 기준일 때만)
+        // 4. 기존에 무기 끼고 있던 캐릭터 해제
         foreach (var c in playerData.HasCharacter)
         {
-            if (c.weapon != null && c.weapon.weaponCode == weaponCodeToEquip && c.characterCode != characterCode)
+            if (c.weapon.weaponCode == weaponCodeToEquip && c.characterCode != characterCode)
             {
                 c.weapon = null;
             }
@@ -131,7 +132,7 @@ public class WeaponData : MonoBehaviour
         foreach (var w in playerData.HasWeapon)
         {
             if (w.currentCharacter == characterCode)
-                w.currentCharacter = 0;
+                w.currentCharacter = NO_CHARACTER;
         }
 
         // 6. 무기 장착
