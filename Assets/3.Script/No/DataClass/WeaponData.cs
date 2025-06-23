@@ -9,6 +9,14 @@ public enum WeaponType
     Sword
 }
 
+public enum WeaponGrade
+{
+    Normal,
+    Rare,
+    Epic,
+    Unique
+}
+
 public class WeaponData : MonoBehaviour
 {
     public int ID;
@@ -17,6 +25,7 @@ public class WeaponData : MonoBehaviour
     //public int CurrentCharacter;
 
     public WeaponType WeaponType;
+    public WeaponGrade WeaponGrade;
 
     public Sprite WeaponIcon;
     

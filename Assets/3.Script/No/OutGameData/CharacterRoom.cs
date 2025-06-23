@@ -26,7 +26,6 @@ public class CharacterRoom : MonoBehaviour
     private List<CharacterData> characterIcons;
 
     public CharacterData SelectedCharacter { get; private set; }
-    private CharacterData selectedCharacterIcon;
 
     [SerializeField] private Button levelUpButton;
 
@@ -54,21 +53,16 @@ public class CharacterRoom : MonoBehaviour
                     var spawnCharacterUI = Instantiate(characterIcons[j].GameObject, iconSpawnPoint.position, iconSpawnPoint.rotation, iconSpawnPoint);
                     Button btn = spawnCharacterUI.AddComponent<Button>();
                     
-                    int currentIndex_i = i;
-                    int currentIndex_j = j;
+                    int currentIndex = i;
                     
                     btn.onClick.AddListener(() =>
                     {
-                        SelectedCharacter = playerCharacters[currentIndex_i];
-                        selectedCharacterIcon = characterIcons[currentIndex_j];
+                        SelectedCharacter = playerCharacters[currentIndex];
                         
                         SetUIPlayerCharacters();
                         SetInfoPlayerCharacter(SelectedCharacter);
                     });
 
-                    if (selectedCharacterIcon != null) continue;
-                    selectedCharacterIcon = characterIcons[j];
-                    Debug.Log($"selectedCharacterIcon ::: {selectedCharacterIcon}");
                 }
             }
         }

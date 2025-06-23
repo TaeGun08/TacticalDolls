@@ -9,6 +9,7 @@ public class WeaponRoom : MonoBehaviour
 {
     [SerializeField] private CharacterRoom characterRoom;
 
+    [SerializeField] private Image weaponImage;
     [SerializeField] private Transform weaponIconSpawnPoint;
     [SerializeField] private GameObject weaponIconPrefab;
     
@@ -18,7 +19,6 @@ public class WeaponRoom : MonoBehaviour
     [SerializeField] private TMP_Text weaponAttack;
     
     private List<WeaponData> allWeapons =  new List<WeaponData>();
-    private List<WeaponData> equipableWeapons =  new List<WeaponData>();
     
     public WeaponData SelectedWeapon { get; private set; }
     
@@ -34,25 +34,19 @@ public class WeaponRoom : MonoBehaviour
 
     private void OnEnable()
     {
-        SetUIWeapon();
-        SetInfoWeapon(SelectedWeapon);
-    }
-
-    private void SetUIWeapon()
-    {
+        Debug.Log($"SelectedCharacter ::: {characterRoom.SelectedCharacter.PrefabName}");
+        
+        allWeapons = PlayerManager.Instance.usingWeaponData;
+        
         foreach (Transform child in weaponIconSpawnPoint)
         {
             Destroy(child.gameObject);
         }
         
-        allWeapons = PlayerManager.Instance.usingWeaponData;
-        
         for (int i = 0; i < allWeapons.Count; i++)
         {
             if (characterRoom.SelectedCharacter.Stat.Weapon.WeaponType == allWeapons[i].WeaponType)
             {
-                equipableWeapons.Add(allWeapons[i]);
-                
                 var icon = Instantiate(weaponIconPrefab, weaponIconSpawnPoint);
                 icon.GetComponent<Image>().sprite = allWeapons[i].WeaponIcon;
                 
@@ -67,7 +61,15 @@ public class WeaponRoom : MonoBehaviour
             }
         }
         
-        SelectedWeapon =  equipableWeapons[0];
+        SelectedWeapon = characterRoom.SelectedCharacter.Stat.Weapon;
+        
+        SetUIWeapon();
+        SetInfoWeapon(SelectedWeapon);
+    }
+
+    private void SetUIWeapon()
+    {
+        weaponImage.sprite = SelectedWeapon.WeaponIcon;
     }
     
     private void SetInfoWeapon(WeaponData weaponData)
