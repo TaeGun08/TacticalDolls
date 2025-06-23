@@ -14,8 +14,9 @@ public class TurnManager : MonoBehaviour
     public event EventHandler<ActorParent> ActorChanged;
     
     // 턴 진행 상황
-    
     public event EventHandler<GameStateEventArgs> GameStateChanged;
+    
+    // public event Action TurnEnded;
 
     // 초기 턴 상태 waitting 으로 시작
     public GameState State { get; private set; } = GameState.Waiting;
@@ -77,7 +78,8 @@ public class TurnManager : MonoBehaviour
             await TurnEndedSource.Task;
 
             TurnCount++;
-
+            // TurnEnd();
+            
             if (CheckWinCondition())
             {
                 break;
@@ -105,6 +107,12 @@ public class TurnManager : MonoBehaviour
         CurrentTurn = actor;
         ActorChanged?.Invoke(this, CurrentTurn);
     }
+    
+    // private void TurnEnd()
+    // {
+    //     Debug.Log($"{TurnCount} 턴 종료");
+    //     TurnEnded?.Invoke();
+    // }
     
     private void EndGame(ActorParent winner)
     {
