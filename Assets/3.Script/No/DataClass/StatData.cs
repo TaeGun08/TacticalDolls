@@ -16,6 +16,7 @@ public class StatData : IStat
     
     public int Level { get => level; set => level = value; }
     public int HP { get => hp; set => hp = value; }
+    public int MaxHP { get; set; }
     public int Attack { get => attack; set => attack = value; }
     public int Defense { get => defense; set => defense = value; }
     // public int Barrier { get; set; }

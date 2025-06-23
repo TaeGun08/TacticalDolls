@@ -6,6 +6,7 @@ public interface IStat
 {
     int Level { get; set; }
     int HP { get; set; }
+    int MaxHP { get; set; }
     int Attack { get; set; }
     int Defense { get; set; }
     // int Barrier { get; set; }

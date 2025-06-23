@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ public class EnemyData : MonoBehaviour, IDamageAble
     [SerializeField] private StatData runtimeStat;
     
     public SkillParent[] HasSkills { get => hasSkills; set => hasSkills = value; }
+    public Action OnHpChanged { get; set; }
 
     public SkillParent[] hasSkills;
     
@@ -48,11 +50,15 @@ public class EnemyData : MonoBehaviour, IDamageAble
         //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
         
         animator.SetTrigger(ATTACKED);
+        OnHpChanged?.Invoke();
     }
 
     public void TakeHeal(HealEvent combatEvent)
     {
         Debug.Log($"{PrefabName} Enemy Take Heal :: {EnemyID}");
+        Stat.HP += combatEvent.Heal;
+        
+        OnHpChanged?.Invoke();
         //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
     }
     

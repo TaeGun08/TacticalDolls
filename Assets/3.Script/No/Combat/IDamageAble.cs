@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ public interface IDamageAble
     int Team { get; }
 
     SkillParent[] HasSkills { get; set; }
+    Action OnHpChanged { get; set; }
     Task Excute(int selectedSkill, List<IDamageAble> targets, Transform targetPoint);
     void TakeDamage(CombatEvent combatEvent);
     void TakeHeal(HealEvent combatEvent);
