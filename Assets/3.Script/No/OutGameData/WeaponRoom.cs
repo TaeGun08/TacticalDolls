@@ -57,9 +57,12 @@ public class WeaponRoom : MonoBehaviour
                 icon.GetComponent<Image>().sprite = allWeapons[i].WeaponIcon;
                 
                 var button = icon.AddComponent<Button>();
+                var index = i;
+                
                 button.onClick.AddListener(() =>
                 {
-                    SelectedWeapon =  allWeapons[i];
+                    SelectedWeapon =  allWeapons[index];
+                    RequestUpdateWeapon();
                 });
             }
         }
@@ -90,13 +93,10 @@ public class WeaponRoom : MonoBehaviour
         return null;
     }
     
+    // 무기 레벨업
     private async void RequestUpdateWeaponLevelUp(int weaponId)
     {
-        // 무기 레벨업 구현하면 됩니다래끼
-        Debug.Log($"RequestUpdateWeaponLevelUp :: {weaponId}");
-        
         var result = await SelectedWeapon.UpdateWeaponLevel(weaponId, 1);
-        
         if (result)
         {
             await FirebaseMainSession.Instance.FirestoreLoader();
@@ -108,5 +108,25 @@ public class WeaponRoom : MonoBehaviour
         {
             Debug.LogWarning("무기 레벨업 실패");
         }
+    }
+    
+    // 무기 교체
+    private async void RequestUpdateWeapon()
+    {
+        Debug.Log($"RequestUpdateWeapon::{characterRoom.SelectedCharacter.CharacterID}, {SelectedWeapon.ID}");
+        
+        // var result = await SelectedWeapon.UpdateCharacterCurrentWeapon(characterRoom.SelectedCharacter.CharacterID, );
+        //
+        // if (result)
+        // {
+        //     await FirebaseMainSession.Instance.FirestoreLoader();
+        //     PlayerManager.Instance.UpdateCharacterData();
+        //     SetUIWeapon();
+        //     SetInfoWeapon(SelectedWeapon);
+        // }
+        // else
+        // {
+        //     Debug.LogWarning("무기 레벨업 실패");
+        // }
     }
 }
