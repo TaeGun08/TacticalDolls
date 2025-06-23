@@ -2282,7 +2282,9 @@ MonoBehaviour:
   structurePrefab204: {fileID: 1030973270, guid: 1c266d50d677f9546aff6c0c251a9e68,
     type: 3}
   EnmeyPrefab:
-  - {fileID: 5253676370753747957, guid: cc21feae2b810cc4687c675fe7a3685e, type: 3}
+  - {fileID: 8549023517635794372, guid: 5525feaee2d4f844699d4dcbb77a539a, type: 3}
+  - {fileID: 4575126344441247688, guid: b1c0ebe1aff878a46bfc56ca22c0b898, type: 3}
+  - {fileID: 4101742799277918513, guid: f0fb24a2c42897240a2d228ea99e1f33, type: 3}
   CharacterSpawnUseTiles: []
   selectedTile: {fileID: 0}
   defaultMaterial: {fileID: 0}
@@ -2588,7 +2590,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 182001976}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.9981385
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2664,7 +2666,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   autoButton: {fileID: 424275802}
-  IsAuto: 0
 --- !u!4 &854237648
 Transform:
   m_ObjectHideFlags: 0
@@ -3616,7 +3617,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: 0.00051934435}
+  m_AnchoredPosition: {x: -0.000061035156, y: 0.00016608943}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1192701331

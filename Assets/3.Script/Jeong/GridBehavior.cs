@@ -111,6 +111,7 @@ public class GridBehavior : MonoBehaviour
     /// <param name="target"></param>
     public async Task MovePlayerAlongPath(List<Node> path, Vector3 target)
     {
+        IsMove = true;
         Tile currentTile = TileManager.Instance.GetClosestTile(Actor.GameObject.transform.position);
         if (currentTile != null)
         {
@@ -130,14 +131,7 @@ public class GridBehavior : MonoBehaviour
                 node.Position.z * tileManager.tileSize
             );
 
-            TaskCompletionSource<bool> moveTcs = new TaskCompletionSource<bool>();
-            
-            Actor.GameObject.transform.DOMove(targetPos, 0.1f).SetEase(Ease.Linear).OnComplete(() =>
-            {
-                moveTcs.TrySetResult(true);
-            });
-
-            await moveTcs.Task;
+            await Actor.GameObject.transform.DOMove(targetPos, 0.1f).SetEase(Ease.Linear).AsyncWaitForCompletion();
             
             if (IsAutoMove)
             {
@@ -164,6 +158,7 @@ public class GridBehavior : MonoBehaviour
 
         Actor = null;
         nearestTarget = null;
+        IsMove = false;
     }
     
     private void TargetActors()
