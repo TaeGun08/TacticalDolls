@@ -173,14 +173,12 @@ public class PathFindingManager : MonoBehaviour
 
             if (nx < 0 || nz < 0 || nx >= 51 || nz >= 51)
             {
-                Debug.Log("탐색 타일 벗어남");
                 continue;
             }
 
             Node neighbor = nodeArray[nx, nz];
             if (neighbor == null || !neighbor.Tile.isWalkable)
             {
-                Debug.Log("이웃 노드 없거나 또는 밟을 수 없는 타일임");
                 continue;
             }
 
@@ -193,7 +191,6 @@ public class PathFindingManager : MonoBehaviour
 
                 if (nodeA == null || nodeB == null || !nodeA.Tile.isWalkable || !nodeB.Tile.isWalkable)
                 {
-                    Debug.Log("이웃 노드가 없거나 또는 밟을 수 없는 타일임 ( A노드와 B 노드 관련)");
                     continue;
                 }
             }

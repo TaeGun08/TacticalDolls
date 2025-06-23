@@ -50,7 +50,7 @@ public class GridBehavior : MonoBehaviour
         autoButton.onClick.AddListener(() =>
         {
             IsAuto = IsAuto == false;
-            if (IsAuto)
+            if (IsAuto && IsMove == false)
             {
                 _= Turn_Test.Instance.OnCheckEndCharacterActor();
             }
@@ -132,7 +132,7 @@ public class GridBehavior : MonoBehaviour
 
             TaskCompletionSource<bool> moveTcs = new TaskCompletionSource<bool>();
             
-            Actor.GameObject.transform.DOMove(targetPos, 0.2f).SetEase(Ease.Linear).OnComplete(() =>
+            Actor.GameObject.transform.DOMove(targetPos, 0.1f).SetEase(Ease.Linear).OnComplete(() =>
             {
                 moveTcs.TrySetResult(true);
             });

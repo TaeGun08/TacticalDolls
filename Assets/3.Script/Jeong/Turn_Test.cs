@@ -21,9 +21,6 @@ public class Turn_Test : MonoBehaviour
     private int aiSelectSkill;
     private bool isBlockedPlayerControl;
 
-    // 행동 확인
-    public TaskCompletionSource<bool> MoveTcs;
-
     public List<CharacterData> TurnActor;
 
     public bool IsAuto;
@@ -61,8 +58,7 @@ public class Turn_Test : MonoBehaviour
         currentTurn = turnManager.TurnCount + 1;
         actorParent = actor;
         Debug.Log($"{actor.ToString()}의 {currentTurn}턴이 시작되었습니다.");
-
-        MoveTcs = new TaskCompletionSource<bool>();
+        
         gridBehavior.Actors = new List<IDamageAble>();
 
         if (actor.Equals(ActorParent.Player))
@@ -71,8 +67,8 @@ public class Turn_Test : MonoBehaviour
 
             TurnActor = GameManager.Instance.PlayerUnits;
 
-            // 모든 캐릭터 행동 종료 체크
-            await MoveTcs.Task;
+            if (gridBehavior.IsAuto == false) return; 
+            await OnCheckEndCharacterActor();
         }
         else if (actor.Equals(ActorParent.Enemy))
         {
@@ -91,10 +87,10 @@ public class Turn_Test : MonoBehaviour
         
         foreach (var player in GameManager.Instance.PlayerUnits)
         {
-            if (gridBehavior.IsAuto) break;
+            if (gridBehavior.IsAuto == false) break;
             if (player.Stat.IsCompleteAction) continue;
             
-            MoveTcs = new TaskCompletionSource<bool>();
+            OffPlayerUI();
             await gridBehavior.AutoMove(player);
         }
 
@@ -106,10 +102,13 @@ public class Turn_Test : MonoBehaviour
             playerIsCompleteCheck = false;
         }
 
+        gridBehavior.IsAutoMove = false;
+        
         if (playerIsCompleteCheck)
         {
-            MoveTcs.TrySetResult(true);
+            turnManager.TurnEndedSource.TrySetResult(true);
         }
+        
     }
 
     private void OffPlayerUI()
@@ -122,6 +121,7 @@ public class Turn_Test : MonoBehaviour
 
     private async Task OnCheckEndEnemyActor()
     {
+        Debug.Log("Enemy Turn");
         foreach (var player in GameManager.Instance.PlayerUnits)
         {
             gridBehavior.Actors.Add(player);
@@ -131,7 +131,6 @@ public class Turn_Test : MonoBehaviour
         
         foreach (var enemy in GameManager.Instance.EnemyUnits)
         {
-            MoveTcs = new TaskCompletionSource<bool>();
             await gridBehavior.AutoMove(enemy);
         }
         

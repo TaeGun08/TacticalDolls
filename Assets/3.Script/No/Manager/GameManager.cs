@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
 
         ExitButton.onClick.AddListener(OnExitButtonClicked);
 
-        endTurnBtn.onClick.AddListener(OnCharacterEndTurn);
+        endTurnBtn.onClick.AddListener(OnCharacterEndTurn_Wrapper);
         
         StartBtn.onClick.AddListener(StartGame);
     }
@@ -107,22 +107,27 @@ public class GameManager : MonoBehaviour
 #endif
     }
 
-    public void OnCharacterEndTurn()
+    public void OnCharacterEndTurn_Wrapper()
     {
+        _ = OnCharacterEndTurn();
+    }
+    
+    public async Task OnCharacterEndTurn()
+    {
+        RangeSystem.Instance.ResetAllTiles();
+        endTurnBtn.gameObject.SetActive(false);
+        skillUI.Close();
+        
         if (MoveChoiceTile != null)
         {
             GridBehavior.Instance.Actor = currentCharacter;
             List<Node> path = PathFindingManager.Instance.PathFind(
                 currentCharacter.transform.position, MoveChoiceTile.transform.position);
-            _ = GridBehavior.Instance.MovePlayerAlongPath(path, Vector3.zero);
+            await GridBehavior.Instance.MovePlayerAlongPath(path, Vector3.zero);
         }
         
         MoveChoiceTile = null;
         SkillSelectSystem.Instance.IsSelectingSkill = false;
-
-        RangeSystem.Instance.ResetAllTiles();
-        endTurnBtn.gameObject.SetActive(false);
-        skillUI.Close();
 
         CurrentSkillTarget = null;
 
@@ -145,7 +150,6 @@ public class GameManager : MonoBehaviour
 
         if (checkCharacterAction)
         {
-            Turn_Test.Instance.MoveTcs.TrySetResult(true);
             TurnManager.Instance.TurnEndedSource.TrySetResult(true);
         }
 
