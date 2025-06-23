@@ -117,18 +117,18 @@ public class WeaponRoom : MonoBehaviour
     {
         Debug.Log($"RequestUpdateWeapon::{characterRoom.SelectedCharacter.CharacterID}, {SelectedWeapon.ID}");
         
-        // var result = await SelectedWeapon.UpdateCharacterCurrentWeapon(characterRoom.SelectedCharacter.CharacterID, );
-        //
-        // if (result)
-        // {
-        //     await FirebaseMainSession.Instance.FirestoreLoader();
-        //     PlayerManager.Instance.UpdateCharacterData();
-        //     SetUIWeapon();
-        //     SetInfoWeapon(SelectedWeapon);
-        // }
-        // else
-        // {
-        //     Debug.LogWarning("무기 레벨업 실패");
-        // }
+        var result = await SelectedWeapon.UpdateCharacterCurrentWeapon(characterRoom.SelectedCharacter.CharacterID, SelectedWeapon.ID);
+        
+        if (result)
+        {
+            await FirebaseMainSession.Instance.FirestoreLoader();
+            PlayerManager.Instance.UpdateCharacterData();
+            SetUIWeapon();
+            SetInfoWeapon(SelectedWeapon);
+        }
+        else
+        {
+            Debug.LogWarning("무기 변경 실패");
+        }
     }
 }
