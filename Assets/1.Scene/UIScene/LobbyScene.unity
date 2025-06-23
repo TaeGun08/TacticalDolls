@@ -2801,6 +2801,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rawImageSpawnPoint: {fileID: 95958561}
+  characterPrefabs:
+  - {fileID: 7252184665146118528, guid: 76553ef5c92aa8648ac197df4fe37fbc, type: 3}
+  - {fileID: 1363621083032692715, guid: 08ab36c3fd3a61a4ba0aa40a02f5d70a, type: 3}
+  - {fileID: 620485998743106144, guid: 940163d088ee94244b9ab2069d621a24, type: 3}
 --- !u!1 &258962185
 GameObject:
   m_ObjectHideFlags: 0

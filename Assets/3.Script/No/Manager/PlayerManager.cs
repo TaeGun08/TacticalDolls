@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -116,4 +117,100 @@ public class PlayerManager : MonoBehaviour
     
         Debug.Log("캐싱된 캐릭터 데이터 모두 초기화 완료.");
     }
+    
+    // 캐릭터 구매
+    public async Task<bool> UpdateCharacterList(CharacterData character)
+    {
+        string userId = FirebaseMainSession.Instance.FirebaseUser.UserData.UserId;
+        
+        // 1. 유저 데이터 로드
+        PlayerDataSample playerData = await FirestoreManager.Instance.ReadDataAsync<PlayerDataSample>(
+            FirebaseCollections.Players,
+            userId
+        );
+        
+        if (playerData == null)
+        {
+            Debug.LogWarning("플레이어 데이터를 찾을 수 없습니다.");
+            return false;
+        }
+        
+        // 2. 기본 무기 설정
+        WeaponDataSample defaultWeapon = new WeaponDataSample
+        {
+            weaponCode = character.Stat.Weapon.ID,
+            level = 1,
+            currentCharacter = character.CharacterID
+        };
+
+        // 3. 신규 캐릭터 데이터 생성
+        CharacterDataSample newCharacter = new CharacterDataSample
+        {
+            characterCode = character.CharacterID,
+            level = 1,
+            weapon = defaultWeapon,
+            skills = new SkillDataSample[]
+            {
+                new SkillDataSample { skillCode = 0, level = 1 },
+                new SkillDataSample { skillCode = 1, level = 1 }
+            }
+        };
+
+        // 4. Firestore에 추가
+        playerData.HasCharacter.Add(newCharacter);
+        playerData.HasWeapon.Add(defaultWeapon);
+
+        Dictionary<string, object> updates = new Dictionary<string, object>
+        {
+            { "HasCharacter", playerData.HasCharacter },
+            { "HasWeapon", playerData.HasWeapon }
+        };
+
+        await FirestoreManager.Instance.UpdateDataAsync(FirebaseCollections.Players, userId, updates);
+        
+        Debug.Log($"캐릭 구매 완료");
+        return true;
+    }
+    
+    
+    // 무기 구매
+    public async Task<bool> UpdateWeaponList(int weaponCode)
+    {
+        string userId = FirebaseMainSession.Instance.FirebaseUser.UserData.UserId;
+
+        // 1. 유저 데이터 로드
+        PlayerDataSample playerData = await FirestoreManager.Instance.ReadDataAsync<PlayerDataSample>(
+            FirebaseCollections.Players,
+            userId
+        );
+
+        if (playerData == null)
+        {
+            Debug.LogWarning("플레이어 데이터를 찾을 수 없습니다.");
+            return false;
+        }
+        
+        // 2. 무기 생성
+        WeaponDataSample newWeapon = new WeaponDataSample
+        {
+            weaponCode = weaponCode,
+            level = 1,
+            currentCharacter = -1
+        };
+
+        // 3. Firestore에 추가
+        playerData.HasWeapon.Add(newWeapon);
+
+        Dictionary<string, object> updates = new Dictionary<string, object>
+        {
+            { "HasWeapon", playerData.HasWeapon }
+        };
+
+        await FirestoreManager.Instance.UpdateDataAsync(FirebaseCollections.Players, userId, updates);
+
+        Debug.Log($"무기 {weaponCode} 구매 완료");
+        return true;
+    }
+
+    
 }
