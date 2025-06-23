@@ -69,7 +69,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300002, guid: 358b5d9f23bc9413e87c9948acc67ee1, type: 3}
+  m_Sprite: {fileID: -577014708, guid: 168838f77920f4842930be3dfa3cec2b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -100,7 +100,6 @@ MonoBehaviour:
     attack: 0
     defense: 0
     moveRange: 0
-    skills: []
     weapon: {fileID: 0}
     isDead: 0
     isCompleteAction: 0
