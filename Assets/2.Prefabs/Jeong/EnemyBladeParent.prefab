@@ -231,8 +231,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d67d48b4b70ac948b7f40ea06efb669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyID: 101
-  PrefabName: Enemy1
+  EnemyID: 102
+  PrefabName: EnemyBlade
   baseStatSO: {fileID: 11400000, guid: 49ab79f5437eb0741a6b012b36dd5e17, type: 2}
   runtimeStat:
     level: 1
@@ -240,8 +240,6 @@ MonoBehaviour:
     attack: 10
     defense: 10
     moveRange: 5
-    skills:
-    - {fileID: 11400000, guid: bcf42b402ce89dd4e9ce8653ccdcab75, type: 2}
     weapon: {fileID: 0}
     isDead: 0
     isCompleteAction: 0

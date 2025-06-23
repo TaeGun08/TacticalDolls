@@ -1339,7 +1339,6 @@ GameObject:
   - component: {fileID: 5880168015886687418}
   - component: {fileID: 1756723760001488107}
   - component: {fileID: 5049325275754751265}
-  - component: {fileID: 7576381068218249331}
   - component: {fileID: 9120533909499227610}
   - component: {fileID: 5854854541310954076}
   m_Layer: 8
@@ -1416,20 +1415,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
---- !u!114 &7576381068218249331
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1363621083032692715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e47f5849f7b5ecf4fadec2a0bccf912e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rifle: {fileID: 0}
-  pistol: {fileID: 0}
 --- !u!114 &9120533909499227610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1463,12 +1448,13 @@ MonoBehaviour:
     attack: 105
     defense: 105
     moveRange: 10
-    skills: []
-    weapon: {fileID: -5119681726747987232, guid: 463e5a7dbcf268d4986b84a9cddb6554,
-      type: 3}
+    weapon: {fileID: 655872180643203572}
     isDead: 0
     isCompleteAction: 0
-  hasSkills: []
+  hasSkills:
+  - {fileID: 2634113563099085101}
+  - {fileID: 8005124875068205587}
+  - {fileID: 1089653472534161075}
 --- !u!1 &1372670758770199354
 GameObject:
   m_ObjectHideFlags: 0
@@ -4400,12 +4386,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
-    are already bound by a Humanoid avatar. These transforms can only be changed
-    by Humanoid clips.\n\tTransform 'clavicle_r'\n\tTransform 'index_metacarpal_l'\n\tTransform
-    'pinky_01_l'\n\tTransform 'lowerarm_r'\n\tTransform 'ring_02_l'\n\tTransform
-    'index_metacarpal_r'\n\tTransform 'root'\n\tTransform 'spine_04'\n\tTransform
-    'ring_metacarpal_r'\n\tTransform 'middle_01_r'\n\tand more ..."
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -10297,6 +10278,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9098ebe93f92a804b808393bab6d1c39, type: 3}
+--- !u!114 &655872180643203572 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -8985103076616876387, guid: 9098ebe93f92a804b808393bab6d1c39,
+    type: 3}
+  m_PrefabInstance: {fileID: 744395891929499497}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 077375dbc750fa344b408e988b149393, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &956166117002722183 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 509008028129950958, guid: 9098ebe93f92a804b808393bab6d1c39,

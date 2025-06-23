@@ -3178,7 +3178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnemyID: 101
-  PrefabName: Enemy1
+  PrefabName: EnemySoldier
   baseStatSO: {fileID: 11400000, guid: 49ab79f5437eb0741a6b012b36dd5e17, type: 2}
   runtimeStat:
     level: 1
@@ -3186,12 +3186,11 @@ MonoBehaviour:
     attack: 10
     defense: 10
     moveRange: 5
-    skills:
-    - {fileID: 11400000, guid: bcf42b402ce89dd4e9ce8653ccdcab75, type: 2}
     weapon: {fileID: 0}
     isDead: 0
     isCompleteAction: 0
-  hasSkills: []
+  hasSkills:
+  - {fileID: 1857200678274582966}
 --- !u!1 &6755557830963784552
 GameObject:
   m_ObjectHideFlags: 0
