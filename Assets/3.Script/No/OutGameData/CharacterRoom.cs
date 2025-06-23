@@ -12,9 +12,6 @@ public class CharacterRoom : MonoBehaviour
     [SerializeField] private Transform iconSpawnPoint;
     [SerializeField] private Transform playerRawImageSpawnPoint;
     
-    [SerializeField] private GameObject pistolRawImage;
-    [SerializeField] private GameObject weaponRawImage;
-    
     [SerializeField] private TMP_Text characterPosition;
     [SerializeField] private TMP_Text characterName;
     [SerializeField] private TMP_Text characterLevel;
@@ -22,6 +19,8 @@ public class CharacterRoom : MonoBehaviour
     [SerializeField] private TMP_Text characterHp;
     [SerializeField] private TMP_Text characterDefense;
     [SerializeField] private TMP_Text weaponLevel;
+    
+    [SerializeField] private Image weaponImage;
 
     private List<CharacterData> playerCharacters;
     private List<CharacterData> characterIcons;
@@ -60,11 +59,6 @@ public class CharacterRoom : MonoBehaviour
                     
                     btn.onClick.AddListener(() =>
                     {
-                        if (selectedCharacterIcon != null)
-                        {
-                            selectedCharacterIcon.gameObject.GetComponent<Outline>().enabled = false;
-                        }
-
                         SelectedCharacter = playerCharacters[currentIndex_i];
                         selectedCharacterIcon = characterIcons[currentIndex_j];
                         
@@ -87,8 +81,6 @@ public class CharacterRoom : MonoBehaviour
 
     private void SetUIPlayerCharacters()
     {
-        selectedCharacterIcon.gameObject.GetComponent<Outline>().enabled = true;
-        
         foreach (Transform child in playerRawImageSpawnPoint)
         {
             Destroy(child.gameObject);
@@ -98,8 +90,6 @@ public class CharacterRoom : MonoBehaviour
             playerRawImageSpawnPoint.position, 
             playerRawImageSpawnPoint.rotation, 
             playerRawImageSpawnPoint);
-
-        OnWeaponRawImage(SelectedCharacter.Stat.Weapon);
     }
 
     private void SetInfoPlayerCharacter(CharacterData characterData)
@@ -111,28 +101,8 @@ public class CharacterRoom : MonoBehaviour
         characterHp.text = characterData.Stat.HP.ToString();
         characterDefense.text = characterData.Stat.Defense.ToString();
         weaponLevel.text = "Lv. " + characterData.Stat.Weapon.Level;
-    }
-
-    private void OnWeaponRawImage(WeaponData weaponData)
-    {
-        weaponRawImage.SetActive(false);
-        pistolRawImage.SetActive(false);
         
-        var weaponType = weaponData.WeaponType;
-
-        switch (weaponType)
-        {
-            case WeaponType.Rifle:
-                weaponRawImage.SetActive(true);
-                break;
-            case WeaponType.Pistol:
-                pistolRawImage.SetActive(true);
-                break;
-            case WeaponType.Sword:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
+        weaponImage.sprite = characterData.Stat.Weapon.WeaponIcon;
     }
     
     private async void RequestUpdateCharacterLevelUp()
