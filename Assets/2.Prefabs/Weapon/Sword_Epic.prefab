@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 726277358454826932}
   - component: {fileID: 1314666978135270514}
   m_Layer: 0
-  m_Name: Sword_Normal
+  m_Name: Sword_Epic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -96,10 +96,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 077375dbc750fa344b408e988b149393, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 20
+  ID: 22
   WeaponName: Sword
   Level: 1
-  Damage: 1
+  Damage: 5
   WeaponType: 2
-  WeaponGrade: 0
+  WeaponGrade: 2
   WeaponIcon: {fileID: -1302298865, guid: aded6d8cd956ed249bf5d8d508a73007, type: 3}

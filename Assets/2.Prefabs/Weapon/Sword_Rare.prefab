@@ -99,7 +99,7 @@ MonoBehaviour:
   ID: 21
   WeaponName: Sword
   Level: 1
-  Damage: 0
+  Damage: 3
   WeaponType: 2
   WeaponGrade: 1
   WeaponIcon: {fileID: -1302298865, guid: aded6d8cd956ed249bf5d8d508a73007, type: 3}
