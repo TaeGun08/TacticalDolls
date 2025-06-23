@@ -54,8 +54,10 @@ public class PlayerManager : MonoBehaviour
     {
         GameObject prefab = CharacterTable.GetPrefabByKey(character.characterCode);
 
+        GameObject weaponPrefab = WeaponTable.GetPrefabByKey(character.weapon.weaponCode);
+        
         CharacterData SyncCharacterData = prefab.GetComponent<CharacterData>();
-        SyncCharacterData.CalculateStatFromLevel(character.level, character.weapon.level);
+        SyncCharacterData.CalculateStatFromLevel(character.level, character.weapon.level, weaponPrefab.GetComponent<WeaponData>());
         
         usingCharacterData.Add(SyncCharacterData);
         

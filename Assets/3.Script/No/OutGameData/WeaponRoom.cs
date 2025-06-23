@@ -82,10 +82,14 @@ public class WeaponRoom : MonoBehaviour
 
     private string GetWeaponUserOrNull()
     {
+        Debug.Log($"SelectedWeapon:: {SelectedWeapon}");
+        
         var characters = PlayerManager.Instance.usingCharacterData;
         
         for (int i = 0; i < characters.Count; i++)
         {
+            Debug.Log($"=========== characters[i].Stat.Weapon.ID {characters[i].Stat.Weapon.ID}");
+            
             if (characters[i].Stat.Weapon.ID == SelectedWeapon.ID)
             {
                 return characters[i].PrefabName;

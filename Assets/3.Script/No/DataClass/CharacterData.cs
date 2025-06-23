@@ -92,7 +92,7 @@ public class CharacterData : MonoBehaviour, IDamageAble
     }
 
     // 임시 스텟 계산 및 적용
-    public StatData CalculateStatFromLevel(int characterLevel, int weaponLevel)
+    public StatData CalculateStatFromLevel(int characterLevel, int weaponLevel, WeaponData weapon)
     {
         runtimeStat.Level = characterLevel;
 
@@ -103,7 +103,7 @@ public class CharacterData : MonoBehaviour, IDamageAble
         runtimeStat.MoveRange = baseStatSO.moveRange + characterLevel / 5; // 5레벨마다 1 증가
 
         // 스킬 및 무기 정보 복사
-        runtimeStat.Weapon = baseStatSO.weapon;
+        runtimeStat.Weapon = weapon;
 
         return runtimeStat;
     }
