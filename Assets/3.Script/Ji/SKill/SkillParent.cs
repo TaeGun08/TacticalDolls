@@ -81,13 +81,13 @@ public abstract class SkillParent : MonoBehaviour //, IUnitSkill
         [Tooltip("스킬을 식별하기 위한 ID값 입니다.")] public string skillID;
         
         [LabelText("스킬 효과 값")]
-        [Tooltip("데미지, 힐, 보호막 등이 적용될 수치입니다.")] public int skillValue = 0;
+        [Tooltip("데미지, 힐, 보호막 등이 적용될 수치입니다.")] [Range(0f, 5.0f)]public float skillValue = 0;
         
         [LabelText("공격 범위")] 
         [Tooltip("스킬이 타격할 수 있는 범위 값 입니다.")] public int areaOfEffect = 0;
         
         [LabelText("타격 횟수")] 
-        [Tooltip("총알이 몇 번 발사되어 타격하는지를 의미합니다.")] public int splitHitCount = 0;
+        [Tooltip("총알이 몇 번 발사되어 타격하는지를 의미합니다.")][Range(1,50)] public int splitHitCount = 1;
         
         [LabelText("파티클 지속시간")] 
         [Tooltip("파티클을 활성화하고 유지시키는 시간입니다.")] public float vfxDuration = 0f;
@@ -97,6 +97,8 @@ public abstract class SkillParent : MonoBehaviour //, IUnitSkill
     public class UnitSkillComponents
     {
         [Space] [Header("컴포넌트")] [Space]
+        
+        //발동시킬 버프 추가?
         
         [LabelText("스킬 보유 캐릭터")] [Required]
         [Tooltip("스킬을 가진 캐릭터입니다.")]  public CharacterData characterData;
@@ -109,9 +111,6 @@ public abstract class SkillParent : MonoBehaviour //, IUnitSkill
         
         [LabelText("필살기 비디오클립")] 
         [Tooltip("필살기 동영상 클립 입니다.")] public VideoClip ultClip; //ToDo:타임라인으로 변경하기
-        
-        [LabelText("발사체 시작 위치")]
-        [Tooltip("스킬 투사체가 발사될 위치입니다.")] public Transform castTransform;
     }
     
     public UnitSkillDetails unitSkillDetails;
@@ -119,9 +118,9 @@ public abstract class SkillParent : MonoBehaviour //, IUnitSkill
 
 
     //ToDo 리스트로 바꾸고 초기화
-    public Action[] StartSkillEvents;
-    public Action[] AffectSkillEvents;
-    public Action[] EndSkillEvents;
+    public Action[] StartSkillEvents = new Action[10];
+    public Action[] AffectSkillEvents = new Action[10];
+    public Action[] EndSkillEvents = new Action[10];
     
     public abstract Task StartSkillAction(List<IDamageAble> targets);
     public abstract Task AffectSkillAction(List<IDamageAble> targets);

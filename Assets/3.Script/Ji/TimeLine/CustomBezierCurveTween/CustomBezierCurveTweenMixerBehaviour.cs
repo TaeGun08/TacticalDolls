@@ -68,7 +68,7 @@ public class CustomBezierCurveTweenMixerBehaviour : PlayableBehaviour
                 
                 if (input.flashParticle) //시작지점에서 Flash 파티클
                 {
-                    input.flashParticle.transform.position = trackBinding.position; 
+                    input.flashParticle.transform.position = input.startLocation.position; 
                     input.flashParticle.SetActive(true);
                 }
             }
@@ -79,7 +79,7 @@ public class CustomBezierCurveTweenMixerBehaviour : PlayableBehaviour
                 
                 if (input.hitParticle) //끝나는 지점에서 Hit 파티클
                 {
-                    input.hitParticle.transform.position = trackBinding.position;
+                    input.hitParticle.transform.position = input.endLocation.position;
                     input.hitParticle.SetActive(true);
                 }
             }
