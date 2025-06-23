@@ -128,7 +128,8 @@ public abstract class SkillParent : MonoBehaviour //, IUnitSkill
     
     private void Start()
     {
-        BindSignalReceiver();
+        if(CharacterSequenceManager.Instance != null)
+            BindSignalReceiver();
     }
     
     void BindSignalReceiver() //시그널 바인딩

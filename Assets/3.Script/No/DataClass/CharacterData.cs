@@ -21,7 +21,8 @@ public class CharacterData : MonoBehaviour, IDamageAble
     public GameObject GameObject => gameObject;
     public int Team => 0;
     public SkillParent[] HasSkills { get => hasSkills; set => hasSkills = value; }
-    
+    public Action OnHpChanged { get; set; }
+
     public SkillParent[] hasSkills;
     
     public Animator animator;
@@ -76,12 +77,16 @@ public class CharacterData : MonoBehaviour, IDamageAble
         Stat.HP -= combatEvent.Damage;
         
         animator.SetTrigger(ATTACKED);
+        OnHpChanged?.Invoke();
         //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
     }
 
     public void TakeHeal(HealEvent combatEvent)
     {
         Debug.Log($"{PrefabName} Character Take Heal :: {CharacterID}");
+        Stat.HP += combatEvent.Heal;
+        
+        OnHpChanged?.Invoke();
         //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
     }
 
@@ -92,7 +97,7 @@ public class CharacterData : MonoBehaviour, IDamageAble
     }
 
     // 임시 스텟 계산 및 적용
-    public StatData CalculateStatFromLevel(int characterLevel, int weaponLevel)
+    public StatData CalculateStatFromLevel(int characterLevel, int weaponLevel, WeaponData weapon)
     {
         runtimeStat.Level = characterLevel;
 
@@ -103,7 +108,7 @@ public class CharacterData : MonoBehaviour, IDamageAble
         runtimeStat.MoveRange = baseStatSO.moveRange + characterLevel / 5; // 5레벨마다 1 증가
 
         // 스킬 및 무기 정보 복사
-        runtimeStat.Weapon = baseStatSO.weapon;
+        runtimeStat.Weapon = weapon;
 
         return runtimeStat;
     }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7839496093976268408}
   - component: {fileID: 1169428410338001786}
   m_Layer: 0
-  m_Name: Rifle
+  m_Name: Rifle_Normal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -102,7 +102,9 @@ MonoBehaviour:
   ID: 0
   WeaponName: Rifle
   Level: 1
+  Damage: 1
   WeaponType: 0
+  WeaponGrade: 0
   WeaponIcon: {fileID: -98867558, guid: 647ada823f106f447b80437a809d4e1e, type: 3}
 --- !u!1 &2018381188510630566
 GameObject:

@@ -6,6 +6,7 @@ using UnityEngine;
 public enum FirebaseCollections
 {
     Players,
+    Stores,
     // Rooms,
     // MatchHistorys,
     // Ranks,
@@ -61,6 +62,18 @@ public class PlayerDataSample  //key : GUID
 {
     [FirestoreProperty] public List<CharacterDataSample> HasCharacter { get; set; } =  new List<CharacterDataSample>();
     [FirestoreProperty] public List<WeaponDataSample> HasWeapon { get; set; } =  new List<WeaponDataSample>();
+}
+
+[FirestoreData]
+public class WaeponStoreDataSample  //key : GUID
+{
+    [FirestoreProperty] public List<WeaponDataSample> HasWeapon { get; set; } =  new List<WeaponDataSample>();
+}
+
+[FirestoreData]
+public class CharacterStoreDataSample  //key : GUID
+{
+    [FirestoreProperty] public List<CharacterDataSample> HasCharacter { get; set; } =  new List<CharacterDataSample>();
 }
 
 // [FirestoreData]

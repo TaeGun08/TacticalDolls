@@ -73,7 +73,8 @@ namespace _0._ExternalAssets.Exoa.TouchCameraPro.Scripts.Camera
                 ApplyToCamera();
                 return;
             }
-
+            
+            //휠 입력받는곳
             if (IsInputMatching(InputMapFingerDrag.RotateAround))
             {
                 RotateFromVector(CameraInputs.GetAnyPixelScaledDelta());

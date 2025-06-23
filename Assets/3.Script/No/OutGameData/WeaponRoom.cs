@@ -9,6 +9,7 @@ public class WeaponRoom : MonoBehaviour
 {
     [SerializeField] private CharacterRoom characterRoom;
 
+    [SerializeField] private Image weaponImage;
     [SerializeField] private Transform weaponIconSpawnPoint;
     [SerializeField] private GameObject weaponIconPrefab;
     
@@ -18,7 +19,6 @@ public class WeaponRoom : MonoBehaviour
     [SerializeField] private TMP_Text weaponAttack;
     
     private List<WeaponData> allWeapons =  new List<WeaponData>();
-    private List<WeaponData> equipableWeapons =  new List<WeaponData>();
     
     public WeaponData SelectedWeapon { get; private set; }
     
@@ -34,6 +34,10 @@ public class WeaponRoom : MonoBehaviour
 
     private void OnEnable()
     {
+        Debug.Log($"SelectedCharacter ::: {characterRoom.SelectedCharacter.PrefabName}");
+        
+        allWeapons = PlayerManager.Instance.usingWeaponData;
+        
         SetUIWeapon();
         SetInfoWeapon(SelectedWeapon);
     }
@@ -45,15 +49,20 @@ public class WeaponRoom : MonoBehaviour
             Destroy(child.gameObject);
         }
         
-        allWeapons = PlayerManager.Instance.usingWeaponData;
-        
         for (int i = 0; i < allWeapons.Count; i++)
         {
             if (characterRoom.SelectedCharacter.Stat.Weapon.WeaponType == allWeapons[i].WeaponType)
             {
-                equipableWeapons.Add(allWeapons[i]);
+                var background = Instantiate(weaponIconPrefab, weaponIconSpawnPoint);
                 
-                var icon = Instantiate(weaponIconPrefab, weaponIconSpawnPoint);
+                if (characterRoom.SelectedCharacter.Stat.Weapon.ID == allWeapons[i].ID)
+                {
+                    background.GetComponent<Outline>().enabled = true;
+                }
+
+                background.GetComponent<Image>().color = SetWeaponBackgroundColor(allWeapons[i].WeaponGrade);
+                
+                var icon = Instantiate(weaponIconPrefab, background.transform);
                 icon.GetComponent<Image>().sprite = allWeapons[i].WeaponIcon;
                 
                 var button = icon.AddComponent<Button>();
@@ -67,7 +76,8 @@ public class WeaponRoom : MonoBehaviour
             }
         }
         
-        SelectedWeapon =  equipableWeapons[0];
+        SelectedWeapon = characterRoom.SelectedCharacter.Stat.Weapon;
+        weaponImage.sprite = SelectedWeapon.WeaponIcon;
     }
     
     private void SetInfoWeapon(WeaponData weaponData)
@@ -75,15 +85,19 @@ public class WeaponRoom : MonoBehaviour
         weaponName.text = weaponData.WeaponName;
         weaponUser.text = GetWeaponUserOrNull() + " Using";
         weaponLevel.text = "Lv. " + weaponData.Level + "/ 20";
-        weaponAttack.text = "Up seo yo...";
+        weaponAttack.text = weaponData.Damage.ToString();
     }
 
     private string GetWeaponUserOrNull()
     {
+        Debug.Log($"SelectedWeapon:: {SelectedWeapon}");
+        
         var characters = PlayerManager.Instance.usingCharacterData;
         
         for (int i = 0; i < characters.Count; i++)
         {
+            Debug.Log($"=========== characters[i].Stat.Weapon.ID {characters[i].Stat.Weapon.ID}");
+            
             if (characters[i].Stat.Weapon.ID == SelectedWeapon.ID)
             {
                 return characters[i].PrefabName;
@@ -91,6 +105,23 @@ public class WeaponRoom : MonoBehaviour
         }
         
         return null;
+    }
+
+    private Color SetWeaponBackgroundColor(WeaponGrade weaponGrade)
+    {
+        switch (weaponGrade)
+        {
+            case WeaponGrade.Normal:
+                return Color.gray;
+            case WeaponGrade.Rare:
+                return Color.cyan;
+            case WeaponGrade.Epic:
+                return Color.magenta;
+            case WeaponGrade.Unique:
+                return Color.yellow;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(weaponGrade), weaponGrade, null);
+        }
     }
     
     // 무기 레벨업
@@ -115,18 +146,18 @@ public class WeaponRoom : MonoBehaviour
     {
         Debug.Log($"RequestUpdateWeapon::{characterRoom.SelectedCharacter.CharacterID}, {SelectedWeapon.ID}");
         
-        // var result = await SelectedWeapon.UpdateCharacterCurrentWeapon(characterRoom.SelectedCharacter.CharacterID, );
-        //
-        // if (result)
-        // {
-        //     await FirebaseMainSession.Instance.FirestoreLoader();
-        //     PlayerManager.Instance.UpdateCharacterData();
-        //     SetUIWeapon();
-        //     SetInfoWeapon(SelectedWeapon);
-        // }
-        // else
-        // {
-        //     Debug.LogWarning("무기 레벨업 실패");
-        // }
+        var result = await SelectedWeapon.UpdateCharacterCurrentWeapon(characterRoom.SelectedCharacter.CharacterID, SelectedWeapon.ID);
+        
+        if (result)
+        {
+            await FirebaseMainSession.Instance.FirestoreLoader();
+            PlayerManager.Instance.UpdateCharacterData();
+            SetUIWeapon();
+            SetInfoWeapon(SelectedWeapon);
+        }
+        else
+        {
+            Debug.LogWarning("무기 변경 실패");
+        }
     }
 }

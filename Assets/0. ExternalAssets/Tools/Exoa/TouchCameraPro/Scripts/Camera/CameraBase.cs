@@ -641,7 +641,7 @@ namespace Exoa.Cameras
             return 1.0f;
         }
 
-
+    
         protected Quaternion ClampTwist(Quaternion twistRot, Quaternion currentRotation)
         {
             Quaternion r1 = twistRot * currentRotation;
@@ -694,7 +694,7 @@ namespace Exoa.Cameras
         }
 
 
-
+//RotateHarang
         /// <summary>
         /// Rotate the camera manually
         /// </summary>
