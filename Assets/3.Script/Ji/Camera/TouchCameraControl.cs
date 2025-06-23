@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using Exoa.Cameras;
+using Exoa.Common;
 using UnityEngine;
 
 public class TouchCameraControl : MonoBehaviour
@@ -12,32 +14,23 @@ public class TouchCameraControl : MonoBehaviour
     public float returnDuration = 1f;
     
     private Coroutine resetCoroutine;
-    private Tween pitchTween;
 
-    void Update()
+    public Transform[] targets;
+    int index = 0;
+
+
+    private void LateUpdate()
     {
-        if (Input.GetMouseButton(2)) // 마우스 우클릭 회전 중
+        if (BaseTouchInput.GetMouseWentUp(2))
         {
-            if (resetCoroutine != null)
-            {
-                // StopCoroutine(resetCoroutine);
-                resetCoroutine = null;
-            }
-
-            if (pitchTween != null && pitchTween.IsActive())
-                pitchTween.Kill();
+            targetCamera.ResetCameraY(); //휠 떨어질 때 카메라 각도 복구
         }
-        else
+        
+        if (Input.GetKeyDown(KeyCode.A))
         {
-            if (resetCoroutine == null)
-            {
-                resetCoroutine = StartCoroutine(ResetPitchAfterDelay());
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            targetCamera.Init();
+            targetCamera.ResetCamera();
+            targetCamera.MoveCameraTo(targets[index%4].position);
+            index++;
         }
     }
 
@@ -45,12 +38,18 @@ public class TouchCameraControl : MonoBehaviour
     {
         // targetCamera.ResetCamera();
 
-        Quaternion rotation45Pitch = Quaternion.Euler(45f, 0f, 0f);
-        targetCamera.Init();
-        targetCamera.StopFollow();
-        targetCamera.FocusCamera(targetCamera.transform.position, targetCamera.initDistance, rotation45Pitch);
+        // Quaternion rotation45Pitch = Quaternion.Euler(45f, 0f, 0f);
+        targetCamera.ResetCameraY();
+        // targetCamera.Init();
+        // targetCamera.StopFollow();
+        // targetCamera.FocusCamera(targetCamera.transform.position, targetCamera.initDistance, rotation45Pitch);
         yield return new WaitForSeconds(returnDelay);
     }
 }
+
+    
+
+
+
 
 

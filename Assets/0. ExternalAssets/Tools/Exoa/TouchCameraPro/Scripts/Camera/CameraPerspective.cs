@@ -67,7 +67,23 @@ namespace Exoa.Cameras
             FocusCamera(initOffset, initDistance, initRotation.eulerAngles);
         }
 
+        //Harang
+        public void ResetCameraY()
+        {
+            StopFollow();
+            Vector3 customOffset = new Vector3(finalOffset.x, initOffset.y, finalOffset.z);
+            
+            Quaternion eulerToQuat = Quaternion.Euler(
+                initRotation.eulerAngles.x,
+                finalRotation.eulerAngles.y,
+                initRotation.eulerAngles.z
+            );
 
+            Vector3 euler = eulerToQuat.eulerAngles;
+            
+            FocusCamera(customOffset, finalDistance, euler);
+        }
+        
         #region EVENTS
         /// <summary>
         /// Called just before the perspective switch happens
