@@ -103,7 +103,7 @@ MonoBehaviour:
   WeaponName: Rifle
   Level: 1
   WeaponType: 0
-  WeaponIcon: {fileID: 21300002, guid: 358b5d9f23bc9413e87c9948acc67ee1, type: 3}
+  WeaponIcon: {fileID: -98867558, guid: 647ada823f106f447b80437a809d4e1e, type: 3}
 --- !u!1 &2018381188510630566
 GameObject:
   m_ObjectHideFlags: 0

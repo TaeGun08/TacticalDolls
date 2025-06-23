@@ -99,5 +99,5 @@ MonoBehaviour:
   ID: 2
   WeaponName: Sword
   Level: 1
-  WeaponType: 0
-  WeaponIcon: {fileID: 0}
+  WeaponType: 2
+  WeaponIcon: {fileID: -1302298865, guid: aded6d8cd956ed249bf5d8d508a73007, type: 3}

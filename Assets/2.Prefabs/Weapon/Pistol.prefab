@@ -558,4 +558,4 @@ MonoBehaviour:
   WeaponName: Pistol
   Level: 1
   WeaponType: 1
-  WeaponIcon: {fileID: 21300012, guid: 358b5d9f23bc9413e87c9948acc67ee1, type: 3}
+  WeaponIcon: {fileID: -1767782213, guid: b209f20fae432c249b4b4a92120f7d83, type: 3}
