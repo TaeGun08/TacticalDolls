@@ -32,16 +32,6 @@ public class NavigationHandler : MonoBehaviour
     public Button WeaponRoomButton;
     public Button OrderRoomButton;
     public Button MyRoomButton;
-    
-    [Header("Chapter Settings")]
-    private GameObject SelectedChapter;
-    public Button Chapter1;
-    public Button Chapter2;
-    public Button Check;
-
-    [Header("Stage Settings")]
-    public GameObject Stage1;
-    public GameObject Stage2;
 
     private Stack<GameObject> panelHistory = new Stack<GameObject>();
     private Stack<GameObject> renderHistory = new Stack<GameObject>();
@@ -58,11 +48,6 @@ public class NavigationHandler : MonoBehaviour
         OrderRoomButton.onClick.AddListener(OnMoveOrderRoom);
         MyRoomButton.onClick.AddListener(OnMoveMyRoom);
         
-        Chapter1.onClick.AddListener(()=> OnSelectChapter(Stage1));
-        Chapter2.onClick.AddListener(()=> OnSelectChapter(Stage2));
-        
-        Check.onClick.AddListener(OnMoveChapter);
-
         currentPanel = Lobby;
         currentRender = LobbyRender;
     }
@@ -81,8 +66,6 @@ public class NavigationHandler : MonoBehaviour
         WeaponRoom.SetActive(false);
         Order.SetActive(false);
         My.SetActive(false);
-        Stage1.SetActive(false);
-        Stage2.SetActive(false);
         
         LobbyRender.SetActive(false);
         StageRender.SetActive(false);
@@ -113,19 +96,6 @@ public class NavigationHandler : MonoBehaviour
     private void OnMoveWeaponRoom() => ShowRoom(WeaponRoom, WeaponRender);
     private void OnMoveOrderRoom() => ShowRoom(Order, OrderRender);
     private void OnMoveMyRoom() => ShowRoom(My, MyRender);
-    private void OnMoveChapter() => OnMoverStagePage();
-    
-    private void OnSelectChapter(GameObject stage)
-    {
-        SelectedChapter = stage;
-    }
-    
-    private void OnMoverStagePage()
-    {
-        Stage1.SetActive(false);
-        Stage2.SetActive(false);
-        SelectedChapter.SetActive(true);  
-    }
 
     private void BackButtonClicked()
     {

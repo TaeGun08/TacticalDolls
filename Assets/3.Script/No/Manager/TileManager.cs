@@ -14,6 +14,7 @@ public enum StageType
 public class TileManager : MonoBehaviour
 {
     public static TileManager Instance;
+    
     public GameObject combatScript;
     
     [Header("Tile Settings")]
@@ -43,6 +44,7 @@ public class TileManager : MonoBehaviour
     public Material outlineMaterial;
     
     [Header("Stage Selection")]
+    public static StageType selectedStageStatic;
     public StageType selectedStage;
 
     [System.Serializable]
@@ -65,6 +67,8 @@ public class TileManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        
+        selectedStage = selectedStageStatic;
     }
     
     private void Start()

@@ -110,7 +110,7 @@ public class Turn_Test : MonoBehaviour
 
         while (checkCharacterAction < playerUnits.Count)
         {
-            Debug.Log("플레이어 턴");
+            // Debug.Log("플레이어 턴");
             foreach (var character in playerUnits)
             {
                 if (character.Stat.IsCompleteAction) continue;
