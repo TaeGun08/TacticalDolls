@@ -203,7 +203,7 @@ public class FirebaseAccountManager : MonoBehaviour
             {
                 weaponCode = 10,
                 level = 5,
-                currentCharacter = 0,
+                currentCharacter = 1,
             },
 
             skills = new SkillDataSample[2]
@@ -230,7 +230,7 @@ public class FirebaseAccountManager : MonoBehaviour
             {
                 weaponCode = 20,
                 level = 5,
-                currentCharacter = 0,
+                currentCharacter = 2,
             },
 
             skills = new SkillDataSample[2]
@@ -260,7 +260,7 @@ public class FirebaseAccountManager : MonoBehaviour
         {
             weaponCode = 1,
             level = 5,
-            currentCharacter = 1,
+            currentCharacter = -1,
         };
         
         WeaponDataSample sampleWeapon3 = new WeaponDataSample
@@ -281,7 +281,7 @@ public class FirebaseAccountManager : MonoBehaviour
         {
             weaponCode = 20,
             level = 5,
-            currentCharacter = 1,
+            currentCharacter = 2,
         };
         
         WeaponDataSample sampleWeapon6 = new WeaponDataSample

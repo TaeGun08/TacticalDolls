@@ -52,7 +52,7 @@ public class PlayerManager : MonoBehaviour
     
     public CharacterDataSample InitializeCharacterData(CharacterDataSample character)
     {
-        GameObject prefab = CharacterTable.GetPrefabByIndex(character.characterCode);
+        GameObject prefab = CharacterTable.GetPrefabByKey(character.characterCode);
 
         CharacterData SyncCharacterData = prefab.GetComponent<CharacterData>();
         SyncCharacterData.CalculateStatFromLevel(character.level, character.weapon.level);
@@ -64,7 +64,7 @@ public class PlayerManager : MonoBehaviour
     
     public void InitializeWeaponData(WeaponDataSample weapon)
     {
-        GameObject prefab = WeaponTable.GetPrefabByIndex(weapon.weaponCode);
+        GameObject prefab = WeaponTable.GetPrefabByKey(weapon.weaponCode);
 
         WeaponData SyncWeaponData = prefab.GetComponent<WeaponData>();
         SyncWeaponData.Level = weapon.level;
