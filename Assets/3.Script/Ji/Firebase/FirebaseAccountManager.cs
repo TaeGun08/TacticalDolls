@@ -270,6 +270,13 @@ public class FirebaseAccountManager : MonoBehaviour
             currentCharacter = 1,
         };
         
+        WeaponDataSample sampleWeapon4 = new WeaponDataSample
+        {
+            weaponCode = 3,
+            level = 10,
+            currentCharacter = -1,
+        };
+        
         PlayerData userData = new PlayerData() 
         {
             Email = email,
@@ -278,7 +285,7 @@ public class FirebaseAccountManager : MonoBehaviour
             Role = "user",
             IsTutorialCompleted = false,
             HasCharacter = new List<CharacterDataSample> { sampleCharacter, sampleCharacter2, sampleCharacter3 },
-            HasWeapon = new List<WeaponDataSample> { sampleWeapon1, sampleWeapon2, sampleWeapon3 }
+            HasWeapon = new List<WeaponDataSample> { sampleWeapon1, sampleWeapon2, sampleWeapon3, sampleWeapon4 }
         };
 
         FirestoreManager.Instance.WriteDataAsync<PlayerData>(FirebaseCollections.Players, uid, userData)
