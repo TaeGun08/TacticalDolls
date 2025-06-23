@@ -116,7 +116,7 @@ public class GameManager : MonoBehaviour
                 currentCharacter.transform.position, MoveChoiceTile.transform.position);
             _ = GridBehavior.Instance.MovePlayerAlongPath(path, Vector3.zero);
         }
-
+        
         MoveChoiceTile = null;
         SkillSelectSystem.Instance.IsSelectingSkill = false;
 
@@ -128,7 +128,7 @@ public class GameManager : MonoBehaviour
 
         currentCharacter.Stat.IsCompleteAction = true;
 
-        CheckCharacterAction();
+        _= CheckCharacterAction();
         NextCharacterSetting();
     }
 
@@ -145,9 +145,13 @@ public class GameManager : MonoBehaviour
 
         if (checkCharacterAction)
         {
+            Turn_Test.Instance.MoveTcs.TrySetResult(true);
             TurnManager.Instance.TurnEndedSource.TrySetResult(true);
         }
+
+        await Task.Yield();
     }
+
 
     // 캐릭터 행동 종료 -> 다음 캐릭터 전환
     private void NextCharacterSetting()

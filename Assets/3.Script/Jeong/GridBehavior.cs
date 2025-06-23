@@ -1,8 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -40,7 +39,7 @@ public class GridBehavior : MonoBehaviour
     private Tile skillChoiceTile;
 
     [SerializeField] private Button autoButton;
-    public bool IsAuto; // { get; private set; }
+    public bool IsAuto { get; private set; }
 
     private IDamageAble nearestTarget;
     
@@ -48,7 +47,14 @@ public class GridBehavior : MonoBehaviour
     {
         Instance = this;
 
-        autoButton.onClick.AddListener(() => { IsAuto = IsAuto == false; });
+        autoButton.onClick.AddListener(() =>
+        {
+            IsAuto = IsAuto == false;
+            if (IsAuto)
+            {
+                _= Turn_Test.Instance.OnCheckEndCharacterActor();
+            }
+        });
     }
 
     private void Start()
@@ -58,17 +64,12 @@ public class GridBehavior : MonoBehaviour
         mainCam = Camera.main;
     }
 
-    private void Update()
-    {
-        AutoMove();
-    }
-
     /// <summary>
     /// 자동 이동을 위한 함수, 자신과 가까운 거리의 Actor를 찾아서 8방향 주위에 있는 경로를 탐색함
     /// </summary>
-    private void AutoMove()
+    public async Task AutoMove(IDamageAble actor)
     {
-        if (IsMove || IsAutoMove == false || Actor == null) return;
+        Actor = actor;
         reservedTiles.Clear();
         TargetActors();
 
@@ -98,9 +99,9 @@ public class GridBehavior : MonoBehaviour
             .FirstOrDefault();
         
         Vector3 targetPos = nearestTarget == null ? Vector3.zero: 
-        PathFindingManager.Instance.RoundToTilePosition(nearestTarget.GameObject.transform.position);
+        PathFindingManager.Instance.RoundToTilePosition(nearestTarget.GameObject.transform.position); 
         
-            _ = MovePlayerAlongPath(path, targetPos);
+        await MovePlayerAlongPath(path, targetPos);
     }
 
     /// <summary>
@@ -110,7 +111,6 @@ public class GridBehavior : MonoBehaviour
     /// <param name="target"></param>
     public async Task MovePlayerAlongPath(List<Node> path, Vector3 target)
     {
-        IsMove = true;
         Tile currentTile = TileManager.Instance.GetClosestTile(Actor.GameObject.transform.position);
         if (currentTile != null)
         {
@@ -121,26 +121,23 @@ public class GridBehavior : MonoBehaviour
         Vector2Int actorPos = new Vector2Int((int)Actor.GameObject.transform.position.x,
             (int)Actor.GameObject.transform.position.z);
         List<Vector2Int> actorPosList = TileManager.Instance.GetReachableTiles(actorPos, Actor.Stat.MoveRange);
-
+        
         foreach (Node node in path)
         {
             Vector3 targetPos = new Vector3(
                 node.Position.x * tileManager.tileSize,
-                0f,
+                0.5f,
                 node.Position.z * tileManager.tileSize
             );
 
-            while (Vector3.Distance(Actor.GameObject.transform.position, targetPos) > 0.05f)
+            TaskCompletionSource<bool> moveTcs = new TaskCompletionSource<bool>();
+            
+            Actor.GameObject.transform.DOMove(targetPos, 0.2f).SetEase(Ease.Linear).OnComplete(() =>
             {
-                Debug.Log("이동 시작");
-                Actor.GameObject.transform.position =
-                    Vector3.MoveTowards(Actor.GameObject.transform.position, targetPos, 10f * Time.deltaTime);
+                moveTcs.TrySetResult(true);
+            });
 
-                var temp = new Vector2(targetPos.x - Actor.GameObject.transform.position.x,
-                    targetPos.z - Actor.GameObject.transform.position.z);
-                UpdateRotation(Actor.GameObject.transform, temp, 0.1f);
-                await Task.Delay(10);
-            }
+            await moveTcs.Task;
             
             if (IsAutoMove)
             {
@@ -167,8 +164,6 @@ public class GridBehavior : MonoBehaviour
 
         Actor = null;
         nearestTarget = null;
-        turn.MoveTcs.TrySetResult(true);
-        IsMove = false;
     }
     
     private void TargetActors()
