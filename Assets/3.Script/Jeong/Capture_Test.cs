@@ -39,7 +39,7 @@ public static class Capture_Test
         tex.Apply();
 
         // PNG 저장
-        string folder = Path.Combine(Application.dataPath, "Captures");
+        string folder = Path.Combine(Application.dataPath, "4.Sprite/Captures");
         Directory.CreateDirectory(folder);
         string path = Path.Combine(folder, $"GameViewCapture_{System.DateTime.Now:yyyyMMdd_HHmmss}.png");
         File.WriteAllBytes(path, tex.EncodeToPNG());

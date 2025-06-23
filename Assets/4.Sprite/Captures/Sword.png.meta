@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7d7cffcf24d49de4d846604f676f5873
+guid: aded6d8cd956ed249bf5d8d508a73007
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -49,7 +49,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 650, y: 0, z: 200, w: 0}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -97,22 +97,22 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: TestIcon
+      name: Sword
       rect:
         serializedVersion: 2
-        x: 674
-        y: 51
+        x: 660
+        y: 240
         width: 600
-        height: 900
+        height: 600
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 22b6317fd7976924583ffd610b9bab7c
-      internalID: -1963137482
+      spriteID: 9c95e9e5784828741b8fbbab07be31be
+      internalID: -1302298865
       vertices: []
       indices: 
       edges: []
@@ -120,15 +120,15 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    spriteID: 3460394b2c555e044a3400c4157aeccf
+    internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      TestIcon: -1963137482
+      Sword: -1302298865
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
