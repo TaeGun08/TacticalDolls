@@ -6,6 +6,7 @@ using UnityEngine;
 [System.Serializable]
 public class EnemyData : MonoBehaviour, IDamageAble
 {
+    private static readonly int ATTACKED = Animator.StringToHash("Attacked");
     public int EnemyID;
     public string PrefabName;
 
@@ -21,6 +22,8 @@ public class EnemyData : MonoBehaviour, IDamageAble
     public Collider MainCollider { get; }
     public GameObject GameObject => gameObject;
     public int Team => 1;
+
+    public Animator animator;
     
     private void Awake()
     {
@@ -43,6 +46,8 @@ public class EnemyData : MonoBehaviour, IDamageAble
         Stat.HP -= combatEvent.Damage;
         
         //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
+        
+        animator.SetTrigger(ATTACKED);
     }
 
     public void TakeHeal(HealEvent combatEvent)
