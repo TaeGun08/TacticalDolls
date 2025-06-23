@@ -34,22 +34,35 @@ public class SkillBase : SkillParent
     {
         Debug.Log("AffectSkillAction");
 
-        if (AffectSkillEvents != null)
-            foreach (var t in AffectSkillEvents)
-            {
-                t?.Invoke();
-            }
-        
+
         
         for (int i =0; i<RangeSystem.Instance.damageAbles.Count;i++)
         {
             Debug.Log(RangeSystem.Instance.damageAbles[i].GameObject.name);
         }
+
+        int totalAmount = (int)(unitSkillComponents.characterData.Stat.Attack * unitSkillDetails.skillValue); //캐릭터 공격력 * 스킬 배율
+        int tickAmount = totalAmount / unitSkillDetails.splitHitCount; //스킬 틱으로 나누기
         
-        //ToDo 소수점 탈락함으로 float으로 교체하기
-        // int amount = unitSkillDetails.skillValue / unitSkillDetails.splitHitCount;
-        int amount = 10;
-        CombatSystem.Instance.ApplyDamage(unitSkillComponents.characterData, targets, amount);
+        switch (skillType)
+        {
+            case SkillType.Damage:
+                CombatSystem.Instance.ApplyDamage(unitSkillComponents.characterData, targets, tickAmount);
+                break;
+            
+            case SkillType.Heal:
+                CombatSystem.Instance.ApplyHeal(unitSkillComponents.characterData, targets, tickAmount);
+                break;
+            
+            // //ToDo : 
+            // case SkillType.Buff:
+            //     if (AffectSkillEvents != null)
+            //         foreach (var t in AffectSkillEvents)
+            //         {
+            //             t?.Invoke();
+            //         }
+            //     break;
+        }
         
         return Task.CompletedTask;
     }
