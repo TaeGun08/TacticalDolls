@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 030f85c3f73729f4f976f66ffb23b875, type: 3}
   m_Name: AnimationPlayableAsset
   m_EditorClassIdentifier: 
-  m_Clip: {fileID: 7400000, guid: d3a86bf3052af3b459f32498a26d78a9, type: 3}
+  m_Clip: {fileID: 1827226128182048838, guid: be09aef58479fa243b6bcb0f4599ec0f, type: 3}
   m_Position: {x: 0, y: 0, z: 0}
   m_EulerAngles: {x: 0, y: 0, z: 0}
   m_UseTrackMatchFields: 1
@@ -34,7 +34,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 030f85c3f73729f4f976f66ffb23b875, type: 3}
   m_Name: AnimationPlayableAsset(Clone)(Clone)
   m_EditorClassIdentifier: 
-  m_Clip: {fileID: 7400000, guid: d3a86bf3052af3b459f32498a26d78a9, type: 3}
+  m_Clip: {fileID: 1827226128182048838, guid: be09aef58479fa243b6bcb0f4599ec0f, type: 3}
   m_Position: {x: 0, y: 0, z: 0}
   m_EulerAngles: {x: 0, y: 0, z: 0}
   m_UseTrackMatchFields: 1
@@ -56,7 +56,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c38f6fa1940124db1ab7f6fe7268d1, type: 3}
   m_Name: Signal Emitter
   m_EditorClassIdentifier: 
-  m_Time: 1.4333333333333333
+  m_Time: 1.2666666666666666
   m_Retroactive: 0
   m_EmitOnce: 0
   m_Asset: {fileID: 11400000, guid: 04d59f38cf7b6de43b09176a3c12a296, type: 2}
@@ -131,9 +131,9 @@ MonoBehaviour:
     m_PreExtrapolationMode: 1
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: Idle
+    m_DisplayName: Idle_01
   - m_Version: 1
-    m_Start: 2.1333333333333333
+    m_Start: 2.6057997969910502
     m_ClipIn: 0
     m_Asset: {fileID: -5986887336103825363}
     m_Duration: 1.1833333333333336
@@ -141,7 +141,7 @@ MonoBehaviour:
     m_ParentTrack: {fileID: -591100859709482370}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
-    m_BlendInDuration: 0.1333333333333333
+    m_BlendInDuration: 0.12753353634228315
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
@@ -164,18 +164,18 @@ MonoBehaviour:
     m_PreExtrapolationMode: 1
     m_PostExtrapolationTime: Infinity
     m_PreExtrapolationTime: 0
-    m_DisplayName: Idle
+    m_DisplayName: Idle_01
   - m_Version: 1
     m_Start: 0.6666666666666665
     m_ClipIn: 0
     m_Asset: {fileID: 7276666922913779738}
-    m_Duration: 1.6
+    m_Duration: 2.066666666666667
     m_TimeScale: 1
     m_ParentTrack: {fileID: -591100859709482370}
     m_EaseInDuration: 0
     m_EaseOutDuration: 0
     m_BlendInDuration: 0.21666666666666679
-    m_BlendOutDuration: 0.1333333333333333
+    m_BlendOutDuration: 0.12753353634228315
     m_MixInCurve:
       serializedVersion: 2
       m_Curve:
@@ -233,7 +233,7 @@ MonoBehaviour:
     m_PreExtrapolationMode: 1
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: attack_01
+    m_DisplayName: Attack_02
   m_Markers:
     m_Objects: []
   m_InfiniteClipPreExtrapolation: 0
@@ -270,7 +270,6 @@ MonoBehaviour:
   m_Tracks:
   - {fileID: -591100859709482370}
   - {fileID: 3978523779508620460}
-  - {fileID: 7986316635235687116}
   m_FixedDuration: 0
   m_EditorSettings:
     m_Framerate: 60
@@ -311,10 +310,10 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 1.4333333333333333
+    m_Start: 1.3666666666666667
     m_ClipIn: 0
     m_Asset: {fileID: 3954607485188911595}
-    m_Duration: 0.3666666666666667
+    m_Duration: 0.43333333333333335
     m_TimeScale: 1
     m_ParentTrack: {fileID: 3978523779508620460}
     m_EaseInDuration: 0
@@ -394,7 +393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 030f85c3f73729f4f976f66ffb23b875, type: 3}
   m_Name: AnimationPlayableAsset
   m_EditorClassIdentifier: 
-  m_Clip: {fileID: 7400000, guid: d5951b664d926804088b6e0ed3e0cee8, type: 3}
+  m_Clip: {fileID: 1827226128182048838, guid: b832ee8e3d2338c458fb1fa1bbe84f74, type: 3}
   m_Position: {x: 0, y: 0, z: 0}
   m_EulerAngles: {x: 0, y: 0, z: 0}
   m_UseTrackMatchFields: 1
@@ -404,27 +403,3 @@ MonoBehaviour:
   m_Loop: 0
   m_Version: 1
   m_Rotation: {x: 0, y: 0, z: 0, w: 1}
---- !u!114 &7986316635235687116
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b46e36075dd1c124a8422c228e75e1fb, type: 3}
-  m_Name: Signal Track
-  m_EditorClassIdentifier: 
-  m_Version: 3
-  m_AnimClip: {fileID: 0}
-  m_Locked: 0
-  m_Muted: 0
-  m_CustomPlayableFullTypename: 
-  m_Curves: {fileID: 0}
-  m_Parent: {fileID: 11400000}
-  m_Children: []
-  m_Clips: []
-  m_Markers:
-    m_Objects:
-    - {fileID: -796243205347560010}
