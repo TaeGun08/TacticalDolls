@@ -17,6 +17,7 @@ MonoBehaviour:
   attack: 100
   defense: 100
   moveRange: 5
-  skills:
-  - {fileID: 11400000, guid: 355f49512152d4845a1ea900a86f48f3, type: 2}
-  weapon: {fileID: 3330984961467865235, guid: 54be0897d98795b49afb61f3731d7645, type: 3}
+  skills: []
+  weapon: {fileID: 1314666978135270514, guid: 5aea409815dc37549a663621ebaaec71, type: 3}
+  isDead: 0
+  isCompleteAction: 0
