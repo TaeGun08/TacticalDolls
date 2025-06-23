@@ -16,8 +16,16 @@ MonoBehaviour:
   - prefabKey: 0
     prefab: {fileID: 433131571881629062, guid: 7ce6622ba8c35c14d8cf468be744c972, type: 3}
   - prefabKey: 1
+    prefab: {fileID: 433131571881629062, guid: 7e7a0b74fcdeec84a83a3effed562ac5, type: 3}
+  - prefabKey: 10
     prefab: {fileID: 7257292289926141734, guid: 9098ebe93f92a804b808393bab6d1c39,
       type: 3}
-  - prefabKey: 2
+  - prefabKey: 11
+    prefab: {fileID: 7257292289926141734, guid: f11e769a1f8e4434ea69ea5a74ce263c,
+      type: 3}
+  - prefabKey: 20
     prefab: {fileID: 1230816512742540897, guid: 5aea409815dc37549a663621ebaaec71,
+      type: 3}
+  - prefabKey: 21
+    prefab: {fileID: 1230816512742540897, guid: 69d9cdbe29e28fa49902e4fd04715cc0,
       type: 3}
