@@ -126,36 +126,34 @@ public class OrderRoom : MonoBehaviour
     // 캐릭터 구매
     private async void RequestBuyCharacter(CharacterData character)
     {
-        Debug.Log($"RequestBuyCharacter ::: {character.PrefabName}");
+        var result = await PlayerManager.Instance.UpdateCharacterList(character);
         
-        // var result = await PlayerManager.Instance.UpdateCharacterList(character);
-        //
-        // if (result)
-        // {
-        //     await FirebaseMainSession.Instance.FirestoreLoader();
-        //     PlayerManager.Instance.UpdateCharacterData();
-        // }
-        // else
-        // {
-        //     Debug.LogWarning("캐릭 구매 실패");
-        // }
+        if (result)
+        {
+            await FirebaseMainSession.Instance.FirestoreLoader();
+            PlayerManager.Instance.UpdateCharacterData();
+            SetUI();
+        }
+        else
+        {
+            Debug.LogWarning("캐릭 구매 실패");
+        }
     }
     
     // 무기 구매
     private async void RequestBuyWeapon(int weaponCode)
     {
-        Debug.Log($"RequestBuyWeapon ::: {weaponCode}");
+        var result = await PlayerManager.Instance.UpdateWeaponList(weaponCode);
         
-        // var result = await PlayerManager.Instance.UpdateWeaponList(weaponCode);
-        //
-        // if (result)
-        // {
-        //     await FirebaseMainSession.Instance.FirestoreLoader();
-        //     PlayerManager.Instance.UpdateCharacterData();
-        // }
-        // else
-        // {
-        //     Debug.LogWarning("무기 구매 실패");
-        // }
+        if (result)
+        {
+            await FirebaseMainSession.Instance.FirestoreLoader();
+            PlayerManager.Instance.UpdateCharacterData();
+            SetUI();
+        }
+        else
+        {
+            Debug.LogWarning("무기 구매 실패");
+        }
     }
 }
