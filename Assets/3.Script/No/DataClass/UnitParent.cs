@@ -1,18 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
-public class UnitParent : MonoBehaviour
+public abstract class UnitParent : MonoBehaviour, IDamageAble
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public abstract IStat Stat { get; }
+    public abstract Collider MainCollider { get; }
+    public abstract GameObject GameObject { get; }
+    public abstract int Team { get; }
+    public abstract SkillParent[] HasSkills { get; set; }
+    public abstract Action OnHpChanged { get; set; }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public abstract Task Excute(int selectedSkill, List<IDamageAble> targets, Transform targetPoint);
+    
+    public abstract void TakeDamage(CombatEvent combatEvent);
+
+    public abstract void TakeHeal(HealEvent combatEvent);
+
+    public abstract void TakeBuff(BuffEvent combatEvent);
 }

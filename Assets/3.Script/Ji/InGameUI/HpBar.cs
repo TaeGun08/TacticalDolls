@@ -7,24 +7,37 @@ using UnityEngine;
 
 public class HpBar : MonoBehaviour
 {
+    public UnitParent unit;
     public Rectangle hpBar; // Shapes Rectangle 참조
     public Rectangle hpBackGroundBar;
+    
     private float maxHpWidth;
     private float maxHpWidthBackGround;
     
-    public IDamageAble unit;
     private Tween widthTween;
     private Tween widthBackGroundTween;
+    private Camera mainCam;
     
     void Start()
     {
+        mainCam = Camera.main;
         maxHpWidth = hpBar.Width;
         maxHpWidthBackGround = hpBackGroundBar.Width;
         unit.OnHpChanged += OnHealthChanged;
+        Debug.Log($" unit attack{unit.Stat.Attack}");
     }
 
+    void LateUpdate()
+    {
+        if (mainCam != null)
+        {
+            transform.forward = mainCam.transform.forward; //항상 카메라 정면을 바라보도록 (뒤)
+        }
+    }
+    
     public void OnHealthChanged()
     {
+        Debug.Log($" {unit.Stat.HP} / {unit.Stat.MaxHP}");
         float percent = Mathf.Clamp01(unit.Stat.HP / (float)unit.Stat.MaxHP);
         float targetWidth = maxHpWidth * percent;
         float targetwidthBackGround = maxHpWidthBackGround * percent;

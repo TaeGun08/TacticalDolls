@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 [System.Serializable]
-public class CharacterData : MonoBehaviour, IDamageAble 
+public class CharacterData : UnitParent
 {
     private static readonly int ATTACKED = Animator.StringToHash("Attacked");
     public int CharacterID;
@@ -15,13 +15,13 @@ public class CharacterData : MonoBehaviour, IDamageAble
     private IDamageAble damageAbleImplementation;
 
 
-    public IStat Stat => runtimeStat;
+    public override IStat Stat => runtimeStat;
 
-    public Collider MainCollider { get; }
-    public GameObject GameObject => gameObject;
-    public int Team => 0;
-    public SkillParent[] HasSkills { get => hasSkills; set => hasSkills = value; }
-    public Action OnHpChanged { get; set; }
+    public override Collider MainCollider { get; }
+    public override GameObject GameObject => gameObject;
+    public override int Team => 0;
+    public override SkillParent[] HasSkills { get => hasSkills; set => hasSkills = value; }
+    public override Action OnHpChanged { get; set; }
 
     public SkillParent[] hasSkills;
     
@@ -33,6 +33,7 @@ public class CharacterData : MonoBehaviour, IDamageAble
     private void Awake()
     {
         runtimeStat = new StatData(baseStatSO);
+        runtimeStat.MaxHP = runtimeStat.HP;
     }
 
     // private void OnEnable()
@@ -60,7 +61,7 @@ public class CharacterData : MonoBehaviour, IDamageAble
     //     }
     // }
 
-    public async Task Excute(int selectedSkill, List<IDamageAble> targets, Transform targetPoint)
+    public override async Task Excute(int selectedSkill, List<IDamageAble> targets, Transform targetPoint)
     {
         if (HasSkills[selectedSkill] == null)
         {
@@ -71,7 +72,7 @@ public class CharacterData : MonoBehaviour, IDamageAble
     }
     
 
-    public void TakeDamage(CombatEvent combatEvent)
+    public override void TakeDamage(CombatEvent combatEvent)
     {
         Debug.Log($"{PrefabName} Character Take damage :: CharacterID {CharacterID} _ {combatEvent.Damage}");
         Stat.HP -= combatEvent.Damage;
@@ -81,7 +82,7 @@ public class CharacterData : MonoBehaviour, IDamageAble
         //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
     }
 
-    public void TakeHeal(HealEvent combatEvent)
+    public override void TakeHeal(HealEvent combatEvent)
     {
         Debug.Log($"{PrefabName} Character Take Heal :: {CharacterID}");
         Stat.HP += combatEvent.Heal;
@@ -90,7 +91,7 @@ public class CharacterData : MonoBehaviour, IDamageAble
         //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
     }
 
-    public void TakeBuff(BuffEvent combatEvent)
+    public override void TakeBuff(BuffEvent combatEvent)
     {
         Debug.Log($"{PrefabName} Character Take Buff :: {CharacterID}");
         //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
@@ -103,6 +104,7 @@ public class CharacterData : MonoBehaviour, IDamageAble
 
         // 스탯 증가 공식
         runtimeStat.HP = baseStatSO.hp + characterLevel * 10;
+        runtimeStat.MaxHP = runtimeStat.HP;
         runtimeStat.Attack = baseStatSO.attack + characterLevel * 2 + weaponLevel * 5;
         runtimeStat.Defense = baseStatSO.defense + characterLevel * 2;
         runtimeStat.MoveRange = baseStatSO.moveRange + characterLevel / 5; // 5레벨마다 1 증가
