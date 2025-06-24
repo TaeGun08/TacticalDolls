@@ -65,7 +65,7 @@ public class PlayerDataSample  //key : GUID
 }
 
 [FirestoreData]
-public class WaeponStoreDataSample  //key : GUID
+public class WeaponStoreDataSample  //key : GUID
 {
     [FirestoreProperty] public List<WeaponDataSample> HasWeapon { get; set; } =  new List<WeaponDataSample>();
 }

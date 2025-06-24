@@ -60,7 +60,7 @@ public class WeaponRoom : MonoBehaviour
                     background.GetComponent<Outline>().enabled = true;
                 }
 
-                background.GetComponent<Image>().color = SetWeaponBackgroundColor(allWeapons[i].WeaponGrade);
+                background.GetComponent<Image>().color = allWeapons[i].SetWeaponBackgroundColor();
                 
                 var icon = Instantiate(weaponIconPrefab, background.transform);
                 icon.GetComponent<Image>().sprite = allWeapons[i].WeaponIcon;
@@ -105,23 +105,6 @@ public class WeaponRoom : MonoBehaviour
         }
         
         return null;
-    }
-
-    private Color SetWeaponBackgroundColor(WeaponGrade weaponGrade)
-    {
-        switch (weaponGrade)
-        {
-            case WeaponGrade.Normal:
-                return Color.gray;
-            case WeaponGrade.Rare:
-                return Color.cyan;
-            case WeaponGrade.Epic:
-                return Color.magenta;
-            case WeaponGrade.Unique:
-                return Color.yellow;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(weaponGrade), weaponGrade, null);
-        }
     }
     
     // 무기 레벨업

@@ -26,6 +26,8 @@ public class CharacterData : UnitParent
     public SkillParent[] hasSkills;
     
     public Animator animator;
+    
+    public Sprite characterIcon;
 
     //InGame
     // private List<BuffParent> Buffs = new List<BuffParent>();
