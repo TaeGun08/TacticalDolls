@@ -13,6 +13,8 @@ public interface IDamageAble
 
     SkillParent[] HasSkills { get; set; }
     Action OnHpChanged { get; set; }
+    Animator Animator { get; }
+
     Task Excute(int selectedSkill, List<IDamageAble> targets, Transform targetPoint);
     void TakeDamage(CombatEvent combatEvent);
     void TakeHeal(HealEvent combatEvent);

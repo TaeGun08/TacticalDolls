@@ -22,10 +22,11 @@ public class CharacterData : UnitParent
     public override int Team => 0;
     public override SkillParent[] HasSkills { get => hasSkills; set => hasSkills = value; }
     public override Action OnHpChanged { get; set; }
+    
+    [SerializeField] private Animator animator;
+    public override Animator Animator => animator;
 
     public SkillParent[] hasSkills;
-    
-    public Animator animator;
     
     public Sprite characterIcon;
 

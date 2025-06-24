@@ -118,6 +118,8 @@ public class GridBehavior : MonoBehaviour
             currentTile.isUsingTile = false;
             currentTile.SetOccupant(null);
         }
+        
+        Actor.Animator.SetBool("isRunning", true);
 
         Vector2Int actorPos = new Vector2Int((int)Actor.GameObject.transform.position.x,
             (int)Actor.GameObject.transform.position.z);
@@ -131,6 +133,7 @@ public class GridBehavior : MonoBehaviour
                 node.Position.z * tileManager.tileSize
             );
 
+            await Actor.GameObject.transform.DORotate(targetPos, 0.01f).SetEase(Ease.Linear).AsyncWaitForCompletion();
             await Actor.GameObject.transform.DOMove(targetPos, 0.1f).SetEase(Ease.Linear).AsyncWaitForCompletion();
             
             if (IsAutoMove)
@@ -140,6 +143,8 @@ public class GridBehavior : MonoBehaviour
             }
         }
 
+        //Actor.Animator.SetBool("isRunning", false);
+        
         Tile newTile = TileManager.Instance.GetClosestTile(Actor.GameObject.transform.position);
         if (newTile != null)
         {
