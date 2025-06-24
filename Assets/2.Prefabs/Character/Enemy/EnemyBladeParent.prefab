@@ -244,6 +244,7 @@ MonoBehaviour:
     isDead: 0
     isCompleteAction: 0
   hasSkills: []
+  animator: {fileID: 5544192321432596531}
 --- !u!1 &727491768337575656
 GameObject:
   m_ObjectHideFlags: 0
@@ -1944,7 +1945,6 @@ MonoBehaviour:
     skillIconSprite: {fileID: 0}
     director: {fileID: 4918216646000061905}
     ultClip: {fileID: 0}
-    castTransform: {fileID: 0}
 --- !u!320 &4918216646000061905
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -2263,7 +2263,6 @@ MonoBehaviour:
     skillIconSprite: {fileID: 0}
     director: {fileID: 1695322949802231922}
     ultClip: {fileID: 0}
-    castTransform: {fileID: 0}
 --- !u!320 &5167050471853038791
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -2728,7 +2727,6 @@ MonoBehaviour:
     skillIconSprite: {fileID: 0}
     director: {fileID: 1695322949802231922}
     ultClip: {fileID: 0}
-    castTransform: {fileID: 0}
 --- !u!320 &1695322949802231922
 PlayableDirector:
   m_ObjectHideFlags: 0

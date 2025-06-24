@@ -119,11 +119,16 @@ public class GridBehavior : MonoBehaviour
             currentTile.SetOccupant(null);
         }
         
-        Actor.Animator.SetBool("isRunning", true);
-
+        if (Actor?.Animator != null)
+        {
+            Actor.Animator.SetBool("isRunning", true);
+        }
+        
         Vector2Int actorPos = new Vector2Int((int)Actor.GameObject.transform.position.x,
             (int)Actor.GameObject.transform.position.z);
         List<Vector2Int> actorPosList = TileManager.Instance.GetReachableTiles(actorPos, Actor.Stat.MoveRange);
+
+        Node endNode = new Node();
         
         foreach (Node node in path)
         {
@@ -132,10 +137,18 @@ public class GridBehavior : MonoBehaviour
                 0.5f,
                 node.Position.z * tileManager.tileSize
             );
-
-            await Actor.GameObject.transform.DORotate(targetPos, 0.01f).SetEase(Ease.Linear).AsyncWaitForCompletion();
-            await Actor.GameObject.transform.DOMove(targetPos, 0.1f).SetEase(Ease.Linear).AsyncWaitForCompletion();
             
+            Vector3 direction = (targetPos - Actor.GameObject.transform.position).normalized;
+            if (direction != Vector3.zero)
+            {
+                Quaternion lookRotation = Quaternion.LookRotation(direction);
+                Vector3 eulerAngles = new Vector3(0f, lookRotation.eulerAngles.y, 0f);
+                Actor.GameObject.transform.DORotate(eulerAngles, 0.1f).SetEase(Ease.Linear);
+            }
+            
+            await Actor.GameObject.transform.DOMove(targetPos, 0.1f).SetEase(Ease.Linear).AsyncWaitForCompletion();
+
+            endNode = node;
             if (IsAutoMove)
             {
                 if (AttackRangeChecker(target)) break;
@@ -143,7 +156,22 @@ public class GridBehavior : MonoBehaviour
             }
         }
 
-        //Actor.Animator.SetBool("isRunning", false);
+        if (Actor?.Animator != null)
+        {
+            Actor.Animator.SetBool("isRunning", false);
+        }
+
+        switch (endNode.Tile.obstacleDir)
+        {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+        }
         
         Tile newTile = TileManager.Instance.GetClosestTile(Actor.GameObject.transform.position);
         if (newTile != null)
@@ -155,8 +183,8 @@ public class GridBehavior : MonoBehaviour
         if (IsAutoMove)
         {
             List<IDamageAble> targets = new List<IDamageAble> { nearestTarget };
-            //await Actor.Excute(0, targets, targets[0].GameObject.transform);
-            await Task.Delay(1000);
+            await Actor.Excute(TurnManager.Instance.CurrentTurn == ActorParent.Player
+                ? Random.Range(0, 3) : 0, targets, targets[0].GameObject.transform);
         }
         
         Actor.Stat.IsCompleteAction = true;

@@ -15,7 +15,7 @@ public class Node
 
     public Tile Tile { get; set; }
 
-    public Node(Tile tile)
+    public Node(Tile tile = null)
     {
         Position = new Vector3Int(tile.x, 0, tile.y);
         Tile = tile;
@@ -205,14 +205,13 @@ public class PathFindingManager : MonoBehaviour
             return false;
         switch (TurnManager.Instance.CurrentTurn)
         {
-            // case ActorParent.Player:
-            //     foreach (EnemyData enemy in GameManager.Instance.EnemyUnits)
-            //     {
-            //         if (RoundToTilePosition(enemy.transform.position) == pos)
-            //             return true;
-            //     }
-            //     break;
-
+            case ActorParent.Player:
+                foreach (EnemyData enemy in GameManager.Instance.EnemyUnits)
+                {
+                    if (RoundToTilePosition(enemy.transform.position) == pos)
+                        return true;
+                }
+                break;
             case ActorParent.Enemy:
                 foreach (CharacterData player in GameManager.Instance.PlayerUnits)
                 {

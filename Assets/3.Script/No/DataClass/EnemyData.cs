@@ -25,7 +25,7 @@ public class EnemyData : UnitParent
     public override GameObject GameObject => gameObject;
     
     [SerializeField] private Animator animator;
-    public override Animator Animator { get; }
+    public override Animator Animator => animator;
     
     public override int Team => 1;
     
