@@ -20,6 +20,7 @@ public class CharacterRoom : MonoBehaviour
     [SerializeField] private TMP_Text characterDefense;
     [SerializeField] private TMP_Text weaponLevel;
     
+    [SerializeField] private Image weaponBackground;
     [SerializeField] private Image weaponImage;
 
     private List<CharacterData> playerCharacters;
@@ -95,7 +96,8 @@ public class CharacterRoom : MonoBehaviour
         characterHp.text = characterData.Stat.HP.ToString();
         characterDefense.text = characterData.Stat.Defense.ToString();
         weaponLevel.text = "Lv. " + characterData.Stat.Weapon.Level;
-        
+
+        weaponBackground.color = characterData.Stat.Weapon.SetWeaponBackgroundColor();
         weaponImage.sprite = characterData.Stat.Weapon.WeaponIcon;
     }
     
