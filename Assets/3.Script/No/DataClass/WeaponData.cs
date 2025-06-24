@@ -153,6 +153,23 @@ public class WeaponData : MonoBehaviour
         return true;
     }
     
+    public Color SetWeaponBackgroundColor()
+    {
+        switch (WeaponGrade)
+        {
+            case WeaponGrade.Normal:
+                return Color.gray;
+            case WeaponGrade.Rare:
+                return Color.cyan;
+            case WeaponGrade.Epic:
+                return Color.magenta;
+            case WeaponGrade.Unique:
+                return Color.yellow;
+        }
+
+        return Color.gray;
+    }
+    
     //public List<SkillEffectHandlerBase> Skills;
     //public int GetDamage() => BaseDamage + Level;
     
