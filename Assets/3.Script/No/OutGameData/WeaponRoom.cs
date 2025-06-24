@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,7 +37,9 @@ public class WeaponRoom : MonoBehaviour
     {
         Debug.Log($"SelectedCharacter ::: {characterRoom.SelectedCharacter.PrefabName}");
         
-        allWeapons = PlayerManager.Instance.usingWeaponData;
+        allWeapons = PlayerManager.Instance.usingWeaponData
+            .OrderBy(w => w.WeaponGrade)
+            .ToList();
         
         SetUIWeapon();
         SetInfoWeapon(SelectedWeapon);

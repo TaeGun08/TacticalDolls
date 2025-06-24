@@ -2590,7 +2590,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 182001976}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9981385
+  m_Size: 0.9961809
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3544,6 +3544,8 @@ MonoBehaviour:
   HasCharacterContent: {fileID: 1192701330}
   characterUIPrefab:
   - {fileID: 4523403451643908191, guid: 10ac623fce32eaf4a97172c834a6d94f, type: 3}
+  - {fileID: 4409047874068816009, guid: f52b48445a840a748ba3b39dd1866fdd, type: 3}
+  - {fileID: 2028351747548310683, guid: 8c286959b56ce964682ac04da1944531, type: 3}
   Apply: {fileID: 643945350}
   CancelApply: {fileID: 110243651}
 --- !u!114 &1103959016
@@ -3617,7 +3619,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: 0.00016608943}
+  m_AnchoredPosition: {x: -0.000061035156, y: 0.000059297006}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1192701331

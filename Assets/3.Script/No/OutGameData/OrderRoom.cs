@@ -25,12 +25,25 @@ public class OrderRoom : MonoBehaviour
 
     private List<CharacterDataSample> allCharacterSamples;
     private List<WeaponDataSample> allWeaponSamples;
+    
+    private List<CharacterData> allCharacters = new List<CharacterData>();
+    private List<WeaponData> allWeapons = new List<WeaponData>();
 
     private CharacterData selectedCharacter;
     private WeaponData[] selectedWeapons = new WeaponData[2];
 
+    private const string KEY_ORDERROOM_RESET_TIME = "OrderRoom_NextResetTime";
+    private DateTime nextResetTime;
+    
     public float resetTime = 10f;
     private float timer;
+    
+    Dictionary<WeaponGrade, float> gradeWeights = new Dictionary<WeaponGrade, float>
+    {
+        { WeaponGrade.Rare, 0.6f },
+        { WeaponGrade.Epic, 0.3f },
+        { WeaponGrade.Unique, 0.1f }
+    };
     
     private void Start()
     {
@@ -39,7 +52,7 @@ public class OrderRoom : MonoBehaviour
     
         // 무기 조회
         Debug.Log($"FirebaseMainSession.Instance.FirebaseUser.WeaponStore.Count:: {FirebaseMainSession.Instance.FirebaseUser.weaponStore.Count}");
-
+        
         itemButtons[0].onClick.AddListener(() =>
         {
             RequestBuyCharacter(selectedCharacter);
@@ -58,7 +71,21 @@ public class OrderRoom : MonoBehaviour
         allCharacterSamples = FirebaseMainSession.Instance.FirebaseUser.characterStore;
         allWeaponSamples = FirebaseMainSession.Instance.FirebaseUser.weaponStore;
         
-        timer = resetTime;
+        for (int i = 0; i < allCharacterSamples.Count; i++)
+        {
+            var ob = PlayerManager.Instance.CharacterTable.GetPrefabByKey(allCharacterSamples[i].characterCode);
+            
+            allCharacters.Add(ob.GetComponent<CharacterData>());
+        }
+        
+        for (int i = 0; i < allWeaponSamples.Count; i++)
+        {
+            var ob = PlayerManager.Instance.WeaponTable.GetPrefabByKey(allWeaponSamples[i].weaponCode);
+            
+            allWeapons.Add(ob.GetComponent<WeaponData>());
+        }
+        
+        LoadOrSetNextResetTime();
 
         PickRandomItems();
         SetUI();
@@ -66,12 +93,18 @@ public class OrderRoom : MonoBehaviour
     
     private void Update()
     {
-        timer -= Time.deltaTime;
-        timerText.text = TimeSpan.FromSeconds(timer).ToString(@"hh\:mm\:ss");
+        var remain = (nextResetTime - DateTime.UtcNow).TotalSeconds;
+        if (remain < 0) remain = 0;
 
-        if (timer <= 0)
+        timerText.text = TimeSpan.FromSeconds(remain).ToString(@"hh\:mm\:ss");
+
+        if (remain <= 0)
         {
-            timer = resetTime;
+            // 다음 리셋 시간 갱신: 지금부터 resetTime초 후
+            nextResetTime = DateTime.UtcNow.AddSeconds(resetTime);
+            PlayerPrefs.SetString(KEY_ORDERROOM_RESET_TIME, nextResetTime.ToString("o"));
+            PlayerPrefs.Save();
+
             PickRandomItems();
             SetUI();
         }
@@ -80,35 +113,68 @@ public class OrderRoom : MonoBehaviour
     private void PickRandomItems()
     {
         // 캐릭터 1개 랜덤
-        var characterGameObject =
-            PlayerManager.Instance.CharacterTable.GetPrefabByKey(
-                allCharacterSamples[Random.Range(0, allCharacterSamples.Count)].characterCode);
-        selectedCharacter = characterGameObject.GetComponent<CharacterData>();
+        selectedCharacter = allCharacters[Random.Range(0, allCharacterSamples.Count)];
+
+        // 무기: Normal 등급 제외
+        var filteredWeapons = allWeapons.Where(w => w.WeaponGrade != WeaponGrade.Normal).ToList();
     
-        // 무기 2개 랜덤 (중복방지)
-        var weaponList = allWeaponSamples.OrderBy(x => Random.value).ToList();
+        var firstWeapon = PickRandomWeaponByWeight(filteredWeapons, gradeWeights);
+        filteredWeapons.Remove(firstWeapon);
+        var secondWeapon = PickRandomWeaponByWeight(filteredWeapons, gradeWeights);
         
-        var weaponGameObject0 =
-            PlayerManager.Instance.WeaponTable.GetPrefabByKey(
-                weaponList[0].weaponCode);
-        var weaponGameObject1 =
-            PlayerManager.Instance.WeaponTable.GetPrefabByKey(
-                weaponList[1].weaponCode);
-        
-        selectedWeapons[0] = weaponGameObject0.GetComponent<WeaponData>();
-        selectedWeapons[1] = weaponGameObject1.GetComponent<WeaponData>();
+        selectedWeapons[0] = firstWeapon;
+        selectedWeapons[1] = secondWeapon;
+    }
+    
+    WeaponData PickRandomWeaponByWeight(List<WeaponData> weaponList, Dictionary<WeaponGrade, float> weights)
+    {
+        // weaponList는 Normal 등급 없는 상태여야 함!
+        var gradeGroups = weaponList
+            .GroupBy(w => w.WeaponGrade)
+            .ToDictionary(g => g.Key, g => g.ToList());
+
+        // 전체 확률 합산
+        float totalWeight = gradeGroups.Sum(g => weights.ContainsKey(g.Key) ? weights[g.Key] : 0f);
+
+        float rnd = Random.value * totalWeight;
+        float cumulative = 0f;
+
+        foreach (var kv in gradeGroups)
+        {
+            float weight = weights.ContainsKey(kv.Key) ? weights[kv.Key] : 0f;
+            cumulative += weight;
+            if (rnd <= cumulative)
+            {
+                // 이 등급 그룹에서 랜덤 1개 뽑기
+                var groupList = kv.Value;
+                return groupList[Random.Range(0, groupList.Count)];
+            }
+        }
+        // 예외처리(실패 시 첫 번째)
+        return weaponList[0];
     }
     
     private void SetUI()
     {
+        for (int i = 0; i < itemButtons.Length; i++)
+        {
+            itemButtons[i].interactable = true;
+        }
+        
         // 캐릭터
         itemImages[0].sprite = selectedCharacter.characterIcon;
         itemNames[0].text = selectedCharacter.PrefabName;
         // itemPrices[0].text = selectedCharacter.Price.ToString();
 
         // 소유 여부에 따라 버튼 비활성화
-        bool hasChar = PlayerManager.Instance.usingCharacter.Contains(selectedCharacter.CharacterID);
-        itemButtons[0].interactable = !hasChar;
+        for (int i = 0; i < PlayerManager.Instance.usingCharacterData.Count; i++)
+        {
+            if (PlayerManager.Instance.usingCharacterData[i].CharacterID == selectedCharacter.CharacterID)
+            {
+                itemButtons[0].interactable = false;
+                break;
+            }
+        }
 
         // 무기
         for(int i = 0; i < 2; i++)
@@ -118,44 +184,65 @@ public class OrderRoom : MonoBehaviour
             itemNames[i+1].text = selectedWeapons[i].WeaponName;
             // itemPrices[i+1].text = selectedWeapons[i].Price.ToString();
 
-            bool hasWeapon = PlayerManager.Instance.usingWeaponData.Contains(selectedWeapons[i]);
-            itemButtons[i+1].interactable = !hasWeapon;
+            for (int j = 0; j < PlayerManager.Instance.usingWeaponData.Count; j++)
+            {
+                if (PlayerManager.Instance.usingWeaponData[j].ID == selectedWeapons[i].ID)
+                {
+                    itemButtons[i+1].interactable = false;
+                    break;
+                }
+            }
+        }
+    }
+    
+    private void LoadOrSetNextResetTime()
+    {
+        // 최초 실행시엔 저장된 값이 없음
+        if (PlayerPrefs.HasKey(KEY_ORDERROOM_RESET_TIME))
+        {
+            var savedTimeStr = PlayerPrefs.GetString(KEY_ORDERROOM_RESET_TIME);
+            nextResetTime = DateTime.Parse(savedTimeStr);
+        }
+        else
+        {
+            // 최초: 현재 시각 + resetTime초 후로
+            nextResetTime = DateTime.UtcNow.AddSeconds(resetTime);
+            PlayerPrefs.SetString(KEY_ORDERROOM_RESET_TIME, nextResetTime.ToString("o"));
+            PlayerPrefs.Save();
         }
     }
     
     // 캐릭터 구매
     private async void RequestBuyCharacter(CharacterData character)
     {
-        Debug.Log($"RequestBuyCharacter ::: {character.PrefabName}");
+        var result = await PlayerManager.Instance.UpdateCharacterList(character);
         
-        // var result = await PlayerManager.Instance.UpdateCharacterList(character);
-        //
-        // if (result)
-        // {
-        //     await FirebaseMainSession.Instance.FirestoreLoader();
-        //     PlayerManager.Instance.UpdateCharacterData();
-        // }
-        // else
-        // {
-        //     Debug.LogWarning("캐릭 구매 실패");
-        // }
+        if (result)
+        {
+            await FirebaseMainSession.Instance.FirestoreLoader();
+            PlayerManager.Instance.UpdateCharacterData();
+            SetUI();
+        }
+        else
+        {
+            Debug.LogWarning("캐릭 구매 실패");
+        }
     }
     
     // 무기 구매
     private async void RequestBuyWeapon(int weaponCode)
     {
-        Debug.Log($"RequestBuyWeapon ::: {weaponCode}");
+        var result = await PlayerManager.Instance.UpdateWeaponList(weaponCode);
         
-        // var result = await PlayerManager.Instance.UpdateWeaponList(weaponCode);
-        //
-        // if (result)
-        // {
-        //     await FirebaseMainSession.Instance.FirestoreLoader();
-        //     PlayerManager.Instance.UpdateCharacterData();
-        // }
-        // else
-        // {
-        //     Debug.LogWarning("무기 구매 실패");
-        // }
+        if (result)
+        {
+            await FirebaseMainSession.Instance.FirestoreLoader();
+            PlayerManager.Instance.UpdateCharacterData();
+            SetUI();
+        }
+        else
+        {
+            Debug.LogWarning("무기 구매 실패");
+        }
     }
 }
