@@ -10,7 +10,7 @@ public interface IDamageAble
     Collider MainCollider { get; }
     GameObject GameObject { get; }
     int Team { get; }
-
+    
     SkillParent[] HasSkills { get; set; }
     Action OnHpChanged { get; set; }
     Animator Animator { get; }

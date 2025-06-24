@@ -334,7 +334,9 @@ public class GameManager : MonoBehaviour
         skillUI.Open(target);
         currentCharacter = target;
     }
-    
+
+
+    public Action GameStartAction;
     // 게임 시작
     public void StartGame()
     {
@@ -342,6 +344,7 @@ public class GameManager : MonoBehaviour
         RangeSystem.Instance.ResetAllTiles();
         SelectedCharacterPanel.SetActive(false);
         
+        GameStartAction?.Invoke();
         UnitInitializeStarSetting();
     }
 }
