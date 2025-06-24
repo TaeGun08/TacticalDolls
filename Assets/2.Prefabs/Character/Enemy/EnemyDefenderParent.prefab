@@ -629,7 +629,8 @@ Transform:
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 4359247074748508400}
   m_Father: {fileID: 8506871855760754320}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &8553831659007239362
@@ -1795,7 +1796,6 @@ MonoBehaviour:
     skillIconSprite: {fileID: 0}
     director: {fileID: 8594401429527041336}
     ultClip: {fileID: 0}
-    castTransform: {fileID: 0}
 --- !u!320 &8594401429527041336
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -2036,6 +2036,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d67d48b4b70ac948b7f40ea06efb669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hpBarTransform: {fileID: 4359247074748508400}
   EnemyID: 103
   PrefabName: EnemyDefender
   baseStatSO: {fileID: 11400000, guid: 49ab79f5437eb0741a6b012b36dd5e17, type: 2}
@@ -2049,6 +2050,7 @@ MonoBehaviour:
     isDead: 0
     isCompleteAction: 0
   hasSkills: []
+  animator: {fileID: 0}
 --- !u!1 &3014278843516442750
 GameObject:
   m_ObjectHideFlags: 0
@@ -2481,6 +2483,37 @@ Transform:
   - {fileID: 8292578442538964609}
   m_Father: {fileID: 3435281450298900421}
   m_LocalEulerAnglesHint: {x: -5.757497, y: -8.04245, z: -7.849596}
+--- !u!1 &4008434497877865719
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4359247074748508400}
+  m_Layer: 0
+  m_Name: HpBarPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4359247074748508400
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4008434497877865719}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 2.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4994424055138346342}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4012287994470977353
 GameObject:
   m_ObjectHideFlags: 0
@@ -5351,7 +5384,6 @@ MonoBehaviour:
     skillIconSprite: {fileID: 0}
     director: {fileID: 8594401429527041336}
     ultClip: {fileID: 0}
-    castTransform: {fileID: 0}
 --- !u!320 &7413047334559634054
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -5765,7 +5797,6 @@ MonoBehaviour:
     skillIconSprite: {fileID: 0}
     director: {fileID: 8737281596343730926}
     ultClip: {fileID: 0}
-    castTransform: {fileID: 0}
 --- !u!320 &8737281596343730926
 PlayableDirector:
   m_ObjectHideFlags: 0
