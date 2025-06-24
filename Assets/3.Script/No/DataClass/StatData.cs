@@ -23,7 +23,8 @@ public class StatData : IStat
     public WeaponData Weapon { get => weapon; set => weapon = value; }
     public bool IsDead { get => isDead; set => isDead = value; }
     public bool IsCompleteAction { get => isCompleteAction; set => isCompleteAction = value; }
-    
+    public bool isCovered { get; set; }
+
     public StatData() {}
 
     public StatData(StatDataSO baseSO)

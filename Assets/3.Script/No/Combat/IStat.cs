@@ -15,4 +15,5 @@ public interface IStat
     
     bool IsDead { get; set;  }
     bool IsCompleteAction { get; set; }
+    bool isCovered { get; set; }
 }

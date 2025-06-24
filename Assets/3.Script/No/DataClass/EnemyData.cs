@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 [System.Serializable]
-public class EnemyData : MonoBehaviour, IDamageAble
+public class EnemyData : UnitParent
 {
     private static readonly int ATTACKED = Animator.StringToHash("Attacked");
     public int EnemyID;
@@ -14,16 +14,16 @@ public class EnemyData : MonoBehaviour, IDamageAble
     [SerializeField] private StatDataSO baseStatSO;
     [SerializeField] private StatData runtimeStat;
     
-    public SkillParent[] HasSkills { get => hasSkills; set => hasSkills = value; }
-    public Action OnHpChanged { get; set; }
+    public override SkillParent[] HasSkills { get => hasSkills; set => hasSkills = value; }
+    public override Action OnHpChanged { get; set; }
 
     public SkillParent[] hasSkills;
     
-    public IStat Stat => runtimeStat;
+    public override IStat Stat => runtimeStat;
     
-    public Collider MainCollider { get; }
-    public GameObject GameObject => gameObject;
-    public int Team => 1;
+    public override Collider MainCollider { get; }
+    public override GameObject GameObject => gameObject;
+    public override int Team => 1;
 
     public Animator animator;
     
@@ -32,7 +32,7 @@ public class EnemyData : MonoBehaviour, IDamageAble
         runtimeStat = new StatData(baseStatSO);
     }
     
-    public async Task Excute(int selectedSkill, List<IDamageAble> targets, Transform targetPoint)
+    public override async Task Excute(int selectedSkill, List<IDamageAble> targets, Transform targetPoint)
     {
         if (HasSkills[selectedSkill] == null)
         {
@@ -42,7 +42,7 @@ public class EnemyData : MonoBehaviour, IDamageAble
         await CharacterSequenceManager.Instance.MakeSequence(HasSkills[selectedSkill] as SkillBase, targets, targetPoint);
     }
     
-    public void TakeDamage(CombatEvent combatEvent)
+    public override void TakeDamage(CombatEvent combatEvent)
     {
         Debug.Log($"{PrefabName} Enemy Take damage :: {EnemyID}");
         Stat.HP -= combatEvent.Damage;
@@ -53,7 +53,7 @@ public class EnemyData : MonoBehaviour, IDamageAble
         OnHpChanged?.Invoke();
     }
 
-    public void TakeHeal(HealEvent combatEvent)
+    public override void TakeHeal(HealEvent combatEvent)
     {
         Debug.Log($"{PrefabName} Enemy Take Heal :: {EnemyID}");
         Stat.HP += combatEvent.Heal;
@@ -62,7 +62,7 @@ public class EnemyData : MonoBehaviour, IDamageAble
         //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
     }
     
-    public void TakeBuff(BuffEvent combatEvent)
+    public override void TakeBuff(BuffEvent combatEvent)
     {
         Debug.Log($"{PrefabName} Enemy Take Buff :: {EnemyID}");
         //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
