@@ -211,6 +211,4 @@ public class PlayerManager : MonoBehaviour
         Debug.Log($"무기 {weaponCode} 구매 완료");
         return true;
     }
-
-    
 }

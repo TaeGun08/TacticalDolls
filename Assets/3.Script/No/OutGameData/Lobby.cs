@@ -9,11 +9,13 @@ public class Lobby : MonoBehaviour
     private Transform rawImageSpawnPoint;
 
     [SerializeField] private List<GameObject> characterPrefabs;
-    
+    [SerializeField] private List<GameObject> weaponPrefabs;
+
     private void Start()
     {
-        // 상점 무기 리스트 추가
+        // 상점 캐릭터 무기 리스트 추가 코드 ( 지우지 마세요 )
         //UploadAllCharactersToStore();
+        //UploadAllWeaponToStore();
     }
 
     private void OnEnable()
@@ -65,5 +67,35 @@ public class Lobby : MonoBehaviour
         );
 
         Debug.Log("게임 내 판매 캐릭터 정보 저장 완료.");
+    }
+    
+    public async Task UploadAllWeaponToStore()
+    {
+        List<WeaponDataSample> storeWeapon = new List<WeaponDataSample>();
+
+        foreach (var weapon in weaponPrefabs)
+        {
+            var weaponData = weapon.GetComponent<WeaponData>();
+            storeWeapon.Add(new WeaponDataSample
+            {
+                weaponCode = weaponData.ID,
+                level = 1,
+                currentCharacter = -1
+            });            
+        }
+
+        WeaponStoreDataSample weaponStoreData = new WeaponStoreDataSample
+        {
+            HasWeapon = storeWeapon
+        };
+
+        await FirestoreManager.Instance.WriteDataAsync<WeaponStoreDataSample>(
+            FirebaseCollections.Stores,
+            "StoreWeapons",
+            weaponStoreData
+        );
+        
+        
+        Debug.Log("게임 내 판매 무기 정보 저장 완료.");
     }
 }
