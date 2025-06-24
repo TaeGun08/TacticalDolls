@@ -13,8 +13,7 @@ public class GridBehavior : MonoBehaviour
     public static GridBehavior Instance;
 
     private TileManager tileManager;
-    private Turn_Test turn;
-
+    
     private Camera mainCam;
 
     public IDamageAble Actor;
@@ -42,6 +41,8 @@ public class GridBehavior : MonoBehaviour
     public bool IsAuto { get; private set; }
 
     private IDamageAble nearestTarget;
+
+    private Node endNode = new Node();
     
     private void Awake()
     {
@@ -60,7 +61,6 @@ public class GridBehavior : MonoBehaviour
     private void Start()
     {
         tileManager = TileManager.Instance;
-        turn = Turn_Test.Instance;
         mainCam = Camera.main;
     }
 
@@ -127,8 +127,6 @@ public class GridBehavior : MonoBehaviour
         Vector2Int actorPos = new Vector2Int((int)Actor.GameObject.transform.position.x,
             (int)Actor.GameObject.transform.position.z);
         List<Vector2Int> actorPosList = TileManager.Instance.GetReachableTiles(actorPos, Actor.Stat.MoveRange);
-
-        Node endNode = new Node();
         
         foreach (Node node in path)
         {
@@ -149,6 +147,7 @@ public class GridBehavior : MonoBehaviour
             await Actor.GameObject.transform.DOMove(targetPos, 0.1f).SetEase(Ease.Linear).AsyncWaitForCompletion();
 
             endNode = node;
+            
             if (IsAutoMove)
             {
                 if (AttackRangeChecker(target)) break;
@@ -189,6 +188,7 @@ public class GridBehavior : MonoBehaviour
         
         Actor.Stat.IsCompleteAction = true;
 
+        endNode = null;
         Actor = null;
         nearestTarget = null;
         IsMove = false;
