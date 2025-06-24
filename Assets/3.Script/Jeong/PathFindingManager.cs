@@ -114,11 +114,6 @@ public class PathFindingManager : MonoBehaviour
 
                 int tentativeG = currentNode.G + CalculateDistanceCost(currentNode, neighbor);
                 
-                //Vector2Int neighborPos = new Vector2Int(neighbor.Position.x, neighbor.Position.z);
-
-                // bool canPass = neighbor.Tile.isWalkable && 
-                //                (neighbor.Tile.isUsingTile == false || (reser))
-                
                 if (tentativeG < neighbor.G 
                     && neighbor.Tile.isWalkable
                     && neighbor.Tile.isUsingTile == false)
