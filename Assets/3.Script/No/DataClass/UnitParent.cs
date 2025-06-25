@@ -12,6 +12,9 @@ public abstract class UnitParent : MonoBehaviour, IDamageAble
     public abstract int Team { get; }
     public abstract SkillParent[] HasSkills { get; set; }
     public abstract Action OnHpChanged { get; set; }
+    
+    public abstract Animator Animator { get; }
+    public Transform hpBarTransform;
 
     public abstract Task Excute(int selectedSkill, List<IDamageAble> targets, Transform targetPoint);
     

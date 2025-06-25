@@ -91,7 +91,6 @@ public class TurnManager : MonoBehaviour
     {
         //처음 실행되면 ActorParent.None 이므로 플레이어부터 시작되는 조건문
         CurrentTurn = (CurrentTurn == ActorParent.Player) ? ActorParent.Enemy : ActorParent.Player;
-        Debug.Log($"턴 전환됨: {CurrentTurn}");
         TurnStart(CurrentTurn);
     }
 

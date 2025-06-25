@@ -146,7 +146,6 @@ MonoBehaviour:
     skillIconSprite: {fileID: 0}
     director: {fileID: 7538823133056593333}
     ultClip: {fileID: 0}
-    castTransform: {fileID: 0}
 --- !u!320 &7538823133056593333
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -536,7 +535,6 @@ MonoBehaviour:
     skillIconSprite: {fileID: 0}
     director: {fileID: 1176196717239776793}
     ultClip: {fileID: 0}
-    castTransform: {fileID: 0}
 --- !u!320 &1176196717239776793
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -2146,7 +2144,6 @@ MonoBehaviour:
     skillIconSprite: {fileID: 0}
     director: {fileID: 7538823133056593333}
     ultClip: {fileID: 0}
-    castTransform: {fileID: 0}
 --- !u!320 &8721994479669392586
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -2311,6 +2308,37 @@ Transform:
   m_Children:
   - {fileID: 6801302005161642415}
   m_Father: {fileID: 7964015275653979295}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4469487152156534784
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4335044586256175912}
+  m_Layer: 0
+  m_Name: HpBarPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4335044586256175912
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4469487152156534784}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 449484181870101134}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4499016559504481626
 GameObject:
@@ -3113,6 +3141,7 @@ Transform:
   m_Children:
   - {fileID: 4153234400155445291}
   - {fileID: 8836858847387671473}
+  - {fileID: 4335044586256175912}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2465614325280311223
@@ -3177,6 +3206,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d67d48b4b70ac948b7f40ea06efb669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hpBarTransform: {fileID: 4335044586256175912}
   EnemyID: 101
   PrefabName: EnemySoldier
   baseStatSO: {fileID: 11400000, guid: 49ab79f5437eb0741a6b012b36dd5e17, type: 2}
@@ -3191,6 +3221,7 @@ MonoBehaviour:
     isCompleteAction: 0
   hasSkills:
   - {fileID: 1857200678274582966}
+  animator: {fileID: 6097686423843609935}
 --- !u!1 &6755557830963784552
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,12 +12,18 @@ public class Character2DDragSystem : MonoBehaviour, IBeginDragHandler, IDragHand
     public GameObject characterPrefab3D;
 
     public Action<GameObject> OnCharacterSpawned;
+    private Camera mainCamera;
     
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
         canvas = GetComponentInParent<Canvas>();
+    }
+
+    private void Start()
+    {
+        mainCamera = Camera.main;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -38,7 +44,7 @@ public class Character2DDragSystem : MonoBehaviour, IBeginDragHandler, IDragHand
         canvasGroup.alpha = 1f;
         rectTransform.anchoredPosition = originalPosition;
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
             Tile tile = hit.collider.GetComponent<Tile>();

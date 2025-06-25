@@ -13,8 +13,7 @@ public class GridBehavior : MonoBehaviour
     public static GridBehavior Instance;
 
     private TileManager tileManager;
-    private Turn_Test turn;
-
+    
     private Camera mainCam;
 
     public IDamageAble Actor;
@@ -42,6 +41,8 @@ public class GridBehavior : MonoBehaviour
     public bool IsAuto { get; private set; }
 
     private IDamageAble nearestTarget;
+
+    private Node endNode = new Node();
     
     private void Awake()
     {
@@ -60,7 +61,6 @@ public class GridBehavior : MonoBehaviour
     private void Start()
     {
         tileManager = TileManager.Instance;
-        turn = Turn_Test.Instance;
         mainCam = Camera.main;
     }
 
@@ -118,7 +118,12 @@ public class GridBehavior : MonoBehaviour
             currentTile.isUsingTile = false;
             currentTile.SetOccupant(null);
         }
-
+        
+        if (Actor?.Animator != null)
+        {
+            Actor.Animator.SetBool("isRunning", true);
+        }
+        
         Vector2Int actorPos = new Vector2Int((int)Actor.GameObject.transform.position.x,
             (int)Actor.GameObject.transform.position.z);
         List<Vector2Int> actorPosList = TileManager.Instance.GetReachableTiles(actorPos, Actor.Stat.MoveRange);
@@ -130,8 +135,18 @@ public class GridBehavior : MonoBehaviour
                 0.5f,
                 node.Position.z * tileManager.tileSize
             );
-
+            
+            Vector3 direction = (targetPos - Actor.GameObject.transform.position).normalized;
+            if (direction != Vector3.zero)
+            {
+                Quaternion lookRotation = Quaternion.LookRotation(direction);
+                Vector3 eulerAngles = new Vector3(0f, lookRotation.eulerAngles.y, 0f);
+                Actor.GameObject.transform.DORotate(eulerAngles, 0.1f).SetEase(Ease.Linear);
+            }
+            
             await Actor.GameObject.transform.DOMove(targetPos, 0.1f).SetEase(Ease.Linear).AsyncWaitForCompletion();
+
+            endNode = node;
             
             if (IsAutoMove)
             {
@@ -140,6 +155,23 @@ public class GridBehavior : MonoBehaviour
             }
         }
 
+        if (Actor?.Animator != null)
+        {
+            Actor.Animator.SetBool("isRunning", false);
+        }
+
+        switch (endNode.Tile.obstacleDir)
+        {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+        }
+        
         Tile newTile = TileManager.Instance.GetClosestTile(Actor.GameObject.transform.position);
         if (newTile != null)
         {
@@ -150,12 +182,13 @@ public class GridBehavior : MonoBehaviour
         if (IsAutoMove)
         {
             List<IDamageAble> targets = new List<IDamageAble> { nearestTarget };
-            //await Actor.Excute(0, targets, targets[0].GameObject.transform);
-            await Task.Delay(1000);
+            await Actor.Excute(TurnManager.Instance.CurrentTurn == ActorParent.Player
+                ? Random.Range(0, 3) : 0, targets, targets[0].GameObject.transform);
         }
         
         Actor.Stat.IsCompleteAction = true;
 
+        endNode = null;
         Actor = null;
         nearestTarget = null;
         IsMove = false;

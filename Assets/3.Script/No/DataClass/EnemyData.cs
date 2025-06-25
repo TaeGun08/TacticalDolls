@@ -23,15 +23,17 @@ public class EnemyData : UnitParent
     
     public override Collider MainCollider { get; }
     public override GameObject GameObject => gameObject;
+    
+    [SerializeField] private Animator animator;
+    public override Animator Animator => animator;
+    
     public override int Team => 1;
-
-    public Animator animator;
     
     private void Awake()
     {
         runtimeStat = new StatData(baseStatSO);
     }
-    
+
     public override async Task Excute(int selectedSkill, List<IDamageAble> targets, Transform targetPoint)
     {
         if (HasSkills[selectedSkill] == null)

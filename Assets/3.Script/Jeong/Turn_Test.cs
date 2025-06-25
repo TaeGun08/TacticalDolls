@@ -121,7 +121,6 @@ public class Turn_Test : MonoBehaviour
 
     private async Task OnCheckEndEnemyActor()
     {
-        Debug.Log("Enemy Turn");
         foreach (var player in GameManager.Instance.PlayerUnits)
         {
             gridBehavior.Actors.Add(player);

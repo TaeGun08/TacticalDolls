@@ -122,22 +122,67 @@ public class TileManager : MonoBehaviour
                 CharacterSpawnUseTiles.Add(tileComp);
             }
 
-            if (tile.tileType > 100)
+            // if (tile.tileType > 100)
+            // {
+            //     foreach (var enemy in EnmeyPrefab)
+            //     {
+            //         EnemyData enemyData = enemy.GameObject.GetComponent<EnemyData>();
+            //         
+            //         if (tile.tileType == enemyData.EnemyID)
+            //         {
+            //             var spawnEnemey = Instantiate(
+            //                 enemyData.GameObject,
+            //                 tileComp.transform.position + Vector3.up * 0.5f, 
+            //                 Quaternion.Euler(0f, 180f, 0f));
+            //             Tile applyTileObj = GetClosestTile(spawnEnemey.transform.position);
+            //             applyTileObj.SetOccupant(spawnEnemey.GetComponent<IDamageAble>());
+            //              
+            //             // add enemy unit 
+            //             GameManager.Instance.EnemyUnits.Add(spawnEnemey.GetComponent<EnemyData>());
+            //         }
+            //     }
+            // }
+            
+            if (tile.tileType == 101)
             {
-                foreach (var enemy in EnmeyPrefab)
-                {
-                    EnemyData enemyData = enemy.GameObject.GetComponent<EnemyData>();
-                    
-                    if (tile.tileType == enemyData.EnemyID)
-                    {
-                        var spawnEnemey = Instantiate(enemyData.GameObject,tileComp.transform.position + Vector3.up, Quaternion.identity);
-                        Tile applyTileObj = GetClosestTile(spawnEnemey.transform.position);
-                        applyTileObj.SetOccupant(spawnEnemey.GetComponent<IDamageAble>());
+                var enemyData = EnmeyPrefab[0];
+                var spawnEnemey = Instantiate(
+                    enemyData.GameObject,
+                    tileComp.transform.position + Vector3.up * 0.5f, 
+                    Quaternion.Euler(0f, 180f, 0f));
+                Tile applyTileObj = GetClosestTile(spawnEnemey.transform.position);
+                applyTileObj.SetOccupant(spawnEnemey.GetComponent<IDamageAble>());
                          
-                        // add enemy unit 
-                        GameManager.Instance.EnemyUnits.Add(spawnEnemey.GetComponent<EnemyData>());
-                    }
-                }
+                // add enemy unit 
+                GameManager.Instance.EnemyUnits.Add(spawnEnemey.GetComponent<EnemyData>());
+            }
+            
+            if (tile.tileType == 102)
+            {
+                var enemyData = EnmeyPrefab[1];
+                var spawnEnemey = Instantiate(
+                    enemyData.GameObject,
+                    tileComp.transform.position + Vector3.up * 0.5f, 
+                    Quaternion.Euler(0f, 180f, 0f));
+                Tile applyTileObj = GetClosestTile(spawnEnemey.transform.position);
+                applyTileObj.SetOccupant(spawnEnemey.GetComponent<IDamageAble>());
+                         
+                // add enemy unit 
+                GameManager.Instance.EnemyUnits.Add(spawnEnemey.GetComponent<EnemyData>());
+            }
+            
+            if (tile.tileType == 103)
+            {
+                var enemyData = EnmeyPrefab[2];
+                var spawnEnemey = Instantiate(
+                    enemyData.GameObject,
+                    tileComp.transform.position + Vector3.up * 0.5f, 
+                    Quaternion.Euler(0f, 180f, 0f));
+                Tile applyTileObj = GetClosestTile(spawnEnemey.transform.position);
+                applyTileObj.SetOccupant(spawnEnemey.GetComponent<IDamageAble>());
+                         
+                // add enemy unit 
+                GameManager.Instance.EnemyUnits.Add(spawnEnemey.GetComponent<EnemyData>());
             }
 
             if (tile.tileType == 201)
