@@ -1626,6 +1626,7 @@ GameObject:
   - component: {fileID: 457123148}
   - component: {fileID: 457123147}
   - component: {fileID: 457123146}
+  - component: {fileID: 457123152}
   m_Layer: 0
   m_Name: TouchCamera
   m_TagString: MainCamera
@@ -1851,6 +1852,30 @@ Transform:
   - {fileID: 1210162582}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 40.757, y: -26.886, z: 0}
+--- !u!114 &457123152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 457123144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0703de1087d14a49ac22d0c9b6af02a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  movementType: 0
+  elasticity: 0.05
+  elasticSpace: 5
+  bounderiesCollider: {fileID: 0}
+  sphereCollider: {fileID: 0}
+  boxCollider: {fileID: 0}
+  mode: 0
+  pitchThreshold: 60
+  insideThreshold: 0.5
+  drawGizmos: 0
+  drawElasticGizmos: 0
 --- !u!1 &497479141
 GameObject:
   m_ObjectHideFlags: 0
@@ -4739,7 +4764,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000061035156, y: 0.00034195863}
+  m_AnchoredPosition: {x: -0.000061035156, y: 0.000052858053}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1192701331

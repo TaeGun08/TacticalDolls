@@ -54,23 +54,27 @@ public class InGameHpBarManager : MonoBehaviour
     {
         if( initialized == false ) return;
 
-        foreach (var t in hpBarPacks) //매 프레임마다 위치 동기화
+        for (var i = 0; i < hpBarPacks.Length; i++)
         {
+            var t = hpBarPacks[i];
+            if (t == null) continue;
+            
             if (t.drawHpBar.unit.Stat.IsDead)
             {
                 t.drawHpBar.gameObject.SetActive(false);
                 t.drawHpBar = null;
+                hpBarPacks[i] = null; //비워주기
                 continue;
             }
-            
+
             t.drawHpBar.gameObject.SetActive(true);
-            
+
             Vector3 screenPoint = targetCamera.WorldToScreenPoint(t.targetTransform.position);
             RectTransformUtility.ScreenPointToLocalPointInRectangle
             (
-                parentCanvas.transform as RectTransform, 
+                parentCanvas.transform as RectTransform,
                 screenPoint,
-                targetCamera, 
+                targetCamera,
                 out Vector2 localPoint
             );
 
