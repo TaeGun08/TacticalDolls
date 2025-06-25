@@ -101,7 +101,7 @@ public abstract class SkillParent : MonoBehaviour //, IUnitSkill
         //발동시킬 버프 추가?
         
         [LabelText("스킬 보유 캐릭터")] [Required]
-        [Tooltip("스킬을 가진 캐릭터입니다.")]  public CharacterData characterData;
+        [Tooltip("스킬을 가진 캐릭터입니다.")]  public UnitParent characterData;
         
         [LabelText("스킬 아이콘")] [Required]
         [Tooltip("스킬 아이콘입니다.")] public Sprite skillIconSprite;

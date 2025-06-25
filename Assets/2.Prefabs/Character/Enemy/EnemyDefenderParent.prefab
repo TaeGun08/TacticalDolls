@@ -1791,7 +1791,7 @@ MonoBehaviour:
     splitHitCount: 7
     vfxDuration: 1
   unitSkillComponents:
-    characterData: {fileID: 0}
+    characterData: {fileID: 4101742799277918513}
     skillIconSprite: {fileID: 0}
     director: {fileID: 8594401429527041336}
     ultClip: {fileID: 0}
@@ -1830,6 +1830,8 @@ PlayableDirector:
     value: {fileID: 5478430928762625452}
   - key: {fileID: -7600942723716100730, guid: f7716ee9c9097224d84c03dd3dffe7d0, type: 2}
     value: {fileID: 3354329143255561414}
+  - key: {fileID: -6263563125101892516, guid: f7716ee9c9097224d84c03dd3dffe7d0, type: 2}
+    value: {fileID: 0}
   m_ExposedReferences:
     m_References:
     - e2a5e8c516a2a6545a4fd793161d832c: {fileID: 0}
@@ -5793,7 +5795,7 @@ MonoBehaviour:
     splitHitCount: 7
     vfxDuration: 1
   unitSkillComponents:
-    characterData: {fileID: 0}
+    characterData: {fileID: 4101742799277918513}
     skillIconSprite: {fileID: 0}
     director: {fileID: 8737281596343730926}
     ultClip: {fileID: 0}
@@ -5840,6 +5842,8 @@ PlayableDirector:
     value: {fileID: 4317360553315356711}
   - key: {fileID: 3978523779508620460, guid: b8db40f1e29498448848a0a59ef9ca60, type: 2}
     value: {fileID: 2379972433504252031}
+  - key: {fileID: -3717714649786267992, guid: b8db40f1e29498448848a0a59ef9ca60, type: 2}
+    value: {fileID: 0}
   m_ExposedReferences:
     m_References:
     - c17d205efb894aa47831aad398a922d3: {fileID: 0}
