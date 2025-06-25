@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Shapes {
 
@@ -10,15 +11,18 @@ namespace Shapes {
         public UnitParent unit { get; set; }
         private Tween widthTween;
         private Tween widthBackGroundTween;
-        public bool isOnUI = true;
+        private bool isOnUI { get; set; }= true;
         
         private float fillAmount = 1;
         private float fillBackGroundAmount = 1;
-        public Gradient colorGradient;
-        public string unitName = "UnitName";
+        public Gradient allyColorGradient;
+        public Gradient enemyColorGradient;
         
+        private Gradient selectedColorGradient;
+        private string unitName = "UnitName";
+
         public override void DrawPanelShapes( Rect rect, ImCanvasContext ctx ) {
-            if( colorGradient == null || unit == null || isOnUI == false)
+            if( selectedColorGradient == null || unit == null || isOnUI == false)
                 return; // just in case it hasn't initialized
 
             // Draw black background:
@@ -32,7 +36,7 @@ namespace Shapes {
             Draw.Rectangle( fillBackGroundRect, Color.white );
             
             fillRect.width *= fillAmount;
-            Draw.Rectangle( fillRect, colorGradient.Evaluate( fillAmount ) );
+            Draw.Rectangle( fillRect, selectedColorGradient.Evaluate( fillAmount ) );
             
             // Draw white border:
             Draw.RectangleBorder( rect, 2f, 8f, Color.white );
@@ -51,7 +55,16 @@ namespace Shapes {
         {
             unit = unitParent;
             unit.OnHpChanged += OnHealthChanged;
-            unitName = unit.name;
+            unitName = unit.PrefabName;
+
+            if (unit.Team == 0) //아군
+            {
+                selectedColorGradient =  allyColorGradient;
+            }
+            else
+            {
+                selectedColorGradient =  enemyColorGradient;
+            }
         }
         
         private void OnHealthChanged()

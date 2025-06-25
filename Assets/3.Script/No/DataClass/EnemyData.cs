@@ -9,7 +9,8 @@ public class EnemyData : UnitParent
 {
     private static readonly int ATTACKED = Animator.StringToHash("Attacked");
     public int EnemyID;
-    public string PrefabName;
+    public override string PrefabName { get => prefabName; set => prefabName = value; }
+    public string prefabName;
 
     [SerializeField] private StatDataSO baseStatSO;
     [SerializeField] private StatData runtimeStat;
