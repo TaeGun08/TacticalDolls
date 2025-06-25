@@ -25,4 +25,12 @@ public abstract class UnitParent : MonoBehaviour, IDamageAble
     public abstract void TakeHeal(HealEvent combatEvent);
 
     public abstract void TakeBuff(BuffEvent combatEvent);
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            this.OnHpChanged?.Invoke();
+        }
+    }
 }
