@@ -22,12 +22,17 @@ public class CharacterRoom : MonoBehaviour
     
     [SerializeField] private Image weaponBackground;
     [SerializeField] private Image weaponImage;
+    
+    [SerializeField] private Transform characterIconBackground;
 
     private List<CharacterData> playerCharacters;
     private List<CharacterData> characterIcons;
 
+    public GameObject iconContents;
     public CharacterData SelectedCharacter { get; private set; }
-
+    private int currentIndex;
+    private Transform currentIconBackground;
+    
     [SerializeField] private Button levelUpButton;
 
     private void Awake()
@@ -40,35 +45,40 @@ public class CharacterRoom : MonoBehaviour
         playerCharacters = PlayerManager.Instance.usingCharacterData;
         characterIcons = PlayerManager.Instance.characterIcons;
         
-        foreach (Transform child in iconSpawnPoint)
-        {
-            Destroy(child.gameObject);
-        }
-        
         for (int i = 0; i < playerCharacters.Count; i++)
         {
             for (int j = 0; j < characterIcons.Count; j++)
             {
                 if (playerCharacters[i].CharacterID == characterIcons[j].CharacterID)
                 {
-                    var spawnCharacterUI = Instantiate(characterIcons[j].GameObject, iconSpawnPoint.position, iconSpawnPoint.rotation, iconSpawnPoint);
+                    var spawnCharacterIconBackground = Instantiate(
+                        characterIconBackground, 
+                        iconSpawnPoint.position, 
+                        iconSpawnPoint.rotation, 
+                        iconSpawnPoint);
+                    var spawnCharacterUI = Instantiate(
+                        characterIcons[j].GameObject, 
+                        spawnCharacterIconBackground.position, 
+                        spawnCharacterIconBackground.rotation, 
+                        spawnCharacterIconBackground);
                     Button btn = spawnCharacterUI.AddComponent<Button>();
-                    
-                    int currentIndex = i;
-                    
+
+                    var i1 = i;
                     btn.onClick.AddListener(() =>
                     {
+                        currentIndex = i1;
                         SelectedCharacter = playerCharacters[currentIndex];
                         
                         SetUIPlayerCharacters();
                         SetInfoPlayerCharacter(SelectedCharacter);
                     });
-
                 }
             }
         }
         
         SelectedCharacter = playerCharacters[0];
+        currentIndex = 0;
+        currentIconBackground = iconContents.transform.GetChild(currentIndex);
         
         SetInfoPlayerCharacter(SelectedCharacter);
         SetUIPlayerCharacters();
@@ -76,6 +86,13 @@ public class CharacterRoom : MonoBehaviour
 
     private void SetUIPlayerCharacters()
     {
+        if (currentIconBackground != null)
+        {
+            currentIconBackground.GetComponent<Outline>().enabled = false;
+            currentIconBackground = iconContents.transform.GetChild(currentIndex);
+            currentIconBackground.GetComponent<Outline>().enabled = true;
+        }
+        
         foreach (Transform child in playerRawImageSpawnPoint)
         {
             Destroy(child.gameObject);
