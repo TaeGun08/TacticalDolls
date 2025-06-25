@@ -239,13 +239,15 @@ MonoBehaviour:
   runtimeStat:
     level: 1
     hp: 100
-    attack: 10
-    defense: 10
-    moveRange: 5
+    attack: 30
+    defense: 5
+    moveRange: 4
+    attackRange: 1
     weapon: {fileID: 0}
     isDead: 0
     isCompleteAction: 0
-  hasSkills: []
+  hasSkills:
+  - {fileID: 5669927198993339603}
   animator: {fileID: 5544192321432596531}
 --- !u!1 &727491768337575656
 GameObject:

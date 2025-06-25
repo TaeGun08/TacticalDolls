@@ -160,26 +160,8 @@ public class GridBehavior : MonoBehaviour
         {
             Actor.Animator.SetBool("isRunning", false);
         }
-        
-        switch (endNode.Tile.obstacleDir)
-        {
-            case 1:
-                Actor.GameObject.transform.DORotate(new Vector3(0f, 90f, 0f), 0.1f).SetEase(Ease.Linear);
-                Actor.Animator.SetBool("isCrouching", true);
-                break;
-            case 2:
-                Actor.GameObject.transform.DORotate(new Vector3(0f, -90f, 0f), 0.1f).SetEase(Ease.Linear);
-                Actor.Animator.SetBool("isCrouching", true);
-                break;
-            case 3:
-                Actor.GameObject.transform.DORotate(new Vector3(0f, 0f, 0f), 0.1f).SetEase(Ease.Linear);
-                Actor.Animator.SetBool("isCrouching", true);
-                break;
-            case 4:
-                Actor.GameObject.transform.DORotate(new Vector3(0f, 180f, 0f), 0.1f).SetEase(Ease.Linear);
-                Actor.Animator.SetBool("isCrouching", true);
-                break;
-        }
+
+        TurnCrouching(endNode);
         
         Tile newTile = TileManager.Instance.GetClosestTile(Actor.GameObject.transform.position);
         if (newTile != null)
@@ -201,6 +183,29 @@ public class GridBehavior : MonoBehaviour
         Actor = null;
         nearestTarget = null;
         IsMove = false;
+    }
+
+    private void TurnCrouching(Node endNode)
+    {
+        switch (endNode.Tile.obstacleDir)
+        {
+            case 1:
+                Actor.GameObject.transform.DORotate(new Vector3(0f, 90f, 0f), 0.1f).SetEase(Ease.Linear);
+                Actor.Animator.SetBool("isCrouching", true);
+                break;
+            case 2:
+                Actor.GameObject.transform.DORotate(new Vector3(0f, -90f, 0f), 0.1f).SetEase(Ease.Linear);
+                Actor.Animator.SetBool("isCrouching", true);
+                break;
+            case 3:
+                Actor.GameObject.transform.DORotate(new Vector3(0f, 0f, 0f), 0.1f).SetEase(Ease.Linear);
+                Actor.Animator.SetBool("isCrouching", true);
+                break;
+            case 4:
+                Actor.GameObject.transform.DORotate(new Vector3(0f, 180f, 0f), 0.1f).SetEase(Ease.Linear);
+                Actor.Animator.SetBool("isCrouching", true);
+                break;
+        }
     }
     
     private void TargetActors()
@@ -247,7 +252,7 @@ public class GridBehavior : MonoBehaviour
     {
         Vector2Int actorPos = new Vector2Int((int)Actor.GameObject.transform.position.x,
             (int)Actor.GameObject.transform.position.z);
-        List<Vector2Int> actorPosList = TileManager.Instance.GetReachableTiles(actorPos, Actor.Stat.MoveRange);
+        List<Vector2Int> actorPosList = TileManager.Instance.GetReachableTiles(actorPos, Actor.Stat.AttackRnage);
         
         return actorPosList.Contains(new Vector2Int((int)targetPos.x, (int)targetPos.z));
     }
@@ -294,10 +299,10 @@ public class GridBehavior : MonoBehaviour
         return Vector3Int.zero; // 모든 대상 주위에 유효한 타일이 없을 경우
     }
 
-    private void UpdateRotation(Transform player, Vector2 inputAxis, float smoothTime)
-    {
-        float targetAngle = Mathf.Atan2(inputAxis.x, inputAxis.y) * Mathf.Rad2Deg;
-        float angle = Mathf.SmoothDampAngle(player.eulerAngles.y, targetAngle, ref turnCalmVelocity, smoothTime);
-        player.rotation = Quaternion.Euler(0f, angle, 0f);
-    }
+    // private void UpdateRotation(Transform player, Vector2 inputAxis, float smoothTime)
+    // {
+    //     float targetAngle = Mathf.Atan2(inputAxis.x, inputAxis.y) * Mathf.Rad2Deg;
+    //     float angle = Mathf.SmoothDampAngle(player.eulerAngles.y, targetAngle, ref turnCalmVelocity, smoothTime);
+    //     player.rotation = Quaternion.Euler(0f, angle, 0f);
+    // }
 }

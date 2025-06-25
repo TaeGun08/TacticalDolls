@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   level: 1
   hp: 100
-  attack: 100
-  defense: 100
+  attack: 15
+  defense: 5
   moveRange: 5
+  attackRange: 5
   skills: []
   weapon: {fileID: -8985103076616876387, guid: 9098ebe93f92a804b808393bab6d1c39, type: 3}
   isDead: 0

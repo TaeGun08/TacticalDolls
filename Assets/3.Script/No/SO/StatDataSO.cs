@@ -10,6 +10,7 @@ public class StatDataSO : ScriptableObject, IStat
     public int attack;
     public int defense;
     public int moveRange;
+    public int attackRange;
     public List<SkillEffectHandlerBase> skills = new();
     public WeaponData weapon;
     public bool isDead;
@@ -22,6 +23,7 @@ public class StatDataSO : ScriptableObject, IStat
     public int Attack { get => attack; set => attack = value; }
     public int Defense { get => defense; set => defense = value; }
     public int MoveRange { get => moveRange; set => moveRange = value; }
+    public int AttackRnage { get => attackRange; set => attackRange = value; }
     public List<SkillEffectHandlerBase> Skills { get => skills; set => skills = value; }
     public WeaponData Weapon { get => weapon; set => weapon = value; }
 

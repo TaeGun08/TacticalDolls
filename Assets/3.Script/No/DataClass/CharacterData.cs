@@ -111,8 +111,9 @@ public class CharacterData : UnitParent
         runtimeStat.MaxHP = runtimeStat.HP;
         runtimeStat.Attack = baseStatSO.attack + characterLevel * 2 + weaponLevel * 5;
         runtimeStat.Defense = baseStatSO.defense + characterLevel * 2;
-        runtimeStat.MoveRange = baseStatSO.moveRange + characterLevel / 5; // 5레벨마다 1 증가
-
+        runtimeStat.MoveRange = baseStatSO.moveRange; // 5레벨마다 1 증가
+        runtimeStat.AttackRnage = baseStatSO.AttackRnage;
+        
         // 스킬 및 무기 정보 복사
         runtimeStat.Weapon = weapon;
 

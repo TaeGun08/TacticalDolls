@@ -153,7 +153,7 @@ public class SkillSelectSystem : MonoBehaviour
             : GameManager.Instance.MoveChoiceTile;
         
         RangeSystem.Instance.ResetAllTiles();
-        RangeSystem.Instance.ShowAttackRange(tempTile, currentTarget.Stat.MoveRange);  // TODO MoveRange -> AttackRange로 수정 필요
+        RangeSystem.Instance.ShowAttackRange(tempTile, currentTarget.Stat.AttackRnage);  // TODO MoveRange -> AttackRange로 수정 필요
 
         currentSkill = skillIndex;
         // SkillRangeSystem.Instance.ClearUsableTiles();
