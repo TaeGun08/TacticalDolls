@@ -344,7 +344,7 @@ public class GameManager : MonoBehaviour
         RangeSystem.Instance.ResetAllTiles();
         SelectedCharacterPanel.SetActive(false);
         
-        GameStartAction?.Invoke();
         UnitInitializeStarSetting();
+        GameStartAction?.Invoke();
     }
 }

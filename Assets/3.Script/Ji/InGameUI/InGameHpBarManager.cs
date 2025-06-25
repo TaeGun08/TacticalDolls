@@ -9,6 +9,18 @@ public class HpBarPack
     public Transform targetTransform { get; set; }
     public DrawHpBar drawHpBar { get; set; }
     public RectTransform drawHpBarRectTransform { get; set; }
+    public UnitParent target { get; set; }
+
+    public HpBarPack(Transform targetTransform, DrawHpBar drawHpBar,RectTransform drawHpBarRectTransform, UnitParent target)
+    {
+        this.targetTransform = targetTransform;
+        this.drawHpBar = drawHpBar;
+        this.drawHpBarRectTransform = drawHpBarRectTransform;
+        this.target = target;
+        
+        drawHpBar.SetUpHpBar(target);
+        drawHpBar.gameObject.SetActive(true);
+    }
 }
 
 public class InGameHpBarManager : MonoBehaviour
@@ -62,6 +74,7 @@ public class InGameHpBarManager : MonoBehaviour
                 out Vector2 localPoint
             );
 
+            Debug.Log("t.drawHpBarRectTransform.anchoredPosition");
             t.drawHpBarRectTransform.anchoredPosition = localPoint;
         }
     }
@@ -70,6 +83,7 @@ public class InGameHpBarManager : MonoBehaviour
     {
         //나중에 최적화
         List<UnitParent> targets = new List<UnitParent>();
+        
         targets.AddRange(GameManager.Instance.PlayerUnits);
         targets.AddRange(GameManager.Instance.EnemyUnits);
         
@@ -84,13 +98,7 @@ public class InGameHpBarManager : MonoBehaviour
         
         for (int i = 0; i < targets.Count; i++)
         {
-            hpBarPacks[i].targetTransform = targets[i].hpBarTransform; //유닛의 HpBar 트랜스폼 (할당 필요)
-            hpBarPacks[i].drawHpBarRectTransform = hpBars[i].transform as RectTransform; //RectTransform 형변환
-            
-            hpBarPacks[i].drawHpBar = hpBars[i];
-            hpBarPacks[i].drawHpBar.SetUpHpBar(targets[i]);
-            hpBarPacks[i].drawHpBar.gameObject.SetActive(true);
-            Debug.Log("1111111111111111111111");
+            hpBarPacks[i] = new HpBarPack(targets[i].hpBarTransform, hpBars[i], hpBars[i].transform as RectTransform, targets[i]);
             
             hpBarPacksIndex ++;
         }
@@ -106,6 +114,14 @@ public class InGameHpBarManager : MonoBehaviour
     
     private void CreateHpBarInstances(int count)
     {
+        StopCoroutine(SlipInintializeCoroutine(count));
+        StartCoroutine(SlipInintializeCoroutine(count));
+    }
+
+    private IEnumerator SlipInintializeCoroutine(int count)
+    {
+        yield return null;
+        
         for (int i = 0; i < count; i++)
         {
             DrawHpBar hpBar = Instantiate(drawHpBarPrefab, gameObject.transform);
