@@ -9,6 +9,7 @@ public class StatData : IStat
     [SerializeField] private int attack;
     [SerializeField] private int defense;
     [SerializeField] private int moveRange;
+    [SerializeField] private int attackRange;
     [SerializeField] private WeaponData weapon;
     [SerializeField] private bool isDead;
     [SerializeField] private bool isCompleteAction;
@@ -20,6 +21,7 @@ public class StatData : IStat
     public int Defense { get => defense; set => defense = value; }
     // public int Barrier { get; set; }
     public int MoveRange { get => moveRange; set => moveRange = value; }
+    public int AttackRnage { get => attackRange; set => attackRange = value; }
     public WeaponData Weapon { get => weapon; set => weapon = value; }
     public bool IsDead { get => isDead; set => isDead = value; }
     public bool IsCompleteAction { get => isCompleteAction; set => isCompleteAction = value; }

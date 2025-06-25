@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cinemachine;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -104,6 +106,15 @@ public class GridBehavior : MonoBehaviour
         await MovePlayerAlongPath(path, targetPos);
     }
 
+    public class CallBack
+    {
+        public Action<CinemachineVirtualCamera> startMove { get; set; }
+        public Action onCompleteMove { get; set; }
+    }
+    
+    public CallBack callback {get; private set;}
+    private bool isCameraMove = false;
+    
     /// <summary>
     /// 경로를 넣어주면 그 경로에 맞는 위치로 이동하는 함수
     /// </summary>
@@ -113,6 +124,14 @@ public class GridBehavior : MonoBehaviour
     {
         IsMove = true;
         Tile currentTile = TileManager.Instance.GetClosestTile(Actor.GameObject.transform.position);
+        
+        //harang 시작
+        if(Actor is CharacterData character)
+        {
+            callback.startMove?.Invoke(character.characterMiddleZoomCamera);
+            isCameraMove = true;
+        }
+        
         if (currentTile != null)
         {
             currentTile.isUsingTile = false;
@@ -121,6 +140,7 @@ public class GridBehavior : MonoBehaviour
         
         if (Actor?.Animator != null)
         {
+            Actor.Animator.SetBool("isCrouching", false);
             Actor.Animator.SetBool("isRunning", true);
         }
         
@@ -160,17 +180,7 @@ public class GridBehavior : MonoBehaviour
             Actor.Animator.SetBool("isRunning", false);
         }
 
-        switch (endNode.Tile.obstacleDir)
-        {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-        }
+        TurnCrouching(endNode);
         
         Tile newTile = TileManager.Instance.GetClosestTile(Actor.GameObject.transform.position);
         if (newTile != null)
@@ -179,7 +189,7 @@ public class GridBehavior : MonoBehaviour
             newTile.SetOccupant(Actor);
         }
 
-        if (IsAutoMove)
+        if (IsAutoMove && AttackRangeChecker(target))
         {
             List<IDamageAble> targets = new List<IDamageAble> { nearestTarget };
             await Actor.Excute(TurnManager.Instance.CurrentTurn == ActorParent.Player
@@ -192,6 +202,35 @@ public class GridBehavior : MonoBehaviour
         Actor = null;
         nearestTarget = null;
         IsMove = false;
+        
+        //harang 카메라 끝
+        if (isCameraMove)
+        {
+            callback.onCompleteMove?.Invoke();
+        }
+    }
+
+    private void TurnCrouching(Node endNode)
+    {
+        switch (endNode.Tile.obstacleDir)
+        {
+            case 1:
+                Actor.GameObject.transform.DORotate(new Vector3(0f, 90f, 0f), 0.1f).SetEase(Ease.Linear);
+                Actor.Animator.SetBool("isCrouching", true);
+                break;
+            case 2:
+                Actor.GameObject.transform.DORotate(new Vector3(0f, -90f, 0f), 0.1f).SetEase(Ease.Linear);
+                Actor.Animator.SetBool("isCrouching", true);
+                break;
+            case 3:
+                Actor.GameObject.transform.DORotate(new Vector3(0f, 0f, 0f), 0.1f).SetEase(Ease.Linear);
+                Actor.Animator.SetBool("isCrouching", true);
+                break;
+            case 4:
+                Actor.GameObject.transform.DORotate(new Vector3(0f, 180f, 0f), 0.1f).SetEase(Ease.Linear);
+                Actor.Animator.SetBool("isCrouching", true);
+                break;
+        }
     }
     
     private void TargetActors()
@@ -238,7 +277,7 @@ public class GridBehavior : MonoBehaviour
     {
         Vector2Int actorPos = new Vector2Int((int)Actor.GameObject.transform.position.x,
             (int)Actor.GameObject.transform.position.z);
-        List<Vector2Int> actorPosList = TileManager.Instance.GetReachableTiles(actorPos, Actor.Stat.MoveRange);
+        List<Vector2Int> actorPosList = TileManager.Instance.GetReachableTiles(actorPos, Actor.Stat.AttackRnage);
         
         return actorPosList.Contains(new Vector2Int((int)targetPos.x, (int)targetPos.z));
     }
@@ -285,10 +324,10 @@ public class GridBehavior : MonoBehaviour
         return Vector3Int.zero; // 모든 대상 주위에 유효한 타일이 없을 경우
     }
 
-    private void UpdateRotation(Transform player, Vector2 inputAxis, float smoothTime)
-    {
-        float targetAngle = Mathf.Atan2(inputAxis.x, inputAxis.y) * Mathf.Rad2Deg;
-        float angle = Mathf.SmoothDampAngle(player.eulerAngles.y, targetAngle, ref turnCalmVelocity, smoothTime);
-        player.rotation = Quaternion.Euler(0f, angle, 0f);
-    }
+    // private void UpdateRotation(Transform player, Vector2 inputAxis, float smoothTime)
+    // {
+    //     float targetAngle = Mathf.Atan2(inputAxis.x, inputAxis.y) * Mathf.Rad2Deg;
+    //     float angle = Mathf.SmoothDampAngle(player.eulerAngles.y, targetAngle, ref turnCalmVelocity, smoothTime);
+    //     player.rotation = Quaternion.Euler(0f, angle, 0f);
+    // }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Cinemachine;
 using UnityEngine;
 
 [System.Serializable]
@@ -18,7 +19,8 @@ public class CharacterData : UnitParent
 
     public override IStat Stat => runtimeStat;
 
-    public override Collider MainCollider { get; }
+    public override Collider MainCollider { get;}
+    
     public override GameObject GameObject => gameObject;
     public override int Team => 0;
     public override SkillParent[] HasSkills { get => hasSkills; set => hasSkills = value; }
@@ -30,6 +32,8 @@ public class CharacterData : UnitParent
     public SkillParent[] hasSkills;
     
     public Sprite characterIcon;
+    [field: SerializeField]
+    public CinemachineVirtualCamera characterMiddleZoomCamera { get; private set; }
 
     //InGame
     // private List<BuffParent> Buffs = new List<BuffParent>();
@@ -111,8 +115,9 @@ public class CharacterData : UnitParent
         runtimeStat.MaxHP = runtimeStat.HP;
         runtimeStat.Attack = baseStatSO.attack + characterLevel * 2 + weaponLevel * 5;
         runtimeStat.Defense = baseStatSO.defense + characterLevel * 2;
-        runtimeStat.MoveRange = baseStatSO.moveRange + characterLevel / 5; // 5레벨마다 1 증가
-
+        runtimeStat.MoveRange = baseStatSO.moveRange; // 5레벨마다 1 증가
+        runtimeStat.AttackRnage = baseStatSO.AttackRnage;
+        
         // 스킬 및 무기 정보 복사
         runtimeStat.Weapon = weapon;
 

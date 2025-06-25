@@ -57,10 +57,10 @@ public class CharacterSequenceManager : MonoBehaviour
             .SetEase(Ease.OutSine)
             .AsyncWaitForCompletion();
         
-        // 2. 컷신 재생
+        // 2. 컷신 재생 -> 폐기
         //동영상으로 교체
-        if (cashedSkillComponents.ultClip != null) //ultClip은 애니메이션 클립입니다. 변경하기
-            await PlayCutscene(cashedSkillComponents.ultClip);
+        // if (cashedSkillComponents.ultClip != null) //ultClip은 애니메이션 클립입니다. 변경하기
+        //     await PlayCutscene(cashedSkillComponents.ultClip);
         
         
         // 3. 애니메이션 & 탄환 발사 타임라인 재생
@@ -150,16 +150,16 @@ public class CharacterSequenceManager : MonoBehaviour
         return Task.CompletedTask;
     }
     
-    public async Task PlayCutscene(VideoClip videoClip)
-    {
-        //ToDo :: 동영상 실행으로 수정
-        await Task.Delay((int)((videoClip ? videoClip.length : 1f) * 1000)); //비디오 시간만큼 대기
-    }
+    // public async Task PlayCutscene(VideoClip videoClip)
+    // {
+    //
+    //     await Task.Delay((int)((videoClip ? videoClip.length : 1f) * 1000)); //비디오 시간만큼 대기
+    // }
     
-    private void CharacterFocus(Vector3 go)
-    {
-        touchCamera.MoveCameraTo(go);
-    }
+    // private void CharacterFocus(Vector3 go)
+    // {
+    //     touchCamera.MoveCameraTo(go);
+    // }
 
     public void ProjectileSignalListener() //발사체가 맞을 경우 수치를 틱으로 나눠 적용합니다.
     {
@@ -167,9 +167,9 @@ public class CharacterSequenceManager : MonoBehaviour
         cashedSkill.AffectSkillAction(cashedSkillTargets);
     }
     
-    public void TouchCameraSignalListener()
-    {
-        Debug.Log("TouchCameraSignalListener");
-        touchCamera.MoveCameraTo(cashedSkillComponents.characterData.gameObject.transform.position);
-    }
+    // public void TouchCameraSignalListener()
+    // {
+    //     Debug.Log("TouchCameraSignalListener");
+    //     touchCamera.MoveCameraTo(cashedSkillComponents.characterData.gameObject.transform.position);
+    // }
 }

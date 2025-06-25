@@ -114,7 +114,7 @@ public class RangeSystem : MonoBehaviour
             ? TileManager.Instance.GetCurrentTileByIDamageAble(attackAble)
             : GameManager.Instance.MoveChoiceTile;
         
-        ShowAttackRange(tempTile, attackAble.Stat.MoveRange);
+        ShowAttackRange(tempTile, attackAble.Stat.AttackRnage);
         usableTiles.Clear();
         damageAbles.Clear();
         

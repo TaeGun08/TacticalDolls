@@ -11,6 +11,7 @@ public interface IStat
     int Defense { get; set; }
     // int Barrier { get; set; }
     int MoveRange { get; set; }
+    int AttackRnage { get; set; }
     WeaponData Weapon { get; set; }
     
     bool IsDead { get; set;  }
