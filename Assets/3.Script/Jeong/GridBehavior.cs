@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Cinemachine;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -104,6 +106,15 @@ public class GridBehavior : MonoBehaviour
         await MovePlayerAlongPath(path, targetPos);
     }
 
+    public class CallBack
+    {
+        public Action<CinemachineVirtualCamera> startMove { get; set; }
+        public Action onCompleteMove { get; set; }
+    }
+    
+    public CallBack callback {get; private set;}
+    private bool isCameraMove = false;
+    
     /// <summary>
     /// 경로를 넣어주면 그 경로에 맞는 위치로 이동하는 함수
     /// </summary>
@@ -113,6 +124,14 @@ public class GridBehavior : MonoBehaviour
     {
         IsMove = true;
         Tile currentTile = TileManager.Instance.GetClosestTile(Actor.GameObject.transform.position);
+        
+        //harang 시작
+        if(Actor is CharacterData character)
+        {
+            callback.startMove?.Invoke(character.characterMiddleZoomCamera);
+            isCameraMove = true;
+        }
+        
         if (currentTile != null)
         {
             currentTile.isUsingTile = false;
@@ -183,6 +202,12 @@ public class GridBehavior : MonoBehaviour
         Actor = null;
         nearestTarget = null;
         IsMove = false;
+        
+        //harang 카메라 끝
+        if (isCameraMove)
+        {
+            callback.onCompleteMove?.Invoke();
+        }
     }
 
     private void TurnCrouching(Node endNode)
