@@ -6,7 +6,6 @@ namespace Michsky.UI.Dark
     public class ScrollForMore : MonoBehaviour
     {
         [Header("Resources")]
-        public Scrollbar listScrollbar;
         public Animator objectAnimator;
 
         [Header("Settings")]
@@ -22,19 +21,19 @@ namespace Michsky.UI.Dark
         {
             if (invertValue == false)
             {
-                if (objectAnimator != null && listScrollbar.value >= fadeOutValue)
+                if (objectAnimator != null)
                     objectAnimator.Play("SFM In");
 
-                else if (objectAnimator != null && listScrollbar.value <= fadeOutValue)
+                else if (objectAnimator != null)
                     objectAnimator.Play("SFM Out");
             }
             
             else
             {
-                if (objectAnimator != null && listScrollbar.value <= fadeOutValue)
+                if (objectAnimator != null)
                     objectAnimator.Play("SFM In");
 
-                else if (objectAnimator != null && listScrollbar.value >= fadeOutValue)
+                else if (objectAnimator != null)
                     objectAnimator.Play("SFM Out");
             }
         }
