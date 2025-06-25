@@ -531,7 +531,7 @@ MonoBehaviour:
     splitHitCount: 7
     vfxDuration: 1
   unitSkillComponents:
-    characterData: {fileID: 0}
+    characterData: {fileID: 8549023517635794372}
     skillIconSprite: {fileID: 0}
     director: {fileID: 1176196717239776793}
     ultClip: {fileID: 0}
@@ -584,6 +584,8 @@ PlayableDirector:
     value: {fileID: 867659351535554523}
   - key: {fileID: 6501264299441367849, guid: b5017f6ca2688dd4ead8724ebfcfe352, type: 2}
     value: {fileID: 4359402974693123557}
+  - key: {fileID: 6345727720349802581, guid: b5017f6ca2688dd4ead8724ebfcfe352, type: 2}
+    value: {fileID: 0}
   m_ExposedReferences:
     m_References:
     - 007511b9dbedd7e48810b3fac79743c3: {fileID: 0}

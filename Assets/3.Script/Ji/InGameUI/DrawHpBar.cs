@@ -11,7 +11,6 @@ namespace Shapes {
         public UnitParent unit { get; set; }
         private Tween widthTween;
         private Tween widthBackGroundTween;
-        private bool isOnUI { get; set; }= true;
         
         private float fillAmount = 1;
         private float fillBackGroundAmount = 1;
@@ -22,7 +21,7 @@ namespace Shapes {
         private string unitName = "UnitName";
 
         public override void DrawPanelShapes( Rect rect, ImCanvasContext ctx ) {
-            if( selectedColorGradient == null || unit == null || isOnUI == false)
+            if( selectedColorGradient == null || unit == null)
                 return; // just in case it hasn't initialized
 
             // Draw black background:
