@@ -121,6 +121,7 @@ public class GridBehavior : MonoBehaviour
         
         if (Actor?.Animator != null)
         {
+            Actor.Animator.SetBool("isCrouching", false);
             Actor.Animator.SetBool("isRunning", true);
         }
         
@@ -159,16 +160,24 @@ public class GridBehavior : MonoBehaviour
         {
             Actor.Animator.SetBool("isRunning", false);
         }
-
+        
         switch (endNode.Tile.obstacleDir)
         {
             case 1:
+                Actor.GameObject.transform.DORotate(new Vector3(0f, 90f, 0f), 0.1f).SetEase(Ease.Linear);
+                Actor.Animator.SetBool("isCrouching", true);
                 break;
             case 2:
+                Actor.GameObject.transform.DORotate(new Vector3(0f, -90f, 0f), 0.1f).SetEase(Ease.Linear);
+                Actor.Animator.SetBool("isCrouching", true);
                 break;
             case 3:
+                Actor.GameObject.transform.DORotate(new Vector3(0f, 0f, 0f), 0.1f).SetEase(Ease.Linear);
+                Actor.Animator.SetBool("isCrouching", true);
                 break;
             case 4:
+                Actor.GameObject.transform.DORotate(new Vector3(0f, 180f, 0f), 0.1f).SetEase(Ease.Linear);
+                Actor.Animator.SetBool("isCrouching", true);
                 break;
         }
         
