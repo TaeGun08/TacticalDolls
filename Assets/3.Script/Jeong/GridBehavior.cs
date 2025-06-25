@@ -188,7 +188,7 @@ public class GridBehavior : MonoBehaviour
             newTile.SetOccupant(Actor);
         }
 
-        if (IsAutoMove)
+        if (IsAutoMove && AttackRangeChecker(target))
         {
             List<IDamageAble> targets = new List<IDamageAble> { nearestTarget };
             await Actor.Excute(TurnManager.Instance.CurrentTurn == ActorParent.Player
