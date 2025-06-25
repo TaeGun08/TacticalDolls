@@ -234,7 +234,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpBarTransform: {fileID: 383261267087816103}
   EnemyID: 102
-  PrefabName: EnemyBlade
+  prefabName: Blade
   baseStatSO: {fileID: 11400000, guid: 49ab79f5437eb0741a6b012b36dd5e17, type: 2}
   runtimeStat:
     level: 1

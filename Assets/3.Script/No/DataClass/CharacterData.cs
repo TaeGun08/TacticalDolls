@@ -8,8 +8,9 @@ public class CharacterData : UnitParent
 {
     private static readonly int ATTACKED = Animator.StringToHash("Attacked");
     public int CharacterID;
-    public string PrefabName;
-
+    public override string PrefabName { get => prefabName; set => prefabName = value; }
+    public string prefabName;
+    
     [SerializeField] private StatDataSO baseStatSO;
     [SerializeField] private StatData runtimeStat;
     private IDamageAble damageAbleImplementation;
