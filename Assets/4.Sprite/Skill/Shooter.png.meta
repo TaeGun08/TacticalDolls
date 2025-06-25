@@ -110,7 +110,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171459_0"
+      name: Skill 1
       rect:
         serializedVersion: 2
         x: 12
@@ -118,7 +118,7 @@ TextureImporter:
         width: 68
         height: 68
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -131,7 +131,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171459_1"
+      name: Skill 2
       rect:
         serializedVersion: 2
         x: 12
@@ -139,7 +139,7 @@ TextureImporter:
         width: 68
         height: 68
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -152,7 +152,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171459_2"
+      name: Skill 3
       rect:
         serializedVersion: 2
         x: 12
@@ -160,7 +160,7 @@ TextureImporter:
         width: 68
         height: 68
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -181,7 +181,7 @@ TextureImporter:
         width: 68
         height: 68
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -202,7 +202,7 @@ TextureImporter:
         width: 68
         height: 68
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -225,9 +225,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171459_0": 1526158065
-      "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171459_1": -2049477658
-      "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171459_2": 1009070799
+      Skill 1: 1526158065
+      Skill 2: -2049477658
+      Skill 3: 1009070799
       "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171459_3": 622563381
       "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171459_4": 1983834091
   mipmapLimitGroupName: 

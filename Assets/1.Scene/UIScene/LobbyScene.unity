@@ -5254,6 +5254,10 @@ MonoBehaviour:
   characterHp: {fileID: 459680564}
   characterDefense: {fileID: 240557711}
   weaponLevel: {fileID: 303119605}
+  skillImage:
+  - {fileID: 1801228925}
+  - {fileID: 18247295}
+  - {fileID: 1277329727}
   weaponBackground: {fileID: 1697822604}
   weaponImage: {fileID: 576515283}
   characterIconBackground: {fileID: 4285689931678332448, guid: f8f5b2535a7b6954b8873bc801a1a68c,

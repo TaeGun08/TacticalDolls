@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 35b9039698aec7b42b40256e8dfeecec
+guid: 8cbf5b48000f3f44b82c301f560f4eb4
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,106 +110,106 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171730_0"
+      name: Skill 1
       rect:
         serializedVersion: 2
-        x: 27
-        y: 381
+        x: 9
+        y: 492
         width: 67
         height: 67
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a123a70492b866f499cf0ae71576c755
-      internalID: -25400641
+      spriteID: 33d2cee6b9dd6a74a96bb041459b0571
+      internalID: 1862759066
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171730_1"
+      name: Skill 2
       rect:
         serializedVersion: 2
-        x: 26
-        y: 293
+        x: 9
+        y: 402
         width: 67
         height: 67
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 07cffdc7a4e1b1249bd5ea2633e15cb1
-      internalID: -1516468676
+      spriteID: e2f5838ef88f87647a74d9bc048dba43
+      internalID: -1776908806
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171730_2"
+      name: Skill 3
       rect:
         serializedVersion: 2
-        x: 26
-        y: 206
+        x: 9
+        y: 312
         width: 67
         height: 67
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 066ddb101cec48b46b3a5c30026c591e
-      internalID: -622290305
+      spriteID: 04b016540b2b0f240916a43543eb9776
+      internalID: 2068477716
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171730_3"
+      name: "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171528_3"
       rect:
         serializedVersion: 2
-        x: 26
-        y: 111
+        x: 9
+        y: 213
         width: 67
         height: 67
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 033b0ff9f6b10094e85f52b1006ed521
-      internalID: -1584629639
+      spriteID: 3c44eda89280d3e45a27293d37fc50ce
+      internalID: 1055721412
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171730_4"
+      name: "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171528_4"
       rect:
         serializedVersion: 2
-        x: 26
-        y: 12
+        x: 9
+        y: 95
         width: 67
         height: 67
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 85bf932ecc365e4478387e9cd600fac4
-      internalID: 1340523690
+      spriteID: 01e845634d25026428da15b9eb56db9c
+      internalID: 925993088
       vertices: []
       indices: 
       edges: []
@@ -225,11 +225,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171730_0": -25400641
-      "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171730_1": -1516468676
-      "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171730_2": -622290305
-      "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171730_3": -1584629639
-      "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171730_4": 1340523690
+      Skill 1: 1862759066
+      Skill 2: -1776908806
+      Skill 3: 2068477716
+      "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171528_3": 1055721412
+      "\uD654\uBA74 \uCEA1\uCC98 2025-06-25 171528_4": 925993088
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
