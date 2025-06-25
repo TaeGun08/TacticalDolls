@@ -32,8 +32,6 @@ public class CharacterData : UnitParent
     public SkillParent[] hasSkills;
     
     public Sprite characterIcon;
-    [field: SerializeField]
-    public CinemachineVirtualCamera characterMiddleZoomCamera { get; private set; }
 
     //InGame
     // private List<BuffParent> Buffs = new List<BuffParent>();
