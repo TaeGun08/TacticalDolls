@@ -48,12 +48,12 @@ public class GridBehavior : MonoBehaviour
     
     public class CallBack
     {
-        public Action<CharacterData> startMove { get; set; }
-        public Action onCompleteMove { get; set; }
+        public Action<Transform> startMove { get; set; }
+        public Action<Transform> onCompleteMove { get; set; }
     }
 
     public CallBack callback;
-    private bool isCameraMove = false;
+    // private bool isCameraMove = false;
     
     private void Awake()
     {
@@ -128,10 +128,9 @@ public class GridBehavior : MonoBehaviour
         Tile currentTile = TileManager.Instance.GetClosestTile(Actor.GameObject.transform.position);
         
         //harang 시작
-        if(Actor is CharacterData character)
+        if(Actor is CharacterData character) //명시적 형변환 -> Actor가 CharacterData일 경우
         {
-            callback.startMove?.Invoke(character);
-            isCameraMove = true;
+            callback.startMove?.Invoke(character.transform);
         }
         
         if (currentTile != null)
@@ -198,6 +197,12 @@ public class GridBehavior : MonoBehaviour
                 ? Random.Range(0, 3) : 0, targets, targets[0].GameObject.transform);
         }
         
+        //harang 카메라 끝
+        if(Actor is CharacterData _character) //명시적 형변환 -> Actor가 CharacterData일 경우
+        {
+            callback.onCompleteMove?.Invoke(_character.transform);
+        }
+        
         Actor.Stat.IsCompleteAction = true;
 
         endNode = null;
@@ -205,11 +210,7 @@ public class GridBehavior : MonoBehaviour
         nearestTarget = null;
         IsMove = false;
         
-        //harang 카메라 끝
-        if (isCameraMove)
-        {
-            callback.onCompleteMove?.Invoke();
-        }
+
     }
 
     private void TurnCrouching(Node endNode)
