@@ -170,6 +170,7 @@ public class OrderRoom : MonoBehaviour
         {
             if (PlayerManager.Instance.usingCharacterData[i].CharacterID == selectedCharacter.CharacterID)
             {
+                itemPrices[0].text = "<보유 중>";
                 itemButtons[0].interactable = false;
                 break;
             }
@@ -186,6 +187,7 @@ public class OrderRoom : MonoBehaviour
             {
                 if (PlayerManager.Instance.usingWeaponData[j].ID == selectedWeapons[i].ID)
                 {
+                    itemPrices[i+1].text = "<보유 중>";
                     itemButtons[i+1].interactable = false;
                     break;
                 }

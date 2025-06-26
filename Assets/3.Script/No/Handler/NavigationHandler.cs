@@ -65,6 +65,11 @@ public class NavigationHandler : MonoBehaviour
             panelHistory.Push(currentPanel);
             renderHistory.Push(currentRender);
         }
+
+        if (pushToHistory && panel == CharacterRoom)
+        {
+            CharacterRoom.GetComponent<CharacterRoom>().currentIndex = 0;
+        }
         
         Lobby.SetActive(false);
         Stage.SetActive(false);
