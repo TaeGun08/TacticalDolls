@@ -77,7 +77,7 @@ public class WeaponRoom : MonoBehaviour
     private void SetInfoWeapon(WeaponData weaponData)
     {
         weaponName.text = weaponData.WeaponName;
-        weaponUser.text = GetWeaponUserOrNull() + " Using";
+        weaponUser.text = GetWeaponUserOrNull() + " 사용 중";
         weaponLevel.text = "Lv. " + weaponData.Level + "/ 20";
         weaponAttack.text = weaponData.Damage.ToString();
     }
