@@ -41,7 +41,7 @@ public class CharacterSequenceManager : MonoBehaviour
         cashedSkillComponents =  skillSample.unitSkillComponents;
         cashedSkillTargets =  listeners;
         
-        await cashedSkill.StartSkillAction(listeners);
+        // await cashedSkill.StartSkillAction(listeners);
         
         // 1. 포커스 처리
         // CharacterFocus(cashedSkillComponents.characterData.transform.position);
@@ -89,7 +89,7 @@ public class CharacterSequenceManager : MonoBehaviour
         // }
         
 
-        await cashedSkill.EndSkillAction(listeners);
+        // await cashedSkill.EndSkillAction(listeners);
         
         await cashedSkillComponents.characterData.gameObject.transform.DORotateQuaternion(originalRotation, 0.2f).SetEase(Ease.InSine).AsyncWaitForCompletion(); //원래 회전값으로 복귀
 
