@@ -45,7 +45,7 @@ public class CharacterSequenceManager : MonoBehaviour
         
         // 1. 포커스 처리
         // CharacterFocus(cashedSkillComponents.characterData.transform.position);
-        // touchCamera.MoveCameraTo(cashedSkillComponents.characterData.transform.position);
+        touchCamera.MoveCameraTo(cashedSkillComponents.characterData.transform.position);
             
         originalRotation = cashedSkillComponents.characterData.gameObject.transform.rotation; //원래 회전값 저장
         
@@ -77,6 +77,8 @@ public class CharacterSequenceManager : MonoBehaviour
             
             await AwaitTimelineEnd(cashedSkillComponents.director);
         }
+        
+        touchCamera.MoveCameraTo(cashedSkillComponents.characterData.transform.position);
         
         //적과 자신 사이 중간을 포커스
         // {   
