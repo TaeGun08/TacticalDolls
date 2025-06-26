@@ -124,8 +124,8 @@ public class GridBehavior : MonoBehaviour
     /// <param name="target"></param>
     public async Task MovePlayerAlongPath(List<Node> path, Vector3 target)
     {
-        IsMove = true;
-        Tile currentTile = TileManager.Instance.GetClosestTile(Actor.GameObject.transform.position);
+        IsMove = true; //이동 시작
+        Tile currentTile = TileManager.Instance.GetClosestTile(Actor.GameObject.transform.position); //현재 움직일 Actor의 타일을 받아 옴
         
         //harang 시작
         if(Actor is CharacterData character) //명시적 형변환 -> Actor가 CharacterData일 경우
@@ -133,35 +133,39 @@ public class GridBehavior : MonoBehaviour
             callback.startMove?.Invoke(character.transform);
         }
         
-        if (currentTile != null)
+        if (currentTile != null) //현재 타일이 null이 아니라면 이동 가능 타일로 변경
         {
             currentTile.isUsingTile = false;
             currentTile.SetOccupant(null);
         }
         
-        if (Actor?.Animator != null)
+        if (Actor?.Animator != null) //Actor에 Animator가 존재한다면 애니메이션 재생
         {
             Actor.Animator.SetBool("isCrouching", false);
             Actor.Animator.SetBool("isRunning", true);
         }
         
+        //Actor의 X, Z 좌표를 담아주기 위한 변수
         Vector2Int actorPos = new Vector2Int((int)Actor.GameObject.transform.position.x,
             (int)Actor.GameObject.transform.position.z);
         List<Vector2Int> actorPosList = TileManager.Instance.GetReachableTiles(actorPos, Actor.Stat.MoveRange);
         
         foreach (Node node in path)
         {
+            //타일 사이즈에 맞게 파인딩한 노드 위치로 이동하기 위한 좌표
             Vector3 targetPos = new Vector3(
                 node.Position.x * tileManager.tileSize,
                 0.5f,
                 node.Position.z * tileManager.tileSize
             );
 
-            _ = NodeMovement(targetPos);
+            //이동 시작
+            await NodeMovement(targetPos);
             
+            //끝난 노드
             endNode = node;
             
-            if (IsAutoMove)
+            if (IsAutoMove) //자동 이동 중일 때 적용
             {
                 if (AttackRangeChecker(target)) break;
                 if (MoveRangeChecker(actorPosList, targetPos) == false) break;
@@ -173,7 +177,7 @@ public class GridBehavior : MonoBehaviour
             Actor.Animator.SetBool("isRunning", false);
         }
 
-        TurnCrouching(endNode);
+        CrouchingRotate(endNode);
         
         Tile newTile = TileManager.Instance.GetClosestTile(Actor.GameObject.transform.position);
         if (newTile != null) //현재 Actor가 서있는 위치를 탐색하지 못하게 함
@@ -227,7 +231,11 @@ public class GridBehavior : MonoBehaviour
         IsMove = false;
     }
     
-    private void TurnCrouching(Node endNode)
+    /// <summary>
+    /// 엄폐에 맞춰서 회전 방향을 결정
+    /// </summary>
+    /// <param name="endNode"></param>
+    private void CrouchingRotate(Node endNode)
     {
         switch (endNode.Tile.obstacleDir)
         {
@@ -245,9 +253,13 @@ public class GridBehavior : MonoBehaviour
                 break;
         }
         
+        if (endNode.Tile.obstacleDir == 0) return;
         Actor.Animator.SetBool("isCrouching", true);
     }
     
+    /// <summary>
+    /// Player나 Enemy 턴 때, 자신을 제외한 상대를 추적하기 위해 리스트를 담는 함수
+    /// </summary>
     private void TargetActors()
     {
         switch (TurnManager.Instance.CurrentTurn)
@@ -283,11 +295,22 @@ public class GridBehavior : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 자신의 이동 범위 이상을 이동하지 못하게 체크하기 위한 함수
+    /// </summary>
+    /// <param name="actorPos"></param>
+    /// <param name="targetPos"></param>
+    /// <returns></returns>
     private bool MoveRangeChecker(List<Vector2Int> actorPos, Vector3 targetPos)
     {
         return actorPos.Contains(new Vector2Int((int)targetPos.x, (int)targetPos.z));
     }
     
+    /// <summary>
+    /// 자신의 공격 사거리에 상대가 있는지 체크하기 위한 함수
+    /// </summary>
+    /// <param name="targetPos"></param>
+    /// <returns></returns>
     private bool AttackRangeChecker(Vector3 targetPos)
     {
         Vector2Int actorPos = new Vector2Int((int)Actor.GameObject.transform.position.x,

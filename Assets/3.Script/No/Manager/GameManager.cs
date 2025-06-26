@@ -227,6 +227,7 @@ public class GameManager : MonoBehaviour
             case TargetType.Enemy:
                 if (hit.collider.TryGetComponent(out EnemyData enemyData))
                 {
+                    Debug.Log("Enemy 확인");
                     currentSkillTargetTile =
                         TileManager.Instance.GetCurrentTileByIDamageAble(enemyData);
                 }
@@ -240,7 +241,7 @@ public class GameManager : MonoBehaviour
     {
         isTargetInAttackRange =
             RangeSystem.Instance.attackableTiles.Contains(currentSkillTargetTile);
-
+        
         if (isTargetInAttackRange)
         {
             SkillSelectSystem.Instance.CashedDamageAbles = 
@@ -248,6 +249,8 @@ public class GameManager : MonoBehaviour
                     currentCharacter, 
                     currentSkillTargetTile, 
                     skillUI.currentSkill);
+            Debug.Log($"{SkillSelectSystem.Instance.CashedDamageAbles} 값이 할당 됨");
+            Debug.Log($"{currentCharacter} 현재 캐릭터");
             SkillSelectSystem.Instance.selectButton.interactable = true;
         }
     }

@@ -62,7 +62,6 @@ public class SkillSelectSystem : MonoBehaviour
             
             IsSelectingSkill = false;
             
-            
             if (GameManager.Instance.MoveChoiceTile != null)
             {
                 GridBehavior.Instance.Actor = currentTarget;
