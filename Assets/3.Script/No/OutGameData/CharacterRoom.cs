@@ -23,6 +23,13 @@ public class CharacterRoom : MonoBehaviour
     [SerializeField] private TMP_Text weaponLevel;
     
     [SerializeField] private Image[] skillImage;
+    [SerializeField] private Button[] skillButtons;
+    
+    [SerializeField] private GameObject skillDetailPanel;
+    [SerializeField] private Image skillDetailIcon;
+    [SerializeField] private TMP_Text skillName;
+    [SerializeField] private TMP_Text skillDescription;
+    [SerializeField] private Button skillDetailCancel;
     
     [SerializeField] private Image weaponBackground;
     [SerializeField] private Image weaponImage;
@@ -32,11 +39,28 @@ public class CharacterRoom : MonoBehaviour
     private List<CharacterData> playerCharacters;
 
     public CharacterData SelectedCharacter { get; private set; }
-    private int currentIndex;
+    public int currentIndex = 0;
     private Transform currentIconBackground;
     
     public NavigationHandler navigation;
-    
+
+    private void Start()
+    {
+        for (int i = 0; i < skillButtons.Length; i++)
+        {
+            var i1 = i;
+            skillButtons[i].onClick.AddListener(() =>
+            {
+                OpenSkillDetailPanel(i1);
+            });
+        }
+        
+        skillDetailCancel.onClick.AddListener(() =>
+        {
+            skillDetailPanel.SetActive(false);
+        });
+    }
+
     private void OnEnable()
     {
         playerCharacters = PlayerManager.Instance.usingCharacterData;
@@ -73,7 +97,6 @@ public class CharacterRoom : MonoBehaviour
             });
         }
         
-        currentIndex = 0;
         SelectedCharacter = playerCharacters[currentIndex];
         
         SetUIPlayerCharacters();
@@ -120,7 +143,7 @@ public class CharacterRoom : MonoBehaviour
 
     private void SetInfoPlayerCharacter(CharacterData characterData)
     {
-        characterPosition.text = "No Position";
+        characterPosition.text = characterData.position;
         characterName.text = characterData.PrefabName;
         characterLevel.text = "Lv. " + characterData.Stat.Level + "/ 20";
         characterAttack.text = characterData.Stat.Attack.ToString();
@@ -135,6 +158,15 @@ public class CharacterRoom : MonoBehaviour
         
         weaponBackground.color = characterData.Stat.Weapon.SetWeaponBackgroundColor();
         weaponImage.sprite = characterData.Stat.Weapon.WeaponIcon;
+    }
+
+    private void OpenSkillDetailPanel(int index)
+    {
+        skillDetailIcon.sprite = skillImage[index].sprite;
+        skillName.text = SelectedCharacter.HasSkills[index].skillName;
+        skillDescription.text = SelectedCharacter.HasSkills[index].skillInfoText;
+        
+        skillDetailPanel.SetActive(true);
     }
     
     public async void RequestUpdateCharacterLevelUp()
