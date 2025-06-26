@@ -131,6 +131,11 @@ public class RangeSystem : MonoBehaviour
         HighlightAllTilesInRange(currentTile, skill.rangeType, skill.unitSkillDetails.areaOfEffect);
         SetDamageAbles();
 
+        for (int i = 0; i < damageAbles.Count; i++)
+        {
+            Debug.Log($" damageAbles {i} : {damageAbles[i].GameObject.name}");
+        }
+        
         return damageAbles;
         
         void HighlightAllTilesInRange(Tile centerTile, RangeType rangeType, int range)
