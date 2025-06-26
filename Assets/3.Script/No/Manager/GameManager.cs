@@ -187,87 +187,7 @@ public class GameManager : MonoBehaviour
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
                         out RaycastHit unitHit, 100f, unitLayer | tileLayer))
                 {
-                    int currentSkillIndex = SkillSelectSystem.Instance.GetCurrentSkillIndex();
-                    switch (currentCharacter.HasSkills[currentSkillIndex].targetType)
-                    {
-                        case TargetType.Tile:
-                            if (unitHit.collider.TryGetComponent(out Tile tile))
-                            {
-                                currentSkillTargetTile = tile;
-                                isTargetInAttackRange =
-                                    RangeSystem.Instance.attackableTiles.Contains(currentSkillTargetTile);
-
-                                if (isTargetInAttackRange)
-                                {
-                                    SkillSelectSystem.Instance.CashedDamageAbles = 
-                                        RangeSystem.Instance.ShowSkillRange(
-                                            currentCharacter, 
-                                            currentSkillTargetTile, 
-                                            skillUI.currentSkill);
-                                    Debug.Log($"Gm SkillSelectSystem.Instance.CashedDamageAbles.Count {SkillSelectSystem.Instance.CashedDamageAbles.Count}");
-                                    SkillSelectSystem.Instance.selectButton.interactable = true;
-                                }
-                            }
-                            else
-                            {
-                                Debug.Log("지정 대상이 잘못되었습니다.");
-                            }
-                            break;
-                        case TargetType.Ally:
-                            if (unitHit.collider.TryGetComponent(out CharacterData characterData))
-                            {
-                                currentSkillTargetTile =
-                                    TileManager.Instance.GetCurrentTileByIDamageAble(characterData);
-                                isTargetInAttackRange =
-                                    RangeSystem.Instance.attackableTiles.Contains(currentSkillTargetTile);
-
-                                if (isTargetInAttackRange)
-                                {
-                                    CurrentSkillTarget = characterData;
-
-                                    SkillSelectSystem.Instance.CashedDamageAbles = 
-                                        RangeSystem.Instance.ShowSkillRange(
-                                            currentCharacter, 
-                                            currentSkillTargetTile, 
-                                            skillUI.currentSkill);
-                                    Debug.Log($"Gm SkillSelectSystem.Instance.CashedDamageAbles.Count {SkillSelectSystem.Instance.CashedDamageAbles.Count}");
-                                    SkillSelectSystem.Instance.selectButton.interactable = true;
-                                }
-                            }
-                            else
-                            {
-                                Debug.Log("지정 대상이 잘못되었습니다.");
-                            }
-                            break;
-                        case TargetType.Enemy:
-                            if (unitHit.collider.TryGetComponent(out EnemyData enemyData))
-                            {
-                                currentSkillTargetTile =
-                                    TileManager.Instance.GetCurrentTileByIDamageAble(enemyData);
-                                isTargetInAttackRange =
-                                    RangeSystem.Instance.attackableTiles.Contains(currentSkillTargetTile);
-
-                                if (isTargetInAttackRange)
-                                {
-                                    CurrentSkillTarget = enemyData;
-
-                                    SkillSelectSystem.Instance.CashedDamageAbles = 
-                                        RangeSystem.Instance.ShowSkillRange(
-                                            currentCharacter, 
-                                            currentSkillTargetTile, 
-                                            skillUI.currentSkill);
-                                    Debug.Log($"Gm SkillSelectSystem.Instance.CashedDamageAbles.Count {SkillSelectSystem.Instance.CashedDamageAbles.Count}");
-                                    SkillSelectSystem.Instance.selectButton.interactable = true;
-                                }
-                            }
-                            else
-                            {
-                                Debug.Log("지정 대상이 잘못되었습니다.");
-                            }
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
+                    InputHitTarget(unitHit);
                 }
             }
             else
@@ -275,56 +195,112 @@ public class GameManager : MonoBehaviour
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
                         out RaycastHit characterHit, 100f, unitLayer))
                 {
-                    if (characterHit.collider.TryGetComponent(out CharacterData characterData))
-                    {
-                        currentCharacter = characterData;
-                    }
-                    else return;
-
-                    // TODO 행동 완료 UI 추가
-
-                    if (currentCharacter != null && !currentCharacter.Stat.IsCompleteAction)
-                    {
-                        RangeSystem.Instance.ResetAllTiles();
-                        endTurnBtn.gameObject.SetActive(true);
-                        skillUI.Open(currentCharacter);
-                        MoveChoiceTile = null;
-                        RangeSystem.Instance.ShowMoveRange(
-                            TileManager.Instance.GetCurrentTileByIDamageAble(currentCharacter),
-                            currentCharacter.Stat.MoveRange);
-                    }
+                    InputSelectCharacter(characterHit);
                 }
                 else if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
-                             out var tileHit))
+                             out RaycastHit tileHit))
                 {
-                    if (currentCharacter == null) return;
-
-                    Tile targetTile = tileHit.collider.GetComponent<Tile>();
-                    if (targetTile == null || !targetTile.isWalkable) return;
-
-                    if (!RangeSystem.Instance.IsTileInMoveRange(targetTile))
-                    {
-                        Debug.Log("이동 불가능한 범위입니다.");
-                        RangeSystem.Instance.ResetAllTiles();
-                        endTurnBtn.gameObject.SetActive(false);
-                        skillUI.Close();
-
-                        MoveChoiceTile = null;
-                        return;
-                    }
-
-                    if (MoveChoiceTile != null)
-                    {
-                        MoveChoiceTile.Highlight(Color.white);
-                    }
-
-                    MoveChoiceTile = targetTile;
-                    MoveChoiceTile.Highlight(Color.magenta);
+                    InputSelectTile(tileHit);
                 }
             }
         }
     }
 
+    private void InputHitTarget(RaycastHit hit)
+    {
+        int currentSkillIndex = SkillSelectSystem.Instance.GetCurrentSkillIndex();
+        switch (currentCharacter.HasSkills[currentSkillIndex].targetType)
+        {
+            case TargetType.Tile:
+                if (hit.collider.TryGetComponent(out Tile tile))
+                {
+                    currentSkillTargetTile = tile;
+                }
+                break;
+            case TargetType.Ally:
+                if (hit.collider.TryGetComponent(out CharacterData characterData))
+                {
+                    currentSkillTargetTile =
+                        TileManager.Instance.GetCurrentTileByIDamageAble(characterData);
+                }
+                break;
+            case TargetType.Enemy:
+                if (hit.collider.TryGetComponent(out EnemyData enemyData))
+                {
+                    currentSkillTargetTile =
+                        TileManager.Instance.GetCurrentTileByIDamageAble(enemyData);
+                }
+                break;
+        }
+
+        TargetAttackRange();
+    }
+
+    private void TargetAttackRange()
+    {
+        isTargetInAttackRange =
+            RangeSystem.Instance.attackableTiles.Contains(currentSkillTargetTile);
+
+        if (isTargetInAttackRange)
+        {
+            SkillSelectSystem.Instance.CashedDamageAbles = 
+                RangeSystem.Instance.ShowSkillRange(
+                    currentCharacter, 
+                    currentSkillTargetTile, 
+                    skillUI.currentSkill);
+            SkillSelectSystem.Instance.selectButton.interactable = true;
+        }
+    }
+
+    private void InputSelectCharacter(RaycastHit hit)
+    {
+        if (hit.collider.TryGetComponent(out CharacterData characterData))
+        {
+            currentCharacter = characterData;
+        }
+        else return;
+
+        // TODO 행동 완료 UI 추가
+
+        if (currentCharacter != null && !currentCharacter.Stat.IsCompleteAction)
+        {
+            RangeSystem.Instance.ResetAllTiles();
+            endTurnBtn.gameObject.SetActive(true);
+            skillUI.Open(currentCharacter);
+            MoveChoiceTile = null;
+            RangeSystem.Instance.ShowMoveRange(
+                TileManager.Instance.GetCurrentTileByIDamageAble(currentCharacter),
+                currentCharacter.Stat.MoveRange);
+        }
+    }
+
+    private void InputSelectTile(RaycastHit hit)
+    {
+        if (currentCharacter == null) return;
+
+        Tile targetTile = hit.collider.GetComponent<Tile>();
+        if (targetTile == null || !targetTile.isWalkable) return;
+
+        if (!RangeSystem.Instance.IsTileInMoveRange(targetTile))
+        {
+            Debug.Log("이동 불가능한 범위입니다.");
+            RangeSystem.Instance.ResetAllTiles();
+            endTurnBtn.gameObject.SetActive(false);
+            skillUI.Close();
+
+            MoveChoiceTile = null;
+            return;
+        }
+
+        if (MoveChoiceTile != null)
+        {
+            MoveChoiceTile.Highlight(Color.white);
+        }
+
+        MoveChoiceTile = targetTile;
+        MoveChoiceTile.Highlight(Color.magenta);
+    }
+    
     // 게임 초기 캐릭터 설정
     public void InitCharacterTurnSetting(CharacterData target)
     {
@@ -334,8 +310,7 @@ public class GameManager : MonoBehaviour
         skillUI.Open(target);
         currentCharacter = target;
     }
-
-
+    
     public Action GameStartAction;
     // 게임 시작
     public void StartGame()

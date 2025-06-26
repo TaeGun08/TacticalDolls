@@ -43,9 +43,6 @@ public class SkillBase : SkillParent
         int totalAmount =
             (int)(unitSkillComponents.characterData.Stat.Attack * unitSkillDetails.skillValue); //캐릭터 공격력 * 스킬 배율
         int tickAmount = totalAmount / unitSkillDetails.splitHitCount; //스킬 틱으로 나누기
-        Debug.Log($"{unitSkillComponents.characterData.GameObject.name}의 공격력 : {unitSkillComponents.characterData.Stat.Attack}");
-        Debug.Log($"{unitSkillComponents.characterData.GameObject.name}의 토탈 공격력 : {unitSkillComponents.characterData.Stat.Attack * unitSkillDetails.skillValue}");
-        Debug.Log($"{unitSkillComponents.characterData.GameObject.name}의 틱 공격력 : {totalAmount / unitSkillDetails.splitHitCount}");
         
         switch (skillType)
         {
