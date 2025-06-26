@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Michsky.UI.Dark;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -34,12 +35,7 @@ public class CharacterRoom : MonoBehaviour
     private int currentIndex;
     private Transform currentIconBackground;
     
-    [SerializeField] private Button levelUpButton;
-
-    private void Awake()
-    {
-        levelUpButton.onClick.AddListener(RequestUpdateCharacterLevelUp);
-    }
+    public NavigationHandler navigation;
     
     private void OnEnable()
     {
@@ -141,12 +137,13 @@ public class CharacterRoom : MonoBehaviour
         weaponImage.sprite = characterData.Stat.Weapon.WeaponIcon;
     }
     
-    private async void RequestUpdateCharacterLevelUp()
+    public async void RequestUpdateCharacterLevelUp()
     {
-        Debug.Log($"RequestUpdateCharacterLevelUp :: {SelectedCharacter.CharacterID}");
+        var complete = navigation.Complete.GetComponent<ModalWindowManager>();
+        complete.description = $"{SelectedCharacter.PrefabName}의 레벨업에 성공하였습니다.";
 
         var result = await SelectedCharacter.UpdateCharacterLevel(SelectedCharacter.CharacterID, 1);
-
+        
         if (result)
         {
             await FirebaseMainSession.Instance.FirestoreLoader();

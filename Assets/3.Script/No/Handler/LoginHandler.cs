@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,6 +14,7 @@ public class LoginHandler : MonoBehaviour
     public GameObject JoinForm;
     public GameObject AlertForm;
     public TMP_Text alertInputField;
+    public TMP_Text startText;
     
     [Header("Button Settings")]
     public Button GameStartButton;
@@ -62,7 +64,8 @@ public class LoginHandler : MonoBehaviour
         IPassword.contentType = TMP_InputField.ContentType.Custom;
         IPassword.onValidateInput += BlockKoreanInput;
     }
-
+    
+    
     void Start()
     {
         LoginButton.onClick.AddListener(OnLoginButtonClicked);
@@ -70,6 +73,16 @@ public class LoginHandler : MonoBehaviour
         backButton.onClick.AddListener(OnBackButtonClicked);
         OpenJoinFormButton.onClick.AddListener(()=> JoinForm.SetActive(true));
         GameStartButton.onClick.AddListener(LoginManager.Instance.OnClickedGameStartButtonPanelButton);
+        
+        // 시작 시 텍스트 투명하게 만들기
+        Color c = startText.color;
+        c.a = 0;
+        startText.color = c;
+
+        // 0 → 1 → 0 페이드 인 & 아웃
+        startText.DOFade(1f, 2.0f)
+            .SetLoops(-1, LoopType.Yoyo) 
+            .SetEase(Ease.InOutSine);
     }
     
     // 입력 값 체크

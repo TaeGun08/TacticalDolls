@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Michsky.MUIP;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
@@ -15,6 +17,9 @@ public class NavigationHandler : MonoBehaviour
     public GameObject Order;
     public GameObject My;
     
+    [Header("Complete Panel Settings")]
+    public GameObject Complete;
+
     [Header("Render Texture Settings")]
     public GameObject LobbyRender;
     public GameObject StageRender;
@@ -33,6 +38,7 @@ public class NavigationHandler : MonoBehaviour
     public Button OrderRoomButton;
     public Button MyRoomButton;
 
+    
     private Stack<GameObject> panelHistory = new Stack<GameObject>();
     private Stack<GameObject> renderHistory = new Stack<GameObject>();
 
@@ -110,30 +116,4 @@ public class NavigationHandler : MonoBehaviour
             ShowRoom(Lobby, LobbyRender, false);
         }
     }
-
-    // FireBase요청 필요하면 구조 변경할때 사용하면 됨
-    // void OnMoveLobby()
-    // {
-    //     
-    // }
-    //
-    // void OnMoveStageRoom()
-    // {
-    //     
-    // }
-    //
-    // void OnMoveCharacterRoom()
-    // {
-    //     
-    // }
-    //
-    // void OnMoveOrderRoom()
-    // {
-    //     
-    // }
-    //
-    // void OnMoveMyRoom()
-    // {
-    //     
-    // }
 }
