@@ -156,17 +156,9 @@ public class GridBehavior : MonoBehaviour
                 0.5f,
                 node.Position.z * tileManager.tileSize
             );
-            
-            Vector3 direction = (targetPos - Actor.GameObject.transform.position).normalized;
-            if (direction != Vector3.zero)
-            {
-                Quaternion lookRotation = Quaternion.LookRotation(direction);
-                Vector3 eulerAngles = new Vector3(0f, lookRotation.eulerAngles.y, 0f);
-                Actor.GameObject.transform.DORotate(eulerAngles, 0.1f).SetEase(Ease.Linear);
-            }
-            
-            await Actor.GameObject.transform.DOMove(targetPos, 0.1f).SetEase(Ease.Linear).AsyncWaitForCompletion();
 
+            _ = NodeMovement(targetPos);
+            
             endNode = node;
             
             if (IsAutoMove)
@@ -184,17 +176,10 @@ public class GridBehavior : MonoBehaviour
         TurnCrouching(endNode);
         
         Tile newTile = TileManager.Instance.GetClosestTile(Actor.GameObject.transform.position);
-        if (newTile != null)
+        if (newTile != null) //현재 Actor가 서있는 위치를 탐색하지 못하게 함
         {
             newTile.isUsingTile = true;
             newTile.SetOccupant(Actor);
-        }
-
-        if (IsAutoMove && AttackRangeChecker(target))
-        {
-            List<IDamageAble> targets = new List<IDamageAble> { nearestTarget };
-            await Actor.Excute(TurnManager.Instance.CurrentTurn == ActorParent.Player
-                ? Random.Range(0, 3) : 0, targets, targets[0].GameObject.transform);
         }
         
         //harang 카메라 끝
@@ -202,38 +187,65 @@ public class GridBehavior : MonoBehaviour
         {
             callback.onCompleteMove?.Invoke(_character.transform);
         }
-        
-        Actor.Stat.IsCompleteAction = true;
 
+        if (IsAutoMove && AttackRangeChecker(target)) //AI로 움직이는 중일 때, 공격 사거리에 든다면 공격
+        {
+            List<IDamageAble> targets = new List<IDamageAble> { nearestTarget };
+            await Actor.Excute(TurnManager.Instance.CurrentTurn == ActorParent.Player
+                ? Random.Range(0, 3) : 0, targets, targets[0].GameObject.transform);
+        }
+
+        EndMovement();
+    }
+
+    /// <summary>
+    /// 노드에 따른 순차적 이동
+    /// </summary>
+    /// <param name="targetPos"></param>
+    private async Task NodeMovement(Vector3 targetPos)
+    {
+        Vector3 direction = (targetPos - Actor.GameObject.transform.position).normalized;
+        if (direction != Vector3.zero)
+        {
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+            Vector3 eulerAngles = new Vector3(0f, lookRotation.eulerAngles.y, 0f);
+            Actor.GameObject.transform.DORotate(eulerAngles, 0.1f).SetEase(Ease.Linear);
+        }
+            
+        await Actor.GameObject.transform.DOMove(targetPos, 0.1f).SetEase(Ease.Linear).AsyncWaitForCompletion();
+    }
+
+    /// <summary>
+    /// 이동 종료 시, 값 초기화 및 캐릭터 행동 가능여부 체크
+    /// </summary>
+    private void EndMovement()
+    {
+        Actor.Stat.IsCompleteAction = true;
         endNode = null;
         Actor = null;
         nearestTarget = null;
         IsMove = false;
-        
-
     }
-
+    
     private void TurnCrouching(Node endNode)
     {
         switch (endNode.Tile.obstacleDir)
         {
             case 1:
                 Actor.GameObject.transform.DORotate(new Vector3(0f, 90f, 0f), 0.1f).SetEase(Ease.Linear);
-                Actor.Animator.SetBool("isCrouching", true);
                 break;
             case 2:
                 Actor.GameObject.transform.DORotate(new Vector3(0f, -90f, 0f), 0.1f).SetEase(Ease.Linear);
-                Actor.Animator.SetBool("isCrouching", true);
                 break;
             case 3:
                 Actor.GameObject.transform.DORotate(new Vector3(0f, 0f, 0f), 0.1f).SetEase(Ease.Linear);
-                Actor.Animator.SetBool("isCrouching", true);
                 break;
             case 4:
                 Actor.GameObject.transform.DORotate(new Vector3(0f, 180f, 0f), 0.1f).SetEase(Ease.Linear);
-                Actor.Animator.SetBool("isCrouching", true);
                 break;
         }
+        
+        Actor.Animator.SetBool("isCrouching", true);
     }
     
     private void TargetActors()

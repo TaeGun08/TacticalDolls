@@ -77,8 +77,7 @@ public class InGameHpBarManager : MonoBehaviour
                 targetCamera,
                 out Vector2 localPoint
             );
-
-            Debug.Log("t.drawHpBarRectTransform.anchoredPosition");
+            
             t.drawHpBarRectTransform.anchoredPosition = localPoint;
         }
     }

@@ -35,6 +35,21 @@ public class EnemyData : UnitParent
         runtimeStat = new StatData(baseStatSO);
     }
 
+    private void Start()
+    {
+        SetStateSO();
+    }
+
+    public void SetStateSO()
+    {
+        runtimeStat.HP = baseStatSO.hp;
+        runtimeStat.MaxHP = runtimeStat.HP;
+        runtimeStat.Attack = baseStatSO.attack;
+        runtimeStat.Defense = baseStatSO.defense;
+        runtimeStat.MoveRange = baseStatSO.moveRange;
+        runtimeStat.AttackRnage = baseStatSO.AttackRnage;
+    }
+
     public override async Task Excute(int selectedSkill, List<IDamageAble> targets, Transform targetPoint)
     {
         if (HasSkills[selectedSkill] == null)
