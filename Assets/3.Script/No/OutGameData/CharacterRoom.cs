@@ -45,11 +45,6 @@ public class CharacterRoom : MonoBehaviour
     {
         playerCharacters = PlayerManager.Instance.usingCharacterData;
         
-        foreach (Transform child in iconSpawnPoint)
-        {
-            Destroy(child.gameObject);
-        }
-        
         for (int i = 0; i < playerCharacters.Count; i++)
         {
             var spawnCharacterIconBackground = Instantiate(
@@ -89,6 +84,14 @@ public class CharacterRoom : MonoBehaviour
         SetInfoPlayerCharacter(SelectedCharacter);
     }
 
+    private void OnDisable()
+    {
+        foreach (Transform child in iconSpawnPoint)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
     private void SetUIPlayerCharacters()
     {
         foreach (Transform child in iconSpawnPoint)
@@ -101,8 +104,6 @@ public class CharacterRoom : MonoBehaviour
         }
         
         currentIconBackground = iconSpawnPoint.GetChild(currentIndex);
-        Debug.Log($"currentIndex ::: {currentIndex}");
-        Debug.Log($"currentIconBackground ::: {currentIconBackground}");
         
         var currentOutline = currentIconBackground.GetComponent<Outline>();
         if (currentOutline != null)
