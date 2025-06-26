@@ -46,6 +46,15 @@ public class GridBehavior : MonoBehaviour
 
     private Node endNode = new Node();
     
+    public class CallBack
+    {
+        public Action<CharacterData> startMove { get; set; }
+        public Action onCompleteMove { get; set; }
+    }
+
+    public CallBack callback;
+    private bool isCameraMove = false;
+    
     private void Awake()
     {
         Instance = this;
@@ -58,6 +67,7 @@ public class GridBehavior : MonoBehaviour
                 _= Turn_Test.Instance.OnCheckEndCharacterActor();
             }
         });
+        callback = new CallBack();
     }
 
     private void Start()
@@ -105,15 +115,7 @@ public class GridBehavior : MonoBehaviour
         
         await MovePlayerAlongPath(path, targetPos);
     }
-
-    public class CallBack
-    {
-        public Action<CinemachineVirtualCamera> startMove { get; set; }
-        public Action onCompleteMove { get; set; }
-    }
     
-    public CallBack callback {get; private set;}
-    private bool isCameraMove = false;
     
     /// <summary>
     /// 경로를 넣어주면 그 경로에 맞는 위치로 이동하는 함수
@@ -128,7 +130,7 @@ public class GridBehavior : MonoBehaviour
         //harang 시작
         if(Actor is CharacterData character)
         {
-            callback.startMove?.Invoke(character.characterMiddleZoomCamera);
+            callback.startMove?.Invoke(character);
             isCameraMove = true;
         }
         

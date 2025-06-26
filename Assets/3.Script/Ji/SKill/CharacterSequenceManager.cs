@@ -53,7 +53,7 @@ public class CharacterSequenceManager : MonoBehaviour
         direction.y = 0f; // Y축은 무시
 
 
-        await transform.DORotateQuaternion(Quaternion.LookRotation(direction), 0.5f) //적 방향으로 회전
+        await cashedSkillComponents.characterData.gameObject.transform.DORotateQuaternion(Quaternion.LookRotation(direction), 0.5f) //적 방향으로 회전
             .SetEase(Ease.OutSine)
             .AsyncWaitForCompletion();
         
@@ -89,7 +89,7 @@ public class CharacterSequenceManager : MonoBehaviour
 
         await cashedSkill.EndSkillAction(listeners);
         
-        await transform.DORotateQuaternion(originalRotation, 0.5f).SetEase(Ease.InSine).AsyncWaitForCompletion(); //원래 회전값으로 복귀
+        await cashedSkillComponents.characterData.gameObject.transform.DORotateQuaternion(originalRotation, 0.5f).SetEase(Ease.InSine).AsyncWaitForCompletion(); //원래 회전값으로 복귀
 
         // 시퀀스 완료까지 대기
     }

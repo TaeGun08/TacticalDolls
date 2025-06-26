@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -20,14 +21,19 @@ public class CharacterRoom : MonoBehaviour
     [SerializeField] private TMP_Text characterDefense;
     [SerializeField] private TMP_Text weaponLevel;
     
+    [SerializeField] private Image[] skillImage;
+    
     [SerializeField] private Image weaponBackground;
     [SerializeField] private Image weaponImage;
+    
+    [SerializeField] private Transform characterIconBackground;
 
     private List<CharacterData> playerCharacters;
-    private List<CharacterData> characterIcons;
 
     public CharacterData SelectedCharacter { get; private set; }
-
+    private int currentIndex;
+    private Transform currentIconBackground;
+    
     [SerializeField] private Button levelUpButton;
 
     private void Awake()
@@ -38,7 +44,6 @@ public class CharacterRoom : MonoBehaviour
     private void OnEnable()
     {
         playerCharacters = PlayerManager.Instance.usingCharacterData;
-        characterIcons = PlayerManager.Instance.characterIcons;
         
         foreach (Transform child in iconSpawnPoint)
         {
@@ -47,35 +52,64 @@ public class CharacterRoom : MonoBehaviour
         
         for (int i = 0; i < playerCharacters.Count; i++)
         {
-            for (int j = 0; j < characterIcons.Count; j++)
+            var spawnCharacterIconBackground = Instantiate(
+                characterIconBackground, 
+                iconSpawnPoint.position, 
+                iconSpawnPoint.rotation, 
+                iconSpawnPoint);
+            var spawnCharacterUI = Instantiate(
+                characterIconBackground, 
+                spawnCharacterIconBackground.position, 
+                spawnCharacterIconBackground.rotation, 
+                spawnCharacterIconBackground);
+            
+            Button btn = spawnCharacterIconBackground.AddComponent<Button>();
+            var image = spawnCharacterUI.GetComponent<Image>();
+            var color = image.color;
+            
+            image.sprite = playerCharacters[i].characterIcon;
+            color.a = 1;
+            image.color = color;
+                
+            var i1 = i;
+            btn.onClick.AddListener(() =>
             {
-                if (playerCharacters[i].CharacterID == characterIcons[j].CharacterID)
-                {
-                    var spawnCharacterUI = Instantiate(characterIcons[j].GameObject, iconSpawnPoint.position, iconSpawnPoint.rotation, iconSpawnPoint);
-                    Button btn = spawnCharacterUI.AddComponent<Button>();
-                    
-                    int currentIndex = i;
-                    
-                    btn.onClick.AddListener(() =>
-                    {
-                        SelectedCharacter = playerCharacters[currentIndex];
-                        
-                        SetUIPlayerCharacters();
-                        SetInfoPlayerCharacter(SelectedCharacter);
-                    });
-
-                }
-            }
+                currentIndex = i1;
+                SelectedCharacter = playerCharacters[currentIndex];
+                
+                SetUIPlayerCharacters();
+                SetInfoPlayerCharacter(SelectedCharacter);
+            });
         }
         
-        SelectedCharacter = playerCharacters[0];
+        currentIndex = 0;
+        SelectedCharacter = playerCharacters[currentIndex];
         
-        SetInfoPlayerCharacter(SelectedCharacter);
         SetUIPlayerCharacters();
+        SetInfoPlayerCharacter(SelectedCharacter);
     }
 
     private void SetUIPlayerCharacters()
     {
+        foreach (Transform child in iconSpawnPoint)
+        {
+            var outline = child.GetComponent<Outline>();
+            if (outline != null)
+            {
+                outline.enabled = false;
+            }
+        }
+        
+        currentIconBackground = iconSpawnPoint.GetChild(currentIndex);
+        Debug.Log($"currentIndex ::: {currentIndex}");
+        Debug.Log($"currentIconBackground ::: {currentIconBackground}");
+        
+        var currentOutline = currentIconBackground.GetComponent<Outline>();
+        if (currentOutline != null)
+        {
+            currentOutline.enabled = true;
+        }
+        
         foreach (Transform child in playerRawImageSpawnPoint)
         {
             Destroy(child.gameObject);
@@ -97,6 +131,11 @@ public class CharacterRoom : MonoBehaviour
         characterDefense.text = characterData.Stat.Defense.ToString();
         weaponLevel.text = "Lv. " + characterData.Stat.Weapon.Level;
 
+        for (int i = 0; i < skillImage.Length; i++)
+        {
+            skillImage[i].sprite = characterData.HasSkills[i].unitSkillComponents.skillIconSprite;
+        }
+        
         weaponBackground.color = characterData.Stat.Weapon.SetWeaponBackgroundColor();
         weaponImage.sprite = characterData.Stat.Weapon.WeaponIcon;
     }
