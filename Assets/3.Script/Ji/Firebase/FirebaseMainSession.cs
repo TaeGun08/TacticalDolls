@@ -39,8 +39,8 @@ public class FirebaseMainSession : MonoBehaviour
 
         if (user != null) //디버그용
         {
-            Debug.Log($"MainSystem UserId ::: {FirebaseUser.UserData.UserId}");
-            Debug.Log($"MainSystem userName ::: {username}");
+            // Debug.Log($"MainSystem UserId ::: {FirebaseUser.UserData.UserId}");
+            // Debug.Log($"MainSystem userName ::: {username}");
         }
         
         FirestoreLoader();

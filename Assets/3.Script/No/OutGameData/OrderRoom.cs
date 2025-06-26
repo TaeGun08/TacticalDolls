@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Firebase.Firestore;
+using Michsky.UI.Dark;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -14,6 +15,7 @@ public class OrderRoom : MonoBehaviour
 {
     // 캐릭터, 무기 모든 종류 중 랜덤으로 3개 띄우기 (일정 시간마다 품목이 바뀌어야 함)
     // 만약 있는 상품이라면 버튼 상호작용 X
+    [SerializeField] private NavigationHandler navigation;
     
     public Image[] itemImageBackgrounds;
     public Image[] itemImages;
@@ -37,6 +39,8 @@ public class OrderRoom : MonoBehaviour
     
     public float resetTime = 10f;
     private float timer;
+
+    private WeaponData selectedWeapon;
     
     Dictionary<WeaponGrade, float> gradeWeights = new Dictionary<WeaponGrade, float>
     {
@@ -53,18 +57,14 @@ public class OrderRoom : MonoBehaviour
         // 무기 조회
         Debug.Log($"FirebaseMainSession.Instance.FirebaseUser.WeaponStore.Count:: {FirebaseMainSession.Instance.FirebaseUser.weaponStore.Count}");
         
-        itemButtons[0].onClick.AddListener(() =>
-        {
-            RequestBuyCharacter(selectedCharacter);
-        });
-
         for (int i = 0; i < 2; i++)
         {
             var index = i;
+            itemButtons[i + 1].onClick.RemoveAllListeners();
             
             itemButtons[i+1].onClick.AddListener(() =>
             {
-                RequestBuyWeapon(selectedWeapons[index].ID);
+                selectedWeapon = selectedWeapons[index];
             });
         }
         
@@ -164,7 +164,6 @@ public class OrderRoom : MonoBehaviour
         // 캐릭터
         itemImages[0].sprite = selectedCharacter.characterIcon;
         itemNames[0].text = selectedCharacter.PrefabName;
-        // itemPrices[0].text = selectedCharacter.Price.ToString();
 
         // 소유 여부에 따라 버튼 비활성화
         for (int i = 0; i < PlayerManager.Instance.usingCharacterData.Count; i++)
@@ -182,7 +181,6 @@ public class OrderRoom : MonoBehaviour
             itemImageBackgrounds[i + 1].color = selectedWeapons[i].SetWeaponBackgroundColor();
             itemImages[i+1].sprite = selectedWeapons[i].WeaponIcon;
             itemNames[i+1].text = selectedWeapons[i].WeaponName;
-            // itemPrices[i+1].text = selectedWeapons[i].Price.ToString();
 
             for (int j = 0; j < PlayerManager.Instance.usingWeaponData.Count; j++)
             {
@@ -213,9 +211,12 @@ public class OrderRoom : MonoBehaviour
     }
     
     // 캐릭터 구매
-    private async void RequestBuyCharacter(CharacterData character)
+    public async void RequestBuyCharacter()
     {
-        var result = await PlayerManager.Instance.UpdateCharacterList(character);
+        var complete = navigation.Complete.GetComponent<ModalWindowManager>();
+        complete.description = $"{selectedCharacter.PrefabName} 구매에 성공하였습니다.";
+        
+        var result = await PlayerManager.Instance.UpdateCharacterList(selectedCharacter);
         
         if (result)
         {
@@ -230,9 +231,12 @@ public class OrderRoom : MonoBehaviour
     }
     
     // 무기 구매
-    private async void RequestBuyWeapon(int weaponCode)
+    public async void RequestBuyWeapon()
     {
-        var result = await PlayerManager.Instance.UpdateWeaponList(weaponCode);
+        var complete = navigation.Complete.GetComponent<ModalWindowManager>();
+        complete.description = $"{selectedWeapon.WeaponName} 구매에 성공하였습니다.";
+
+        var result = await PlayerManager.Instance.UpdateWeaponList(selectedWeapon.ID);
         
         if (result)
         {

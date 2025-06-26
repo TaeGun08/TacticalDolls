@@ -2,12 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Michsky.UI.Dark;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class WeaponRoom : MonoBehaviour
 {
+    [SerializeField] private NavigationHandler navigation;
     [SerializeField] private CharacterRoom characterRoom;
 
     [SerializeField] private Image weaponImage;
@@ -23,20 +25,9 @@ public class WeaponRoom : MonoBehaviour
     
     public WeaponData SelectedWeapon { get; private set; }
     
-    [SerializeField] private Button levelUpButton;
-    
-    private void Awake()
-    {
-        levelUpButton.onClick.AddListener(()=>
-        {
-            RequestUpdateWeaponLevelUp(SelectedWeapon.ID);
-        });
-    }
 
     private void OnEnable()
     {
-        Debug.Log($"SelectedCharacter ::: {characterRoom.SelectedCharacter.PrefabName}");
-        
         allWeapons = PlayerManager.Instance.usingWeaponData
             .OrderBy(w => w.WeaponGrade)
             .ToList();
@@ -93,14 +84,10 @@ public class WeaponRoom : MonoBehaviour
 
     private string GetWeaponUserOrNull()
     {
-        Debug.Log($"SelectedWeapon:: {SelectedWeapon}");
-        
         var characters = PlayerManager.Instance.usingCharacterData;
         
         for (int i = 0; i < characters.Count; i++)
         {
-            Debug.Log($"=========== characters[i].Stat.Weapon.ID {characters[i].Stat.Weapon.ID}");
-            
             if (characters[i].Stat.Weapon.ID == SelectedWeapon.ID)
             {
                 return characters[i].PrefabName;
@@ -111,9 +98,12 @@ public class WeaponRoom : MonoBehaviour
     }
     
     // 무기 레벨업
-    private async void RequestUpdateWeaponLevelUp(int weaponId)
+    public async void RequestUpdateWeaponLevelUp()
     {
-        var result = await SelectedWeapon.UpdateWeaponLevel(weaponId, 1);
+        var complete = navigation.Complete.GetComponent<ModalWindowManager>();
+        complete.description = $"{SelectedWeapon.WeaponName} 레벨업에 성공하였습니다.";
+        
+        var result = await SelectedWeapon.UpdateWeaponLevel(SelectedWeapon.ID, 1);
         if (result)
         {
             await FirebaseMainSession.Instance.FirestoreLoader();
@@ -130,8 +120,6 @@ public class WeaponRoom : MonoBehaviour
     // 무기 교체
     private async void RequestUpdateWeapon()
     {
-        Debug.Log($"RequestUpdateWeapon::{characterRoom.SelectedCharacter.CharacterID}, {SelectedWeapon.ID}");
-        
         var result = await SelectedWeapon.UpdateCharacterCurrentWeapon(characterRoom.SelectedCharacter.CharacterID, SelectedWeapon.ID);
         
         if (result)
