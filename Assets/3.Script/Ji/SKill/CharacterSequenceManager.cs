@@ -45,7 +45,7 @@ public class CharacterSequenceManager : MonoBehaviour
         
         // 1. 포커스 처리
         // CharacterFocus(cashedSkillComponents.characterData.transform.position);
-        // touchCamera.MoveCameraTo(cashedSkillComponents.characterData.transform.position);
+        touchCamera.MoveCameraTo(cashedSkillComponents.characterData.transform.position);
             
         originalRotation = cashedSkillComponents.characterData.gameObject.transform.rotation; //원래 회전값 저장
         
@@ -53,7 +53,7 @@ public class CharacterSequenceManager : MonoBehaviour
         direction.y = 0f; // Y축은 무시
 
 
-        await cashedSkillComponents.characterData.gameObject.transform.DORotateQuaternion(Quaternion.LookRotation(direction), 0.5f) //적 방향으로 회전
+        await cashedSkillComponents.characterData.gameObject.transform.DORotateQuaternion(Quaternion.LookRotation(direction), 0.2f) //적 방향으로 회전
             .SetEase(Ease.OutSine)
             .AsyncWaitForCompletion();
         
@@ -78,6 +78,8 @@ public class CharacterSequenceManager : MonoBehaviour
             await AwaitTimelineEnd(cashedSkillComponents.director);
         }
         
+        touchCamera.MoveCameraTo(cashedSkillComponents.characterData.transform.position);
+        
         //적과 자신 사이 중간을 포커스
         // {   
         //     // Debug.Log($"touchCamera.transform.position.y {touchCamera.transform.position.y}");
@@ -89,7 +91,7 @@ public class CharacterSequenceManager : MonoBehaviour
 
         await cashedSkill.EndSkillAction(listeners);
         
-        await cashedSkillComponents.characterData.gameObject.transform.DORotateQuaternion(originalRotation, 0.5f).SetEase(Ease.InSine).AsyncWaitForCompletion(); //원래 회전값으로 복귀
+        await cashedSkillComponents.characterData.gameObject.transform.DORotateQuaternion(originalRotation, 0.2f).SetEase(Ease.InSine).AsyncWaitForCompletion(); //원래 회전값으로 복귀
 
         // 시퀀스 완료까지 대기
     }

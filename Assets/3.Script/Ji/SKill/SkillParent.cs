@@ -88,9 +88,6 @@ public abstract class SkillParent : MonoBehaviour //, IUnitSkill
         
         [LabelText("타격 횟수")] 
         [Tooltip("총알이 몇 번 발사되어 타격하는지를 의미합니다.")][Range(1,50)] public int splitHitCount = 1;
-        
-        [LabelText("파티클 지속시간")] 
-        [Tooltip("파티클을 활성화하고 유지시키는 시간입니다.")] public float vfxDuration = 0f;
     }
 
     [System.Serializable]

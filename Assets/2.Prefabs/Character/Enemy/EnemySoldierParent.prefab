@@ -526,9 +526,9 @@ MonoBehaviour:
   skillInfoText: "\uC0D8\uD50C\uC785\uB2C8\uB2E4."
   unitSkillDetails:
     skillID: 
-    skillValue: 10
+    skillValue: 1
     areaOfEffect: 1
-    splitHitCount: 7
+    splitHitCount: 6
     vfxDuration: 1
   unitSkillComponents:
     characterData: {fileID: 8549023517635794372}

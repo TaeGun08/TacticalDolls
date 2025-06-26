@@ -11,7 +11,7 @@ using UnityEngine.Serialization;
 //타겟을 설정합니다.
 //컷신
 //애니메이션 시작
-    //공격 실행 //적용 //피격위치로 카메라 이동
+//공격 실행 //적용 //피격위치로 카메라 이동
 //애니메이션 종료
 //스킬 종료
 
@@ -20,13 +20,13 @@ public class SkillBase : SkillParent
     public override async Task StartSkillAction(List<IDamageAble> targets)
     {
         Debug.Log("StartSkillAction");
-        
+
         if (StartSkillEvents != null)
             foreach (var t in StartSkillEvents)
             {
                 t?.Invoke();
             }
-        
+
         // await Task.Delay(100);
     }
 
@@ -35,13 +35,13 @@ public class SkillBase : SkillParent
         Debug.Log("AffectSkillAction");
 
 
-        
-        for (int i =0; i<RangeSystem.Instance.damageAbles.Count;i++)
+        for (int i = 0; i < RangeSystem.Instance.damageAbles.Count; i++)
         {
             Debug.Log(RangeSystem.Instance.damageAbles[i].GameObject.name);
         }
 
-        int totalAmount = (int)(unitSkillComponents.characterData.Stat.Attack * unitSkillDetails.skillValue); //캐릭터 공격력 * 스킬 배율
+        int totalAmount =
+            (int)(unitSkillComponents.characterData.Stat.Attack * unitSkillDetails.skillValue); //캐릭터 공격력 * 스킬 배율
         int tickAmount = totalAmount / unitSkillDetails.splitHitCount; //스킬 틱으로 나누기
         
         switch (skillType)
@@ -49,11 +49,11 @@ public class SkillBase : SkillParent
             case SkillType.Damage:
                 CombatSystem.Instance.ApplyDamage(unitSkillComponents.characterData, targets, tickAmount);
                 break;
-            
+
             case SkillType.Heal:
                 CombatSystem.Instance.ApplyHeal(unitSkillComponents.characterData, targets, tickAmount);
                 break;
-            
+
             // //ToDo : 
             // case SkillType.Buff:
             //     if (AffectSkillEvents != null)
@@ -63,24 +63,25 @@ public class SkillBase : SkillParent
             //         }
             //     break;
         }
-        
+
         return Task.CompletedTask;
     }
 
     public override async Task EndSkillAction(List<IDamageAble> targets)
     {
         Debug.Log("EndSkillAction");
-        
+
         if (EndSkillEvents != null)
             foreach (var t in EndSkillEvents)
             {
                 t?.Invoke();
             }
-        
+
         //await Task.Delay(100);
     }
 
     #region OldCode
+
     // private static readonly int ANIMATION_TRIGGER = Animator.StringToHash("ANIMATION_TRIGGER");
     // public override SkillType SkillType => SkillType.Damage;
     // public override RangeType RangeType => RangeType.Single;
@@ -216,7 +217,6 @@ public class SkillBase : SkillParent
     //     
     //     SkillEffectTcs.TrySetResult(true); //스킬 적용 종료
     // }
-    
+
     #endregion
-    
 }
