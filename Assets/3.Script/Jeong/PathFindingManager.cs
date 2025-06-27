@@ -29,7 +29,7 @@ public class PathFindingManager : MonoBehaviour
     public static PathFindingManager Instance { get; private set; }
     
     private TileManager tileManager;
-    private Turn_Test turn;
+    private TurnController turn;
     
     private Node[,] nodeArray;
     public Node[,]  NodeArray => nodeArray;
@@ -56,7 +56,7 @@ public class PathFindingManager : MonoBehaviour
     {
         yield return null;
         tileManager = TileManager.Instance;
-        turn = Turn_Test.Instance;
+        turn = TurnController.Instance;
         
         nodeArray = new Node[tileManager.tiles.GetLength(0), tileManager.tiles.GetLength(0)];
 

@@ -13,6 +13,8 @@ public class GridBehavior : MonoBehaviour
 {
     // 노드에서 노드 이동 처리
     public static GridBehavior Instance;
+    private static readonly int IS_CROUCHING = Animator.StringToHash("isCrouching");
+    private static readonly int IS_RUNNING = Animator.StringToHash("isRunning");
 
     private TileManager tileManager;
     
@@ -64,7 +66,7 @@ public class GridBehavior : MonoBehaviour
             IsAuto = IsAuto == false;
             if (IsAuto && IsMove == false)
             {
-                _= Turn_Test.Instance.OnCheckEndCharacterActor();
+                _= TurnController.Instance.OnCheckEndCharacterActor();
             }
         });
         callback = new CallBack();
@@ -105,7 +107,7 @@ public class GridBehavior : MonoBehaviour
         reservedTiles.Add(new Vector2Int(finalTargetPos.x, finalTargetPos.z));
         
         nearestTarget = Actors
-            .Where(target => target != Actor)
+            .Where(target => target != Actor && actor.Stat.IsDead == false)
             .OrderBy(target =>
                 Vector3.Distance(Actor.GameObject.transform.position, target.GameObject.transform.position))
             .FirstOrDefault();
@@ -141,8 +143,8 @@ public class GridBehavior : MonoBehaviour
         
         if (Actor?.Animator != null) //Actor에 Animator가 존재한다면 애니메이션 재생
         {
-            Actor.Animator.SetBool("isCrouching", false);
-            Actor.Animator.SetBool("isRunning", true);
+            Actor.Animator.SetBool(IS_CROUCHING, false);
+            Actor.Animator.SetBool(IS_RUNNING, true);
         }
         
         //Actor의 X, Z 좌표를 담아주기 위한 변수
@@ -174,7 +176,7 @@ public class GridBehavior : MonoBehaviour
 
         if (Actor?.Animator != null)
         {
-            Actor.Animator.SetBool("isRunning", false);
+            Actor.Animator.SetBool(IS_RUNNING, false);
         }
 
         CrouchingRotate(endNode);
@@ -267,7 +269,7 @@ public class GridBehavior : MonoBehaviour
             case ActorParent.Player:
                 foreach (IDamageAble actor in GameManager.Instance.EnemyUnits)
                 {
-                    if (actor != Actor)
+                    if (actor != Actor && actor.Stat.IsDead == false)
                     {
                         var tilePos = new Vector2Int(
                             Mathf.RoundToInt(actor.GameObject.transform.position.x),
@@ -281,7 +283,7 @@ public class GridBehavior : MonoBehaviour
             case ActorParent.Enemy:
                 foreach (IDamageAble actor in GameManager.Instance.PlayerUnits)
                 {
-                    if (actor != Actor)
+                    if (actor != Actor && actor.Stat.IsDead == false)
                     {
                         var tilePos = new Vector2Int(
                             Mathf.RoundToInt(actor.GameObject.transform.position.x),

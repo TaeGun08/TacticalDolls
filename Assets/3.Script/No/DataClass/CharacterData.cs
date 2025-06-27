@@ -32,8 +32,6 @@ public class CharacterData : UnitParent
     public override Animator Animator => animator;
 
     public SkillParent[] hasSkills;
-    
-    public Sprite characterIcon;
 
     //InGame
     // private List<BuffParent> Buffs = new List<BuffParent>();
@@ -85,8 +83,15 @@ public class CharacterData : UnitParent
         Debug.Log($"{PrefabName} Character Take damage :: CharacterID {CharacterID} _ {combatEvent.Damage}");
         Stat.HP -= combatEvent.Damage;
         
-        animator.SetTrigger(ATTACKED);
         OnHpChanged?.Invoke();
+        if (Stat.HP <= 0)
+        {
+            StartCoroutine(DeadCorotuine());
+        }
+        else
+        {
+            animator.SetTrigger(ATTACKED);
+        }
         //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
     }
 
