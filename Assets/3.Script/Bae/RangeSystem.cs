@@ -144,11 +144,15 @@ public class RangeSystem : MonoBehaviour
 
                     int dx = Mathf.Abs(tile.x - centerTile.x);
                     int dy = Mathf.Abs(tile.y - centerTile.y);
-
                     bool inRange = false;
 
                     switch (rangeType)
                     {
+                        case RangeType.Single:
+                            inRange = dx == 0 && dy == 0;
+                            if(inRange)
+                                Debug.Log(true);
+                            break;
                         case RangeType.Straight:
                         case RangeType.Plus:
                             inRange = (dx == 0 && dy <= range) || (dy == 0 && dx <= range);
@@ -163,6 +167,7 @@ public class RangeSystem : MonoBehaviour
 
                     if (inRange && tile.isWalkable)
                     {
+                        Debug.Log("찍혔음");
                         tile.Highlight(Color.cyan);
                         usableTiles.Add(tile);
                     }

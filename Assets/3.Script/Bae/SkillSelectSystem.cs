@@ -29,8 +29,10 @@ public class SkillSelectSystem : MonoBehaviour
 
     public int currentSkill;
 
+    private IDamageAble target;
     private void Start()
     {
+        CashedDamageAbles = new List<IDamageAble>();
         for (int i = 0; i < skillButtons.Length; i++)
         {
             currentSkill = i;
@@ -81,7 +83,7 @@ public class SkillSelectSystem : MonoBehaviour
             }
             else
             {
-                await currentTarget.Excute(currentSkill, CashedDamageAbles, GameManager.Instance.CurrentSkillTarget.GameObject.transform);
+                await currentTarget.Excute(currentSkill, CashedDamageAbles, GameManager.Instance.CurrentSkillTarget.transform);
             }
             
             InintializeAfterSkillExcute();

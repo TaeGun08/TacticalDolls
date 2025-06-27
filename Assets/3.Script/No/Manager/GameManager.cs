@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
     public Button EndTurnBtn => endTurnBtn;
 
     private CharacterData currentCharacter;
-    public IDamageAble CurrentSkillTarget { get; set; }
+    public Transform CurrentSkillTarget { get; set; }
     private Tile currentSkillTargetTile;
 
     public Tile MoveChoiceTile { get; set; }
@@ -209,6 +209,7 @@ public class GameManager : MonoBehaviour
     private void InputHitTarget(RaycastHit hit)
     {
         int currentSkillIndex = SkillSelectSystem.Instance.GetCurrentSkillIndex();
+
         switch (currentCharacter.HasSkills[currentSkillIndex].targetType)
         {
             case TargetType.Tile:
@@ -227,13 +228,14 @@ public class GameManager : MonoBehaviour
             case TargetType.Enemy:
                 if (hit.collider.TryGetComponent(out EnemyData enemyData))
                 {
-                    Debug.Log("Enemy 확인");
                     currentSkillTargetTile =
                         TileManager.Instance.GetCurrentTileByIDamageAble(enemyData);
                 }
                 break;
         }
 
+        CurrentSkillTarget = hit.collider.gameObject.transform;
+        
         TargetAttackRange();
     }
 
@@ -249,8 +251,6 @@ public class GameManager : MonoBehaviour
                     currentCharacter, 
                     currentSkillTargetTile, 
                     skillUI.currentSkill);
-            Debug.Log($"{SkillSelectSystem.Instance.CashedDamageAbles} 값이 할당 됨");
-            Debug.Log($"{currentCharacter} 현재 캐릭터");
             SkillSelectSystem.Instance.selectButton.interactable = true;
         }
     }

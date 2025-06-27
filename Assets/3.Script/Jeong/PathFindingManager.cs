@@ -17,6 +17,7 @@ public class Node
 
     public Node(Tile tile = null)
     {
+        if (tile == null) return;
         Position = new Vector3Int(tile.x, 0, tile.y);
         Tile = tile;
         G = int.MaxValue;
