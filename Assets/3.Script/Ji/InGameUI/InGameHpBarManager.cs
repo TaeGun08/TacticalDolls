@@ -23,12 +23,12 @@ public class HpBarPack
     }
 }
 
-public class InGameHpBarManager : MonoBehaviour
+public class InGameHpBarPanel : MonoBehaviour
 {
     //ingame
-    public Camera targetCamera;
-    public Canvas parentCanvas; 
-    public DrawHpBar drawHpBarPrefab;
+    [field:SerializeField] private Camera targetCamera { get; set; }
+    [field:SerializeField] private Canvas parentCanvas { get; set; } 
+    [field:SerializeField] private DrawHpBar drawHpBarPrefab { get; set; }
     
     private HpBarPack[] hpBarPacks;
     private List<DrawHpBar> hpBars;

@@ -31,8 +31,8 @@ public class GameManager : MonoBehaviour
 
     // 캐릭터 스폰
     public CharacterSpawnController CharacterSpawnController;
-    public GameObject SelectedCharacterPanel;
-    public Button StartBtn;
+    public GameObject SelectedCharacterPanel; //del
+    public Button StartBtn; //del
     
     public Button EndTurnBtn => endTurnBtn;
 
@@ -43,6 +43,8 @@ public class GameManager : MonoBehaviour
     public Tile MoveChoiceTile { get; set; }
 
     private bool isTargetInAttackRange;
+    
+    private Camera mainCamera;
     
     private void Awake()
     {
@@ -65,6 +67,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         TurnManager.Instance.ActorChanged += UnitStateInitialize;
+        mainCamera = Camera.main;
     }
 
     // 첫 턴
@@ -184,7 +187,7 @@ public class GameManager : MonoBehaviour
 
             if (SkillSelectSystem.Instance.IsSelectingSkill)
             {
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
+                if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition),
                         out RaycastHit unitHit, 100f, unitLayer | tileLayer))
                 {
                     InputHitTarget(unitHit);
@@ -192,16 +195,21 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
-                        out RaycastHit characterHit, 100f, unitLayer))
+                if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out RaycastHit raycastHit, 100f))
                 {
-                    InputSelectCharacter(characterHit);
+                    int hitLayer = raycastHit.collider.gameObject.layer;
+                    if ( ((1 << hitLayer) & unitLayer.value) != 0 )
+                    {
+                        InputSelectCharacter(raycastHit);
+                    }
+                    else
+                    {
+                        InputSelectTile(raycastHit);
+                    }
                 }
-                else if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),
-                             out RaycastHit tileHit))
-                {
-                    InputSelectTile(tileHit);
-                }
+
+                
+
             }
         }
     }
@@ -216,6 +224,7 @@ public class GameManager : MonoBehaviour
                 if (hit.collider.TryGetComponent(out Tile tile))
                 {
                     currentSkillTargetTile = tile;
+                    
                 }
                 break;
             case TargetType.Ally:
@@ -260,6 +269,9 @@ public class GameManager : MonoBehaviour
         if (hit.collider.TryGetComponent(out CharacterData characterData))
         {
             currentCharacter = characterData;
+            
+            //유닛 패널 호출
+            InGameUIEventTerminal.ShowUnitInfoEventHandler?.Invoke(this, new ShowUnitInfoEventArgs(characterData));
         }
         else return;
 
