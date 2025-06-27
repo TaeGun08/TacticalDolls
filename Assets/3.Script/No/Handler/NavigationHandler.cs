@@ -64,7 +64,7 @@ public class NavigationHandler : MonoBehaviour
         {
             panelHistory.Push(currentPanel);
             renderHistory.Push(currentRender);
-        }
+        }   
 
         if (pushToHistory && panel == CharacterRoom)
         {
@@ -99,6 +99,15 @@ public class NavigationHandler : MonoBehaviour
 
         currentPanel = panel;
         currentRender = render;
+
+        if (currentPanel != Lobby)
+        {
+            BackButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            BackButton.gameObject.SetActive(false);
+        }
     }
 
     private void OnMoveLobby() => ShowRoom(Lobby, LobbyRender);
