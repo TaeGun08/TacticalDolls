@@ -2010,6 +2010,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hpBarTransform: {fileID: 6550886823689763815}
+  characterIcon: {fileID: -1669415583, guid: 41ca4ad448176ba46a9d4d65e9c0d329, type: 3}
   EnemyID: 103
   prefabName: Defender
   baseStatSO: {fileID: 11400000, guid: 242718327e655324cab6daa74ad172cc, type: 2}
