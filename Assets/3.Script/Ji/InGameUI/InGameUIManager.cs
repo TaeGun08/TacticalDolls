@@ -5,6 +5,12 @@ using Michsky.MUIP;
 using Sirenix.Utilities.Editor;
 using UnityEngine;
 
+public class ShowUnitInfoEventArgs : EventArgs
+{
+    public UnitParent unit;
+    public ShowUnitInfoEventArgs(UnitParent unit) => this.unit = unit;
+}
+
 public class InGameUIManager : MonoBehaviour
 {
     #region Field
