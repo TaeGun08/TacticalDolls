@@ -205,6 +205,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hpBarTransform: {fileID: 383261267087816103}
+  characterIcon: {fileID: 946056, guid: 36f090a8bb221da4490002bad0f07b2d, type: 3}
   EnemyID: 102
   prefabName: Blade
   baseStatSO: {fileID: 11400000, guid: 49ab79f5437eb0741a6b012b36dd5e17, type: 2}

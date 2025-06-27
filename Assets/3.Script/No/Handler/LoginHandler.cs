@@ -12,8 +12,6 @@ public class LoginHandler : MonoBehaviour
     [Header("Panel Settings")]
     public GameObject LoginForm;
     public GameObject JoinForm;
-    public GameObject AlertForm;
-    public TMP_Text alertInputField;
     public TMP_Text startText;
     
     [Header("Button Settings")]
@@ -107,17 +105,10 @@ public class LoginHandler : MonoBehaviour
         return false;
     }
     
-    // public void OnClickedLoginButtonWrapper()
-    // {
-    //     _ = OnLoginButtonClicked();
-    // }
-    
     private async void OnLoginButtonClicked()
     {
         string userEmail = LEmail.text;
         string userPassword = LPassword.text;
-        
-        Debug.Log($"email:{userEmail} / PW:{userPassword}");
      
         // 로그인 요청
         if (await FirebaseAccountManager.Instance.SignIn(userEmail, userPassword)) //return bool
@@ -143,9 +134,6 @@ public class LoginHandler : MonoBehaviour
         else
         {
             //로그인 실패
-            AlertForm.SetActive(true);
-            alertInputField.text ="login failed";
-            StartCoroutine(TestCo());
         }
     }
 
@@ -154,8 +142,6 @@ public class LoginHandler : MonoBehaviour
         string useNickName = INick.text;
         string userEmail = IEmail.text;
         string userPassword = IPassword.text;
-
-        Debug.Log($"NICK: {useNickName} / ID:{userEmail} / PW:{userPassword}");
         
         // 회원가입 성공
         var res = FirebaseAccountManager.Instance.CreateAccount(userEmail, userPassword, useNickName);
@@ -163,30 +149,20 @@ public class LoginHandler : MonoBehaviour
         if (res != null)
         {
             // 회원가입 성공
-            AlertForm.SetActive(true);
-            alertInputField.text = $"{useNickName} 회원 가입 성공";
-            JoinForm.SetActive(false);
-            StartCoroutine(TestCo());
+            OnBackButtonClicked();
         }
         else
         {
             // 회원가입 실패
-            AlertForm.SetActive(true);
-            alertInputField.text = $"========= 회원 가입 실패 =============";
         }
     }
     
-    void OnBackButtonClicked()
+    public void OnBackButtonClicked()
     {
         // 뒤로가기
         JoinForm.SetActive(false);
-    }
-    
-    IEnumerator TestCo()
-    {
-        yield return new WaitForSeconds(2f);
-        
-        AlertForm.SetActive(false);
-        alertInputField.text = $"";
+        INick.text = "";
+        IEmail.text = "";
+        IPassword.text = "";
     }
 }
