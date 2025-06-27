@@ -69,7 +69,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -577014708, guid: 168838f77920f4842930be3dfa3cec2b, type: 3}
+  m_Sprite: {fileID: 642692446, guid: 3df5428f9ba5b974dbea60c5b2c9bb26, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -91,8 +91,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9962c534960090e4fbfd1d105be98100, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hpBarTransform: {fileID: 0}
+  characterIcon: {fileID: 0}
   CharacterID: 0
-  PrefabName: Shooter
+  prefabName: 
+  position: 
   baseStatSO: {fileID: 11400000, guid: c24d3475c95a7cf4d94d5a0866131bde, type: 2}
   runtimeStat:
     level: 0
@@ -100,11 +103,12 @@ MonoBehaviour:
     attack: 0
     defense: 0
     moveRange: 0
+    attackRange: 0
     weapon: {fileID: 0}
     isDead: 0
     isCompleteAction: 0
-  hasSkills: []
   animator: {fileID: 0}
+  hasSkills: []
 --- !u!114 &4442200570086932641
 MonoBehaviour:
   m_ObjectHideFlags: 0

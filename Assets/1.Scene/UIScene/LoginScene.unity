@@ -337,9 +337,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: GAME START
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b4cb574d92d859d48812f0274bae09fc, type: 2}
-  m_sharedMaterial: {fileID: 3081724542603141711, guid: b4cb574d92d859d48812f0274bae09fc,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -948,9 +947,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Touch the screen
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b4cb574d92d859d48812f0274bae09fc, type: 2}
-  m_sharedMaterial: {fileID: 3081724542603141711, guid: b4cb574d92d859d48812f0274bae09fc,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1161,7 +1159,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 68bed61eaacc5954bab3c0860ccd2808, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dc573bffecfb3514eb3fca3a1fee1b33, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1516,7 +1514,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LoginForm: {fileID: 403918257}
   JoinForm: {fileID: 2097121549}
-  AlertForm: {fileID: 1288413328}
   startText: {fileID: 273327272}
   GameStartButton: {fileID: 451822672}
   LoginButton: {fileID: 1434592878}
@@ -3958,19 +3955,13 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1288413326}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1288413328 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8681360060235012988, guid: fca644ef066da26489ee7adffb3732d9,
-    type: 3}
-  m_PrefabInstance: {fileID: 1288413326}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1288413329 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8681360060235012984, guid: fca644ef066da26489ee7adffb3732d9,
     type: 3}
   m_PrefabInstance: {fileID: 1288413326}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1288413328}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee814d6473067724eaf0a75a1b2ad037, type: 3}
@@ -6162,7 +6153,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 68bed61eaacc5954bab3c0860ccd2808, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dc573bffecfb3514eb3fca3a1fee1b33, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
