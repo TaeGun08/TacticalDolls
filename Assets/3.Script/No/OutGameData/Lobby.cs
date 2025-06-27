@@ -98,4 +98,9 @@ public class Lobby : MonoBehaviour
         
         Debug.Log("게임 내 판매 무기 정보 저장 완료.");
     }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
 }

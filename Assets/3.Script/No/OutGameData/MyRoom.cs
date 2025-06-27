@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MyRoom : MonoBehaviour
@@ -19,6 +20,8 @@ public class MyRoom : MonoBehaviour
     
     [SerializeField] private TMP_Text playerName;
     [SerializeField] private TMP_Text playerEmail;
+    
+    [SerializeField] private Button logoutButton;
 
     private void Start()
     {
@@ -74,5 +77,12 @@ public class MyRoom : MonoBehaviour
                     break;
             }
         }
+    }
+
+    public void LogOut()
+    {
+        FirebaseAccountManager.Instance.SignOut();
+        PlayerPrefs.DeleteAll();
+        SceneManager.LoadScene("LoginScene");
     }
 }

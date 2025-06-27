@@ -72,15 +72,74 @@ public class CombatSystem : MonoBehaviour
     //     }
     // }
 
+    /// <summary>
+    /// 엄폐 방향에 따라 감소된 대미지의 값을 받아오는 함수
+    /// </summary>
+    /// <param name="attackerPos"></param>
+    /// <param name="targetPos"></param>
+    /// <param name="tile"></param>
+    /// <returns></returns>
+    private float GetRelativeAttackAngle(Vector2 attackerPos, Vector2 targetPos, Tile tile)
+    {
+        Vector2 attackDir = (attackerPos - targetPos).normalized;
+
+        Vector2 fowardDir = Vector2.zero;
+        
+        //엄폐 방향
+        switch (tile.obstacleDir)
+        {
+            case 1: //정면
+                fowardDir = Vector2.up;
+                break;
+            case 2: //후면
+                fowardDir = Vector2.down;
+                break;
+            case 3: //좌
+                fowardDir = Vector2.left;
+                break;
+            case 4: //우
+                fowardDir = Vector2.right;
+                break;
+        }
+        
+        // 기준 벡터: forward
+        // 공격 방향: attackDir
+        float angle = Vector2.SignedAngle(fowardDir, attackDir);
+        
+        float damage = 1f;
+        if (angle <= 45 && angle >= -45)
+        {
+            damage = 0.5f;
+        }
+        
+        // 결과는 -180도 ~ +180도 사이
+        return damage;
+    }
+    
     public void ApplyDamage(IDamageAble attacker, List<IDamageAble> targets, int amount)
     {
+        //공격자의 현재 타일
+        Tile tile = TileManager.Instance.GetCurrentTileByIDamageAble(attacker);
+        
+        //공격자 위치
+        Vector2 attackerPos = new Vector2(attacker.GameObject.transform.position.x,
+            attacker.GameObject.transform.position.z);
+        
+        //타겟 위치
+        Vector2 targetPos = Vector2.zero;
+        
+        int damage = 0;
+        
         foreach (var target in targets)
         {
+            targetPos = new Vector2(target.GameObject.transform.position.x, target.GameObject.transform.position.z);
+            damage = (int)(amount * GetRelativeAttackAngle(attackerPos, targetPos, tile));
+            
             var combatEvent = new CombatEvent
             {
                 Sender = attacker,
                 Target = target,
-                Damage = amount
+                Damage = damage,
             };
         
             target.TakeDamage(combatEvent);

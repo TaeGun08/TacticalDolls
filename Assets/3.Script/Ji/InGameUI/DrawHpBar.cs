@@ -21,11 +21,11 @@ namespace Shapes {
         private string unitName = "UnitName";
 
         public override void DrawPanelShapes( Rect rect, ImCanvasContext ctx ) {
-            // if (selectedColorGradient == null || unit == null)
-            // {
-            //     Debug.LogError( "DrawPanelShapes: selectedColorGradient, unit == null" );
-            //     return; // just in case it hasn't initialized
-            // }
+            if (selectedColorGradient == null || unit == null)
+            {
+                //Debug.LogError( "DrawPanelShapes: selectedColorGradient, unit == null" );
+                return; // just in case it hasn't initialized
+            }
 
 
             // Draw black background:
