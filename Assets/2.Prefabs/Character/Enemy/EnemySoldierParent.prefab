@@ -3178,6 +3178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hpBarTransform: {fileID: 4335044586256175912}
+  characterIcon: {fileID: -681787415, guid: 5f70c42034d2b09459fd23936289754a, type: 3}
   EnemyID: 101
   prefabName: Soldier
   baseStatSO: {fileID: 11400000, guid: f0f34391159c94c42a7d9a28aad8d3ab, type: 2}
