@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
     public Button EndTurnBtn => endTurnBtn;
 
     private CharacterData currentCharacter;
-    public IDamageAble CurrentSkillTarget { get; set; }
+    public Transform CurrentSkillTarget { get; set; }
     private Tile currentSkillTargetTile;
 
     public Tile MoveChoiceTile { get; set; }
@@ -209,6 +209,7 @@ public class GameManager : MonoBehaviour
     private void InputHitTarget(RaycastHit hit)
     {
         int currentSkillIndex = SkillSelectSystem.Instance.GetCurrentSkillIndex();
+
         switch (currentCharacter.HasSkills[currentSkillIndex].targetType)
         {
             case TargetType.Tile:
@@ -233,6 +234,8 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
+        CurrentSkillTarget = hit.collider.gameObject.transform;
+        
         TargetAttackRange();
     }
 
@@ -240,7 +243,7 @@ public class GameManager : MonoBehaviour
     {
         isTargetInAttackRange =
             RangeSystem.Instance.attackableTiles.Contains(currentSkillTargetTile);
-
+        
         if (isTargetInAttackRange)
         {
             SkillSelectSystem.Instance.CashedDamageAbles = 

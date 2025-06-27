@@ -7,7 +7,6 @@ using UnityEngine;
 [System.Serializable]
 public class EnemyData : UnitParent
 {
-    private static readonly int ATTACKED = Animator.StringToHash("Attacked");
     public int EnemyID;
     public override string PrefabName { get => prefabName; set => prefabName = value; }
     public string prefabName;
@@ -59,16 +58,25 @@ public class EnemyData : UnitParent
         }
         await CharacterSequenceManager.Instance.MakeSequence(HasSkills[selectedSkill] as SkillBase, targets, targetPoint);
     }
+
+    
     
     public override void TakeDamage(CombatEvent combatEvent)
     {
         Debug.Log($"{PrefabName} Enemy Take damage :: {EnemyID}");
         Stat.HP -= combatEvent.Damage;
-        
+
+        OnHpChanged?.Invoke();
+        if (Stat.HP <= 0)
+        {
+            StartCoroutine(DeadCorotuine());
+        }
+        else
+        {
+            animator.SetTrigger(ATTACKED);
+        }
         //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
         
-        animator.SetTrigger(ATTACKED);
-        OnHpChanged?.Invoke();
     }
 
     public override void TakeHeal(HealEvent combatEvent)

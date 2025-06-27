@@ -162,7 +162,7 @@ public class OrderRoom : MonoBehaviour
         }
         
         // 캐릭터
-        itemImages[0].sprite = selectedCharacter.characterIcon;
+        itemImages[0].sprite = selectedCharacter.CharacterIcon;
         itemNames[0].text = selectedCharacter.PrefabName;
         itemPrices[0].text = "가격 미정";
 

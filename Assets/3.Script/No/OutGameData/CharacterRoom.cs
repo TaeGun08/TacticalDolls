@@ -82,7 +82,7 @@ public class CharacterRoom : MonoBehaviour
             var image = spawnCharacterUI.GetComponent<Image>();
             var color = image.color;
             
-            image.sprite = playerCharacters[i].characterIcon;
+            image.sprite = playerCharacters[i].CharacterIcon;
             color.a = 1;
             image.color = color;
                 
