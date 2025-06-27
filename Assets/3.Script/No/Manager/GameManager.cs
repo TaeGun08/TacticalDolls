@@ -14,8 +14,6 @@ public class GameManager : MonoBehaviour
     
     //public PrefabsTable CharacterTable;
     public Button ExitButton;
-    public GameObject EndGamePanel;
-    public TMP_Text EndPanelTxt;
 
     // 게임에 배치된 유닛    
     public List<CharacterData> PlayerUnits;

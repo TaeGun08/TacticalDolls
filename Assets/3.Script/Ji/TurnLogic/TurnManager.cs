@@ -33,6 +33,9 @@ public class TurnManager : MonoBehaviour
     
     public Button startButton; 
     
+    public GameObject playerWinPanel;
+    public GameObject enemyWinPanel;
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -132,8 +135,7 @@ public class TurnManager : MonoBehaviour
             winner = ActorParent.Enemy;
             EndGame(winner);
             
-            GameManager.Instance.EndGamePanel.SetActive(true);
-            GameManager.Instance.EndPanelTxt.text = "enemy win";
+            enemyWinPanel.SetActive(true);
             
             return true;
         }
@@ -144,8 +146,7 @@ public class TurnManager : MonoBehaviour
             winner = ActorParent.Player;
             EndGame(winner);
             
-            GameManager.Instance.EndGamePanel.SetActive(true);
-            GameManager.Instance.EndPanelTxt.text = "player win";
+            playerWinPanel.SetActive(true);
 
             return true;
         }
@@ -156,8 +157,7 @@ public class TurnManager : MonoBehaviour
             winner = ActorParent.Enemy;
             EndGame(winner);
             
-            GameManager.Instance.EndGamePanel.SetActive(true);
-            GameManager.Instance.EndPanelTxt.text = "enemy win";
+            enemyWinPanel.SetActive(true);
             
             return true;
         }
