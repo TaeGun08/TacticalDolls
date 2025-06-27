@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 168838f77920f4842930be3dfa3cec2b
+guid: 3df5428f9ba5b974dbea60c5b2c9bb26
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -93,6 +93,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -100,8 +113,8 @@ TextureImporter:
       name: Shooter
       rect:
         serializedVersion: 2
-        x: 655
-        y: 241
+        x: 647
+        y: 309
         width: 600
         height: 600
       alignment: 0
@@ -111,8 +124,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6075069554086824eadad8811e5041c0
-      internalID: -577014708
+      spriteID: eb58768c1a116f94fbe79691a4c27563
+      internalID: 642692446
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shooter_12
+      rect:
+        serializedVersion: 2
+        x: 752
+        y: 98
+        width: 400
+        height: 800
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e223e5bee308f8949a4c4e9468200616
+      internalID: 1977289835
       vertices: []
       indices: 
       edges: []
@@ -120,7 +154,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: fef60f2d604027641994194fb62f139e
+    spriteID: fcfaeb59f392e09438d25e48e27bafcc
     internalID: 0
     vertices: []
     indices: 
@@ -128,7 +162,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Shooter: -577014708
+      Shooter: 642692446
+      Shooter_12: 1977289835
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

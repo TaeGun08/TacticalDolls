@@ -18,7 +18,7 @@ public class PlayerManager : MonoBehaviour
     // 플레이어가 사용 가능한 캐릭터 
     public List<int> usingCharacter;
     public List<CharacterData> usingCharacterData;
-    public List<CharacterData> characterIcons;
+    
     // 플레이어가 사용 가능한 무기
     public List<WeaponData> usingWeaponData;
     
