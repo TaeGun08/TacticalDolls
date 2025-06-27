@@ -31,9 +31,11 @@ public class PathFindingManager : MonoBehaviour
     private TileManager tileManager;
     private TurnController turn;
     
+    //생성한 타일만큼 담아둘 노드
     private Node[,] nodeArray;
     public Node[,]  NodeArray => nodeArray;
     
+    //탐색을 위한 방향
     private readonly Vector3Int[] directions = new Vector3Int[]
     {
         new Vector3Int(1, 0, 0),
@@ -58,8 +60,10 @@ public class PathFindingManager : MonoBehaviour
         tileManager = TileManager.Instance;
         turn = TurnController.Instance;
         
+        //타일 매니저에 생성된 타일만큼 노드 길이 설정
         nodeArray = new Node[tileManager.tiles.GetLength(0), tileManager.tiles.GetLength(0)];
 
+        //노드를 생성해 줌
         for (int x = 0; x < nodeArray.GetLength(0); x++)
         {
             for (int z = 0; z < nodeArray.GetLength(1); z++)
@@ -69,8 +73,15 @@ public class PathFindingManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 받아온 시작 위치와 종료 위치를 기반으로 노드를 탐색
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    /// <returns></returns>
     public List<Node> PathFind(Vector3 start, Vector3 end)
     {
+        //노드에 할당된 값을 초기화
         foreach (var node in nodeArray)
         {
             node.G = int.MaxValue;
@@ -132,6 +143,11 @@ public class PathFindingManager : MonoBehaviour
         return null;
     }
     
+    /// <summary>
+    /// 반올림 함수
+    /// </summary>
+    /// <param name="position"></param>
+    /// <returns></returns>
     public Vector3Int RoundToTilePosition(Vector3 position)
     {
         int x = Mathf.RoundToInt(position.x / tileManager.tileSize);
@@ -139,6 +155,12 @@ public class PathFindingManager : MonoBehaviour
         return new Vector3Int(x, 0, z);
     }
 
+    /// <summary>
+    /// 노드 탐색이 끝났을 때 반환을 해주는 함수
+    /// </summary>
+    /// <param name="startNode"></param>
+    /// <param name="endNode"></param>
+    /// <returns></returns>
     private List<Node> RetracePath(Node startNode, Node endNode)
     {
         List<Node> path = new List<Node>();
@@ -158,6 +180,11 @@ public class PathFindingManager : MonoBehaviour
         return path;
     }
     
+    /// <summary>
+    /// 이웃한 노드를 탐색하는 함수
+    /// </summary>
+    /// <param name="node"></param>
+    /// <returns></returns>
     private List<Node> GetNeighbours(Node node)
     {
         List<Node> neighbors = new List<Node>();
@@ -200,6 +227,11 @@ public class PathFindingManager : MonoBehaviour
         return neighbors;
     }
 
+    /// <summary>
+    /// 해당 노드에 아군인지 적군인지 판별하기 위한 함수
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <returns></returns>
     private bool IsTargetAtPosition(Vector3Int pos)
     {
         if (TurnManager.Instance == null || turn == null)
@@ -225,6 +257,12 @@ public class PathFindingManager : MonoBehaviour
         return false;
     }
     
+    /// <summary>
+    /// 노드에 가중치를 부여하는 함수
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <returns></returns>
     private int CalculateDistanceCost(Node a, Node b)
     {
         int dx = Mathf.Abs(a.Position.x - b.Position.x);

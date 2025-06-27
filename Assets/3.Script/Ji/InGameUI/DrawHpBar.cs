@@ -21,8 +21,12 @@ namespace Shapes {
         private string unitName = "UnitName";
 
         public override void DrawPanelShapes( Rect rect, ImCanvasContext ctx ) {
-            if( selectedColorGradient == null || unit == null)
-                return; // just in case it hasn't initialized
+            // if (selectedColorGradient == null || unit == null)
+            // {
+            //     Debug.LogError( "DrawPanelShapes: selectedColorGradient, unit == null" );
+            //     return; // just in case it hasn't initialized
+            // }
+
 
             // Draw black background:
             Draw.Rectangle( rect, 8f, Color.black );
@@ -43,7 +47,7 @@ namespace Shapes {
             // Draw the title
             Draw.FontSize = 240;
             Vector2 topLeft = new Vector2( rect.xMin + 6f, rect.yMax + 6f );
-            Draw.Text( topLeft, unitName, TextAlign.BaselineLeft );
+            // Draw.Text( topLeft, unitName, TextAlign.BaselineLeft );
         }
 
         Rect Inset( Rect r, float amount ) {

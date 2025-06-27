@@ -13,21 +13,25 @@ public class GridBehavior : MonoBehaviour
 {
     // 노드에서 노드 이동 처리
     public static GridBehavior Instance;
+    
     private static readonly int IS_CROUCHING = Animator.StringToHash("isCrouching");
     private static readonly int IS_RUNNING = Animator.StringToHash("isRunning");
 
+    private PathFindingManager pathFindingManager;
     private TileManager tileManager;
-    
+
     private Camera mainCam;
 
-    public IDamageAble Actor;
+    public IDamageAble Actor { get; set; } //현재 움직일 Actor
+    [Header("CharacterLayer Setting")]
     [SerializeField] private LayerMask characterLayer;
 
-    public bool IsMove { get; set; }
-    public bool IsAutoMove { get; set; }
-    public List<IDamageAble> Actors = new List<IDamageAble>();
-    private float turnCalmVelocity;
+    public bool IsMove { get; set; } //움직이는 중인지 체크
+    public bool IsAutoMove { get; set; } //오토로 움직이는 중인지 체크
+    public List<IDamageAble> Actors = new List<IDamageAble>(); //추적할 캐릭터들
+    //private float turnCalmVelocity; 
 
+    //이동을 위해 받아올 방향
     private readonly Vector3Int[] directions = new Vector3Int[]
     {
         new Vector3Int(1, 0, 0), new Vector3Int(-1, 0, 0),
@@ -36,18 +40,16 @@ public class GridBehavior : MonoBehaviour
         new Vector3Int(-1, 0, 1), new Vector3Int(-1, 0, -1),
     };
 
+    //도착할 위치에 다른 캐릭터가 있을 경우 중복되지 않은 새로운 위치를 뽑기 위한 리스트
     private HashSet<Vector2Int> reservedTiles = new HashSet<Vector2Int>();
-
-    private Tile moveChoiceTile;
-    private Tile skillChoiceTile;
-
-    [SerializeField] private Button autoButton;
-    public bool IsAuto { get; private set; }
-
-    private IDamageAble nearestTarget;
-
-    private Node endNode = new Node();
     
+    [SerializeField] private Button autoButton;
+    public bool IsAuto { get; private set; } //플레이어를 Auto로 설정해주는 변수
+
+    private IDamageAble nearestTarget; //공격을 지정을 위해 타겟을 담아주는 변수
+
+    private Node endNode = new Node(); //엄폐 체크를 위해 마지막 도착 노드를 확인 하기 위한 변수
+
     public class CallBack
     {
         public Action<Transform> startMove { get; set; }
@@ -55,8 +57,7 @@ public class GridBehavior : MonoBehaviour
     }
 
     public CallBack callback;
-    // private bool isCameraMove = false;
-    
+
     private void Awake()
     {
         Instance = this;
@@ -66,7 +67,7 @@ public class GridBehavior : MonoBehaviour
             IsAuto = IsAuto == false;
             if (IsAuto && IsMove == false)
             {
-                _= TurnController.Instance.OnCheckEndCharacterActor();
+                _ = TurnController.Instance.OnCheckEndCharacterActor();
             }
         });
         callback = new CallBack();
@@ -74,6 +75,7 @@ public class GridBehavior : MonoBehaviour
 
     private void Start()
     {
+        pathFindingManager = PathFindingManager.Instance;
         tileManager = TileManager.Instance;
         mainCam = Camera.main;
     }
@@ -103,22 +105,23 @@ public class GridBehavior : MonoBehaviour
             return;
         }
 
-        List<Node> path = PathFindingManager.Instance.PathFind(Actor.GameObject.transform.position, finalTargetPos);
+        List<Node> path = pathFindingManager.PathFind(Actor.GameObject.transform.position, finalTargetPos);
         reservedTiles.Add(new Vector2Int(finalTargetPos.x, finalTargetPos.z));
-        
+
         nearestTarget = Actors
             .Where(target => target != Actor && actor.Stat.IsDead == false)
             .OrderBy(target =>
                 Vector3.Distance(Actor.GameObject.transform.position, target.GameObject.transform.position))
             .FirstOrDefault();
-        
-        Vector3 targetPos = nearestTarget == null ? Vector3.zero: 
-        PathFindingManager.Instance.RoundToTilePosition(nearestTarget.GameObject.transform.position); 
-        
+
+        Vector3 targetPos = nearestTarget == null
+            ? Vector3.zero
+            : pathFindingManager.RoundToTilePosition(nearestTarget.GameObject.transform.position);
+
         await MovePlayerAlongPath(path, targetPos);
     }
-    
-    
+
+
     /// <summary>
     /// 경로를 넣어주면 그 경로에 맞는 위치로 이동하는 함수
     /// </summary>
@@ -127,31 +130,26 @@ public class GridBehavior : MonoBehaviour
     public async Task MovePlayerAlongPath(List<Node> path, Vector3 target)
     {
         IsMove = true; //이동 시작
-        Tile currentTile = TileManager.Instance.GetClosestTile(Actor.GameObject.transform.position); //현재 움직일 Actor의 타일을 받아 옴
         
+        UsingTileChecker(false, null);; //현재 움직일 Actor의 타일을 받아 옴
+
         //harang 시작
-        if(Actor is CharacterData character) //명시적 형변환 -> Actor가 CharacterData일 경우
+        if (Actor is CharacterData character) //명시적 형변환 -> Actor가 CharacterData일 경우
         {
             callback.startMove?.Invoke(character.transform);
         }
-        
-        if (currentTile != null) //현재 타일이 null이 아니라면 이동 가능 타일로 변경
-        {
-            currentTile.isUsingTile = false;
-            currentTile.SetOccupant(null);
-        }
-        
+
         if (Actor?.Animator != null) //Actor에 Animator가 존재한다면 애니메이션 재생
         {
             Actor.Animator.SetBool(IS_CROUCHING, false);
             Actor.Animator.SetBool(IS_RUNNING, true);
         }
-        
+
         //Actor의 X, Z 좌표를 담아주기 위한 변수
         Vector2Int actorPos = new Vector2Int((int)Actor.GameObject.transform.position.x,
             (int)Actor.GameObject.transform.position.z);
-        List<Vector2Int> actorPosList = TileManager.Instance.GetReachableTiles(actorPos, Actor.Stat.MoveRange);
-        
+        List<Vector2Int> actorPosList = tileManager.GetReachableTiles(actorPos, Actor.Stat.MoveRange);
+
         foreach (Node node in path)
         {
             //타일 사이즈에 맞게 파인딩한 노드 위치로 이동하기 위한 좌표
@@ -163,10 +161,10 @@ public class GridBehavior : MonoBehaviour
 
             //이동 시작
             await NodeMovement(targetPos);
-            
+
             //끝난 노드
             endNode = node;
-            
+
             if (IsAutoMove) //자동 이동 중일 때 적용
             {
                 if (AttackRangeChecker(target)) break;
@@ -180,16 +178,11 @@ public class GridBehavior : MonoBehaviour
         }
 
         CrouchingRotate(endNode);
-        
-        Tile newTile = TileManager.Instance.GetClosestTile(Actor.GameObject.transform.position);
-        if (newTile != null) //현재 Actor가 서있는 위치를 탐색하지 못하게 함
-        {
-            newTile.isUsingTile = true;
-            newTile.SetOccupant(Actor);
-        }
-        
+
+        UsingTileChecker(true, Actor);
+
         //harang 카메라 끝
-        if(Actor is CharacterData _character) //명시적 형변환 -> Actor가 CharacterData일 경우
+        if (Actor is CharacterData _character) //명시적 형변환 -> Actor가 CharacterData일 경우
         {
             callback.onCompleteMove?.Invoke(_character.transform);
         }
@@ -198,7 +191,8 @@ public class GridBehavior : MonoBehaviour
         {
             List<IDamageAble> targets = new List<IDamageAble> { nearestTarget };
             await Actor.Excute(TurnManager.Instance.CurrentTurn == ActorParent.Player
-                ? Random.Range(0, 3) : 0, targets, targets[0].GameObject.transform);
+                ? Random.Range(0, 3)
+                : 0, targets, targets[0].GameObject.transform);
         }
 
         EndMovement();
@@ -217,10 +211,25 @@ public class GridBehavior : MonoBehaviour
             Vector3 eulerAngles = new Vector3(0f, lookRotation.eulerAngles.y, 0f);
             Actor.GameObject.transform.DORotate(eulerAngles, 0.1f).SetEase(Ease.Linear);
         }
-            
+
         await Actor.GameObject.transform.DOMove(targetPos, 0.1f).SetEase(Ease.Linear).AsyncWaitForCompletion();
     }
 
+    /// <summary>
+    /// 이 타일 위에 캐릭터가 있다는 것을 체크해주는 함수
+    /// </summary>
+    /// <param name="usingTileCheck"></param>
+    /// <param name="target"></param>
+    private void UsingTileChecker(bool usingTileCheck, IDamageAble target)
+    {
+        Tile usingTile = tileManager.GetClosestTile(Actor.GameObject.transform.position);
+        if (usingTile != null) //현재 Actor가 서있는 위치를 탐색하지 못하게 함
+        {
+            usingTile.isUsingTile = usingTileCheck;
+            usingTile.SetOccupant(target);
+        }
+    }
+    
     /// <summary>
     /// 이동 종료 시, 값 초기화 및 캐릭터 행동 가능여부 체크
     /// </summary>
@@ -232,7 +241,7 @@ public class GridBehavior : MonoBehaviour
         nearestTarget = null;
         IsMove = false;
     }
-    
+
     /// <summary>
     /// 엄폐에 맞춰서 회전 방향을 결정
     /// </summary>
@@ -254,11 +263,11 @@ public class GridBehavior : MonoBehaviour
                 Actor.GameObject.transform.DORotate(new Vector3(0f, 180f, 0f), 0.1f).SetEase(Ease.Linear);
                 break;
         }
-        
+
         if (endNode.Tile.obstacleDir == 0) return;
         Actor.Animator.SetBool("isCrouching", true);
     }
-    
+
     /// <summary>
     /// Player나 Enemy 턴 때, 자신을 제외한 상대를 추적하기 위해 리스트를 담는 함수
     /// </summary>
@@ -307,7 +316,7 @@ public class GridBehavior : MonoBehaviour
     {
         return actorPos.Contains(new Vector2Int((int)targetPos.x, (int)targetPos.z));
     }
-    
+
     /// <summary>
     /// 자신의 공격 사거리에 상대가 있는지 체크하기 위한 함수
     /// </summary>
@@ -317,8 +326,8 @@ public class GridBehavior : MonoBehaviour
     {
         Vector2Int actorPos = new Vector2Int((int)Actor.GameObject.transform.position.x,
             (int)Actor.GameObject.transform.position.z);
-        List<Vector2Int> actorPosList = TileManager.Instance.GetReachableTiles(actorPos, Actor.Stat.AttackRnage);
-        
+        List<Vector2Int> actorPosList = tileManager.GetReachableTiles(actorPos, Actor.Stat.AttackRnage);
+
         return actorPosList.Contains(new Vector2Int((int)targetPos.x, (int)targetPos.z));
     }
 

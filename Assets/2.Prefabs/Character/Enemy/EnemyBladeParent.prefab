@@ -212,7 +212,7 @@ MonoBehaviour:
   runtimeStat:
     level: 1
     hp: 100
-    attack: 30
+    attack: 20
     defense: 5
     moveRange: 4
     attackRange: 1
