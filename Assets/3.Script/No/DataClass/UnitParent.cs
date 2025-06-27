@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 public abstract class UnitParent : MonoBehaviour, IDamageAble
 {
     protected static readonly int ATTACKED = Animator.StringToHash("Attacked");
-    protected static readonly int DEAD = Animator.StringToHash("Dead");
+    protected static readonly int DIE = Animator.StringToHash("Die");
     
     public abstract IStat Stat { get; }
     public abstract Collider MainCollider { get; }
@@ -35,7 +35,7 @@ public abstract class UnitParent : MonoBehaviour, IDamageAble
     
     protected IEnumerator DeadCorotuine()
     {
-        Animator.SetTrigger(DEAD);
+        Animator.SetTrigger(DIE);
         Stat.IsDead = true;
         Tile usingTile = TileManager.Instance.GetCurrentTileByIDamageAble(this);
         usingTile.isUsingTile = false;
