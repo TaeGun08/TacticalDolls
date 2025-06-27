@@ -20,14 +20,14 @@ public class InGameUIManager : MonoBehaviour
 
         private void Start()
         {
-            InGameUIEventTerminal.ShowUnitInfoEventHandler += ShowUnitInfoCallBacked;
-            InGameUIEventTerminal.DisableUnitInfoAction += DisableUnitInfoCallBacked;
+            InGameUIEventTerminal.UnitInfoEvents.ShowUnitInfoEventHandler += ShowUnitInfoCallBacked;
+            InGameUIEventTerminal.UnitInfoEvents.DisableUnitInfoAction += DisableUnitInfoCallBacked;
         }
 
         private void OnDisable()
         {
-            InGameUIEventTerminal.ShowUnitInfoEventHandler -= ShowUnitInfoCallBacked;
-            InGameUIEventTerminal.DisableUnitInfoAction -= DisableUnitInfoCallBacked;
+            InGameUIEventTerminal.UnitInfoEvents.ShowUnitInfoEventHandler -= ShowUnitInfoCallBacked;
+            InGameUIEventTerminal.UnitInfoEvents.DisableUnitInfoAction -= DisableUnitInfoCallBacked;
         }
     
     #endregion

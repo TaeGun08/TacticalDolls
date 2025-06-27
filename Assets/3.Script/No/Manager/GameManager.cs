@@ -271,7 +271,7 @@ public class GameManager : MonoBehaviour
             currentCharacter = characterData;
             
             //유닛 패널 호출
-            InGameUIEventTerminal.ShowUnitInfoEventHandler?.Invoke(this, new ShowUnitInfoEventArgs(characterData));
+            InGameUIEventTerminal.UnitInfoEvents.ShowUnitInfoEventHandler?.Invoke(this, new ShowUnitInfoEventArgs(characterData));
         }
         else return;
 
