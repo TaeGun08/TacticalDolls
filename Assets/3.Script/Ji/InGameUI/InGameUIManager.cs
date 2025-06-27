@@ -2,41 +2,33 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Michsky.MUIP;
-using Sirenix.Utilities.Editor;
 using UnityEngine;
 
-public class ShowUnitInfoEventArgs : EventArgs
-{
-    public UnitParent unit;
-    public ShowUnitInfoEventArgs(UnitParent unit) => this.unit = unit;
-}
 
 public class InGameUIManager : MonoBehaviour
 {
     #region Field
     
-    //Components
-    [field: SerializeField]
-    public GameManager gameManager { get; set; }
-    
-    [field: SerializeField]
-    private ButtonManager buttonManager { get; set; }
-
-    [SerializeField] private InGameUnitInfoPanel inGameUnitInfoPanel;
+        //Components
+        [field: SerializeField] private InGameUnitInfoPanel inGameUnitInfoPanel { get; set; }
+        [field: SerializeField] private InGameHpBarPanel InGameHpBarPanel { get; set; }
+        [field: SerializeField] private UnitParent testInfoUICharacter { get; set; }
     
     #endregion
     
     #region LifeCycle
 
-    private void Start()
-    {
-        throw new NotImplementedException();
-    }
+        private void Start()
+        {
+            InGameUIEventTerminal.ShowUnitInfoEventHandler += ShowUnitInfoCallBacked;
+            InGameUIEventTerminal.DisableUnitInfoAction += DisableUnitInfoCallBacked;
+        }
 
-    private void OnDisable()
-    {
-        throw new NotImplementedException();
-    }
+        private void OnDisable()
+        {
+            InGameUIEventTerminal.ShowUnitInfoEventHandler -= ShowUnitInfoCallBacked;
+            InGameUIEventTerminal.DisableUnitInfoAction -= DisableUnitInfoCallBacked;
+        }
     
     #endregion
     
@@ -44,17 +36,16 @@ public class InGameUIManager : MonoBehaviour
     
         #region Action
         
-        //캐릭터를 클릭했을 때
-        public void ShowUnitInfoCallBacked(ShowUnitInfoEventArgs e) // 유닛 정보
+        private void ShowUnitInfoCallBacked(object o, ShowUnitInfoEventArgs e) //캐릭터를 클릭했을 때
         {
-            inGameUnitInfoPanel.SetInGameUnitInfoPanel(e.unit);
+            inGameUnitInfoPanel.gameObject.SetActive(true);
+            inGameUnitInfoPanel.SetInGameUnitInfoPanel(e.Unit);
         }
         
-        public void InteractableChangeCallBacked(bool isInteractable) // 게임 스타트 버튼 CallBack
+        private void DisableUnitInfoCallBacked() // 캐릭터가 아닌 다른 곳을 클릭했을 때
         {
-            buttonManager.Interactable(isInteractable);
+            inGameUnitInfoPanel.gameObject.SetActive(false);
         }
-        
         #endregion
     
     #endregion

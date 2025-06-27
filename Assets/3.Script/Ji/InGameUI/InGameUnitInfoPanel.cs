@@ -7,22 +7,20 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
+
 public class InGameUnitInfoPanel : MonoBehaviour
 {
     #region Field
     
-    [SerializeField] private RawImage unitImage;
+    [SerializeField] private Image unitImage;
     [SerializeField] private DrawHpBar unitHpBar;
     #endregion
-
-
-    #region Method
     
-    public void SetInGameUnitInfoPanel(UnitParent unitParent)
-    {
-        // unitImage = unitParent.icon
-        unitHpBar.SetUpHpBar(unitParent);
-    }
+    #region Method
+        public void SetInGameUnitInfoPanel(UnitParent unitParent) //유닛 정보 표시 왼쪽 하단
+        {
+            unitImage.sprite = unitParent.CharacterIcon;
+            unitHpBar.SetUpHpBar(unitParent);
+        }
     #endregion
-
 }

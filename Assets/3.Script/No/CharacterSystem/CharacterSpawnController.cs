@@ -77,6 +77,8 @@ public class CharacterSpawnController : MonoBehaviour
         }
     }
 
+    // public EventHandler<InGameUnitSetEventArgs> SetInGameUnit;
+    
     private void ApplyCharacter()
     {
         var dragSystem = disposeCharacter.GetComponent<Character2DDragSystem>();
@@ -107,6 +109,8 @@ public class CharacterSpawnController : MonoBehaviour
         // 배치된 캐릭터 저장
         PlayerManager.Instance.usingCharacter.Add(spawnedData.CharacterID);
         
+        // InGameUIEventTerminal.SetInGameUnitEventHandler?.Invoke(this, new InGameUnitSetEventArgs(PlayerManager.Instance.usingCharacter.Count));
+        
         // 배치된 캐릭터가 할당된 타일 저장
         characterTileMap[spawnedData.CharacterID] = TileManager.Instance.selectedTile;
         
@@ -136,6 +140,7 @@ public class CharacterSpawnController : MonoBehaviour
 
         PlayerManager.Instance.usingCharacter.Remove(charID);
         GameManager.Instance.PlayerUnits.Remove(revertCharacter.GetComponent<CharacterData>());
+        // InGameUIEventTerminal.SetInGameUnitEventHandler?.Invoke(this, new InGameUnitSetEventArgs(PlayerManager.Instance.usingCharacter.Count));
         
         if (characterTileMap.TryGetValue(charID, out Tile tile))
         {
