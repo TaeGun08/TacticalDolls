@@ -47,7 +47,7 @@ namespace Shapes {
             // Draw the title
             Draw.FontSize = 240;
             Vector2 topLeft = new Vector2( rect.xMin + 6f, rect.yMax + 6f );
-            // Draw.Text( topLeft, unitName, TextAlign.BaselineLeft );
+            Draw.Text( topLeft, unitName, TextAlign.BaselineLeft );
         }
 
         Rect Inset( Rect r, float amount ) {
