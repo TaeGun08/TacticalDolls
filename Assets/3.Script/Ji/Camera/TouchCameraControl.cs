@@ -17,14 +17,6 @@ public class TouchCameraControl : MonoBehaviour
         {
             targetCamera.ResetCameraY(); //휠 떨어질 때 카메라 각도 복구
         }
-        
-        //test
-        // if (Input.GetKeyDown(KeyCode.A))
-        // {
-        //     targetCamera.ResetCamera();
-        //     targetCamera.MoveCameraTo(targets[index%4].position);
-        //     index++;
-        // }
     }
 }
 

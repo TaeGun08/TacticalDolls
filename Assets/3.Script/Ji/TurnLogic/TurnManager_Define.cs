@@ -14,12 +14,6 @@ public enum ActorParent //턴의 조작권을 받습니다.
     Enemy
 }
 
-public class PlayerTurnEventArgs : EventArgs
-{
-    public ActorParent Actor { get; }
-    public PlayerTurnEventArgs(ActorParent actor) => Actor = actor;
-}
-
 public class GameStateEventArgs : EventArgs
 {
     public GameState State { get; }
