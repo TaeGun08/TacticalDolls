@@ -53,12 +53,9 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
 
         ExitButton.onClick.AddListener(OnExitButtonClicked);
-
         endTurnBtn.onClick.AddListener(OnCharacterEndTurn_Wrapper);
-        
         StartBtn.onClick.AddListener(StartGame);
     }
 
