@@ -76,6 +76,7 @@ public class TurnController : MonoBehaviour
     {
         foreach (var enemy in GameManager.Instance.EnemyUnits)
         {
+            if(enemy.Stat.IsDead) continue;
             gridBehavior.Actors.Add(enemy);
         }
 
@@ -84,6 +85,7 @@ public class TurnController : MonoBehaviour
         foreach (var player in GameManager.Instance.PlayerUnits)
         {
             if (gridBehavior.IsAuto == false) break;
+            if (player.Stat.IsDead) continue;
             if (player.Stat.IsCompleteAction) continue;
             
             OffPlayerUI();
@@ -94,7 +96,6 @@ public class TurnController : MonoBehaviour
         
         foreach (var player in GameManager.Instance.PlayerUnits)
         {
-            if (player.Stat.IsDead) continue;
             if (player.Stat.IsCompleteAction) continue;
             playerIsCompleteCheck = false;
         }
@@ -120,6 +121,7 @@ public class TurnController : MonoBehaviour
     {
         foreach (var player in GameManager.Instance.PlayerUnits)
         {
+            if (player.Stat.IsDead) continue;
             gridBehavior.Actors.Add(player);
         }
 

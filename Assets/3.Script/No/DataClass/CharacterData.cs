@@ -83,13 +83,13 @@ public class CharacterData : UnitParent
         Debug.Log($"{PrefabName} Character Take damage :: CharacterID {CharacterID} _ {combatEvent.Damage}");
         Stat.HP -= combatEvent.Damage;
         
-        OnHpChanged?.Invoke();
         if (Stat.HP <= 0)
         {
             StartCoroutine(DeadCorotuine());
         }
         else
         {
+            OnHpChanged?.Invoke();
             animator.SetTrigger(ATTACKED);
         }
         //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);

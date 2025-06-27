@@ -65,14 +65,14 @@ public class EnemyData : UnitParent
     {
         Debug.Log($"{PrefabName} Enemy Take damage :: {EnemyID}");
         Stat.HP -= combatEvent.Damage;
-
-        OnHpChanged?.Invoke();
+        
         if (Stat.HP <= 0)
         {
             StartCoroutine(DeadCorotuine());
         }
         else
         {
+            OnHpChanged?.Invoke();
             animator.SetTrigger(ATTACKED);
         }
         //combatEvent.Sender.Stat.Weapon.TriggerSkills(combatEvent.Sender, this);
