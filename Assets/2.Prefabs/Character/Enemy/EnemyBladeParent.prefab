@@ -1940,8 +1940,8 @@ MonoBehaviour:
   targetType: 0
   rangeType: 0
   projectilePathType: 1
-  skillName: "\uC0D8\uD50C"
-  skillInfoText: "\uC0D8\uD50C\uC785\uB2C8\uB2E4."
+  skillName: "\uB0B4\uB824\uCC0D\uAE30"
+  skillInfoText: "\uC801\uC744 \uD5A5\uD574 \uCE7C\uC744 \uB0B4\uB824\uCC0D\uB294\uB2E4"
   unitSkillDetails:
     skillID: 
     skillValue: 1
@@ -2201,7 +2201,12 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'index_03_l'\n\tTransform 'lowerarm_l'\n\tTransform
+    'root'\n\tTransform 'pinky_03_l'\n\tTransform 'neck_01'\n\tTransform 'pinky_03_r'\n\tTransform
+    'clavicle_l'\n\tTransform 'ring_02_l'\n\tTransform 'hand_l'\n\tTransform 'middle_01_l'\n\tand
+    more ..."
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0

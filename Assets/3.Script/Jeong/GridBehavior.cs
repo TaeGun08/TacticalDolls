@@ -189,10 +189,9 @@ public class GridBehavior : MonoBehaviour
 
         if (IsAutoMove && AttackRangeChecker(target)) //AI로 움직이는 중일 때, 공격 사거리에 든다면 공격
         {
+            int skillNumber = Random.Range(0, Actor.HasSkills.Length);
             List<IDamageAble> targets = new List<IDamageAble> { nearestTarget };
-            await Actor.Excute(TurnManager.Instance.CurrentTurn == ActorParent.Player
-                ? Random.Range(0, 3)
-                : 0, targets, targets[0].GameObject.transform);
+            await Actor.Excute(skillNumber, targets, targets[0].GameObject.transform);
         }
 
         EndMovement();
