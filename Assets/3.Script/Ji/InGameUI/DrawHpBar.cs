@@ -26,8 +26,7 @@ namespace Shapes {
                 //Debug.LogError( "DrawPanelShapes: selectedColorGradient, unit == null" );
                 return; // just in case it hasn't initialized
             }
-
-
+            
             // Draw black background:
             Draw.Rectangle( rect, 8f, Color.black );
             
@@ -57,6 +56,9 @@ namespace Shapes {
         public void SetUpHpBar( UnitParent unitParent )
         {
             unit = unitParent;
+            
+            if(!unit) return;
+            
             unit.OnHpChanged += OnHealthChanged;
             unitName = unit.PrefabName;
 

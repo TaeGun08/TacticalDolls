@@ -38,12 +38,14 @@ public class InGameUIManager : MonoBehaviour
         
         private void ShowUnitInfoCallBacked(object o, ShowUnitInfoEventArgs e) //캐릭터를 클릭했을 때
         {
-            inGameUnitInfoPanel.gameObject.SetActive(true);
+            Debug.Log("ShowUnitInfoCallBacked");
             inGameUnitInfoPanel.SetInGameUnitInfoPanel(e.Unit);
+            inGameUnitInfoPanel.gameObject.SetActive(true);
         }
         
         private void DisableUnitInfoCallBacked() // 캐릭터가 아닌 다른 곳을 클릭했을 때
         {
+            inGameUnitInfoPanel.SetInGameUnitInfoPanel(null);
             inGameUnitInfoPanel.gameObject.SetActive(false);
         }
         #endregion

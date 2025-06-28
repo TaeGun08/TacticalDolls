@@ -112,7 +112,7 @@ public class TurnController : MonoBehaviour
     private void OffPlayerUI()
     {
         RangeSystem.Instance.ResetAllTiles();
-        GameManager.Instance.EndTurnBtn.gameObject.SetActive(false);
+        // GameManager.Instance.EndTurnBtn.gameObject.SetActive(false);
         SkillSelectSystem.Instance.cancelButton.gameObject.SetActive(false);
         SkillSelectSystem.Instance.selectButton.gameObject.SetActive(false);
     }

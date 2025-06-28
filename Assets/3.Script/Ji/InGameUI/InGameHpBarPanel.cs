@@ -42,12 +42,12 @@ public class InGameHpBarPanel : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.GameStartAction += OnSetUpHpBar;
+        InGameUIEventTerminal.GameStartAction += OnSetUpHpBar;
     }
 
     private void OnDisable()
     {
-        GameManager.Instance.GameStartAction -= OnSetUpHpBar;
+        InGameUIEventTerminal.GameStartAction -= OnSetUpHpBar;
     }
 
     private void Update()

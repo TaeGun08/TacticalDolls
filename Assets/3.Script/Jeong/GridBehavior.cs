@@ -68,6 +68,11 @@ public class GridBehavior : MonoBehaviour
             if (IsAuto && IsMove == false)
             {
                 _ = TurnController.Instance.OnCheckEndCharacterActor();
+                StartAutoIconRotation();
+            }
+            else
+            {
+                StopAutoIconRotation();
             }
         });
         callback = new CallBack();
@@ -371,7 +376,33 @@ public class GridBehavior : MonoBehaviour
 
         return Vector3Int.zero; // 모든 대상 주위에 유효한 타일이 없을 경우
     }
+    
+    
+    // auto 아이콘 회전
+    [SerializeField] private float rotateSpeed = 180f;
+    private Tween autoRotateTween;
 
+    public void StartAutoIconRotation()
+    {
+        if (autoRotateTween != null && autoRotateTween.IsActive()) return;
+
+        autoRotateTween = autoButton.gameObject.transform.DORotate(
+                new Vector3(0, 0, -360f), // 360도 회전 (시계 방향)
+                360f / rotateSpeed,       // 한 바퀴 도는 시간 = 360 / 속도
+                RotateMode.FastBeyond360)
+            .SetEase(Ease.Linear)
+            .SetLoops(-1);
+    }
+
+    public void StopAutoIconRotation()
+    {
+        if (autoRotateTween != null && autoRotateTween.IsActive())
+        {
+            autoRotateTween.Kill();
+            autoRotateTween = null;
+        }
+    }
+    
     // private void UpdateRotation(Transform player, Vector2 inputAxis, float smoothTime)
     // {
     //     float targetAngle = Mathf.Atan2(inputAxis.x, inputAxis.y) * Mathf.Rad2Deg;

@@ -82,6 +82,8 @@ public class Character2DDragSystem : MonoBehaviour, IBeginDragHandler, IDragHand
             
             Debug.Log("캐릭터 배치 완료");
             GameManager.Instance.PlayerUnits.Add(spawnedData);
+            //GameManager.Instance.PlayerUnits.Count에 따른 bool로 게임 시작 버튼 활성화
+            InGameUIEventTerminal.SetInGameUnitEventHandler?.Invoke(this, new InGameUnitSetEventArgs(GameManager.Instance.PlayerUnits.Count));
         }
     }
 }
