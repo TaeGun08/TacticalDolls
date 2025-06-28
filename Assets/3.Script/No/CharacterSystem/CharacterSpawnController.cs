@@ -120,6 +120,8 @@ public class CharacterSpawnController : MonoBehaviour
 
         Debug.Log("캐릭터 배치 완료");
         GameManager.Instance.PlayerUnits.Add(spawnedData);
+        //GameManager.Instance.PlayerUnits.Count에 따른 bool로 게임 시작 버튼 활성화
+        InGameUIEventTerminal.SetInGameUnitEventHandler?.Invoke(this, new InGameUnitSetEventArgs(GameManager.Instance.PlayerUnits.Count));
     }
     
     private void ActiveCancelBtn(GameObject character)
@@ -140,7 +142,7 @@ public class CharacterSpawnController : MonoBehaviour
 
         PlayerManager.Instance.usingCharacter.Remove(charID);
         GameManager.Instance.PlayerUnits.Remove(revertCharacter.GetComponent<CharacterData>());
-        // InGameUIEventTerminal.SetInGameUnitEventHandler?.Invoke(this, new InGameUnitSetEventArgs(PlayerManager.Instance.usingCharacter.Count));
+        InGameUIEventTerminal.SetInGameUnitEventHandler?.Invoke(this, new InGameUnitSetEventArgs(PlayerManager.Instance.usingCharacter.Count));
         
         if (characterTileMap.TryGetValue(charID, out Tile tile))
         {

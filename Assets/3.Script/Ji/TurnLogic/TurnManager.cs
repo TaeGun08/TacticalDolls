@@ -31,8 +31,6 @@ public class TurnManager : MonoBehaviour
     // 턴 종료 여부 -> callback
     public TaskCompletionSource<bool> TurnEndedSource;
     
-    public Button startButton; 
-    
     public GameObject playerWinPanel;
     public GameObject enemyWinPanel;
     

@@ -6,8 +6,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-
 public class InGameUnitInfoPanel : MonoBehaviour
 {
     #region Field
@@ -19,8 +17,17 @@ public class InGameUnitInfoPanel : MonoBehaviour
     #region Method
         public void SetInGameUnitInfoPanel(UnitParent unitParent) //유닛 정보 표시 왼쪽 하단
         {
-            unitImage.sprite = unitParent.CharacterIcon;
             unitHpBar.SetUpHpBar(unitParent);
+            
+            if (!unitParent)
+            {
+                unitHpBar.gameObject.SetActive(false); //null이라면 꺼주기
+            }
+            else
+            {
+                unitImage.sprite = unitParent.CharacterIcon;
+                unitHpBar.gameObject.SetActive(true); //아니라면 켜주기
+            }
         }
     #endregion
 }

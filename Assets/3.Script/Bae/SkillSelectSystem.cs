@@ -43,7 +43,7 @@ public class SkillSelectSystem : MonoBehaviour
         {
             IsSelectingSkill = false;
             
-            GameManager.Instance.EndTurnBtn.gameObject.SetActive(true);
+            // GameManager.Instance.EndTurnBtn.gameObject.SetActive(true);
             cancelButton.gameObject.SetActive(false);
             selectButton.gameObject.SetActive(false);
             
@@ -138,7 +138,7 @@ public class SkillSelectSystem : MonoBehaviour
         SkillParent skill = currentTarget.HasSkills[skillIndex];
         if (skill == null) return;
 
-        GameManager.Instance.EndTurnBtn.gameObject.SetActive(false);
+        // GameManager.Instance.EndTurnBtn.gameObject.SetActive(false);
         cancelButton.gameObject.SetActive(true);
         selectButton.gameObject.SetActive(true);
 

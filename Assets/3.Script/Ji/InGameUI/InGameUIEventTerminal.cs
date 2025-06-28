@@ -32,7 +32,12 @@ using UnityEngine;
         
         public static EventHandler<InGameUnitSetEventArgs> SetInGameUnitEventHandler; //유닛을 맵에 배치할 때 수신
         
-
+        public static Action GameStartAction; //게임을 시작할 때 수신
+        
+        private void Awake()
+        {
+            UnitInfoEvents = new UnitInfooCallBack();
+        }
     }
 
 #endregion

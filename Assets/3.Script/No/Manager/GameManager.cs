@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Michsky.MUIP;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
@@ -13,7 +14,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     
     //public PrefabsTable CharacterTable;
-    public Button ExitButton;
+    public ButtonManager ExitButton;
 
     // 게임에 배치된 유닛    
     public List<CharacterData> PlayerUnits;
@@ -25,14 +26,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private LayerMask unitLayer;
     [SerializeField] private LayerMask tileLayer;
     [SerializeField] private SkillSelectSystem skillUI;
-    [SerializeField] private Button endTurnBtn;
+    [SerializeField] private ButtonManager endTurnBtn;
 
     // 캐릭터 스폰
     public CharacterSpawnController CharacterSpawnController;
     public GameObject SelectedCharacterPanel; //del
-    public Button StartBtn; //del
-    
-    public Button EndTurnBtn => endTurnBtn;
+    // public Button StartBtn; //del
 
     private CharacterData currentCharacter;
     public Transform CurrentSkillTarget { get; set; }
@@ -55,8 +54,8 @@ public class GameManager : MonoBehaviour
         Instance = this;
 
         ExitButton.onClick.AddListener(OnExitButtonClicked);
-        endTurnBtn.onClick.AddListener(OnCharacterEndTurn_Wrapper);
-        StartBtn.onClick.AddListener(StartGame);
+        // endTurnBtn.onClick.AddListener(OnCharacterEndTurn_Wrapper);
+        //StartBtn.onClick.AddListener(StartGame);
     }
 
     private void Start()
@@ -113,7 +112,7 @@ public class GameManager : MonoBehaviour
     public async Task OnCharacterEndTurn()
     {
         RangeSystem.Instance.ResetAllTiles();
-        endTurnBtn.gameObject.SetActive(false);
+        // endTurnBtn.gameObject.SetActive(false);
         skillUI.Close();
         
         if (MoveChoiceTile != null)
@@ -172,7 +171,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        StartBtn.gameObject.SetActive(PlayerManager.Instance.usingCharacter.Count > 0);
+        // StartBtn.gameObject.SetActive(PlayerManager.Instance.usingCharacter.Count > 0);
         
         if (!isGameStart) return;
         
@@ -200,11 +199,9 @@ public class GameManager : MonoBehaviour
                     else
                     {
                         InputSelectTile(raycastHit);
+                        InGameUIEventTerminal.UnitInfoEvents.DisableUnitInfoAction?.Invoke();
                     }
                 }
-
-                
-
             }
         }
     }
@@ -219,7 +216,6 @@ public class GameManager : MonoBehaviour
                 if (hit.collider.TryGetComponent(out Tile tile))
                 {
                     currentSkillTargetTile = tile;
-                    
                 }
                 break;
             case TargetType.Ally:
@@ -268,14 +264,19 @@ public class GameManager : MonoBehaviour
             //유닛 패널 호출
             InGameUIEventTerminal.UnitInfoEvents.ShowUnitInfoEventHandler?.Invoke(this, new ShowUnitInfoEventArgs(characterData));
         }
-        else return;
+        else if(hit.collider.TryGetComponent(out EnemyData enemyData))
+        {
+            //유닛 패널 호출
+            InGameUIEventTerminal.UnitInfoEvents.ShowUnitInfoEventHandler?.Invoke(this, new ShowUnitInfoEventArgs(enemyData));
+            return;
+        }
 
         // TODO 행동 완료 UI 추가
 
         if (currentCharacter != null && !currentCharacter.Stat.IsCompleteAction)
         {
             RangeSystem.Instance.ResetAllTiles();
-            endTurnBtn.gameObject.SetActive(true);
+            // endTurnBtn.gameObject.SetActive(true);
             skillUI.Open(currentCharacter);
             MoveChoiceTile = null;
             RangeSystem.Instance.ShowMoveRange(
@@ -295,7 +296,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("이동 불가능한 범위입니다.");
             RangeSystem.Instance.ResetAllTiles();
-            endTurnBtn.gameObject.SetActive(false);
+            // endTurnBtn.gameObject.SetActive(false);
             skillUI.Close();
 
             MoveChoiceTile = null;
@@ -316,20 +317,8 @@ public class GameManager : MonoBehaviour
     {
         RangeSystem.Instance.ShowMoveRange(TileManager.Instance.GetCurrentTileByIDamageAble(target),
             target.Stat.MoveRange);
-        endTurnBtn.gameObject.SetActive(true);
+        // endTurnBtn.gameObject.SetActive(true);
         skillUI.Open(target);
         currentCharacter = target;
-    }
-    
-    public Action GameStartAction;
-    // 게임 시작
-    public void StartGame()
-    {
-        TileManager.Instance.combatScript.SetActive(true);
-        RangeSystem.Instance.ResetAllTiles();
-        SelectedCharacterPanel.SetActive(false);
-        
-        UnitInitializeStarSetting();
-        GameStartAction?.Invoke();
     }
 }
