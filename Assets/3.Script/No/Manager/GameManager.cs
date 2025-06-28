@@ -112,7 +112,7 @@ public class GameManager : MonoBehaviour
     public async Task OnCharacterEndTurn()
     {
         RangeSystem.Instance.ResetAllTiles();
-        // endTurnBtn.gameObject.SetActive(false);
+        endTurnBtn.gameObject.SetActive(false);
         skillUI.Close();
         
         if (MoveChoiceTile != null)
@@ -276,7 +276,7 @@ public class GameManager : MonoBehaviour
         if (currentCharacter != null && !currentCharacter.Stat.IsCompleteAction)
         {
             RangeSystem.Instance.ResetAllTiles();
-            // endTurnBtn.gameObject.SetActive(true);
+            endTurnBtn.gameObject.SetActive(true);
             skillUI.Open(currentCharacter);
             MoveChoiceTile = null;
             RangeSystem.Instance.ShowMoveRange(
@@ -317,7 +317,7 @@ public class GameManager : MonoBehaviour
     {
         RangeSystem.Instance.ShowMoveRange(TileManager.Instance.GetCurrentTileByIDamageAble(target),
             target.Stat.MoveRange);
-        // endTurnBtn.gameObject.SetActive(true);
+        endTurnBtn.gameObject.SetActive(true);
         skillUI.Open(target);
         currentCharacter = target;
     }
