@@ -90,26 +90,32 @@ public class CombatSystem : MonoBehaviour
         {
             case 1: //정면
                 fowardDir = Vector2.up;
+                Debug.Log("정면");
                 break;
             case 2: //후면
                 fowardDir = Vector2.down;
+                Debug.Log("후면");
                 break;
             case 3: //좌
                 fowardDir = Vector2.left;
+                Debug.Log("측면 - 좌");
                 break;
             case 4: //우
                 fowardDir = Vector2.right;
+                Debug.Log("측면 - 우");
                 break;
         }
         
         // 기준 벡터: forward
         // 공격 방향: attackDir
         float angle = Vector2.SignedAngle(fowardDir, attackDir);
+        Debug.Log($"방향 : {angle}");
         
         float damage = 1f;
-        if (angle <= 45 && angle >= -45)
+        if (angle < 90 && angle > -90 && tile.obstacleDir != 0)
         {
             damage = 0.5f;
+            Debug.Log("뎀지 감소");
         }
         
         // 결과는 -180도 ~ +180도 사이
@@ -119,7 +125,6 @@ public class CombatSystem : MonoBehaviour
     public void ApplyDamage(IDamageAble attacker, List<IDamageAble> targets, int amount)
     {
         //공격자의 현재 타일
-        Tile tile = TileManager.Instance.GetCurrentTileByIDamageAble(attacker);
         
         //공격자 위치
         Vector2 attackerPos = new Vector2(attacker.GameObject.transform.position.x,
@@ -132,9 +137,10 @@ public class CombatSystem : MonoBehaviour
         
         foreach (var target in targets)
         {
+            Tile tile = TileManager.Instance.GetCurrentTileByIDamageAble(target);
             targetPos = new Vector2(target.GameObject.transform.position.x, target.GameObject.transform.position.z);
             damage = (int)(amount * GetRelativeAttackAngle(attackerPos, targetPos, tile));
-            
+            Debug.Log($"Total Damage: {amount}, Damage: {damage}");
             var combatEvent = new CombatEvent
             {
                 Sender = attacker,

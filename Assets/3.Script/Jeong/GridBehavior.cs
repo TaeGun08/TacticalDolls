@@ -13,18 +13,21 @@ public class GridBehavior : MonoBehaviour
 {
     // 노드에서 노드 이동 처리
     public static GridBehavior Instance;
-    
+
     private static readonly int IS_CROUCHING = Animator.StringToHash("isCrouching");
     private static readonly int IS_RUNNING = Animator.StringToHash("isRunning");
 
     private PathFindingManager pathFindingManager;
     private TileManager tileManager;
+    private TurnManager turnManager;
+    private GameManager gameManager;
 
     private Camera mainCam;
 
     public IDamageAble Actor { get; set; } //현재 움직일 Actor
-    [Header("CharacterLayer Setting")]
-    [SerializeField] private LayerMask characterLayer;
+
+    [Header("CharacterLayer Setting")] [SerializeField]
+    private LayerMask characterLayer;
 
     public bool IsMove { get; set; } //움직이는 중인지 체크
     public bool IsAutoMove { get; set; } //오토로 움직이는 중인지 체크
@@ -42,7 +45,7 @@ public class GridBehavior : MonoBehaviour
 
     //도착할 위치에 다른 캐릭터가 있을 경우 중복되지 않은 새로운 위치를 뽑기 위한 리스트
     private HashSet<Vector2Int> reservedTiles = new HashSet<Vector2Int>();
-    
+
     [SerializeField] private Button autoButton;
     public bool IsAuto { get; private set; } //플레이어를 Auto로 설정해주는 변수
 
@@ -77,6 +80,8 @@ public class GridBehavior : MonoBehaviour
     {
         pathFindingManager = PathFindingManager.Instance;
         tileManager = TileManager.Instance;
+        turnManager = TurnManager.Instance;
+        gameManager = GameManager.Instance;
         mainCam = Camera.main;
     }
 
@@ -108,11 +113,7 @@ public class GridBehavior : MonoBehaviour
         List<Node> path = pathFindingManager.PathFind(Actor.GameObject.transform.position, finalTargetPos);
         reservedTiles.Add(new Vector2Int(finalTargetPos.x, finalTargetPos.z));
 
-        nearestTarget = Actors
-            .Where(target => target != Actor && actor.Stat.IsDead == false)
-            .OrderBy(target =>
-                Vector3.Distance(Actor.GameObject.transform.position, target.GameObject.transform.position))
-            .FirstOrDefault();
+        SetNearestTarget(Actors);
 
         Vector3 targetPos = nearestTarget == null
             ? Vector3.zero
@@ -130,8 +131,9 @@ public class GridBehavior : MonoBehaviour
     public async Task MovePlayerAlongPath(List<Node> path, Vector3 target)
     {
         IsMove = true; //이동 시작
-        
-        UsingTileChecker(false, null);; //현재 움직일 Actor의 타일을 받아 옴
+
+        UsingTileChecker(false, null);
+        ; //현재 움직일 Actor의 타일을 받아 옴
 
         //harang 시작
         if (Actor is CharacterData character) //명시적 형변환 -> Actor가 CharacterData일 경우
@@ -187,11 +189,9 @@ public class GridBehavior : MonoBehaviour
             callback.onCompleteMove?.Invoke(_character.transform);
         }
 
-        if (IsAutoMove && AttackRangeChecker(target)) //AI로 움직이는 중일 때, 공격 사거리에 든다면 공격
+        if (IsAutoMove) //AI로 움직이는 중일 때, 공격 사거리에 든다면 공격
         {
-            int skillNumber = Random.Range(0, Actor.HasSkills.Length);
-            List<IDamageAble> targets = new List<IDamageAble> { nearestTarget };
-            await Actor.Excute(skillNumber, targets, targets[0].GameObject.transform);
+            await AutoSkill(target);
         }
 
         EndMovement();
@@ -228,7 +228,7 @@ public class GridBehavior : MonoBehaviour
             usingTile.SetOccupant(target);
         }
     }
-    
+
     /// <summary>
     /// 이동 종료 시, 값 초기화 및 캐릭터 행동 가능여부 체크
     /// </summary>
@@ -328,6 +328,55 @@ public class GridBehavior : MonoBehaviour
         List<Vector2Int> actorPosList = tileManager.GetReachableTiles(actorPos, Actor.Stat.AttackRnage);
 
         return actorPosList.Contains(new Vector2Int((int)targetPos.x, (int)targetPos.z));
+    }
+
+    /// <summary>
+    /// 공격할 대상을 탐색해주는 함수
+    /// </summary>
+    /// <param name="targets"></param>
+    private void SetNearestTarget(List<IDamageAble> targets)
+    {
+        nearestTarget = targets
+            .Where(target => target != Actor && Actor.Stat.IsDead == false)
+            .OrderBy(target =>
+                Vector3.Distance(Actor.GameObject.transform.position, target.GameObject.transform.position))
+            .FirstOrDefault();
+    }
+
+    /// <summary>
+    /// 공격할 대상의 스킬이 힐인지 아닌지 체크 후, 자신 기준 아군 및 적군 탐색 후 힐 및 공격
+    /// </summary>
+    /// <param name="target"></param>
+    private async Task AutoSkill(Vector3 target)
+    {
+        int skillNumber = Random.Range(0, Actor.HasSkills.Length);
+        bool healSkill = Actor.HasSkills[skillNumber].skillType == SkillType.Heal;
+        List<IDamageAble> targets = new List<IDamageAble>();
+        switch (healSkill)
+        {
+            case true:
+                foreach (var player in gameManager.PlayerUnits)
+                {
+                    if (turnManager.CurrentTurn != ActorParent.Player) break;
+                    targets.Add(player);
+                }
+
+                foreach (var enemy in gameManager.EnemyUnits)
+                {
+                    if (turnManager.CurrentTurn != ActorParent.Enemy) break;
+                    targets.Add(enemy);
+                }
+                
+                SetNearestTarget(targets);
+                if (AttackRangeChecker(nearestTarget.GameObject.transform.position) == false) break;
+                await Actor.Excute(skillNumber, targets, targets[0].GameObject.transform);
+                break;
+            case false:
+                if (AttackRangeChecker(target) == false) break;
+                targets.Add(nearestTarget);
+                await Actor.Excute(skillNumber, targets, targets[0].GameObject.transform);
+                break;
+        }
     }
 
     /// <summary>
