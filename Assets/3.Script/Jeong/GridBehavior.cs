@@ -106,7 +106,7 @@ public class GridBehavior : MonoBehaviour
             Debug.Log("이동 가능한 위치가 없음");
             return;
         }
-
+        
         if (new Vector2Int(finalTargetPos.x, finalTargetPos.z) ==
             new Vector2Int(Mathf.RoundToInt(Actor.GameObject.transform.position.x),
                 Mathf.RoundToInt(Actor.GameObject.transform.position.z)))
@@ -373,11 +373,12 @@ public class GridBehavior : MonoBehaviour
                 }
                 
                 SetNearestTarget(targets);
-                if (AttackRangeChecker(nearestTarget.GameObject.transform.position) == false) break;
+                if (AttackRangeChecker(nearestTarget.GameObject.transform.position ) == false 
+                    || nearestTarget.Stat.IsDead) break;
                 await Actor.Excute(skillNumber, targets, targets[0].GameObject.transform);
                 break;
             case false:
-                if (AttackRangeChecker(target) == false) break;
+                if (AttackRangeChecker(target) == false || nearestTarget.Stat.IsDead) break;
                 targets.Add(nearestTarget);
                 await Actor.Excute(skillNumber, targets, targets[0].GameObject.transform);
                 break;
