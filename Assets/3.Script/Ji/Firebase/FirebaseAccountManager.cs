@@ -194,60 +194,6 @@ public class FirebaseAccountManager : MonoBehaviour
             }
         };
         
-        // CharacterDataSample sampleCharacter2 = new CharacterDataSample
-        // {
-        //     characterCode = 1,
-        //     level = 1,
-        //
-        //     weapon = new WeaponDataSample
-        //     {
-        //         weaponCode = 10,
-        //         level = 5,
-        //         currentCharacter = 1,
-        //     },
-        //
-        //     skills = new SkillDataSample[2]
-        //     {
-        //         new SkillDataSample
-        //         {
-        //             skillCode = 0,
-        //             level = 1
-        //         },
-        //         new SkillDataSample
-        //         {
-        //             skillCode = 1,
-        //             level = 1
-        //         }
-        //     }
-        // };
-        //
-        // CharacterDataSample sampleCharacter3 = new CharacterDataSample
-        // {
-        //     characterCode = 2,
-        //     level = 1,
-        //
-        //     weapon = new WeaponDataSample
-        //     {
-        //         weaponCode = 20,
-        //         level = 5,
-        //         currentCharacter = 2,
-        //     },
-        //
-        //     skills = new SkillDataSample[2]
-        //     {
-        //         new SkillDataSample
-        //         {
-        //             skillCode = 0,
-        //             level = 1
-        //         },
-        //         new SkillDataSample
-        //         {
-        //             skillCode = 1,
-        //             level = 1
-        //         }
-        //     }
-        // };
-        
         // 초기 무기 리스트 설정
         WeaponDataSample sampleWeapon1 = new WeaponDataSample
         {
@@ -256,52 +202,16 @@ public class FirebaseAccountManager : MonoBehaviour
             currentCharacter = 0,
         };
         
-        // WeaponDataSample sampleWeapon2 = new WeaponDataSample
-        // {
-        //     weaponCode = 1,
-        //     level = 5,
-        //     currentCharacter = -1,
-        // };
-        //
-        // WeaponDataSample sampleWeapon3 = new WeaponDataSample
-        // {
-        //     weaponCode = 10,
-        //     level = 5,
-        //     currentCharacter = 1,
-        // };
-        //
-        // WeaponDataSample sampleWeapon4 = new WeaponDataSample
-        // {
-        //     weaponCode = 11,
-        //     level = 10,
-        //     currentCharacter = -1,
-        // };
-        //
-        // WeaponDataSample sampleWeapon5 = new WeaponDataSample
-        // {
-        //     weaponCode = 20,
-        //     level = 5,
-        //     currentCharacter = 2,
-        // };
-        //
-        // WeaponDataSample sampleWeapon6 = new WeaponDataSample
-        // {
-        //     weaponCode = 21,
-        //     level = 10,
-        //     currentCharacter = -1,
-        // };
-        
         PlayerData userData = new PlayerData() 
         {
             Email = email,
+            Gold = 1000,
             NickName = nickname,
             CreatedAt = Timestamp.GetCurrentTimestamp(),
             Role = "user",
             IsTutorialCompleted = false,
             HasCharacter = new List<CharacterDataSample> { sampleCharacter },
             HasWeapon = new List<WeaponDataSample> { sampleWeapon1 }
-            // HasCharacter = new List<CharacterDataSample> { sampleCharacter, sampleCharacter2, sampleCharacter3 },
-            // HasWeapon = new List<WeaponDataSample> { sampleWeapon1, sampleWeapon2, sampleWeapon3, sampleWeapon4, sampleWeapon5, sampleWeapon6 }
         };
 
         FirestoreManager.Instance.WriteDataAsync<PlayerData>(FirebaseCollections.Players, uid, userData)

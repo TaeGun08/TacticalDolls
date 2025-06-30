@@ -25,6 +25,7 @@ public class WeaponData : MonoBehaviour
     public string WeaponName;
     public int Level;
     public int Damage;
+    public int Price;
     //public int CurrentCharacter;
 
     public WeaponType WeaponType;
@@ -37,6 +38,12 @@ public class WeaponData : MonoBehaviour
         string userId = FirebaseMainSession.Instance.FirebaseUser.UserData.UserId;
         
         Debug.Log($"Weapon Level Up Request ::  {userId}");
+        
+        if (FirebaseMainSession.Instance.FirebaseUser.player.Gold < (Level * 50) ||
+            Level >= 20)
+        {
+            return false;
+        }
         
         // 1. 데이터 로드
         PlayerDataSample playerData = await FirestoreManager.Instance.ReadDataAsync<PlayerDataSample>(

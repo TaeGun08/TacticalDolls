@@ -103,6 +103,7 @@ MonoBehaviour:
   WeaponName: Rifle
   Level: 1
   Damage: 5
+  Price: 400
   WeaponType: 0
   WeaponGrade: 2
   WeaponIcon: {fileID: -98867558, guid: 647ada823f106f447b80437a809d4e1e, type: 3}

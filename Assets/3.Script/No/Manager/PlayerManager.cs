@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Firebase.Firestore;
 using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -120,6 +121,11 @@ public class PlayerManager : MonoBehaviour
     {
         string userId = FirebaseMainSession.Instance.FirebaseUser.UserData.UserId;
         
+        if (FirebaseMainSession.Instance.FirebaseUser.player.Gold < character.price)
+        {
+            return false;
+        }
+        
         // 1. 유저 데이터 로드
         PlayerDataSample playerData = await FirestoreManager.Instance.ReadDataAsync<PlayerDataSample>(
             FirebaseCollections.Players,
@@ -171,10 +177,15 @@ public class PlayerManager : MonoBehaviour
     
     
     // 무기 구매
-    public async Task<bool> UpdateWeaponList(int weaponCode)
+    public async Task<bool> UpdateWeaponList(WeaponData weaponData)
     {
         string userId = FirebaseMainSession.Instance.FirebaseUser.UserData.UserId;
 
+        if (FirebaseMainSession.Instance.FirebaseUser.player.Gold < weaponData.Price)
+        {
+            return false;
+        }
+        
         // 1. 유저 데이터 로드
         PlayerDataSample playerData = await FirestoreManager.Instance.ReadDataAsync<PlayerDataSample>(
             FirebaseCollections.Players,
@@ -190,7 +201,7 @@ public class PlayerManager : MonoBehaviour
         // 2. 무기 생성
         WeaponDataSample newWeapon = new WeaponDataSample
         {
-            weaponCode = weaponCode,
+            weaponCode = weaponData.ID,
             level = 1,
             currentCharacter = -1
         };
@@ -205,7 +216,44 @@ public class PlayerManager : MonoBehaviour
 
         await FirestoreManager.Instance.UpdateDataAsync(FirebaseCollections.Players, userId, updates);
 
-        Debug.Log($"무기 {weaponCode} 구매 완료");
+        Debug.Log($"무기 {weaponData.ID} 구매 완료");
         return true;
     }
+    
+    // 재화 감소
+    public async Task DecreaseGold(int itemPrice)
+    {
+        var player = FirebaseMainSession.Instance.FirebaseUser.player;
+
+        if (player.Gold >= itemPrice)
+        {
+            int newGold = player.Gold - itemPrice;
+
+            await FirebaseMainSession.Instance.UpdateGoldAsync(newGold);
+            Debug.Log("아이템 구매 성공");
+        }
+        else
+        {
+            Debug.Log("골드 부족");
+        }
+    }
+    
+    // 재화 증가
+    public async Task IncreaseGold(int itemPrice)
+    {
+        var player = FirebaseMainSession.Instance.FirebaseUser.player;
+
+        if (player.Gold >= itemPrice)
+        {
+            int newGold = player.Gold + itemPrice;
+
+            await FirebaseMainSession.Instance.UpdateGoldAsync(newGold);
+            Debug.Log("재화 획득 성공");
+        }
+        else
+        {
+            Debug.Log("골드 부족");
+        }
+    }
+    
 }
