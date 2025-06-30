@@ -100,23 +100,24 @@ public class WeaponRoom : MonoBehaviour
     // 무기 레벨업
     public async void RequestUpdateWeaponLevelUp()
     {
+        var result = await SelectedWeapon.UpdateWeaponLevel(SelectedWeapon.ID, 1);
+        
+        if (result == false)
+        {
+            Debug.LogWarning("무기 레벨업 실패");
+            return;
+        }
+        
         var complete = navigation.Complete.GetComponent<ModalWindowManager>();
         complete.description = $"{SelectedWeapon.WeaponName} 레벨업에 성공하였습니다.";
         
-        var result = await SelectedWeapon.UpdateWeaponLevel(SelectedWeapon.ID, 1);
-        if (result)
-        {
-            await FirebaseMainSession.Instance.FirestoreLoader();
-            PlayerManager.Instance.UpdateCharacterData();
-            //PlayerManager.Instance.DecreaseGold(selectedCharacter.여기에 금액 추가);
+        await FirebaseMainSession.Instance.FirestoreLoader();
+        PlayerManager.Instance.UpdateCharacterData();
+        await PlayerManager.Instance.DecreaseGold((int)(SelectedWeapon.Level * 50f));
+        LobbyManager.Instance.UpdateGold();
             
-            SetUIWeapon();
-            SetInfoWeapon(SelectedWeapon);
-        }
-        else
-        {
-            Debug.LogWarning("무기 레벨업 실패");
-        }
+        SetUIWeapon();
+        SetInfoWeapon(SelectedWeapon);
     }
     
     // 무기 교체

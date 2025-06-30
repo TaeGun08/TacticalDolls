@@ -7396,7 +7396,7 @@ GameObject:
   m_Component:
   - component: {fileID: 599896552}
   m_Layer: 5
-  m_Name: Credit
+  m_Name: Gold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16957,7 +16957,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 3351748369286481944, guid: 4dffe6eab57ca4e4ba2f967307bd1c29,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -28563,6 +28564,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lobbyPanel: {fileID: 255985163}
   lobbyRender: {fileID: 1936110420}
+  goldFigure: {fileID: 2097103924}
 --- !u!4 &2131725711
 Transform:
   m_ObjectHideFlags: 0

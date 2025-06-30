@@ -9,7 +9,6 @@ public class FirebaseUser
 {
     public Firebase.Auth.FirebaseUser UserData { get; set; }
     public string Username { get; set; }
-    public int Gold { get; set; }
 
     public PlayerDataSample playerData { get; set; }
     
@@ -139,6 +138,8 @@ public class FirebaseMainSession : MonoBehaviour
         try
         {
             await docRef.UpdateAsync(updates);
+            FirebaseUser.player.Gold = newGold;
+            
             Debug.Log($"골드 업데이트 성공: {newGold}");
         }
         catch (Exception e)

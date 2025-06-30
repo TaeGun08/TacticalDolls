@@ -171,23 +171,23 @@ public class CharacterRoom : MonoBehaviour
     
     public async void RequestUpdateCharacterLevelUp()
     {
+        var result = await SelectedCharacter.UpdateCharacterLevel(SelectedCharacter.CharacterID, 1);
+        
+        if (result == false)
+        {
+            Debug.LogWarning("캐릭터 레벨업 실패");
+            return;
+        }
+        
         var complete = navigation.Complete.GetComponent<ModalWindowManager>();
         complete.description = $"{SelectedCharacter.PrefabName}의 레벨업에 성공하였습니다.";
 
-        var result = await SelectedCharacter.UpdateCharacterLevel(SelectedCharacter.CharacterID, 1);
-        
-        if (result)
-        {
-            await FirebaseMainSession.Instance.FirestoreLoader();
-            PlayerManager.Instance.UpdateCharacterData();
-            //PlayerManager.Instance.DecreaseGold(selectedCharacter.여기에 금액 추가);
+        await FirebaseMainSession.Instance.FirestoreLoader();
+        PlayerManager.Instance.UpdateCharacterData();
+        await PlayerManager.Instance.DecreaseGold((int)(SelectedCharacter.Stat.Level * 50f));
+        LobbyManager.Instance.UpdateGold();
             
-            SetUIPlayerCharacters();
-            SetInfoPlayerCharacter(SelectedCharacter);
-        }
-        else
-        {
-            Debug.LogWarning("캐릭터 레벨업 실패");
-        }
+        SetUIPlayerCharacters();
+        SetInfoPlayerCharacter(SelectedCharacter);
     }
 }

@@ -217,44 +217,44 @@ public class OrderRoom : MonoBehaviour
     // 캐릭터 구매
     public async void RequestBuyCharacter()
     {
+        var result = await PlayerManager.Instance.UpdateCharacterList(selectedCharacter);
+       
+        if (result == false)
+        {
+            Debug.LogWarning("캐릭터 구매 실패");
+            return;
+        }
+        
         var complete = navigation.Complete.GetComponent<ModalWindowManager>();
         complete.description = $"{selectedCharacter.PrefabName} 구매에 성공하였습니다.";
         
-        var result = await PlayerManager.Instance.UpdateCharacterList(selectedCharacter);
-        
-        if (result)
-        {
-            await FirebaseMainSession.Instance.FirestoreLoader();
-            PlayerManager.Instance.UpdateCharacterData();
-            //PlayerManager.Instance.DecreaseGold(selectedCharacter.여기에 금액 추가);
+        await FirebaseMainSession.Instance.FirestoreLoader();
+        PlayerManager.Instance.UpdateCharacterData();
+        await PlayerManager.Instance.DecreaseGold(selectedCharacter.price);
+        LobbyManager.Instance.UpdateGold();
             
-            SetUI();
-        }
-        else
-        {
-            Debug.LogWarning("캐릭 구매 실패");
-        }
+        SetUI();
     }
     
     // 무기 구매
     public async void RequestBuyWeapon()
     {
+        var result = await PlayerManager.Instance.UpdateWeaponList(selectedWeapon.ID);
+        
+        if (result == false)
+        {
+            Debug.LogWarning("무기 구매 실패");
+            return;
+        }
+        
         var complete = navigation.Complete.GetComponent<ModalWindowManager>();
         complete.description = $"{selectedWeapon.WeaponName} 구매에 성공하였습니다.";
 
-        var result = await PlayerManager.Instance.UpdateWeaponList(selectedWeapon.ID);
-        
-        if (result)
-        {
-            await FirebaseMainSession.Instance.FirestoreLoader();
-            PlayerManager.Instance.UpdateCharacterData();
-            //PlayerManager.Instance.DecreaseGold(selectedCharacter.여기에 금액 추가);
+        await FirebaseMainSession.Instance.FirestoreLoader();
+        PlayerManager.Instance.UpdateCharacterData();
+        await PlayerManager.Instance.DecreaseGold(selectedWeapon.Price);
+        LobbyManager.Instance.UpdateGold();
             
-            SetUI();
-        }
-        else
-        {
-            Debug.LogWarning("무기 구매 실패");
-        }
+        SetUI();
     }
 }
