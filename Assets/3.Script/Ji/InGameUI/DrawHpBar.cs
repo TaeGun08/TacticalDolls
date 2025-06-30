@@ -37,8 +37,10 @@ namespace Shapes {
             fillBackGroundRect.width *= fillBackGroundAmount;
             Draw.Rectangle( fillBackGroundRect, Color.white );
             
-            fillRect.width *= fillAmount;
-            Draw.Rectangle( fillRect, selectedColorGradient.Evaluate( fillAmount ) );
+            float percent = Mathf.Clamp01(unit.Stat.HP / (float)unit.Stat.MaxHP);
+            
+            fillRect.width *= percent;
+            Draw.Rectangle( fillRect, selectedColorGradient.Evaluate( percent ) );
             
             // Draw white border:
             Draw.RectangleBorder( rect, 2f, 8f, Color.white );
