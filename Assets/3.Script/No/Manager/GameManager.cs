@@ -321,4 +321,24 @@ public class GameManager : MonoBehaviour
         skillUI.Open(target);
         currentCharacter = target;
     }
+    
+    // 게임 종료 초기화
+    public void InitGameOverSetting()
+    {
+        PlayerUnits.Clear();
+        EnemyUnits.Clear();
+        PlayerManager.Instance.usingCharacter.Clear();
+        
+        // 타일 초기화
+        foreach (var character in PlayerUnits)
+        {
+            var tile = TileManager.Instance.GetCurrentTileByIDamageAble(character);
+            
+            tile.isWalkable = true;
+            tile.isUsingTile = false;
+        }
+        
+        // 로비 -> 플레이어 데이터 초기화
+        PlayerManager.Instance.InitializePlayerManager();
+    }
 }
