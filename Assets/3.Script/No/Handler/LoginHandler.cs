@@ -66,6 +66,7 @@ public class LoginHandler : MonoBehaviour
     
     void Start()
     {
+        SoundManager.Instance.PlayBgm("maou_bgm_cyber42");
         LoginButton.onClick.AddListener(OnLoginButtonClicked);
         JoinButton.onClick.AddListener(OnJoinButtonClicked);
         backButton.onClick.AddListener(OnBackButtonClicked);
