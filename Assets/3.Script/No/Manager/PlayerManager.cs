@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Firebase.Firestore;
 using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -208,4 +209,41 @@ public class PlayerManager : MonoBehaviour
         Debug.Log($"무기 {weaponCode} 구매 완료");
         return true;
     }
+    
+    // 재화 감소
+    public async Task DecreaseGold(int itemPrice)
+    {
+        var player = FirebaseMainSession.Instance.FirebaseUser.player;
+
+        if (player.Gold >= itemPrice)
+        {
+            int newGold = player.Gold - itemPrice;
+
+            await FirebaseMainSession.Instance.UpdateGoldAsync(newGold);
+            Debug.Log("아이템 구매 성공");
+        }
+        else
+        {
+            Debug.Log("골드 부족");
+        }
+    }
+    
+    // 재화 증가
+    public async Task IncreaseGold(int itemPrice)
+    {
+        var player = FirebaseMainSession.Instance.FirebaseUser.player;
+
+        if (player.Gold >= itemPrice)
+        {
+            int newGold = player.Gold + itemPrice;
+
+            await FirebaseMainSession.Instance.UpdateGoldAsync(newGold);
+            Debug.Log("재화 획득 성공");
+        }
+        else
+        {
+            Debug.Log("골드 부족");
+        }
+    }
+    
 }

@@ -108,6 +108,8 @@ public class WeaponRoom : MonoBehaviour
         {
             await FirebaseMainSession.Instance.FirestoreLoader();
             PlayerManager.Instance.UpdateCharacterData();
+            //PlayerManager.Instance.DecreaseGold(selectedCharacter.여기에 금액 추가);
+            
             SetUIWeapon();
             SetInfoWeapon(SelectedWeapon);
         }
