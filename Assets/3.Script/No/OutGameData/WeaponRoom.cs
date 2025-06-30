@@ -79,7 +79,7 @@ public class WeaponRoom : MonoBehaviour
         weaponName.text = weaponData.WeaponName;
         weaponUser.text = GetWeaponUserOrNull() + " 사용 중";
         weaponLevel.text = "Lv. " + weaponData.Level + "/ 20";
-        weaponAttack.text = weaponData.Damage.ToString();
+        weaponAttack.text = (weaponData.Level * 2 + weaponData.Damage).ToString();
     }
 
     private string GetWeaponUserOrNull()
@@ -100,16 +100,16 @@ public class WeaponRoom : MonoBehaviour
     // 무기 레벨업
     public async void RequestUpdateWeaponLevelUp()
     {
+        var complete = navigation.Complete.GetComponent<ModalWindowManager>();
+        complete.description = $"{SelectedWeapon.WeaponName} 레벨업에 성공하였습니다.";
+        
         var result = await SelectedWeapon.UpdateWeaponLevel(SelectedWeapon.ID, 1);
         
         if (result == false)
         {
-            Debug.LogWarning("무기 레벨업 실패");
+            complete.description = "재화 부족 또는 무기가 최대 레벨에 도달하였습니다.";
             return;
         }
-        
-        var complete = navigation.Complete.GetComponent<ModalWindowManager>();
-        complete.description = $"{SelectedWeapon.WeaponName} 레벨업에 성공하였습니다.";
         
         await FirebaseMainSession.Instance.FirestoreLoader();
         PlayerManager.Instance.UpdateCharacterData();

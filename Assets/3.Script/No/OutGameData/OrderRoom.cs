@@ -217,16 +217,16 @@ public class OrderRoom : MonoBehaviour
     // 캐릭터 구매
     public async void RequestBuyCharacter()
     {
-        var result = await PlayerManager.Instance.UpdateCharacterList(selectedCharacter);
-       
-        if (result == false)
-        {
-            Debug.LogWarning("캐릭터 구매 실패");
-            return;
-        }
-        
         var complete = navigation.Complete.GetComponent<ModalWindowManager>();
         complete.description = $"{selectedCharacter.PrefabName} 구매에 성공하였습니다.";
+        
+        var result = await PlayerManager.Instance.UpdateCharacterList(selectedCharacter);
+        
+        if (result == false)
+        {
+            complete.description = "재화가 부족하여 구매에 실패하였습니다.";
+            return;
+        }
         
         await FirebaseMainSession.Instance.FirestoreLoader();
         PlayerManager.Instance.UpdateCharacterData();
@@ -239,16 +239,16 @@ public class OrderRoom : MonoBehaviour
     // 무기 구매
     public async void RequestBuyWeapon()
     {
-        var result = await PlayerManager.Instance.UpdateWeaponList(selectedWeapon.ID);
+        var complete = navigation.Complete.GetComponent<ModalWindowManager>();
+        complete.description = $"{selectedWeapon.WeaponName} 구매에 성공하였습니다.";
+        
+        var result = await PlayerManager.Instance.UpdateWeaponList(selectedWeapon);
         
         if (result == false)
         {
-            Debug.LogWarning("무기 구매 실패");
+            complete.description = "재화가 부족하여 구매에 실패하였습니다.";
             return;
         }
-        
-        var complete = navigation.Complete.GetComponent<ModalWindowManager>();
-        complete.description = $"{selectedWeapon.WeaponName} 구매에 성공하였습니다.";
 
         await FirebaseMainSession.Instance.FirestoreLoader();
         PlayerManager.Instance.UpdateCharacterData();
