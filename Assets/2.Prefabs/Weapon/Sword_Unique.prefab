@@ -100,6 +100,7 @@ MonoBehaviour:
   WeaponName: Sword
   Level: 1
   Damage: 7
+  Price: 500
   WeaponType: 2
   WeaponGrade: 3
   WeaponIcon: {fileID: -1302298865, guid: aded6d8cd956ed249bf5d8d508a73007, type: 3}

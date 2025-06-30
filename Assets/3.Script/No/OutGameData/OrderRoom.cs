@@ -164,7 +164,7 @@ public class OrderRoom : MonoBehaviour
         // 캐릭터
         itemImages[0].sprite = selectedCharacter.CharacterIcon;
         itemNames[0].text = selectedCharacter.PrefabName;
-        itemPrices[0].text = "가격 미정";
+        itemPrices[0].text = "<" + selectedCharacter.price + " 골드" + ">";
 
         // 소유 여부에 따라 버튼 비활성화
         for (int i = 0; i < PlayerManager.Instance.usingCharacterData.Count; i++)
@@ -183,7 +183,7 @@ public class OrderRoom : MonoBehaviour
             itemImageBackgrounds[i + 1].color = selectedWeapons[i].SetWeaponBackgroundColor();
             itemImages[i+1].sprite = selectedWeapons[i].WeaponIcon;
             itemNames[i+1].text = selectedWeapons[i].WeaponName;
-            itemPrices[i+1].text = "가격 미정";
+            itemPrices[i+1].text = "<" + selectedWeapons[i].Price + " 골드" + ">";
 
             for (int j = 0; j < PlayerManager.Instance.usingWeaponData.Count; j++)
             {
