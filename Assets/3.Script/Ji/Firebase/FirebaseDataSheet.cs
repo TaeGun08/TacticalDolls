@@ -19,6 +19,7 @@ public enum FirebaseCollections
 public class PlayerData  //key : GUID
 {
     [FirestoreProperty] public string Email { get; set; }
+    [FirestoreProperty] public int Gold { get; set; }
     [FirestoreProperty] public string NickName { get; set; }
     [FirestoreProperty] public string Role { get; set; }
     [FirestoreProperty] public Timestamp CreatedAt { get; set; }

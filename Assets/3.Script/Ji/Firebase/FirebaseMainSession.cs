@@ -9,8 +9,10 @@ public class FirebaseUser
 {
     public Firebase.Auth.FirebaseUser UserData { get; set; }
     public string Username { get; set; }
-    
+
     public PlayerDataSample playerData { get; set; }
+    
+    public PlayerData player { get; set; }
     
     public List<CharacterDataSample> characterStore { get; set; }
     public List<WeaponDataSample> weaponStore { get; set; }
@@ -35,11 +37,10 @@ public class FirebaseMainSession : MonoBehaviour
     public void SetUserData(Firebase.Auth.FirebaseUser user, string username)
     {
         FirebaseUser.UserData = user;
-        FirebaseUser.Username =  username;
 
         if (user != null) //디버그용
         {
-            // Debug.Log($"MainSystem UserId ::: {FirebaseUser.UserData.UserId}");
+            Debug.Log($"MainSystem UserId ::: {FirebaseUser.UserData.UserId}");
             // Debug.Log($"MainSystem userName ::: {username}");
         }
         
@@ -55,10 +56,17 @@ public class FirebaseMainSession : MonoBehaviour
             userId
         );
         
+        PlayerData player = await FirestoreManager.Instance.ReadDataAsync<PlayerData>(
+            FirebaseCollections.Players,
+            userId
+        );
+
+        
         if (playerData != null)
         {
             Debug.Log("플레이어 데이터 로드 성공");
             FirebaseUser.playerData = playerData;
+            FirebaseUser.player = player;
             
             await LoadCharacterStoreList();
             await LoadWeaponStoreList();
@@ -108,5 +116,35 @@ public class FirebaseMainSession : MonoBehaviour
         Debug.Log(storeData.HasWeapon.Count);
         
         FirebaseUser.weaponStore = storeData.HasWeapon;
+    }
+    
+    
+    // 재화 저장
+    public async Task UpdateGoldAsync(int newGold)
+    {
+        string userId = FirebaseUser.UserData.UserId;
+
+        // Firestore 경로 지정
+        var docRef = FirebaseFirestore.DefaultInstance
+            .Collection(FirebaseCollections.Players.ToString())
+            .Document(userId);
+
+        // 변경할 데이터 작성
+        Dictionary<string, object> updates = new Dictionary<string, object>
+        {
+            { "Gold", newGold }
+        };
+
+        try
+        {
+            await docRef.UpdateAsync(updates);
+            FirebaseUser.player.Gold = newGold;
+            
+            Debug.Log($"골드 업데이트 성공: {newGold}");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"골드 업데이트 실패: {e.Message}");
+        }
     }
 }

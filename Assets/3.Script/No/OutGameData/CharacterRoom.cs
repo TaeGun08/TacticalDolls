@@ -173,19 +173,21 @@ public class CharacterRoom : MonoBehaviour
     {
         var complete = navigation.Complete.GetComponent<ModalWindowManager>();
         complete.description = $"{SelectedCharacter.PrefabName}의 레벨업에 성공하였습니다.";
-
+       
         var result = await SelectedCharacter.UpdateCharacterLevel(SelectedCharacter.CharacterID, 1);
         
-        if (result)
+        if (result == false)
         {
-            await FirebaseMainSession.Instance.FirestoreLoader();
-            PlayerManager.Instance.UpdateCharacterData();
-            SetUIPlayerCharacters();
-            SetInfoPlayerCharacter(SelectedCharacter);
+            complete.description = "재화 부족 또는 무기가 최대 레벨에 도달하였습니다.";
+            return;
         }
-        else
-        {
-            Debug.LogWarning("캐릭터 레벨업 실패");
-        }
+
+        await FirebaseMainSession.Instance.FirestoreLoader();
+        PlayerManager.Instance.UpdateCharacterData();
+        await PlayerManager.Instance.DecreaseGold((int)(SelectedCharacter.Stat.Level * 50f));
+        LobbyManager.Instance.UpdateGold();
+            
+        SetUIPlayerCharacters();
+        SetInfoPlayerCharacter(SelectedCharacter);
     }
 }

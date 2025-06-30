@@ -124,42 +124,47 @@ public class TurnManager : MonoBehaviour
     private bool CheckWinCondition() //승자가 나올 겨우 true, 아니라면 false 반환
     {
         ActorParent winner;
-        
+
         // 추가할 것 - 양쪽에 //&& 맵 승리조건이 있고, 그게 달성되었으면 && mapWinLogic?.Invoke ?
-        
+
         //playerAllDead
-        if (GameManager.Instance.PlayerUnits.All(unit => unit.Stat.HP <= 0)) 
+        if (GameManager.Instance.PlayerUnits.All(unit => unit.Stat.HP <= 0))
         {
             winner = ActorParent.Enemy;
             EndGame(winner);
-            
+
             enemyWinPanel.SetActive(true);
+            GameManager.Instance.InitGameOverSetting();
             
             return true;
         }
-        
+
         //enemyAllDead
-        if (GameManager.Instance.EnemyUnits.All(unit => unit.Stat.HP <= 0)) 
+        if (GameManager.Instance.EnemyUnits.All(unit => unit.Stat.HP <= 0))
         {
             winner = ActorParent.Player;
             EndGame(winner);
             
             playerWinPanel.SetActive(true);
-
+            PlayerManager.Instance.IncreaseGold(100);
+            
+            GameManager.Instance.InitGameOverSetting();
+            
             return true;
         }
-        
+
         // 턴이 최대 턴 수를 지나 패배 처리
-        if (TurnCount >= maxTurnCount) 
+        if (TurnCount >= maxTurnCount)
         {
             winner = ActorParent.Enemy;
             EndGame(winner);
-            
+
             enemyWinPanel.SetActive(true);
+            GameManager.Instance.InitGameOverSetting();
             
             return true;
         }
-        
+
         winner = ActorParent.None;
         return false;
     }

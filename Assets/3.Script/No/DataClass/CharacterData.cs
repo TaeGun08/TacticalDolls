@@ -13,6 +13,7 @@ public class CharacterData : UnitParent
     public override string PrefabName { get => prefabName; set => prefabName = value; }
     public string prefabName;
     public string position;
+    public int price;
     
     [SerializeField] private StatDataSO baseStatSO;
     [SerializeField] private StatData runtimeStat;
@@ -118,7 +119,7 @@ public class CharacterData : UnitParent
         // 스탯 증가 공식
         runtimeStat.HP = baseStatSO.hp + characterLevel * 10;
         runtimeStat.MaxHP = runtimeStat.HP;
-        runtimeStat.Attack = baseStatSO.attack + characterLevel * 2 + weaponLevel * 5;
+        runtimeStat.Attack = baseStatSO.attack + characterLevel * 2 + (weaponLevel * 2 + weapon.Damage);
         runtimeStat.Defense = baseStatSO.defense + characterLevel * 2;
         runtimeStat.MoveRange = baseStatSO.moveRange; // 5레벨마다 1 증가
         runtimeStat.AttackRnage = baseStatSO.AttackRnage;
@@ -148,6 +149,12 @@ public class CharacterData : UnitParent
     
         Debug.Log($"Character Level Up Request ::  {userId}");
 
+        if (FirebaseMainSession.Instance.FirebaseUser.player.Gold < (Stat.Level * 50) ||
+            Stat.Level >= 20)
+        {
+            return false;
+        }
+        
         // 1. 데이터 로드
         PlayerDataSample playerData = await FirestoreManager.Instance.ReadDataAsync<PlayerDataSample>(
             FirebaseCollections.Players,
