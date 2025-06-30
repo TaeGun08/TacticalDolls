@@ -25,6 +25,7 @@ public class WeaponData : MonoBehaviour
     public string WeaponName;
     public int Level;
     public int Damage;
+    public int Price;
     //public int CurrentCharacter;
 
     public WeaponType WeaponType;

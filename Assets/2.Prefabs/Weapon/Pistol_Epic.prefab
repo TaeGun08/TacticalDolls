@@ -558,6 +558,7 @@ MonoBehaviour:
   WeaponName: Pistol
   Level: 1
   Damage: 5
+  Price: 400
   WeaponType: 1
   WeaponGrade: 2
   WeaponIcon: {fileID: -1767782213, guid: b209f20fae432c249b4b4a92120f7d83, type: 3}

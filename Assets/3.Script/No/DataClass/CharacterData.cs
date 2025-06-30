@@ -13,6 +13,7 @@ public class CharacterData : UnitParent
     public override string PrefabName { get => prefabName; set => prefabName = value; }
     public string prefabName;
     public string position;
+    public int price;
     
     [SerializeField] private StatDataSO baseStatSO;
     [SerializeField] private StatData runtimeStat;
