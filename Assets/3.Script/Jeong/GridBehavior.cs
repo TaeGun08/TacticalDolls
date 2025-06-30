@@ -341,6 +341,7 @@ public class GridBehavior : MonoBehaviour
     /// <param name="targets"></param>
     private void SetNearestTarget(List<IDamageAble> targets)
     {
+        if (targets.Count <= 0) return;
         nearestTarget = targets
             .Where(target => target != Actor && Actor.Stat.IsDead == false)
             .OrderBy(target =>
@@ -373,7 +374,8 @@ public class GridBehavior : MonoBehaviour
                 }
                 
                 SetNearestTarget(targets);
-                if (AttackRangeChecker(nearestTarget.GameObject.transform.position ) == false 
+                if (nearestTarget == null) break; 
+                if (AttackRangeChecker(nearestTarget.GameObject.transform.position) == false 
                     || nearestTarget.Stat.IsDead) break;
                 await Actor.Excute(skillNumber, targets, targets[0].GameObject.transform);
                 break;
