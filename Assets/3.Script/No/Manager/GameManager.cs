@@ -60,6 +60,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        SoundManager.Instance.PlayBgm("maou_bgm_cyber43");
         TurnManager.Instance.ActorChanged += UnitStateInitialize;
         mainCamera = Camera.main;
     }

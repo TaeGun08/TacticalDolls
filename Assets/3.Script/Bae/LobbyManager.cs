@@ -21,6 +21,7 @@ public class LobbyManager : MonoBehaviour
 
     private void Start()
     {
+        SoundManager.Instance.PlayBgm("maou_bgm_cyber42");
         PlayerManager.Instance.InitializePlayerManager();
         UpdateGold();
         
