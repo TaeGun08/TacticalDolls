@@ -146,7 +146,7 @@ public class TurnManager : MonoBehaviour
             EndGame(winner);
             
             playerWinPanel.SetActive(true);
-            PlayerManager.Instance.IncreaseGold(100);
+            _= PlayerManager.Instance.MissionCompleteGold(100);
             
             GameManager.Instance.InitGameOverSetting();
             

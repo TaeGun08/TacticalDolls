@@ -11,8 +11,8 @@ public class SkillSelectSystem : MonoBehaviour
     public static SkillSelectSystem Instance;
     
     public GameObject panel;
-    public Button[] skillButtons = new Button[4];
-    public TMP_Text[] skillNameTexts = new TMP_Text[4];
+    public Button[] skillButtons = new Button[3];
+    public TMP_Text[] skillNameTexts = new TMP_Text[3];
 
     public Button cancelButton;
     public Button selectButton;

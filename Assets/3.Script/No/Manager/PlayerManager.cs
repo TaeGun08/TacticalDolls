@@ -251,5 +251,12 @@ public class PlayerManager : MonoBehaviour
             Debug.Log("골드 부족");
         }
     }
-    
+
+    public async Task MissionCompleteGold(int getGold)
+    {
+        var player = FirebaseMainSession.Instance.FirebaseUser.player;
+        int newGold = player.Gold + getGold;
+
+        await FirebaseMainSession.Instance.UpdateGoldAsync(newGold);
+    }
 }

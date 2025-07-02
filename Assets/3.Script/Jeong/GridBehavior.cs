@@ -135,21 +135,10 @@ public class GridBehavior : MonoBehaviour
     {
         IsMove = true; //이동 시작
 
-        UsingTileChecker(false, null);
-        ; //현재 움직일 Actor의 타일을 받아 옴
-
-        //harang 시작
-        if (Actor is CharacterData character) //명시적 형변환 -> Actor가 CharacterData일 경우
-        {
-            callback.startMove?.Invoke(character.transform);
-        }
-
-        if (Actor?.Animator != null) //Actor에 Animator가 존재한다면 애니메이션 재생
-        {
-            Actor.Animator.SetBool(IS_CROUCHING, false);
-            Actor.Animator.SetBool(IS_RUNNING, true);
-        }
-
+        UsingTileChecker(false, null); //현재 움직일 Actor의 타일을 받아 옴
+        
+        bool isMove = false;
+        
         //Actor의 X, Z 좌표를 담아주기 위한 변수
         Vector2Int actorPos = new Vector2Int((int)Actor.GameObject.transform.position.x,
             (int)Actor.GameObject.transform.position.z);
@@ -157,6 +146,8 @@ public class GridBehavior : MonoBehaviour
 
         foreach (Node node in path)
         {
+            Debug.Log("확인");
+            
             //타일 사이즈에 맞게 파인딩한 노드 위치로 이동하기 위한 좌표
             Vector3 targetPos = new Vector3(
                 node.Position.x * tileManager.tileSize,
@@ -175,6 +166,21 @@ public class GridBehavior : MonoBehaviour
                 if (AttackRangeChecker(target)) break;
                 if (MoveRangeChecker(actorPosList, targetPos) == false) break;
             }
+            
+            if (isMove) continue; 
+            //harang 시작
+            if (Actor is CharacterData character) //명시적 형변환 -> Actor가 CharacterData일 경우
+            {
+                callback.startMove?.Invoke(character.transform);
+            }
+
+            if (Actor?.Animator != null) //Actor에 Animator가 존재한다면 애니메이션 재생
+            {
+                Actor.Animator.SetBool(IS_CROUCHING, false);
+                Actor.Animator.SetBool(IS_RUNNING, true);
+            }
+
+            isMove = true;
         }
 
         if (Actor?.Animator != null)
@@ -182,21 +188,27 @@ public class GridBehavior : MonoBehaviour
             Actor.Animator.SetBool(IS_RUNNING, false);
         }
 
+        if (isMove)
+        {
+            //harang 카메라 끝
+            if (Actor is CharacterData _character) //명시적 형변환 -> Actor가 CharacterData일 경우
+            {
+                callback.onCompleteMove?.Invoke(_character.transform);
+            }
+        }
+        
+        Debug.Log("이동 끝");
         CrouchingRotate(endNode);
 
         UsingTileChecker(true, Actor);
 
-        //harang 카메라 끝
-        if (Actor is CharacterData _character) //명시적 형변환 -> Actor가 CharacterData일 경우
-        {
-            callback.onCompleteMove?.Invoke(_character.transform);
-        }
 
         if (IsAutoMove) //AI로 움직이는 중일 때, 공격 사거리에 든다면 공격
         {
             await AutoSkill(target);
         }
 
+        Debug.Log("이동 종료");
         EndMovement();
     }
 
@@ -353,6 +365,7 @@ public class GridBehavior : MonoBehaviour
     /// <param name="target"></param>
     private async Task AutoSkill(Vector3 target)
     {
+        Debug.Log("스킬 시작");
         int skillNumber = Random.Range(0, Actor.HasSkills.Length);
         bool healSkill = Actor.HasSkills[skillNumber].skillType == SkillType.Heal;
         List<IDamageAble> targets = new List<IDamageAble>();
@@ -375,14 +388,18 @@ public class GridBehavior : MonoBehaviour
                 if (nearestTarget == null) break; 
                 if (AttackRangeChecker(nearestTarget.GameObject.transform.position) == false 
                     || nearestTarget.Stat.IsDead) break;
+                Debug.Log("힐 스킬 사용");
                 await Actor.Excute(skillNumber, targets, targets[0].GameObject.transform);
                 break;
             case false:
                 if (AttackRangeChecker(target) == false || nearestTarget.Stat.IsDead) break;
                 targets.Add(nearestTarget);
+                Debug.Log("딜 스킬 사용");
                 await Actor.Excute(skillNumber, targets, targets[0].GameObject.transform);
                 break;
         }
+        
+        Debug.Log("스킬 끝");
     }
 
     /// <summary>
