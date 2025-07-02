@@ -1,11 +1,11 @@
 using System;
-using UnityEditor;
+//using UnityEditor;
 using UnityEngine;
 using System.IO;
 
 public static class CaptureMachine
 {
-    [MenuItem("Tools/Capture Scene View with Transparency")]
+  //  [MenuItem("Tools/Capture Scene View with Transparency")]
     static void Capture()
     {
         Camera cam = Camera.main;
@@ -52,7 +52,7 @@ public static class CaptureMachine
         UnityEngine.Object.DestroyImmediate(rt);
         UnityEngine.Object.DestroyImmediate(tex);
 
-        AssetDatabase.Refresh();
+       // AssetDatabase.Refresh();
         Debug.Log($"✅ GameView 캡처 저장됨: {path}");
     }
 }
