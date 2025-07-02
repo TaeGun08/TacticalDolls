@@ -17650,7 +17650,7 @@ PrefabInstance:
     - target: {fileID: 9002809172427653253, guid: fca644ef066da26489ee7adffb3732d9,
         type: 3}
       propertyPath: clickEvent.m_PersistentCalls.m_Calls.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9002809172427653253, guid: fca644ef066da26489ee7adffb3732d9,
         type: 3}
@@ -17676,7 +17676,7 @@ PrefabInstance:
         type: 3}
       propertyPath: clickEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 394652702}
+      objectReference: {fileID: 255985167}
     - target: {fileID: 9002809172427653253, guid: fca644ef066da26489ee7adffb3732d9,
         type: 3}
       propertyPath: clickEvent.m_PersistentCalls.m_Calls.Array.data[2].m_Target
@@ -17705,7 +17705,7 @@ PrefabInstance:
     - target: {fileID: 9002809172427653253, guid: fca644ef066da26489ee7adffb3732d9,
         type: 3}
       propertyPath: clickEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: RequestUpdateCharacterLevelUp
+      value: ExitGame
       objectReference: {fileID: 0}
     - target: {fileID: 9002809172427653253, guid: fca644ef066da26489ee7adffb3732d9,
         type: 3}
@@ -17720,7 +17720,7 @@ PrefabInstance:
     - target: {fileID: 9002809172427653253, guid: fca644ef066da26489ee7adffb3732d9,
         type: 3}
       propertyPath: clickEvent.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: CharacterRoom, Assembly-CSharp
+      value: Lobby, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 9002809172427653253, guid: fca644ef066da26489ee7adffb3732d9,
         type: 3}
